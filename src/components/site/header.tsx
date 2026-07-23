@@ -33,14 +33,14 @@ export function Header() {
   return (
     <header
       className={cn(
-        'sticky top-0 z-50 w-full transition-all duration-300',
+        'fixed top-0 z-50 w-full transition-all duration-300',
         scrolled
-          ? 'border-b border-border bg-white/90 backdrop-blur-md shadow-soft'
-          : 'bg-white/60 backdrop-blur-sm'
+          ? 'border-b border-white/10 bg-navy-900/80 backdrop-blur-md shadow-soft'
+          : 'bg-transparent'
       )}
     >
       <div className="container flex h-20 items-center justify-between gap-4">
-        <Logo />
+        <Logo light />
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-1 lg:flex">
@@ -58,7 +58,7 @@ export function Header() {
                   <button
                     className={cn(
                       'flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors',
-                      active ? 'text-navy' : 'text-navy/70 hover:text-navy'
+                      active ? 'text-white' : 'text-white/70 hover:text-white'
                     )}
                   >
                     {t(item.key)}
@@ -73,12 +73,12 @@ export function Header() {
                         transition={{ duration: 0.18 }}
                         className="absolute left-0 top-full w-56 pt-2"
                       >
-                        <ul className="overflow-hidden rounded-xl border border-border bg-white py-1 shadow-soft-lg">
+                        <ul className="overflow-hidden rounded-xl border border-white/10 bg-navy-900/95 py-1 shadow-soft-lg">
                           {item.children.map((child) => (
                             <li key={child.key}>
                               <Link
                                 href={child.href}
-                                className="block px-4 py-2.5 text-sm text-navy/80 transition-colors hover:bg-navy/5 hover:text-navy"
+                                className="block px-4 py-2.5 text-sm text-white/85 transition-colors hover:bg-white/10 hover:text-white"
                               >
                                 {t(child.key)}
                               </Link>
@@ -97,7 +97,7 @@ export function Header() {
                 href={item.href}
                 className={cn(
                   'rounded-full px-4 py-2 text-sm font-medium transition-colors',
-                  active ? 'text-navy' : 'text-navy/70 hover:text-navy'
+                  active ? 'text-white' : 'text-white/70 hover:text-white'
                 )}
               >
                 {t(item.key)}
@@ -109,17 +109,17 @@ export function Header() {
         <div className="flex items-center gap-1">
           <button
             onClick={() => setSearchOpen(true)}
-            className="flex h-10 w-10 items-center justify-center rounded-full text-navy transition-colors hover:bg-navy/5"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10"
             aria-label={t('home')}
           >
             <Search className="h-5 w-5" />
           </button>
           <div className="hidden lg:block">
-            <LocaleSwitcher />
+            <LocaleSwitcher light />
           </div>
           <button
             onClick={() => setMobileOpen((v) => !v)}
-            className="flex h-10 w-10 items-center justify-center rounded-full text-navy transition-colors hover:bg-navy/5 lg:hidden"
+            className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 lg:hidden"
             aria-label="Menu"
           >
             {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -135,24 +135,24 @@ export function Header() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.25 }}
-            className="overflow-hidden border-t border-border bg-white lg:hidden"
+            className="overflow-hidden border-t border-white/10 bg-navy-900 lg:hidden"
           >
             <nav className="container flex flex-col gap-1 py-4">
               {NAV_ITEMS.map((item) => (
                 <div key={item.key}>
                   <Link
                     href={item.href}
-                    className="block rounded-lg px-3 py-2.5 text-base font-medium text-navy hover:bg-navy/5"
+                    className="block rounded-lg px-3 py-2.5 text-base font-medium text-white hover:bg-white/10"
                   >
                     {t(item.key)}
                   </Link>
                   {item.children && (
-                    <div className="ml-3 border-l border-border pl-3">
+                    <div className="ml-3 border-l border-white/10 pl-3">
                       {item.children.map((child) => (
                         <Link
                           key={child.key}
                           href={child.href}
-                          className="block rounded-lg px-3 py-2 text-sm text-navy/70 hover:bg-navy/5"
+                          className="block rounded-lg px-3 py-2 text-sm text-white/75 hover:bg-white/10"
                         >
                           {t(child.key)}
                         </Link>
@@ -161,8 +161,8 @@ export function Header() {
                   )}
                 </div>
               ))}
-              <div className="mt-3 border-t border-border pt-3">
-                <LocaleSwitcher />
+              <div className="mt-3 border-t border-white/10 pt-3">
+                <LocaleSwitcher light />
               </div>
             </nav>
           </motion.div>

@@ -71,7 +71,95 @@
     "dir_media": "Media",
     "dir_media_desc": "Yangiliklar, video va foto materiallar",
     "dir_education": "Ta’lim",
-    "dir_education_desc": "Malaka oshirish va ta’lim dasturlari"
+    "dir_education_desc": "Malaka oshirish va ta’lim dasturlari",
+    "strategy": {
+      "badge": "Milliy dastur",
+      "hint": "Chapga yoki o‘ngga suring",
+      "prev": "Oldingi",
+      "next": "Keyingi",
+      "slides": [
+        {
+          "tag": "Milliy dastur",
+          "title": "«O‘zbekiston simfoniyasi»",
+          "text": "O‘zbekistonda orkestr va xor san’atini tizimli rivojlantirish, yoshlar orasida akademik musiqaga qiziqishni oshirish va eng yaxshi jamoalarni xalqaro maydonga olib chiqish.",
+          "points": [
+            "21 strategik loyiha",
+            "7 asosiy yo‘nalish",
+            "300–500 ming tomoshabin qamrovi"
+          ]
+        },
+        {
+          "tag": "I yo‘nalish",
+          "title": "Yirik flagman loyihalar",
+          "text": "Mamlakatdagi barcha orkestr va xorlarni birlashtiruvchi yirik festivallar.",
+          "points": [
+            "Uzbekistan Orchestra Fest",
+            "Milliy xor festivali",
+            "«Buyuk Ipak yo‘li» xalqaro festivali"
+          ]
+        },
+        {
+          "tag": "II yo‘nalish",
+          "title": "Yoshlar siyosati",
+          "text": "Iqtidorli yosh musiqachilarni saralash, tayyorlash va sahnaga olib chiqish.",
+          "points": [
+            "Davlat yoshlar simfonik orkestri (100 nafar)",
+            "Davlat yoshlar xori (16–28 yosh)",
+            "Yosh dirijyorlar milliy tanlovi"
+          ]
+        },
+        {
+          "tag": "III yo‘nalish",
+          "title": "Hududlarda rivojlanish",
+          "text": "San’atni poytaxtdan hududlarga olib chiqish va keng auditoriyani qamrab olish.",
+          "points": [
+            "«Har bir hududga — orkestr»",
+            "100 ta konsert — O‘zbekiston bo‘ylab",
+            "«Musiqa poyezdi» loyihasi"
+          ]
+        },
+        {
+          "tag": "IV yo‘nalish",
+          "title": "Ta’lim va kadrlar",
+          "text": "Zamonaviy dual ta’lim va mahorat maktablari orqali professional kadrlar tayyorlash.",
+          "points": [
+            "Milliy dual ta’lim tizimi",
+            "Orkestr mahorati akademiyasi",
+            "Milliy kompozitorlik laboratoriyasi"
+          ]
+        },
+        {
+          "tag": "V yo‘nalish",
+          "title": "Zamonaviy formatlar",
+          "text": "Akademik musiqani yosh auditoriyaga yaqinlashtiruvchi yangi sahna formatlari.",
+          "points": [
+            "«Ochiq osmon ostida simfoniya»",
+            "«Sympho Show»",
+            "«Orkestrlar kechasi»"
+          ]
+        },
+        {
+          "tag": "VI yo‘nalish",
+          "title": "Raqamli rivojlanish",
+          "text": "Milliy media-platforma va onlayn translyatsiyalar orqali keng qamrov.",
+          "points": [
+            "Milliy media-platforma",
+            "«Orkestr bilan tanishuv» videolari",
+            "Jonli onlayn translyatsiyalar"
+          ]
+        },
+        {
+          "tag": "VII yo‘nalish",
+          "title": "Xalqaro hamkorlik",
+          "text": "Markaziy Osiyo va jahon miqyosida madaniy diplomatiya va hamkorlik.",
+          "points": [
+            "Markaziy Osiyo dirijyorlari forumi",
+            "Muxtor Ashrafiy xalqaro tanlovi",
+            "Markaziy Osiyo do‘stlik orkestri"
+          ]
+        }
+      ]
+    }
   },
   "About": {
     "title": "Birlashma haqida",

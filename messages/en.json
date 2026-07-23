@@ -71,7 +71,95 @@
     "dir_media": "Media",
     "dir_media_desc": "News, video and photo materials",
     "dir_education": "Education",
-    "dir_education_desc": "Professional development and education programmes"
+    "dir_education_desc": "Professional development and education programmes",
+    "strategy": {
+      "badge": "National Program",
+      "hint": "Swipe left or right",
+      "prev": "Previous",
+      "next": "Next",
+      "slides": [
+        {
+          "tag": "National Program",
+          "title": "“Symphony of Uzbekistan”",
+          "text": "Systematic development of orchestral and choral art, growing youth interest in classical music, and bringing the best ensembles to the international stage.",
+          "points": [
+            "21 strategic projects",
+            "7 key directions",
+            "300,000–500,000 audience reach"
+          ]
+        },
+        {
+          "tag": "Direction I",
+          "title": "Flagship Projects",
+          "text": "Major festivals uniting all orchestras and choirs of the country.",
+          "points": [
+            "Uzbekistan Orchestra Fest",
+            "National Choir Festival",
+            "“Great Silk Road” International Festival"
+          ]
+        },
+        {
+          "tag": "Direction II",
+          "title": "Youth Policy",
+          "text": "Selecting, training and bringing talented young musicians to the stage.",
+          "points": [
+            "State Youth Symphony Orchestra (100 members)",
+            "State Youth Choir (ages 16–28)",
+            "National Young Conductors Competition"
+          ]
+        },
+        {
+          "tag": "Direction III",
+          "title": "Regional Development",
+          "text": "Bringing art beyond the capital to the regions and reaching a wide audience.",
+          "points": [
+            "“An Orchestra for Every Region”",
+            "100 concerts across Uzbekistan",
+            "“Music Train” project"
+          ]
+        },
+        {
+          "tag": "Direction IV",
+          "title": "Education & Talent",
+          "text": "Training professional talent through dual education and mastery schools.",
+          "points": [
+            "National dual education system",
+            "Orchestral Mastery Academy",
+            "National Composers' Laboratory"
+          ]
+        },
+        {
+          "tag": "Direction V",
+          "title": "Modern Formats",
+          "text": "New stage formats that bring classical music closer to young audiences.",
+          "points": [
+            "“Symphony Under the Open Sky”",
+            "“Sympho Show”",
+            "“Night of Orchestras”"
+          ]
+        },
+        {
+          "tag": "Direction VI",
+          "title": "Digital Development",
+          "text": "Wide reach through a national media platform and online broadcasts.",
+          "points": [
+            "National media platform",
+            "“Meet the Orchestra” videos",
+            "Live online broadcasts"
+          ]
+        },
+        {
+          "tag": "Direction VII",
+          "title": "International Cooperation",
+          "text": "Cultural diplomacy and cooperation across Central Asia and the world.",
+          "points": [
+            "Central Asia Conductors' Forum",
+            "Mukhtor Ashrafi International Competition",
+            "Central Asia Friendship Orchestra"
+          ]
+        }
+      ]
+    }
   },
   "About": {
     "title": "About the union",

@@ -15,6 +15,11 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Source assets (processed copies live in public/)
+# Source assets (processed copies live in public/hero/)
 image.png
 *.pdf
+*.docx
+/*.JPG
+/*.jpg
+/*.jpeg
+/*.png

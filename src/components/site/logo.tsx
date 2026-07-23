@@ -9,13 +9,13 @@ import { cn } from '@/lib/utils';
 export function Logo({ light = false }: { light?: boolean }) {
   const t = useTranslations('Nav');
   return (
-    <Link href="/" className="group flex items-center gap-3" aria-label="Orkestr va Xor">
-      <span className="relative flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft ring-1 ring-navy/10">
+    <Link href="/" className="group flex items-center gap-3.5" aria-label="Orkestr va Xor">
+      <span className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft ring-1 ring-navy/10">
         <Image
           src="/logo.png"
           alt="Orkestr va Xor"
-          width={48}
-          height={48}
+          width={56}
+          height={56}
           className="h-full w-full object-contain p-0.5"
           priority
         />
@@ -23,7 +23,7 @@ export function Logo({ light = false }: { light?: boolean }) {
       <span className="hidden flex-col leading-none sm:flex">
         <span
           className={cn(
-            'font-serif text-lg font-semibold tracking-tight',
+            'font-serif text-xl font-semibold tracking-tight',
             light ? 'text-white' : 'text-navy'
           )}
         >
@@ -31,7 +31,7 @@ export function Logo({ light = false }: { light?: boolean }) {
         </span>
         <span
           className={cn(
-            'mt-0.5 text-[10px] font-medium uppercase tracking-[0.18em]',
+            'mt-1 text-[11px] font-medium uppercase tracking-[0.18em]',
             light ? 'text-white/60' : 'text-muted-foreground'
           )}
         >

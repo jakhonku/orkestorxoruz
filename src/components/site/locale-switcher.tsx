@@ -36,7 +36,7 @@ export function LocaleSwitcher({ light = false }: { light?: boolean }) {
         onClick={() => setOpen((v) => !v)}
         className={cn(
           'flex items-center gap-1.5 rounded-full px-3 py-2 text-sm font-semibold uppercase transition-colors',
-          light ? 'text-white/80 hover:bg-white/10' : 'text-navy hover:bg-navy/5'
+          light ? 'text-white hover:bg-white/10' : 'text-navy hover:bg-navy/5'
         )}
         aria-haspopup="listbox"
         aria-expanded={open}
@@ -46,7 +46,10 @@ export function LocaleSwitcher({ light = false }: { light?: boolean }) {
       </button>
       {open && (
         <ul
-          className="absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-xl border border-border bg-white py-1 shadow-soft-lg"
+          className={cn(
+            'absolute right-0 z-50 mt-2 w-40 overflow-hidden rounded-xl border py-1 shadow-soft-lg',
+            light ? 'border-white/10 bg-navy-950/95' : 'border-border bg-white'
+          )}
           role="listbox"
         >
           {locales.map((l) => (
@@ -54,8 +57,11 @@ export function LocaleSwitcher({ light = false }: { light?: boolean }) {
               <button
                 onClick={() => change(l)}
                 className={cn(
-                  'flex w-full items-center justify-between px-4 py-2.5 text-sm transition-colors hover:bg-navy/5',
-                  l === locale ? 'font-semibold text-navy' : 'text-muted-foreground'
+                  'flex w-full items-center justify-between px-4 py-2.5 text-sm transition-colors',
+                  light ? 'hover:bg-white/10' : 'hover:bg-navy/5',
+                  l === locale
+                    ? (light ? 'font-semibold text-white' : 'font-semibold text-navy')
+                    : (light ? 'text-white/60' : 'text-muted-foreground')
                 )}
                 role="option"
                 aria-selected={l === locale}
