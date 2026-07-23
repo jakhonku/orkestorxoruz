@@ -23,8 +23,8 @@ export function Hero() {
       />
 
       {/* Lighter navy overlay — keeps the orchestra visible, text on the left readable */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-900/85 via-navy-900/45 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-t from-navy-900/85 via-transparent to-navy-900/25" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy-900/80 via-navy-900/35 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-navy-900/55 via-transparent to-navy-900/20" />
       {/* gold glow accent */}
       <div
         className="absolute inset-0 opacity-60"
