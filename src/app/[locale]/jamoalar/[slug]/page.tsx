@@ -53,7 +53,7 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
   return (
     <>
       {/* Banner */}
-      <section className="relative h-[42vh] min-h-[320px] w-full overflow-hidden bg-navy">
+      <section className="relative flex min-h-[420px] w-full flex-col justify-end overflow-hidden bg-navy-950 pt-28 pb-12 md:min-h-[460px] md:pt-36 md:pb-16">
         <Image
           src={ensemble.banner}
           alt={pick(ensemble.name, locale)}
@@ -62,8 +62,10 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
           sizes="100vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/50 to-navy-900/20" />
-        <div className="container relative flex h-full flex-col justify-end pb-10">
+        {/* Layered dark contrast overlays for guaranteed legibility */}
+        <div className="absolute inset-0 bg-navy-950/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/75 to-navy-950/40" />
+        <div className="container relative z-10">
           <Breadcrumbs
             light
             crumbs={[
@@ -72,10 +74,12 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
               { label: pick(ensemble.name, locale) },
             ]}
           />
-          <Badge variant="gold" className="mt-4 w-fit">
-            {t(`type_${ensemble.type}`)}
-          </Badge>
-          <h1 className="mt-3 max-w-3xl font-serif text-3xl font-semibold text-white md:text-5xl">
+          <div className="mt-4">
+            <Badge variant="gold" className="w-fit">
+              {t(`type_${ensemble.type}`)}
+            </Badge>
+          </div>
+          <h1 className="mt-3 max-w-3xl font-serif text-3xl font-semibold leading-tight text-white drop-shadow-sm md:text-5xl">
             {pick(ensemble.name, locale)}
           </h1>
         </div>

@@ -1,13 +1,29 @@
 'use client';
 
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/utils';
 
 /** Real emblem (from brand PDF) + wordmark lockup. */
 export function Logo({ light = false }: { light?: boolean }) {
   const t = useTranslations('Nav');
+  const locale = useLocale();
+
+  const brandName =
+    locale === 'ru'
+      ? 'Оркестр и Хор'
+      : locale === 'en'
+      ? 'Orchestra and Choir'
+      : 'Orkestr va Xor';
+
+  const subline =
+    locale === 'ru'
+      ? 'Творческое объединение'
+      : locale === 'en'
+      ? 'Creative Union'
+      : 'Ijodiy birlashma';
+
   return (
     <Link href="/" className="group flex items-center gap-3.5" aria-label="Orkestr va Xor">
       <span className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft ring-1 ring-navy/10">
@@ -27,7 +43,7 @@ export function Logo({ light = false }: { light?: boolean }) {
             light ? 'text-white' : 'text-navy'
           )}
         >
-          Orkestr <span className="text-gold">&amp;</span> Xor
+          {brandName}
         </span>
         <span
           className={cn(
@@ -35,7 +51,7 @@ export function Logo({ light = false }: { light?: boolean }) {
             light ? 'text-white/60' : 'text-muted-foreground'
           )}
         >
-          {t('home') === 'Home' ? 'Creative Union' : 'Ijodiy birlashma'}
+          {subline}
         </span>
       </span>
     </Link>

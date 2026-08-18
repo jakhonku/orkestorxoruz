@@ -19,7 +19,7 @@ export function PageHeader({ title, subtitle, crumbs }: PageHeaderProps) {
             'radial-gradient(circle at 20% 20%, rgba(201,162,39,0.25), transparent 40%)',
         }}
       />
-      <div className="container relative py-14 md:py-20">
+      <div className="container relative pt-28 pb-14 md:pt-36 md:pb-20">
         {crumbs && crumbs.length > 0 && (
           <div className="mb-5">
             <Breadcrumbs crumbs={crumbs} light />

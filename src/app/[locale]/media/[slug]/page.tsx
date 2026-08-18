@@ -53,7 +53,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
   return (
     <>
       <article className="bg-white">
-        <div className="container max-w-3xl pt-10">
+        <div className="container max-w-3xl pt-28 md:pt-36">
           <Breadcrumbs
             crumbs={[
               { label: tn('home'), href: '/' },

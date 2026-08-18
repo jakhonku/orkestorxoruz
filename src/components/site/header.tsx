@@ -35,8 +35,8 @@ export function Header() {
       className={cn(
         'fixed top-0 z-50 w-full transition-all duration-300',
         scrolled
-          ? 'border-b border-white/10 bg-navy-900/80 backdrop-blur-md shadow-soft'
-          : 'bg-transparent'
+          ? 'border-b border-white/10 bg-navy-900/90 backdrop-blur-md shadow-soft'
+          : 'bg-gradient-to-b from-navy-950/85 via-navy-950/40 to-transparent'
       )}
     >
       <div className="container flex h-20 items-center justify-between gap-4">

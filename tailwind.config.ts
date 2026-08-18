@@ -30,6 +30,7 @@ const config: Config = {
           700: '#0B3C7D',
           800: '#0a2f61',
           900: '#082445',
+          950: '#05162b',
         },
         gold: {
           DEFAULT: '#C9A227',
