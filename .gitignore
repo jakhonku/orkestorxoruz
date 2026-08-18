@@ -23,3 +23,12 @@ image.png
 /*.jpg
 /*.jpeg
 /*.png
+
+/src/generated/prisma
+
+
+# Prisma
+.env
+
+# Mahalliy Postgres ma'lumotlari
+/.postgres

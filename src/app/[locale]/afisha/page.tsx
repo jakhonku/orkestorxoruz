@@ -3,7 +3,7 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { AfishaView } from '@/components/features/afisha-view';
-import { events } from '@/data/events';
+import { getEvents } from '@/server/queries/events';
 
 export async function generateMetadata({
   params,
@@ -16,6 +16,7 @@ export async function generateMetadata({
 
 export default async function AfishaPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const events = await getEvents();
   const t = await getTranslations({ locale: params.locale, namespace: 'Afisha' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
 

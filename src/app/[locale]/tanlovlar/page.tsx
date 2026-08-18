@@ -4,7 +4,7 @@ import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { CompetitionCard } from '@/components/cards/competition-card';
-import { competitions } from '@/data/competitions';
+import { getCompetitions } from '@/server/queries/competitions';
 
 export async function generateMetadata({
   params,
@@ -17,6 +17,7 @@ export async function generateMetadata({
 
 export default async function CompetitionsPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const competitions = await getCompetitions();
   const t = await getTranslations({ locale: params.locale, namespace: 'Competitions' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
 

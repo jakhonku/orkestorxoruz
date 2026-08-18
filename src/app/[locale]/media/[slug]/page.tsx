@@ -10,10 +10,12 @@ import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { NewsCard } from '@/components/cards/news-card';
 import { pick, formatDate } from '@/lib/utils';
-import { news, getNewsBySlug } from '@/data/news';
+import type { NewsArticle } from '@/types';
+import { getNewsBySlug, getNewsSlugs, getRelatedNews } from '@/server/queries/news';
 
-export function generateStaticParams() {
-  return news.map((n) => ({ slug: n.slug }));
+export async function generateStaticParams() {
+  const slugs = await getNewsSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -21,7 +23,7 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale; slug: string };
 }): Promise<Metadata> {
-  const article = getNewsBySlug(params.slug);
+  const article = await getNewsBySlug(params.slug);
   if (!article) return {};
   return {
     title: pick(article.title, params.locale),
@@ -30,23 +32,23 @@ export async function generateMetadata({
   };
 }
 
-export default function NewsDetailPage({
+export default async function NewsDetailPage({
   params,
 }: {
   params: { locale: Locale; slug: string };
 }) {
   setRequestLocale(params.locale);
-  if (!getNewsBySlug(params.slug)) notFound();
-  return <Article slug={params.slug} />;
+  const article = await getNewsBySlug(params.slug);
+  if (!article) notFound();
+  const related = await getRelatedNews(params.slug, 3);
+  return <Article article={article} related={related} />;
 }
 
-function Article({ slug }: { slug: string }) {
-  const article = getNewsBySlug(slug)!;
+function Article({ article, related }: { article: NewsArticle; related: NewsArticle[] }) {
   const locale = useLocale() as Locale;
   const t = useTranslations('Media');
   const tn = useTranslations('Nav');
 
-  const related = news.filter((n) => n.slug !== slug).slice(0, 3);
 
   return (
     <>

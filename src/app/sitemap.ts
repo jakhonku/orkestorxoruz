@@ -1,10 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { routing } from '@/i18n/routing';
 import { SITE } from '@/lib/constants';
-import { ensembles } from '@/data/ensembles';
-import { projects } from '@/data/projects';
-import { competitions } from '@/data/competitions';
-import { news } from '@/data/news';
+import { getEnsembleSlugs } from '@/server/queries/ensembles';
+import { getProjectSlugs } from '@/server/queries/projects';
+import { getCompetitionSlugs } from '@/server/queries/competitions';
+import { getNewsSlugs } from '@/server/queries/news';
 
 const staticPaths = [
   '',
@@ -19,14 +19,21 @@ const staticPaths = [
   '/aloqa',
 ];
 
-const dynamicPaths = [
-  ...ensembles.map((e) => `/jamoalar/${e.slug}`),
-  ...projects.map((p) => `/loyihalar/${p.slug}`),
-  ...competitions.map((c) => `/tanlovlar/${c.slug}`),
-  ...news.map((n) => `/media/${n.slug}`),
-];
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const [ensembleSlugs, projectSlugs, competitionSlugs, newsSlugs] = await Promise.all([
+    getEnsembleSlugs(),
+    getProjectSlugs(),
+    getCompetitionSlugs(),
+    getNewsSlugs(),
+  ]);
 
-export default function sitemap(): MetadataRoute.Sitemap {
+  const dynamicPaths = [
+    ...ensembleSlugs.map((slug) => `/jamoalar/${slug}`),
+    ...projectSlugs.map((slug) => `/loyihalar/${slug}`),
+    ...competitionSlugs.map((slug) => `/tanlovlar/${slug}`),
+    ...newsSlugs.map((slug) => `/media/${slug}`),
+  ];
+
   const all = [...staticPaths, ...dynamicPaths];
   const now = new Date();
 

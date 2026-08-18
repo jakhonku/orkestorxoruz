@@ -4,7 +4,7 @@ import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { ExpertCard } from '@/components/cards/expert-card';
-import { experts } from '@/data/experts';
+import { getExperts } from '@/server/queries/experts';
 
 export async function generateMetadata({
   params,
@@ -17,6 +17,7 @@ export async function generateMetadata({
 
 export default async function ExpertsPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const experts = await getExperts();
   const t = await getTranslations({ locale: params.locale, namespace: 'Experts' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
 

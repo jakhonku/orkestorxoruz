@@ -5,7 +5,7 @@ import { Compass, Globe, Landmark, Trophy, Radio, GraduationCap, type LucideIcon
 import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
 import { AnimatedCounter } from '@/components/shared/animated-counter';
-import { kpiStats } from '@/data/kpi';
+import type { KpiStat } from '@/types';
 import { pick } from '@/lib/utils';
 
 const icons: Record<string, LucideIcon> = {
@@ -17,7 +17,7 @@ const icons: Record<string, LucideIcon> = {
   'graduation-cap': GraduationCap,
 };
 
-export function KpiStats() {
+export function KpiStats({ stats }: { stats: KpiStat[] }) {
   const locale = useLocale();
   const t = useTranslations('Home');
 
@@ -26,7 +26,7 @@ export function KpiStats() {
       <div className="container">
         <SectionTitle eyebrow={t('kpiSubtitle')} title={t('kpiTitle')} />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
-          {kpiStats.map((stat, i) => {
+          {stats.map((stat, i) => {
             const Icon = icons[stat.icon] ?? Compass;
             return (
               <Reveal key={i} delay={i * 0.08}>

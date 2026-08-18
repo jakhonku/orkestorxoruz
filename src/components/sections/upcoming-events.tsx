@@ -4,17 +4,17 @@ import { CalendarDays, MapPin, ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
-import { events } from '@/data/events';
+import type { ConcertEvent } from '@/types';
 import { pick, formatDate } from '@/lib/utils';
 import type { Locale } from '@/i18n/routing';
 
-export function UpcomingEvents() {
+export function UpcomingEvents({ events }: { events: ConcertEvent[] }) {
   const locale = useLocale() as Locale;
   const t = useTranslations('Home');
   const ta = useTranslations('Afisha');
   const tc = useTranslations('Common');
 
-  const upcoming = events.slice(0, 3);
+  const upcoming = events;
 
   return (
     <section className="section bg-white">

@@ -9,38 +9,26 @@ import {
   CalendarDays,
   ChevronLeft,
   ChevronRight,
-  Sparkles,
   Users,
 } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Button } from '@/components/ui/button';
 
-type Slide = {
+/** Bosh ekran slaydi — matnlari joriy tilda tayyorlangan holda keladi */
+export type Slide = {
   tag: string;
   title: string;
   text: string;
   points: string[];
+  image: string;
 };
 
 const AUTOPLAY_MS = 6000;
 
-// Background photo per slide — changes to match the text on each slide.
-const SLIDE_IMAGES = [
-  '/hero/dso.jpg', // Milliy dastur — to‘liq orkestr
-  '/hero/festival.jpg', // Yirik flagman loyihalar — festival
-  '/hero/winds.jpg', // Yoshlar siyosati — yosh ijrochilar
-  '/hero/choir.jpg', // Hududlarda rivojlanish — xor / milliy libos
-  '/hero.png', // Ta’lim va kadrlar — orkestr
-  '/hero/festival.jpg', // Zamonaviy formatlar — ochiq osmon ostida
-  '/hero/dso.jpg', // Raqamli rivojlanish
-  '/hero/choir.jpg', // Xalqaro hamkorlik
-];
-
-export function Hero() {
+export function Hero({ slides }: { slides: Slide[] }) {
   const t = useTranslations('Home');
   const s = useTranslations('Home.strategy');
 
-  const slides = s.raw('slides') as Slide[];
   const count = slides.length;
 
   const [index, setIndex] = useState(0);
@@ -90,7 +78,7 @@ export function Hero() {
 
   return (
     <section
-      className="relative overflow-hidden bg-navy-900"
+      className="relative min-h-screen min-h-[100dvh] overflow-hidden bg-navy-900"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
@@ -105,7 +93,7 @@ export function Hero() {
           className="absolute inset-0"
         >
           <Image
-            src={SLIDE_IMAGES[index] ?? '/hero.png'}
+            src={slide.image || '/hero.png'}
             alt=""
             fill
             priority={index === 0}
@@ -127,17 +115,7 @@ export function Hero() {
         }}
       />
 
-      <div className="container relative flex min-h-[90vh] flex-col justify-center py-24">
-        {/* Program badge (constant) */}
-        <motion.span
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-gold/30 bg-gold/10 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-gold-200 backdrop-blur-sm"
-        >
-          <Sparkles className="h-3.5 w-3.5" />
-          {s('badge')}
-        </motion.span>
+      <div className="container relative flex min-h-screen min-h-[100dvh] flex-col justify-center pt-28 pb-20">
 
         {/* Swipeable slide area */}
         <motion.div
@@ -235,30 +213,33 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="mt-10 flex flex-wrap gap-4"
+          className="mt-10 flex flex-wrap items-center gap-4"
         >
-          <Button asChild variant="gold" size="lg">
-            <Link href="/afisha">
-              <CalendarDays className="h-5 w-5" />
-              {t('ctaAfisha')}
-            </Link>
-          </Button>
           <Button
             asChild
             size="lg"
-            className="border border-white/25 bg-white/10 text-white backdrop-blur-sm hover:bg-white/20"
+            className="group relative h-12 rounded-full border border-gold-300/40 bg-gradient-to-r from-amber-400 via-gold-400 to-amber-500 px-7 text-sm font-semibold tracking-wide text-navy-950 shadow-[0_4px_20px_rgba(201,162,39,0.35),inset_0_1px_0_rgba(255,255,255,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_25px_rgba(201,162,39,0.5)] active:translate-y-0 active:scale-[0.98]"
           >
-            <Link href="/jamoalar">
-              <Users className="h-5 w-5" />
-              {t('ctaEnsembles')}
-              <ArrowRight className="h-4 w-4" />
+            <Link href="/afisha" className="flex items-center gap-2.5">
+              <CalendarDays className="h-4.5 w-4.5 text-navy-950 transition-transform duration-200 group-hover:scale-110" />
+              <span>{t('ctaAfisha')}</span>
+            </Link>
+          </Button>
+
+          <Button
+            asChild
+            size="lg"
+            className="group relative h-12 rounded-full border border-white/20 bg-white/10 px-7 text-sm font-medium tracking-wide text-white shadow-[0_4px_20px_rgba(0,0,0,0.25),inset_0_1px_0_rgba(255,255,255,0.15)] backdrop-blur-md transition-all duration-300 hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/20 active:translate-y-0 active:scale-[0.98]"
+          >
+            <Link href="/jamoalar" className="flex items-center gap-2.5">
+              <Users className="h-4.5 w-4.5 text-gold-300 transition-colors group-hover:text-gold-200" />
+              <span>{t('ctaEnsembles')}</span>
+              <ArrowRight className="h-4 w-4 text-white/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-white" />
             </Link>
           </Button>
         </motion.div>
       </div>
 
-      {/* soft bottom fade into page */}
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
     </section>
   );
 }

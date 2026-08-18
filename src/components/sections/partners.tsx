@@ -2,10 +2,10 @@ import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
-import { partners } from '@/data/kpi';
+import type { Partner } from '@/types';
 import { pick } from '@/lib/utils';
 
-export function Partners() {
+export function Partners({ partners }: { partners: Partner[] }) {
   const t = useTranslations('Home');
   const locale = useLocale();
 

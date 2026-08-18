@@ -7,17 +7,40 @@ import { Directions } from '@/components/sections/directions';
 import { NewsSection } from '@/components/sections/news-section';
 import { Partners } from '@/components/sections/partners';
 import { NewsletterCta } from '@/components/sections/newsletter-cta';
+import { getKpiStats, getPartners, getStrategySlides } from '@/server/queries/home';
+import { getUpcomingEvents } from '@/server/queries/events';
+import { getLatestNews } from '@/server/queries/news';
+import { pick } from '@/lib/utils';
 
-export default function HomePage({ params }: { params: { locale: Locale } }) {
+export default async function HomePage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+
+  // Bosh sahifadagi barcha bloklar uchun ma'lumot — parallel olinadi
+  const [slides, stats, events, articles, partners] = await Promise.all([
+    getStrategySlides(),
+    getKpiStats(),
+    getUpcomingEvents(3),
+    getLatestNews(3),
+    getPartners(),
+  ]);
+
+  // Hero mijoz komponenti — matnlar shu yerda joriy tilga o'giriladi
+  const heroSlides = slides.map((s) => ({
+    tag: pick(s.tag, params.locale),
+    title: pick(s.title, params.locale),
+    text: pick(s.text, params.locale),
+    points: pick(s.points, params.locale),
+    image: s.image,
+  }));
+
   return (
     <>
-      <Hero />
-      <KpiStats />
-      <UpcomingEvents />
+      <Hero slides={heroSlides} />
+      <KpiStats stats={stats} />
+      <UpcomingEvents events={events} />
       <Directions />
-      <NewsSection />
-      <Partners />
+      <NewsSection articles={articles} />
+      <Partners partners={partners} />
       <NewsletterCta />
     </>
   );

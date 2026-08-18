@@ -3,7 +3,8 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { MediaTabs } from '@/components/features/media-tabs';
-import { news, mediaVideos, mediaPhotos } from '@/data/news';
+import { getMediaPhotos, getMediaVideos, getNews } from '@/server/queries/news';
+import { getDocuments } from '@/server/queries/experts';
 
 export async function generateMetadata({
   params,
@@ -16,6 +17,12 @@ export async function generateMetadata({
 
 export default async function MediaPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const [news, mediaVideos, mediaPhotos, documents] = await Promise.all([
+    getNews(),
+    getMediaVideos(),
+    getMediaPhotos(),
+    getDocuments(),
+  ]);
   const t = await getTranslations({ locale: params.locale, namespace: 'Media' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
 
@@ -28,7 +35,7 @@ export default async function MediaPage({ params }: { params: { locale: Locale }
       />
       <section className="section bg-white">
         <div className="container">
-          <MediaTabs news={news} videos={mediaVideos} photos={mediaPhotos} />
+          <MediaTabs news={news} videos={mediaVideos} photos={mediaPhotos} documents={documents} />
         </div>
       </section>
     </>

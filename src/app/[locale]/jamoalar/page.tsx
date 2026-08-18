@@ -4,7 +4,7 @@ import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { EnsemblesExplorer } from '@/components/features/ensembles-explorer';
 import { JoinEnsemble } from '@/components/features/join-ensemble';
-import { ensembles } from '@/data/ensembles';
+import { getEnsembles } from '@/server/queries/ensembles';
 
 export async function generateMetadata({
   params,
@@ -17,6 +17,7 @@ export async function generateMetadata({
 
 export default async function EnsemblesPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const ensembles = await getEnsembles();
   const t = await getTranslations({ locale: params.locale, namespace: 'Ensembles' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
 

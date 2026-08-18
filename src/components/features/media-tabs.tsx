@@ -12,8 +12,7 @@ import { Lightbox, type LightboxImage } from '@/components/shared/lightbox';
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/shared/reveal';
 import { cn, pick } from '@/lib/utils';
-import { documents } from '@/data/experts';
-import type { MediaPhoto, MediaVideo, NewsArticle } from '@/types';
+import type { DocumentLink, MediaPhoto, MediaVideo, NewsArticle } from '@/types';
 
 type Tab = 'news' | 'video' | 'photo' | 'press';
 const PER_PAGE = 6;
@@ -22,10 +21,12 @@ export function MediaTabs({
   news,
   videos,
   photos,
+  documents,
 }: {
   news: NewsArticle[];
   videos: MediaVideo[];
   photos: MediaPhoto[];
+  documents: DocumentLink[];
 }) {
   const t = useTranslations('Media');
   const [tab, setTab] = useState<Tab>('news');
@@ -77,7 +78,7 @@ export function MediaTabs({
           {tab === 'news' && <NewsTab news={news} />}
           {tab === 'video' && <VideoTab videos={videos} />}
           {tab === 'photo' && <PhotoTab photos={photos} />}
-          {tab === 'press' && <PressTab />}
+          {tab === 'press' && <PressTab documents={documents} />}
         </motion.div>
       </AnimatePresence>
     </div>
@@ -153,7 +154,7 @@ function PhotoTab({ photos }: { photos: MediaPhoto[] }) {
   );
 }
 
-function PressTab() {
+function PressTab({ documents }: { documents: DocumentLink[] }) {
   const t = useTranslations('Media');
   const locale = useLocale();
 

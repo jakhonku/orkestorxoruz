@@ -3,7 +3,7 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { ProjectsTabs } from '@/components/features/projects-tabs';
-import { projects } from '@/data/projects';
+import { getProjects } from '@/server/queries/projects';
 
 export async function generateMetadata({
   params,
@@ -16,6 +16,7 @@ export async function generateMetadata({
 
 export default async function ProjectsPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const projects = await getProjects();
   const t = await getTranslations({ locale: params.locale, namespace: 'Projects' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
 

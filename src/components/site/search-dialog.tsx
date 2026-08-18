@@ -1,19 +1,15 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Search } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Modal } from '@/components/shared/modal';
-import { pick } from '@/lib/utils';
-import { ensembles } from '@/data/ensembles';
-import { projects } from '@/data/projects';
-import { events } from '@/data/events';
-import { news } from '@/data/news';
 
 interface Result {
   label: string;
   href: string;
+  /** Nav tarjimalari kaliti: ensembles | projects | afisha | media */
   group: string;
 }
 
@@ -23,21 +19,37 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
   const tNav = useTranslations('Nav');
   const [query, setQuery] = useState('');
 
-  const index: Result[] = useMemo(
-    () => [
-      ...ensembles.map((e) => ({ label: pick(e.name, locale), href: `/jamoalar/${e.slug}`, group: tNav('ensembles') })),
-      ...projects.map((p) => ({ label: pick(p.title, locale), href: `/loyihalar/${p.slug}`, group: tNav('projects') })),
-      ...events.map((e) => ({ label: pick(e.title, locale), href: `/afisha`, group: tNav('afisha') })),
-      ...news.map((n) => ({ label: pick(n.title, locale), href: `/media/${n.slug}`, group: tNav('media') })),
-    ],
-    [locale, tNav]
-  );
+  const [results, setResults] = useState<Result[]>([]);
 
-  const results = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return index.filter((r) => r.label.toLowerCase().includes(q)).slice(0, 8);
-  }, [query, index]);
+  // Qidiruv serverda bajariladi — butun ma'lumot brauzerga yuklanmaydi.
+  // 250 ms kutiladi, har harfda so'rov yuborilmasligi uchun.
+  useEffect(() => {
+    const q = query.trim();
+    if (q.length < 2) {
+      setResults([]);
+      return;
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/search?q=${encodeURIComponent(q)}&locale=${locale}`,
+          { signal: controller.signal },
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as { results: Result[] };
+        setResults(data.results);
+      } catch {
+        // so'rov bekor qilindi yoki tarmoq xatosi — natija o'zgarmaydi
+      }
+    }, 250);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [query, locale]);
 
   return (
     <Modal open={open} onClose={onClose} title={t('search')}>
@@ -65,7 +77,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
               className="flex items-center justify-between rounded-lg px-3 py-2.5 transition-colors hover:bg-navy/5"
             >
               <span className="text-sm font-medium text-navy">{r.label}</span>
-              <span className="text-xs text-muted-foreground">{r.group}</span>
+              <span className="text-xs text-muted-foreground">{tNav(r.group)}</span>
             </Link>
           </li>
         ))}

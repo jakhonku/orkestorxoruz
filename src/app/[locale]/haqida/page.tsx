@@ -7,7 +7,10 @@ import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
-import { leaders, documents } from '@/data/experts';
+import type { DocumentLink, Leader, Localized } from '@/types';
+import { getDocuments, getLeaders } from '@/server/queries/experts';
+import { getAboutTasks } from '@/server/queries/home';
+import { getSettings } from '@/server/queries/settings';
 import { pick } from '@/lib/utils';
 
 export async function generateMetadata({
@@ -19,17 +22,40 @@ export async function generateMetadata({
   return { title: t('title'), description: t('subtitle') };
 }
 
-export default function AboutPage({ params }: { params: { locale: Locale } }) {
+export default async function AboutPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
-  return <AboutContent />;
+
+  const [leaders, documents, tasks, settings] = await Promise.all([
+    getLeaders(),
+    getDocuments(),
+    getAboutTasks(),
+    getSettings(),
+  ]);
+
+  return (
+    <AboutContent
+      leaders={leaders}
+      documents={documents}
+      tasks={tasks}
+      missionText={settings.missionText}
+    />
+  );
 }
 
-function AboutContent() {
+function AboutContent({
+  leaders,
+  documents,
+  tasks,
+  missionText,
+}: {
+  leaders: Leader[];
+  documents: DocumentLink[];
+  tasks: Localized[];
+  missionText: Localized;
+}) {
   const t = useTranslations('About');
   const tn = useTranslations('Nav');
   const locale = useLocale();
-
-  const tasks = ['task1', 'task2', 'task3', 'task4', 'task5', 'task6'] as const;
 
   return (
     <>
@@ -52,7 +78,7 @@ function AboutContent() {
             </h2>
             <div className="mt-4 h-1 w-16 rounded-full bg-gold" />
             <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-              {t('missionText')}
+              {pick(missionText, locale) || t('missionText')}
             </p>
           </Reveal>
           <Reveal direction="left">
@@ -75,12 +101,12 @@ function AboutContent() {
           <SectionTitle title={t('tasksTitle')} />
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {tasks.map((task, i) => (
-              <Reveal key={task} delay={i * 0.07}>
+              <Reveal key={i} delay={i * 0.07}>
                 <div className="flex h-full gap-4 rounded-2xl border border-border bg-white p-6 shadow-soft">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-navy font-serif text-lg font-bold text-gold">
                     {i + 1}
                   </span>
-                  <p className="text-sm leading-relaxed text-navy-900">{t(task)}</p>
+                  <p className="text-sm leading-relaxed text-navy-900">{pick(task, locale)}</p>
                 </div>
               </Reveal>
             ))}

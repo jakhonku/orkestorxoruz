@@ -80,7 +80,7 @@
       "slides": [
         {
           "tag": "Milliy dastur",
-          "title": "«O‘zbekiston simfoniyasi»",
+          "title": "“O‘zbekiston simfoniyasi”",
           "text": "O‘zbekistonda orkestr va xor san’atini tizimli rivojlantirish, yoshlar orasida akademik musiqaga qiziqishni oshirish va eng yaxshi jamoalarni xalqaro maydonga olib chiqish.",
           "points": [
             "21 strategik loyiha",
@@ -95,7 +95,7 @@
           "points": [
             "Uzbekistan Orchestra Fest",
             "Milliy xor festivali",
-            "«Buyuk Ipak yo‘li» xalqaro festivali"
+            "“Buyuk Ipak yo‘li” xalqaro festivali"
           ]
         },
         {
@@ -113,9 +113,9 @@
           "title": "Hududlarda rivojlanish",
           "text": "San’atni poytaxtdan hududlarga olib chiqish va keng auditoriyani qamrab olish.",
           "points": [
-            "«Har bir hududga — orkestr»",
+            "“Har bir hududga — orkestr”",
             "100 ta konsert — O‘zbekiston bo‘ylab",
-            "«Musiqa poyezdi» loyihasi"
+            "“Musiqa poyezdi” loyihasi"
           ]
         },
         {
@@ -133,9 +133,9 @@
           "title": "Zamonaviy formatlar",
           "text": "Akademik musiqani yosh auditoriyaga yaqinlashtiruvchi yangi sahna formatlari.",
           "points": [
-            "«Ochiq osmon ostida simfoniya»",
-            "«Sympho Show»",
-            "«Orkestrlar kechasi»"
+            "“Ochiq osmon ostida simfoniya”",
+            "“Sympho Show”",
+            "“Orkestrlar kechasi”"
           ]
         },
         {
@@ -144,7 +144,7 @@
           "text": "Milliy media-platforma va onlayn translyatsiyalar orqali keng qamrov.",
           "points": [
             "Milliy media-platforma",
-            "«Orkestr bilan tanishuv» videolari",
+            "“Orkestr bilan tanishuv” videolari",
             "Jonli onlayn translyatsiyalar"
           ]
         },
@@ -196,7 +196,7 @@
   },
   "Join": {
     "ctaTitle": "Jamoangizni birlashmaga qo‘shing",
-    "ctaText": "Orkestr, xor yoki ansambl jamoangizni «Orkestr va Xor» ijodiy birlashmasi katalogiga qo‘shish uchun ariza qoldiring. Mutaxassislarimiz siz bilan bog‘lanadi.",
+    "ctaText": "Orkestr, xor yoki ansambl jamoangizni “Orkestr va Xor” ijodiy birlashmasi katalogiga qo‘shish uchun ariza qoldiring. Mutaxassislarimiz siz bilan bog‘lanadi.",
     "ctaButton": "Qo‘shilish uchun ariza",
     "modalTitle": "Jamoa qo‘shilish arizasi",
     "form_ensembleName": "Jamoa nomi",

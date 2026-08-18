@@ -10,10 +10,12 @@ import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { GalleryGrid } from '@/components/features/gallery-grid';
 import { pick } from '@/lib/utils';
-import { projects, getProjectBySlug } from '@/data/projects';
+import type { Project } from '@/types';
+import { getProjectBySlug, getProjectSlugs } from '@/server/queries/projects';
 
-export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const slugs = await getProjectSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -21,7 +23,7 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale; slug: string };
 }): Promise<Metadata> {
-  const project = getProjectBySlug(params.slug);
+  const project = await getProjectBySlug(params.slug);
   if (!project) return {};
   return {
     title: pick(project.title, params.locale),
@@ -30,18 +32,18 @@ export async function generateMetadata({
   };
 }
 
-export default function ProjectDetailPage({
+export default async function ProjectDetailPage({
   params,
 }: {
   params: { locale: Locale; slug: string };
 }) {
   setRequestLocale(params.locale);
-  if (!getProjectBySlug(params.slug)) notFound();
-  return <Detail slug={params.slug} />;
+  const project = await getProjectBySlug(params.slug);
+  if (!project) notFound();
+  return <Detail project={project} />;
 }
 
-function Detail({ slug }: { slug: string }) {
-  const project = getProjectBySlug(slug)!;
+function Detail({ project }: { project: Project }) {
   const locale = useLocale();
   const t = useTranslations('Projects');
   const tn = useTranslations('Nav');

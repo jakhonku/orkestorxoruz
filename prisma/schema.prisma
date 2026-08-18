@@ -1,0 +1,633 @@
+// "Orkestr va Xor" ijodiy birlashmasi — ma'lumotlar bazasi sxemasi
+//
+// Ko'p tillilik: uz/ru/en matnlar Json (jsonb) ustunlarda {"uz":"...","ru":"...","en":"..."}
+// ko'rinishida saqlanadi — frontenddagi Localized<T> tipiga to'g'ridan-to'g'ri mos keladi.
+//
+// Har bir kontent jadvalida:
+//   published — saytda ko'rinadimi (qoralama / e'lon qilingan)
+//   sortOrder — admin panelda qo'lda tartiblash uchun
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// ENUM'lar
+// ============================================================
+
+enum EnsembleType {
+  ORKESTR
+  XOR
+  ANSAMBL
+}
+
+enum Region {
+  TOSHKENT_SHAHRI
+  TOSHKENT
+  SAMARQAND
+  BUXORO
+  XORAZM
+  FARGONA
+  ANDIJON
+  NAMANGAN
+  QASHQADARYO
+  SURXONDARYO
+  NAVOIY
+  JIZZAX
+  SIRDARYO
+  QORAQALPOGISTON
+}
+
+enum ProjectScope {
+  RESPUBLIKA
+  XALQARO
+}
+
+enum ProjectStatus {
+  REJALASHTIRILGAN
+  DAVOM_ETMOQDA
+  YAKUNLANGAN
+}
+
+enum CompetitionKind {
+  TANLOV
+  FESTIVAL
+}
+
+enum CompetitionStatus {
+  OCHIQ
+  YOPIQ
+  TEZ_KUNDA
+}
+
+enum EventCategory {
+  KONSERT
+  FESTIVAL
+  FORUM
+  TANLOV
+}
+
+enum NewsCategory {
+  YANGILIK
+  MATBUOT
+  ELON
+}
+
+enum PhotoRatio {
+  PORTRAIT
+  LANDSCAPE
+  SQUARE
+}
+
+/// Arizalar va murojaatlar holati
+enum SubmissionStatus {
+  YANGI
+  KORIB_CHIQILMOQDA
+  JAVOB_BERILDI
+  RAD_ETILDI
+}
+
+enum AdminRole {
+  ADMIN
+  MUHARRIR
+}
+
+// ============================================================
+// JAMOALAR
+// ============================================================
+
+model Ensemble {
+  id               Int          @id @default(autoincrement())
+  slug             String       @unique @db.VarChar(140)
+  name             Json
+  type             EnsembleType
+  region           Region
+  city             Json
+  conductor        String       @db.VarChar(160)
+  memberCount      Int?
+  foundedYear      Int?
+  logoUrl          String?      @db.Text
+  bannerUrl        String?      @db.Text
+  shortDescription Json
+  history          Json?
+  phone            String?      @db.VarChar(40)
+  email            String?      @db.VarChar(160)
+  featured         Boolean      @default(false)
+  published        Boolean      @default(true)
+  sortOrder        Int          @default(0)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  members    EnsembleMember[]
+  repertoire RepertoireItem[]
+  gallery    EnsembleGalleryPhoto[]
+  videos     EnsembleVideo[]
+
+  @@index([type])
+  @@index([region])
+  @@index([published, sortOrder])
+  @@map("ensembles")
+}
+
+model EnsembleMember {
+  id         Int    @id @default(autoincrement())
+  ensembleId Int
+  name       String @db.VarChar(160)
+  role       Json
+  sortOrder  Int    @default(0)
+
+  ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
+
+  @@index([ensembleId, sortOrder])
+  @@map("ensemble_members")
+}
+
+model RepertoireItem {
+  id         Int    @id @default(autoincrement())
+  ensembleId Int
+  composer   String @db.VarChar(160)
+  work       Json
+  sortOrder  Int    @default(0)
+
+  ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
+
+  @@index([ensembleId, sortOrder])
+  @@map("ensemble_repertoire")
+}
+
+model EnsembleGalleryPhoto {
+  id         Int    @id @default(autoincrement())
+  ensembleId Int
+  src        String @db.Text
+  caption    Json
+  sortOrder  Int    @default(0)
+
+  ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
+
+  @@index([ensembleId, sortOrder])
+  @@map("ensemble_gallery")
+}
+
+model EnsembleVideo {
+  id         Int    @id @default(autoincrement())
+  ensembleId Int
+  title      Json
+  youtubeId  String @db.VarChar(40)
+  sortOrder  Int    @default(0)
+
+  ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
+
+  @@index([ensembleId, sortOrder])
+  @@map("ensemble_videos")
+}
+
+// ============================================================
+// LOYIHALAR
+// ============================================================
+
+model Project {
+  id               Int           @id @default(autoincrement())
+  slug             String        @unique @db.VarChar(140)
+  title            Json
+  scope            ProjectScope
+  status           ProjectStatus @default(YAKUNLANGAN)
+  coverUrl         String?       @db.Text
+  period           Json
+  location         Json
+  shortDescription Json
+  description      Json
+  partnersNote     Json?
+  featured         Boolean       @default(false)
+  published        Boolean       @default(true)
+  sortOrder        Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  results ProjectResult[]
+  gallery ProjectGalleryPhoto[]
+
+  @@index([scope])
+  @@index([published, sortOrder])
+  @@map("projects")
+}
+
+model ProjectResult {
+  id        Int    @id @default(autoincrement())
+  projectId Int
+  label     Json
+  value     String @db.VarChar(60)
+  sortOrder Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sortOrder])
+  @@map("project_results")
+}
+
+model ProjectGalleryPhoto {
+  id        Int    @id @default(autoincrement())
+  projectId Int
+  src       String @db.Text
+  caption   Json
+  sortOrder Int    @default(0)
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, sortOrder])
+  @@map("project_gallery")
+}
+
+// ============================================================
+// TANLOV VA FESTIVALLAR
+// ============================================================
+
+model Competition {
+  id                 Int               @id @default(autoincrement())
+  slug               String            @unique @db.VarChar(140)
+  title              Json
+  kind               CompetitionKind
+  status             CompetitionStatus @default(TEZ_KUNDA)
+  coverUrl           String?           @db.Text
+  date               Json
+  location           Json
+  shortDescription   Json
+  regulations        Json
+  regulationsFileUrl String?           @db.Text
+  applicationEmail   String?           @db.VarChar(160)
+  prizeFund          Json?
+  published          Boolean           @default(true)
+  sortOrder          Int               @default(0)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+
+  timeline     CompetitionStage[]
+  jury         JuryMember[]
+  applications CompetitionApplication[]
+
+  @@index([kind])
+  @@index([status])
+  @@index([published, sortOrder])
+  @@map("competitions")
+}
+
+model CompetitionStage {
+  id            Int    @id @default(autoincrement())
+  competitionId Int
+  date          Json
+  title         Json
+  description   Json
+  sortOrder     Int    @default(0)
+
+  competition Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+
+  @@index([competitionId, sortOrder])
+  @@map("competition_timeline")
+}
+
+model JuryMember {
+  id            Int     @id @default(autoincrement())
+  competitionId Int
+  name          String  @db.VarChar(160)
+  country       Json
+  title         Json
+  photoUrl      String? @db.Text
+  sortOrder     Int     @default(0)
+
+  competition Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+
+  @@index([competitionId, sortOrder])
+  @@map("competition_jury")
+}
+
+// ============================================================
+// AFISHA
+// ============================================================
+
+model ConcertEvent {
+  id               Int           @id @default(autoincrement())
+  slug             String        @unique @db.VarChar(140)
+  title            Json
+  category         EventCategory
+  posterUrl        String?       @db.Text
+  date             DateTime      @db.Date
+  time             String        @db.VarChar(10)
+  venue            Json
+  city             Json
+  ticketUrl        String?       @db.Text
+  price            Json?
+  shortDescription Json
+  performerNote    Json?
+  featured         Boolean       @default(false)
+  published        Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@index([date])
+  @@index([category])
+  @@index([published, date])
+  @@map("events")
+}
+
+// ============================================================
+// MEDIA
+// ============================================================
+
+model NewsArticle {
+  id        Int          @id @default(autoincrement())
+  slug      String       @unique @db.VarChar(140)
+  title     Json
+  category  NewsCategory
+  coverUrl  String?      @db.Text
+  date      DateTime     @db.Date
+  author    Json
+  excerpt   Json
+  /// {"uz": ["1-abzats", "2-abzats"], "ru": [...], "en": [...]}
+  body      Json
+  featured  Boolean      @default(false)
+  published Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@index([date])
+  @@index([category])
+  @@index([published, date])
+  @@map("news")
+}
+
+model MediaVideo {
+  id        Int      @id @default(autoincrement())
+  title     Json
+  youtubeId String   @db.VarChar(40)
+  date      DateTime @db.Date
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+
+  @@index([published, date])
+  @@map("media_videos")
+}
+
+model MediaPhoto {
+  id        Int        @id @default(autoincrement())
+  src       String     @db.Text
+  caption   Json
+  ratio     PhotoRatio @default(LANDSCAPE)
+  published Boolean    @default(true)
+  sortOrder Int        @default(0)
+
+  @@index([published, sortOrder])
+  @@map("media_photos")
+}
+
+// ============================================================
+// ODAMLAR VA HUJJATLAR
+// ============================================================
+
+model Expert {
+  id          Int     @id @default(autoincrement())
+  slug        String  @unique @db.VarChar(140)
+  name        String  @db.VarChar(160)
+  countryCode String  @db.VarChar(2)
+  country     Json
+  photoUrl    String? @db.Text
+  role        Json
+  bio         Json
+  /// {"uz": ["yo'nalish 1", ...], "ru": [...], "en": [...]}
+  specialties Json
+  cooperation Json?
+  published   Boolean @default(true)
+  sortOrder   Int     @default(0)
+
+  @@index([published, sortOrder])
+  @@map("experts")
+}
+
+model Leader {
+  id           Int      @id @default(autoincrement())
+  name         String   @db.VarChar(160)
+  role         Json
+  photoUrl     String?  @db.Text
+  bio          Json
+  honorific    Json?
+  receptionDay Json?
+  published    Boolean  @default(true)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([published, sortOrder])
+  @@map("leaders")
+}
+
+model DocumentLink {
+  id        Int     @id @default(autoincrement())
+  title     Json
+  href      String  @db.Text
+  meta      String  @db.VarChar(60)
+  published Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@index([published, sortOrder])
+  @@map("documents")
+}
+
+// ============================================================
+// BOSH SAHIFA BLOKLARI
+// ============================================================
+
+/// Bosh ekrandagi "O'zbekiston simfoniyasi" strategiyasi slaydlari
+model StrategySlide {
+  id        Int     @id @default(autoincrement())
+  tag       Json
+  title     Json
+  text      Json
+  /// {"uz": ["nuqta 1", "nuqta 2", "nuqta 3"], "ru": [...], "en": [...]}
+  points    Json
+  imageUrl  String? @db.Text
+  published Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@index([published, sortOrder])
+  @@map("strategy_slides")
+}
+
+model KpiStat {
+  id        Int     @id @default(autoincrement())
+  value     Int
+  suffix    String  @db.VarChar(8)
+  icon      String  @db.VarChar(40)
+  label     Json
+  published Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@index([published, sortOrder])
+  @@map("kpi_stats")
+}
+
+model Partner {
+  id        Int     @id @default(autoincrement())
+  name      String  @db.VarChar(160)
+  logoText  String  @db.VarChar(60)
+  logoUrl   String? @db.Text
+  country   Json
+  url       String? @db.Text
+  /// Hamkorlik asosi — memorandum raqami/sanasi (faqat admin uchun)
+  agreement String? @db.VarChar(200)
+  published Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@index([published, sortOrder])
+  @@map("partners")
+}
+
+/// "Birlashma haqida" sahifasidagi tashkiliy vazifalar
+model AboutTask {
+  id        Int     @id @default(autoincrement())
+  text      Json
+  published Boolean @default(true)
+  sortOrder Int     @default(0)
+
+  @@index([published, sortOrder])
+  @@map("about_tasks")
+}
+
+// ============================================================
+// SOZLAMALAR (kontakt ma'lumotlari, missiya matni, ijtimoiy tarmoqlar)
+// ============================================================
+
+/// Kalit-qiymat sozlamalari: siteName, slogan, address, phone, email,
+/// workingHours, missionText, socials, mapCoords va h.k.
+model Setting {
+  key       String   @id @db.VarChar(80)
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// ============================================================
+// ARIZALAR VA MUROJAATLAR
+// ============================================================
+
+model ContactMessage {
+  id        Int              @id @default(autoincrement())
+  name      String           @db.VarChar(160)
+  email     String           @db.VarChar(160)
+  subject   String           @db.VarChar(200)
+  message   String           @db.Text
+  locale    String           @db.VarChar(5)
+  status    SubmissionStatus @default(YANGI)
+  adminNote String?          @db.Text
+  createdAt DateTime         @default(now())
+
+  @@index([status, createdAt])
+  @@map("contact_messages")
+}
+
+model EnsembleApplication {
+  id           Int              @id @default(autoincrement())
+  ensembleName String           @db.VarChar(200)
+  type         EnsembleType
+  region       Region
+  city         String           @db.VarChar(120)
+  conductor    String           @db.VarChar(160)
+  memberCount  Int?
+  contactName  String           @db.VarChar(160)
+  email        String           @db.VarChar(160)
+  phone        String           @db.VarChar(40)
+  message      String?          @db.Text
+  locale       String           @db.VarChar(5)
+  status       SubmissionStatus @default(YANGI)
+  adminNote    String?          @db.Text
+  createdAt    DateTime         @default(now())
+
+  @@index([status, createdAt])
+  @@map("ensemble_applications")
+}
+
+model CompetitionApplication {
+  id            Int              @id @default(autoincrement())
+  competitionId Int?
+  fullName      String           @db.VarChar(160)
+  ensembleName  String?          @db.VarChar(200)
+  email         String           @db.VarChar(160)
+  phone         String           @db.VarChar(40)
+  category      String?          @db.VarChar(120)
+  message       String?          @db.Text
+  locale        String           @db.VarChar(5)
+  status        SubmissionStatus @default(YANGI)
+  adminNote     String?          @db.Text
+  createdAt     DateTime         @default(now())
+
+  competition Competition? @relation(fields: [competitionId], references: [id], onDelete: SetNull)
+
+  @@index([competitionId, createdAt])
+  @@index([status, createdAt])
+  @@map("competition_applications")
+}
+
+model TalentApplication {
+  id         Int              @id @default(autoincrement())
+  fullName   String           @db.VarChar(160)
+  age        Int
+  instrument String           @db.VarChar(120)
+  email      String           @db.VarChar(160)
+  phone      String?          @db.VarChar(40)
+  videoUrl   String           @db.Text
+  about      String           @db.Text
+  locale     String           @db.VarChar(5)
+  status     SubmissionStatus @default(YANGI)
+  adminNote  String?          @db.Text
+  createdAt  DateTime         @default(now())
+
+  @@index([status, createdAt])
+  @@map("talent_applications")
+}
+
+model Subscriber {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(160)
+  locale    String   @db.VarChar(5)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("subscribers")
+}
+
+// ============================================================
+// TIZIM: admin foydalanuvchilar va yuklangan fayllar
+// ============================================================
+
+model AdminUser {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique @db.VarChar(160)
+  passwordHash String    @db.Text
+  name         String    @db.VarChar(160)
+  role         AdminRole @default(MUHARRIR)
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+
+  @@map("admin_users")
+}
+
+/// Admin panel orqali yuklangan rasm va hujjatlar
+model MediaFile {
+  id         Int      @id @default(autoincrement())
+  url        String   @unique @db.Text
+  filename   String   @db.VarChar(255)
+  mimeType   String   @db.VarChar(100)
+  size       Int
+  width      Int?
+  height     Int?
+  alt        Json?
+  folder     String   @default("umumiy") @db.VarChar(60)
+  createdAt  DateTime @default(now())
+
+  @@index([folder, createdAt])
+  @@map("media_files")
+}

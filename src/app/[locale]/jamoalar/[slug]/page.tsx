@@ -12,10 +12,12 @@ import { GalleryGrid } from '@/components/features/gallery-grid';
 import { VideoEmbed } from '@/components/features/video-embed';
 import { REGION_NAMES } from '@/lib/constants';
 import { pick } from '@/lib/utils';
-import { ensembles, getEnsembleBySlug } from '@/data/ensembles';
+import type { Ensemble } from '@/types';
+import { getEnsembleBySlug, getEnsembleSlugs } from '@/server/queries/ensembles';
 
-export function generateStaticParams() {
-  return ensembles.map((e) => ({ slug: e.slug }));
+export async function generateStaticParams() {
+  const slugs = await getEnsembleSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -23,7 +25,7 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale; slug: string };
 }): Promise<Metadata> {
-  const ensemble = getEnsembleBySlug(params.slug);
+  const ensemble = await getEnsembleBySlug(params.slug);
   if (!ensemble) return {};
   return {
     title: pick(ensemble.name, params.locale),
@@ -32,19 +34,18 @@ export async function generateMetadata({
   };
 }
 
-export default function EnsembleProfilePage({
+export default async function EnsembleProfilePage({
   params,
 }: {
   params: { locale: Locale; slug: string };
 }) {
   setRequestLocale(params.locale);
-  const ensemble = getEnsembleBySlug(params.slug);
+  const ensemble = await getEnsembleBySlug(params.slug);
   if (!ensemble) notFound();
-  return <Profile slug={params.slug} />;
+  return <Profile ensemble={ensemble} />;
 }
 
-function Profile({ slug }: { slug: string }) {
-  const ensemble = getEnsembleBySlug(slug)!;
+function Profile({ ensemble }: { ensemble: Ensemble }) {
   const locale = useLocale();
   const t = useTranslations('Ensembles');
   const tn = useTranslations('Nav');

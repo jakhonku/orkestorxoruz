@@ -3,13 +3,12 @@ import { ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Reveal } from '@/components/shared/reveal';
 import { NewsCard } from '@/components/cards/news-card';
-import { news } from '@/data/news';
+import type { NewsArticle } from '@/types';
 
-export function NewsSection() {
+export function NewsSection({ articles }: { articles: NewsArticle[] }) {
   const t = useTranslations('Home');
   const tc = useTranslations('Common');
 
-  const latest = news.slice(0, 3);
 
   return (
     <section className="section bg-navy-50/40">
@@ -33,7 +32,7 @@ export function NewsSection() {
         </div>
 
         <div className="grid gap-6 md:grid-cols-3">
-          {latest.map((article, i) => (
+          {articles.map((article, i) => (
             <Reveal key={article.slug} delay={i * 0.1}>
               <NewsCard article={article} />
             </Reveal>

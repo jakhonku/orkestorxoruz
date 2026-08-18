@@ -10,7 +10,8 @@ import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { ApplyModal } from '@/components/features/apply-modal';
 import { pick, flagEmoji } from '@/lib/utils';
-import { competitions, getCompetitionBySlug } from '@/data/competitions';
+import type { Competition } from '@/types';
+import { getCompetitionBySlug, getCompetitionSlugs } from '@/server/queries/competitions';
 import type { CompetitionStatus } from '@/types';
 
 const statusVariant: Record<CompetitionStatus, 'success' | 'danger' | 'gold'> = {
@@ -19,8 +20,9 @@ const statusVariant: Record<CompetitionStatus, 'success' | 'danger' | 'gold'> = 
   'tez-kunda': 'gold',
 };
 
-export function generateStaticParams() {
-  return competitions.map((c) => ({ slug: c.slug }));
+export async function generateStaticParams() {
+  const slugs = await getCompetitionSlugs();
+  return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -28,7 +30,7 @@ export async function generateMetadata({
 }: {
   params: { locale: Locale; slug: string };
 }): Promise<Metadata> {
-  const competition = getCompetitionBySlug(params.slug);
+  const competition = await getCompetitionBySlug(params.slug);
   if (!competition) return {};
   return {
     title: pick(competition.title, params.locale),
@@ -37,18 +39,18 @@ export async function generateMetadata({
   };
 }
 
-export default function CompetitionDetailPage({
+export default async function CompetitionDetailPage({
   params,
 }: {
   params: { locale: Locale; slug: string };
 }) {
   setRequestLocale(params.locale);
-  if (!getCompetitionBySlug(params.slug)) notFound();
-  return <Detail slug={params.slug} />;
+  const competition = await getCompetitionBySlug(params.slug);
+  if (!competition) notFound();
+  return <Detail competition={competition} />;
 }
 
-function Detail({ slug }: { slug: string }) {
-  const competition = getCompetitionBySlug(slug)!;
+function Detail({ competition }: { competition: Competition }) {
   const locale = useLocale();
   const t = useTranslations('Competitions');
   const tn = useTranslations('Nav');

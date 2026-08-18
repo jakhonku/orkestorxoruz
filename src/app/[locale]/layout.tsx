@@ -65,6 +65,16 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Sahifalar build paytida tayyorlanadi (tez ochiladi), lekin har 5 daqiqada
+ * bazadan qayta o'qiladi. Ya'ni admin panelda kiritilgan o'zgarish saytni
+ * qayta qurmasdan ham ko'rinadi.
+ *
+ * Keyinchalik admin panel qo'shilganda bu yerga "darhol yangilash"
+ * (revalidatePath) qo'shiladi — o'shanda kutish ham kerak bo'lmaydi.
+ */
+export const revalidate = 300;
+
 export default async function LocaleLayout({
   children,
   params,

@@ -1,9 +1,8 @@
 # "Orkestr va Xor" ijodiy birlashmasi — veb-sayt (frontend)
 
 O‘zbekistonda orkestr va xor san’atini rivojlantiruvchi davlat ijodiy tashkiloti uchun
-ko‘p tilli (uz / ru / en) frontend sayt. **Backend hozircha yo‘q** — barcha ma’lumot
-`src/data/` papkasidagi typed mock fayllarda saqlanadi va keyinchalik API ga oson
-almashtiriladi.
+ko‘p tilli (uz / ru / en) sayt. Kontent **PostgreSQL bazasida** saqlanadi va
+Prisma orqali o‘qiladi — batafsil: [BAZA.md](./BAZA.md).
 
 ---
 
@@ -17,7 +16,8 @@ almashtiriladi.
 | Ikonkalar | **lucide-react** |
 | Ko‘p tillilik | **next-intl** (URL prefiks: `/uz`, `/ru`, `/en`) |
 | Shriftlar | **Playfair Display** (sarlavha, serif) + **Manrope** (matn) |
-| Deploy | **Vercel** ga tayyor |
+| Ma’lumotlar bazasi | **PostgreSQL** + **Prisma 7** |
+| Deploy | Node.js server (Ahost VDS) yoki Vercel |
 
 Brend ranglari: to‘q ko‘k `#0B3C7D`, oltin `#C9A227`, oq.
 
@@ -29,7 +29,17 @@ Brend ranglari: to‘q ko‘k `#0B3C7D`, oltin `#C9A227`, oq.
 # 1. Bog‘liqliklarni o‘rnatish
 npm install
 
-# 2. Development server (http://localhost:3000 → /uz ga yo‘naltiradi)
+# 2. Muhit o‘zgaruvchilari
+cp .env.example .env
+
+# 3. Bazani ishga tushirish (alohida terminalda, Docker kerak emas)
+npm run db:start
+
+# 4. Bazani tayyorlash (birinchi marta)
+npm run db:migrate
+npm run db:seed
+
+# 5. Development server (http://localhost:3000 → /uz ga yo‘naltiradi)
 npm run dev
 
 # 3. Production build
