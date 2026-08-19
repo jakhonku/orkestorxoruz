@@ -42,6 +42,8 @@
     "status": "Status",
     "required": "Required field",
     "invalidEmail": "Invalid email address",
+    "errorMessage": "Could not send. Please try again in a moment.",
+    "tooManyRequests": "Too many attempts. Please wait a little and try again.",
     "successMessage": "Your message has been received. Thank you!"
   },
   "Home": {

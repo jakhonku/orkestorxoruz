@@ -1,18 +1,23 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState, useTransition, type FormEvent } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { obunaQoshish } from '@/server/forms/amallar';
+import { Tuzoq } from '@/components/features/forma-yordam';
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function NewsletterForm({ variant = 'light' }: { variant?: 'light' | 'dark' }) {
   const t = useTranslations('Home');
   const tc = useTranslations('Common');
+  const locale = useLocale();
   const [email, setEmail] = useState('');
+  const [tuzoq, setTuzoq] = useState('');
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
+  const [yuborilmoqda, boshla] = useTransition();
 
   function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -20,10 +25,17 @@ export function NewsletterForm({ variant = 'light' }: { variant?: 'light' | 'dar
       setError(tc('invalidEmail'));
       return;
     }
-    // UI-only: backend endpoint will be wired here later.
+
     setError('');
-    setDone(true);
-    setEmail('');
+    boshla(async () => {
+      const natija = await obunaQoshish({ email, locale, tuzoq });
+      if (natija.ok) {
+        setDone(true);
+        setEmail('');
+      } else {
+        setError(natija.kod === 'limit' ? tc('tooManyRequests') : tc('errorMessage'));
+      }
+    });
   }
 
   const dark = variant === 'dark';
@@ -60,15 +72,18 @@ export function NewsletterForm({ variant = 'light' }: { variant?: 'light' | 'dar
         />
         <button
           type="submit"
+          disabled={yuborilmoqda}
           className={cn(
-            'flex h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-colors',
+            'flex h-12 items-center justify-center gap-2 rounded-full px-6 text-sm font-semibold transition-colors disabled:opacity-60',
             dark ? 'bg-gold text-navy-900 hover:bg-gold-600' : 'bg-navy text-white hover:bg-navy-800'
           )}
         >
-          {t('newsletterButton')}
+          {yuborilmoqda ? tc('sending') : t('newsletterButton')}
           <ArrowRight className="h-4 w-4" />
         </button>
       </div>
+
+      <Tuzoq qiymat={tuzoq} ozgartir={setTuzoq} />
       {error && (
         <p className={cn('mt-2 text-xs', dark ? 'text-gold-200' : 'text-red-600')}>{error}</p>
       )}

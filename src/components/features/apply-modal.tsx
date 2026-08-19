@@ -1,12 +1,14 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState, useTransition, type FormEvent } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { Check, Lock } from 'lucide-react';
 import { Modal } from '@/components/shared/modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { tanlovArizasi, type XatoKodi } from '@/server/forms/amallar';
+import { Tuzoq, XatoXabari } from './forma-yordam';
 import type { CompetitionStatus } from '@/types';
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,13 +31,24 @@ const empty: FormState = {
   message: '',
 };
 
-export function ApplyModal({ status }: { status: CompetitionStatus }) {
+export function ApplyModal({
+  status,
+  competitionId,
+}: {
+  status: CompetitionStatus;
+  /** Ariza qaysi tanlovga tegishli ekani — bazaga shu bilan yoziladi */
+  competitionId?: number;
+}) {
   const t = useTranslations('Competitions');
   const tc = useTranslations('Common');
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [tuzoq, setTuzoq] = useState('');
+  const [xato, setXato] = useState<XatoKodi | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [yuborilmoqda, boshla] = useTransition();
 
   const disabled = status !== 'ochiq';
 
@@ -56,8 +69,23 @@ export function ApplyModal({ status }: { status: CompetitionStatus }) {
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (!validate()) return;
-    // UI-only: POST to the applications API endpoint here later.
-    setSubmitted(true);
+
+    setXato(null);
+    boshla(async () => {
+      const natija = await tanlovArizasi({
+        competitionId: competitionId ?? null,
+        fullName: form.name,
+        ensembleName: form.ensemble,
+        email: form.email,
+        phone: form.phone,
+        category: form.category,
+        message: form.message,
+        locale,
+        tuzoq,
+      });
+      if (natija.ok) setSubmitted(true);
+      else setXato(natija.kod);
+    });
   }
 
   function close() {
@@ -66,6 +94,7 @@ export function ApplyModal({ status }: { status: CompetitionStatus }) {
       setSubmitted(false);
       setForm(empty);
       setErrors({});
+      setXato(null);
     }, 200);
   }
 
@@ -113,8 +142,11 @@ export function ApplyModal({ status }: { status: CompetitionStatus }) {
             <Field label={t('form_message')}>
               <Textarea value={form.message} onChange={(e) => set('message', e.target.value)} />
             </Field>
-            <Button type="submit" className="w-full" size="lg">
-              {tc('submit')}
+            <XatoXabari kod={xato} />
+            <Tuzoq qiymat={tuzoq} ozgartir={setTuzoq} />
+
+            <Button type="submit" className="w-full" size="lg" disabled={yuborilmoqda}>
+              {yuborilmoqda ? tc('sending') : tc('submit')}
             </Button>
           </form>
         )}

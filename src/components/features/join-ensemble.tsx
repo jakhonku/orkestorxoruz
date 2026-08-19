@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
+import { useState, useTransition, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { Check, PlusCircle } from 'lucide-react';
 import { Modal } from '@/components/shared/modal';
@@ -10,6 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select } from '@/components/ui/select';
 import { REGION_NAMES } from '@/lib/constants';
 import { pick } from '@/lib/utils';
+import { jamoaArizasi, type XatoKodi } from '@/server/forms/amallar';
+import { Tuzoq, XatoXabari } from './forma-yordam';
 import type { EnsembleType, Region } from '@/types';
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -52,7 +54,10 @@ export function JoinEnsemble() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<FormState>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [tuzoq, setTuzoq] = useState('');
+  const [xato, setXato] = useState<XatoKodi | null>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [yuborilmoqda, boshla] = useTransition();
 
   function set<K extends keyof FormState>(key: K, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -64,14 +69,26 @@ export function JoinEnsemble() {
     if (!form.ensembleName.trim()) err.ensembleName = tc('required');
     if (!form.type) err.type = tc('required');
     if (!form.region) err.region = tc('required');
+    if (!form.city.trim()) err.city = tc('required');
+    if (!form.conductor.trim()) err.conductor = tc('required');
     if (!form.contactName.trim()) err.contactName = tc('required');
     if (!form.email.trim()) err.email = tc('required');
     else if (!emailRe.test(form.email)) err.email = tc('invalidEmail');
     if (!form.phone.trim()) err.phone = tc('required');
     setErrors(err);
     if (Object.keys(err).length) return;
-    // UI-only: POST to the ensemble-membership endpoint here later.
-    setSubmitted(true);
+
+    setXato(null);
+    boshla(async () => {
+      const natija = await jamoaArizasi({
+        ...form,
+        memberCount: form.memberCount.trim() === '' ? null : form.memberCount,
+        locale,
+        tuzoq,
+      });
+      if (natija.ok) setSubmitted(true);
+      else setXato(natija.kod);
+    });
   }
 
   function close() {
@@ -80,6 +97,7 @@ export function JoinEnsemble() {
       setSubmitted(false);
       setForm(empty);
       setErrors({});
+      setXato(null);
     }, 200);
   }
 
@@ -150,10 +168,10 @@ export function JoinEnsemble() {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label={t('form_city')}>
+              <Field label={t('form_city')} error={errors.city} required>
                 <Input value={form.city} onChange={(e) => set('city', e.target.value)} />
               </Field>
-              <Field label={t('form_conductor')}>
+              <Field label={t('form_conductor')} error={errors.conductor} required>
                 <Input value={form.conductor} onChange={(e) => set('conductor', e.target.value)} />
               </Field>
             </div>
@@ -185,8 +203,11 @@ export function JoinEnsemble() {
               <Textarea value={form.message} onChange={(e) => set('message', e.target.value)} />
             </Field>
 
-            <Button type="submit" className="w-full" size="lg">
-              {tc('submit')}
+            <XatoXabari kod={xato} />
+            <Tuzoq qiymat={tuzoq} ozgartir={setTuzoq} />
+
+            <Button type="submit" className="w-full" size="lg" disabled={yuborilmoqda}>
+              {yuborilmoqda ? tc('sending') : tc('submit')}
             </Button>
           </form>
         )}

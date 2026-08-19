@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState, useTransition, type FormEvent } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { talentArizasi, type XatoKodi } from '@/server/forms/amallar';
+import { Tuzoq, XatoXabari } from './forma-yordam';
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -23,9 +25,13 @@ const empty: FormState = { name: '', age: '', instrument: '', email: '', video: 
 export function TalentForm() {
   const t = useTranslations('Talent');
   const tc = useTranslations('Common');
+  const locale = useLocale();
   const [form, setForm] = useState<FormState>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [tuzoq, setTuzoq] = useState('');
+  const [xato, setXato] = useState<XatoKodi | null>(null);
   const [done, setDone] = useState(false);
+  const [yuborilmoqda, boshla] = useTransition();
 
   function set<K extends keyof FormState>(key: K, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -38,10 +44,27 @@ export function TalentForm() {
     if (!form.email.trim()) err.email = tc('required');
     else if (!emailRe.test(form.email)) err.email = tc('invalidEmail');
     if (!form.instrument.trim()) err.instrument = tc('required');
+    if (!form.age.trim()) err.age = tc('required');
+    if (!form.video.trim()) err.video = tc('required');
+    if (!form.about.trim()) err.about = tc('required');
     setErrors(err);
     if (Object.keys(err).length) return;
-    // UI-only: POST to the talent applications endpoint here later.
-    setDone(true);
+
+    setXato(null);
+    boshla(async () => {
+      const natija = await talentArizasi({
+        fullName: form.name,
+        age: form.age,
+        instrument: form.instrument,
+        email: form.email,
+        videoUrl: form.video,
+        about: form.about,
+        locale,
+        tuzoq,
+      });
+      if (natija.ok) setDone(true);
+      else setXato(natija.kod);
+    });
   }
 
   if (done) {
@@ -65,7 +88,7 @@ export function TalentForm() {
         <Field label={t('form_name')} error={errors.name} required>
           <Input value={form.name} onChange={(e) => set('name', e.target.value)} />
         </Field>
-        <Field label={t('form_age')}>
+        <Field label={t('form_age')} error={errors.age} required>
           <Input
             type="number"
             min={5}
@@ -83,7 +106,7 @@ export function TalentForm() {
           <Input type="email" value={form.email} onChange={(e) => set('email', e.target.value)} />
         </Field>
       </div>
-      <Field label={t('form_video')}>
+      <Field label={t('form_video')} error={errors.video} required>
         <Input
           type="url"
           placeholder="https://youtube.com/..."
@@ -91,11 +114,14 @@ export function TalentForm() {
           onChange={(e) => set('video', e.target.value)}
         />
       </Field>
-      <Field label={t('form_about')}>
+      <Field label={t('form_about')} error={errors.about} required>
         <Textarea value={form.about} onChange={(e) => set('about', e.target.value)} />
       </Field>
-      <Button type="submit" size="lg" className="w-full sm:w-auto">
-        {tc('submit')}
+      <XatoXabari kod={xato} />
+      <Tuzoq qiymat={tuzoq} ozgartir={setTuzoq} />
+
+      <Button type="submit" size="lg" className="w-full sm:w-auto" disabled={yuborilmoqda}>
+        {yuborilmoqda ? tc('sending') : tc('submit')}
       </Button>
     </form>
   );

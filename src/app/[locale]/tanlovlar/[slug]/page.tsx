@@ -11,7 +11,11 @@ import { Badge } from '@/components/ui/badge';
 import { ApplyModal } from '@/components/features/apply-modal';
 import { pick, flagEmoji } from '@/lib/utils';
 import type { Competition } from '@/types';
-import { getCompetitionBySlug, getCompetitionSlugs } from '@/server/queries/competitions';
+import {
+  getCompetitionBySlug,
+  getCompetitionMeta,
+  getCompetitionSlugs,
+} from '@/server/queries/competitions';
 import type { CompetitionStatus } from '@/types';
 
 const statusVariant: Record<CompetitionStatus, 'success' | 'danger' | 'gold'> = {
@@ -47,10 +51,20 @@ export default async function CompetitionDetailPage({
   setRequestLocale(params.locale);
   const competition = await getCompetitionBySlug(params.slug);
   if (!competition) notFound();
-  return <Detail competition={competition} />;
+
+  // Ariza qaysi tanlovga tegishli ekanini bilish uchun bazadagi id kerak
+  const meta = await getCompetitionMeta(params.slug);
+
+  return <Detail competition={competition} competitionId={meta?.id} />;
 }
 
-function Detail({ competition }: { competition: Competition }) {
+function Detail({
+  competition,
+  competitionId,
+}: {
+  competition: Competition;
+  competitionId?: number;
+}) {
   const locale = useLocale();
   const t = useTranslations('Competitions');
   const tn = useTranslations('Nav');
@@ -105,7 +119,7 @@ function Detail({ competition }: { competition: Competition }) {
               {pick(competition.location, locale)}
             </span>
           </div>
-          <ApplyModal status={competition.status} />
+          <ApplyModal status={competition.status} competitionId={competitionId} />
         </div>
       </section>
 

@@ -1,11 +1,13 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState, useTransition, type FormEvent } from 'react';
+import { useLocale, useTranslations } from 'next-intl';
 import { Check, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { aloqaYuborish, type XatoKodi } from '@/server/forms/amallar';
+import { Tuzoq, XatoXabari } from './forma-yordam';
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -21,9 +23,13 @@ const empty: FormState = { name: '', email: '', subject: '', message: '' };
 export function ContactForm() {
   const t = useTranslations('Contact');
   const tc = useTranslations('Common');
+  const locale = useLocale();
   const [form, setForm] = useState<FormState>(empty);
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
+  const [tuzoq, setTuzoq] = useState('');
+  const [xato, setXato] = useState<XatoKodi | null>(null);
   const [done, setDone] = useState(false);
+  const [yuborilmoqda, boshla] = useTransition();
 
   function set<K extends keyof FormState>(key: K, value: string) {
     setForm((f) => ({ ...f, [key]: value }));
@@ -38,8 +44,13 @@ export function ContactForm() {
     if (!form.message.trim()) err.message = tc('required');
     setErrors(err);
     if (Object.keys(err).length) return;
-    // UI-only: POST to the contact endpoint here later.
-    setDone(true);
+
+    setXato(null);
+    boshla(async () => {
+      const natija = await aloqaYuborish({ ...form, locale, tuzoq });
+      if (natija.ok) setDone(true);
+      else setXato(natija.kod);
+    });
   }
 
   if (done) {
@@ -77,9 +88,12 @@ export function ContactForm() {
           onChange={(e) => set('message', e.target.value)}
         />
       </Field>
-      <Button type="submit" size="lg">
+      <XatoXabari kod={xato} />
+      <Tuzoq qiymat={tuzoq} ozgartir={setTuzoq} />
+
+      <Button type="submit" size="lg" disabled={yuborilmoqda}>
         <Send className="h-4 w-4" />
-        {tc('submit')}
+        {yuborilmoqda ? tc('sending') : tc('submit')}
       </Button>
     </form>
   );

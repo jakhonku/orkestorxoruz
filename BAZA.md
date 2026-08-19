@@ -136,8 +136,8 @@ Sahifalar build paytida tayyorlanadi va **har 5 daqiqada** bazadan qayta o'qilad
 (`src/app/[locale]/layout.tsx` dagi `revalidate = 300`). Ya'ni bazadagi o'zgarish
 saytni qayta qurmasdan ham ko'rinadi.
 
-Admin panel qo'shilganda bu "darhol yangilash" (`revalidatePath`) bilan
-almashtiriladi — o'shanda kutish ham kerak bo'lmaydi.
+Admin panelda biror yozuv saqlansa, `revalidatePath('/', 'layout')` chaqiriladi —
+ya'ni tahrir qilingan zahoti sayt yangilanadi, 5 daqiqa kutish shart emas.
 
 ---
 
@@ -149,9 +149,77 @@ serverda `ILIKE` bilan bajariladi.
 
 ---
 
+## Admin panel (`/admin`)
+
+Interfeys faqat o'zbek tilida, sayt qismidan mustaqil (`src/app/admin/`).
+Kirish — `/admin/kirish`, sessiya HMAC bilan imzolangan cookie'da (7 kun).
+
+**Bo'limlar bitta joyda tavsiflanadi** — `src/server/admin/registr.ts`. Har bir
+bo'lim uchun model nomi, maydonlar ro'yxati va ro'yxatdagi qator ko'rinishi
+yoziladi; ro'yxat sahifasi (`/admin/<bolim>`), tahrirlash shakli
+(`/admin/<bolim>/<id>`) va yangi yozuv (`/admin/<bolim>/yangi`) shu tavsifdan
+avtomatik quriladi. Yangi bo'lim qo'shish uchun registrga bitta yozuv va
+`_lib/bolimlar.ts` dagi menyuga bitta qator qo'shiladi — sahifa yozilmaydi.
+
+Maydon turlari (`src/server/admin/turlar.ts`): `matn`, `matnKatta`, `slug`,
+`raqam`, `belgi`, `tanlov`, `sana`, `vaqt`, `havola`, `rasm`, uch tilli
+`kopTilli` / `kopTilliKatta` / `kopTilliRoyxat` va takrorlanuvchi `qatorlar`
+(a'zolar, repertuar, galereya, hakamlar...).
+
+> Bazada NULL qabul qilmaydigan ustunlar uchun maydonga `bosh` qiymati
+> beriladi (masalan `sortOrder` uchun `bosh: 0`) — aks holda bo'sh qoldirilgan
+> maydon saqlashda xato beradi.
+
+Registrdan tashqari sahifalar: `/admin/arizalar` (murojaatlar holati va ichki
+eslatma), `/admin/obuna`, `/admin/sozlamalar` (`settings` jadvali),
+`/admin/foydalanuvchilar` (faqat ADMIN roli).
+
+**Rasm yuklash:** `POST /api/admin/yuklash` — fayl `public/uploads/<yil-oy>/`
+ichiga yoziladi va `media_files` jadvaliga qayd qilinadi (8 MB gacha; JPG, PNG,
+WEBP, AVIF, SVG, PDF). Diskka yozgani uchun Node server (VDS) kerak — Vercel'da
+o'rniga obyekt saqlash (Blob) ulanadi.
+
+---
+
+## Saytdagi formalar
+
+Beshta forma bazaga yozadi — barchasi `src/server/forms/amallar.ts` dagi server
+amallari orqali (alohida API yo'llari yo'q):
+
+| Forma | Amal | Jadval |
+|-------|------|--------|
+| Aloqa sahifasi | `aloqaYuborish` | `contact_messages` |
+| «Qo'shilish uchun ariza» | `jamoaArizasi` | `ensemble_applications` |
+| Tanlov arizasi | `tanlovArizasi` | `competition_applications` |
+| Iste'dod platformasi | `talentArizasi` | `talent_applications` |
+| Yangiliklar obunasi | `obunaQoshish` | `subscribers` |
+
+Har bir ariza zod bilan tekshiriladi, so'ng admin panelning «Arizalar va
+xabarlar» bo'limida `YANGI` holatida ko'rinadi.
+
+**Spamdan himoya:**
+- har bir formada yashirin «tuzoq» maydoni — robot to'ldirsa, ariza yozilmaydi
+  (foydalanuvchiga esa muvaffaqiyat ko'rsatiladi, robot buni bilmaydi);
+- bitta IP dan 10 daqiqada 5 tadan ko'p ariza qabul qilinmaydi. Hisoblagich
+  jarayon xotirasida — bitta Node serverda (VDS) ishlaydi, bir nechta nusxa
+  ishlatilsa Redis kerak bo'ladi.
+
+Xato matni serverdan qaytmaydi — faqat kod (`tekshiruv` / `limit` / `xato`)
+qaytadi, matnni klient foydalanuvchi tilida ko'rsatadi.
+
+> Baza talab qiladigan maydonlar formada ham majburiy qilingan: jamoa arizasida
+> shahar va rahbar, iste'dod arizasida yosh, video havolasi va «o'zi haqida».
+> Aloqa formasida mavzu bo'sh qolsa, foydalanuvchi tilidagi «Umumiy murojaat»
+> yoziladi.
+
+Tanlov arizasi tanlovning `id` si bilan bog'lanadi (`getCompetitionMeta`), va
+server tanlov haqiqatan «ochiq» ekanini qayta tekshiradi.
+
+---
+
 ## Keyingi bosqichlar
 
-- [ ] Admin panel (`/admin`) — kirish, kontentni tahrirlash, rasm yuklash
-- [ ] Formalarni bazaga ulash (aloqa, jamoa arizasi, tanlov arizasi, talent, obuna)
-- [ ] Rasm yuklash (`/uploads` yoki obyekt saqlash)
+- [x] Admin panel (`/admin`) — kirish, kontentni tahrirlash, rasm yuklash
+- [x] Formalarni bazaga ulash (aloqa, jamoa arizasi, tanlov arizasi, talent, obuna)
+- [ ] Yangi ariza tushganda xabarnoma emaili (`notifyEmail` sozlamasi tayyor)
 - [ ] Serverga chiqarish (Ahost VDS: Nginx + Node + PostgreSQL + SSL + backup)
