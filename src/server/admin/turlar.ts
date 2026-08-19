@@ -47,6 +47,11 @@ export type Maydon = {
   maydonlar?: Maydon[];
   /** Shaklda ikki ustunga joylashtirish */
   yarim?: boolean;
+  /**
+   * Maydon bo'sh qoldirilsa bazaga yoziladigan qiymat.
+   * Bazada NULL qabul qilmaydigan ustunlar uchun kerak (masalan `sortOrder`).
+   */
+  bosh?: string | number;
 };
 
 /** Uch tilli qiymat */

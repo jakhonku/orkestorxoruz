@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
-import type { Maydon, Qiymatlar } from './turlar';
+import { boshQiymat, type Maydon, type Qiymatlar } from './turlar';
 
 /**
  * Bo'limlar uchun umumiy saqlash / o'chirish amallari.
@@ -45,11 +45,14 @@ function saytniYangilash() {
 // ------------------------------------------------------------------
 
 function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
+  /** Bo'sh maydon: `bosh` berilgan bo'lsa o'sha, aks holda NULL */
+  const bosh = () => m.bosh ?? null;
+
   switch (m.tur) {
     case 'raqam': {
-      if (qiymat === '' || qiymat === null || qiymat === undefined) return null;
+      if (qiymat === '' || qiymat === null || qiymat === undefined) return bosh();
       const n = Number(qiymat);
-      return Number.isFinite(n) ? Math.trunc(n) : null;
+      return Number.isFinite(n) ? Math.trunc(n) : bosh();
     }
     case 'belgi':
       return Boolean(qiymat);
@@ -63,11 +66,12 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
     case 'rasm':
     case 'tanlov': {
       const s = String(qiymat ?? '').trim();
-      return s === '' ? null : s;
+      return s === '' ? bosh() : s;
     }
     default:
-      // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga o'zgarishsiz tushadi
-      return qiymat ?? null;
+      // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga o'zgarishsiz tushadi.
+      // Qiymat umuman kelmasa bo'sh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
+      return qiymat ?? boshQiymat(m);
   }
 }
 
@@ -150,9 +154,13 @@ export async function yozuvSaqlash(
     let yozuvId: number;
 
     if (id === null) {
+      // Yaratishda NULL qiymatlar tashlab yuboriladi — bazadagi standart
+      // qiymatlar (`@default`) o'z ishini qilsin
+      const yangiData = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== null));
+
       const yaratilgan = await d.create({
         data: {
-          ...data,
+          ...yangiData,
           ...Object.fromEntries(ichki.map((i) => [i.bogliq, { create: i.qatorlar }])),
         },
       });

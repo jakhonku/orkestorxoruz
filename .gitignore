@@ -32,3 +32,6 @@ image.png
 
 # Mahalliy Postgres ma'lumotlari
 /.postgres
+
+# Admin paneldan yuklangan fayllar
+/public/uploads

@@ -40,6 +40,7 @@ const tartib: Maydon = {
   yorliq: 'Tartib raqami',
   tur: 'raqam',
   yarim: true,
+  bosh: 0,
   izoh: 'Kichik raqam yuqorida turadi',
 };
 
@@ -69,7 +70,7 @@ const galereya = (yorliq = 'Foto galereya'): Maydon => ({
   ],
 });
 
-const VILOYATLAR = [
+export const VILOYATLAR = [
   { qiymat: 'TOSHKENT_SHAHRI', yorliq: 'Toshkent shahri' },
   { qiymat: 'TOSHKENT', yorliq: 'Toshkent viloyati' },
   { qiymat: 'SAMARQAND', yorliq: 'Samarqand' },
@@ -559,7 +560,7 @@ export const BOLIMLAR: Bolim[] = [
     maydonlar: [
       { nom: 'title', yorliq: 'Hujjat nomi', tur: 'kopTilli', talab: true },
       { nom: 'href', yorliq: 'Fayl havolasi', tur: 'havola', talab: true },
-      { nom: 'meta', yorliq: 'Fayl haqida', tur: 'matn', yarim: true, izoh: 'Masalan: PDF · 480 KB' },
+      { nom: 'meta', yorliq: 'Fayl haqida', tur: 'matn', yarim: true, bosh: '', izoh: 'Masalan: PDF · 480 KB' },
       tartib,
       nashr,
     ],
@@ -627,12 +628,13 @@ export const BOLIMLAR: Bolim[] = [
     }),
     maydonlar: [
       { nom: 'value', yorliq: 'Raqam', tur: 'raqam', talab: true, yarim: true },
-      { nom: 'suffix', yorliq: 'Qo‘shimcha belgi', tur: 'matn', yarim: true, izoh: 'Masalan: +' },
+      { nom: 'suffix', yorliq: 'Qo‘shimcha belgi', tur: 'matn', yarim: true, bosh: '', izoh: 'Masalan: +' },
       { nom: 'label', yorliq: 'Nomi', tur: 'kopTilli', talab: true },
       {
         nom: 'icon',
         yorliq: 'Ikonka',
         tur: 'tanlov',
+        talab: true,
         yarim: true,
         variantlar: [
           { qiymat: 'compass', yorliq: 'Kompas' },
