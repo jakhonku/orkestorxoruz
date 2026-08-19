@@ -17,7 +17,7 @@ Prisma orqali o‘qiladi — batafsil: [BAZA.md](./BAZA.md).
 | Ko‘p tillilik | **next-intl** (URL prefiks: `/uz`, `/ru`, `/en`) |
 | Shriftlar | **Playfair Display** (sarlavha, serif) + **Manrope** (matn) |
 | Ma’lumotlar bazasi | **PostgreSQL** + **Prisma 7** |
-| Deploy | Node.js server (Ahost VDS) yoki Vercel |
+| Deploy | Node.js server (Ahost VDS) — [DEPLOY.md](./DEPLOY.md) |
 
 Brend ranglari: to‘q ko‘k `#0B3C7D`, oltin `#C9A227`, oq.
 
@@ -52,14 +52,14 @@ npm run lint
 
 > Node.js 18.17+ (tavsiya: 20+) talab qilinadi.
 
-### Vercel ga deploy
+### Serverga chiqarish
 
-1. Repozitoriyni GitHub ga yuklang.
-2. [vercel.com](https://vercel.com) da "New Project" → repo ni tanlang.
-3. Framework avtomatik **Next.js** deb aniqlanadi — hech qanday qo‘shimcha sozlash shart emas.
-4. Deploy tugmasini bosing. Muhit o‘zgaruvchilari kerak emas (backend yo‘q).
+Sayt Node.js va PostgreSQL talab qiladi — oddiy (PHP) hosting'da ishlamaydi.
+VDS'ga o'rnatishning bosqichma-bosqich yo'riqnomasi: **[DEPLOY.md](./DEPLOY.md)**.
 
-Yoki CLI orqali: `npm i -g vercel && vercel`.
+Tayyor konfiguratsiya fayllari `deploy/` papkasida:
+`orkestrvaxor.service` (systemd), `nginx.conf`, `backup.sh` (kunlik zaxira),
+`yangilash.sh` (saytni yangilash).
 
 ---
 

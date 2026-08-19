@@ -1,0 +1,36 @@
+[Unit]
+Description=Orkestr va Xor — Next.js sayti
+Documentation=https://github.com/jakhonku/orkestorxoruz
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=orkestr
+Group=orkestr
+WorkingDirectory=/var/www/orkestrvaxor
+
+# Ilova faqat localhost'da tinglaydi — tashqariga Nginx chiqaradi
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Environment=HOSTNAME=127.0.0.1
+
+# Qolgan o'zgaruvchilar (DATABASE_URL, AUTH_SECRET...) .env faylidan o'qiladi —
+# Next.js uni o'zi yuklaydi, shuning uchun bu yerda takrorlash shart emas.
+ExecStart=/usr/bin/npm run start
+
+Restart=always
+RestartSec=5
+
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=orkestrvaxor
+
+# Oddiy himoya choralari
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=true
+
+[Install]
+WantedBy=multi-user.target

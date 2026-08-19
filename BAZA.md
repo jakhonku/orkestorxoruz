@@ -231,5 +231,6 @@ server tanlov haqiqatan «ochiq» ekanini qayta tekshiradi.
 
 - [x] Admin panel (`/admin`) — kirish, kontentni tahrirlash, rasm yuklash
 - [x] Formalarni bazaga ulash (aloqa, jamoa arizasi, tanlov arizasi, talent, obuna)
+- [x] Serverga chiqarish yo'riqnomasi va konfiguratsiyalari — [DEPLOY.md](./DEPLOY.md)
 - [ ] Yangi ariza tushganda xabarnoma emaili (`notifyEmail` sozlamasi tayyor)
-- [ ] Serverga chiqarish (Ahost VDS: Nginx + Node + PostgreSQL + SSL + backup)
+- [ ] Saytni serverga o'rnatish (DEPLOY.md bo'yicha)
