@@ -18,8 +18,17 @@ function yaratish() {
     );
   }
 
+  /**
+   * Bitta jarayon ochadigan ulanishlar soni.
+   *
+   * `next build` sahifalarni bir nechta ishchi jarayonda tayyorlaydi va har
+   * biri o'z hovuzini ochadi — cheklanmasa Postgres'ning `max_connections`
+   * limiti tugab qoladi ("too many clients already").
+   */
+  const hovuz = Number(process.env.DATABASE_POOL_MAX ?? 5);
+
   return new PrismaClient({
-    adapter: new PrismaPg({ connectionString }),
+    adapter: new PrismaPg({ connectionString, max: Number.isFinite(hovuz) ? hovuz : 5 }),
     log: process.env.NODE_ENV === 'development' ? ['warn', 'error'] : ['error'],
   });
 }

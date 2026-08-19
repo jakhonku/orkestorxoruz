@@ -128,6 +128,11 @@ CREATE DATABASE orkestrvaxor
 **Prisma 7 driver adapter talab qiladi** — `src/lib/db.ts` da `@prisma/adapter-pg`
 orqali ulanadi, `DATABASE_URL` shu yerda o'qiladi.
 
+Bitta jarayon ochadigan ulanishlar soni 5 ta bilan cheklangan
+(`DATABASE_POOL_MAX` bilan o'zgartiriladi). `next build` sahifalarni bir nechta
+ishchi jarayonda tayyorlaydi — cheklanmasa Postgres'ning `max_connections`
+limiti tugab, "too many clients already" xatosi chiqadi.
+
 ---
 
 ## Sahifalar bazadan qanday o'qiydi
@@ -173,6 +178,11 @@ Maydon turlari (`src/server/admin/turlar.ts`): `matn`, `matnKatta`, `slug`,
 Registrdan tashqari sahifalar: `/admin/arizalar` (murojaatlar holati va ichki
 eslatma), `/admin/obuna`, `/admin/sozlamalar` (`settings` jadvali),
 `/admin/foydalanuvchilar` (faqat ADMIN roli).
+
+Sozlamalar saytning footer'i, «Aloqa» sahifasi (manzil, telefon, email, ish
+vaqti, ijtimoiy tarmoqlar va xarita nuqtasi) hamda «Haqida» sahifasidagi
+missiya matnida ishlatiladi. Bazada kalit bo'lmasa, `src/lib/constants.ts`
+dagi zaxira qiymat olinadi — shuning uchun baza bo'sh bo'lsa ham sayt ishlaydi.
 
 **Rasm yuklash:** `POST /api/admin/yuklash` — fayl `public/uploads/<yil-oy>/`
 ichiga yoziladi va `media_files` jadvaliga qayd qilinadi (8 MB gacha; JPG, PNG,

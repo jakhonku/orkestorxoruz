@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { MapPin, Phone, Mail, Facebook, Instagram, Send, Youtube } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Send, Youtube } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { ContactForm } from '@/components/features/contact-form';
-import { SITE, SOCIALS } from '@/lib/constants';
 import { pick } from '@/lib/utils';
+import { getSettings, type SiteSettings } from '@/server/queries/settings';
 
 const socialIcons = {
   facebook: Facebook,
@@ -21,15 +21,24 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: 'Aloqa' };
 }
 
-export default function ContactPage({ params }: { params: { locale: Locale } }) {
+export default async function ContactPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
-  return <ContactContent />;
+  const settings = await getSettings();
+  return <ContactContent settings={settings} />;
 }
 
-function ContactContent() {
+/** Kontakt ma'lumotlari va xarita nuqtasi bazadagi sozlamalardan olinadi */
+function ContactContent({ settings }: { settings: SiteSettings }) {
   const t = useTranslations('Contact');
   const tn = useTranslations('Nav');
   const locale = useLocale();
+
+  const { lat, lng } = settings.mapCoords;
+  const chekka = 0.02;
+  const xarita =
+    'https://www.openstreetmap.org/export/embed.html?bbox=' +
+    [lng - chekka, lat - chekka, lng + chekka, lat + chekka].map((n) => n.toFixed(4)).join('%2C') +
+    `&layer=mapnik&marker=${lat.toFixed(5)}%2C${lng.toFixed(5)}`;
 
   return (
     <>
@@ -47,25 +56,28 @@ function ContactContent() {
             <div className="mt-3 h-1 w-16 rounded-full bg-gold" />
             <ul className="mt-8 space-y-6">
               <InfoRow icon={MapPin} label={t('addressLabel')}>
-                {pick(SITE.address, locale)}
+                {pick(settings.address, locale)}
               </InfoRow>
               <InfoRow icon={Phone} label={t('phoneLabel')}>
-                <a href={`tel:${SITE.phone.replace(/\s/g, '')}`} className="hover:text-navy">
-                  {SITE.phone}
+                <a href={`tel:${settings.phone.replace(/\s/g, '')}`} className="hover:text-navy">
+                  {settings.phone}
                 </a>
               </InfoRow>
               <InfoRow icon={Mail} label={t('emailLabel')}>
-                <a href={`mailto:${SITE.email}`} className="hover:text-navy">
-                  {SITE.email}
+                <a href={`mailto:${settings.email}`} className="hover:text-navy">
+                  {settings.email}
                 </a>
+              </InfoRow>
+              <InfoRow icon={Clock} label={t('hoursLabel')}>
+                {pick(settings.workingHours, locale)}
               </InfoRow>
             </ul>
 
             <div className="mt-8">
               <p className="mb-3 text-sm font-semibold text-navy">{t('socialLabel')}</p>
               <div className="flex gap-2">
-                {SOCIALS.map((s) => {
-                  const Icon = socialIcons[s.platform];
+                {settings.socials.map((s) => {
+                  const Icon = socialIcons[s.platform] ?? Send;
                   return (
                     <a
                       key={s.platform}
@@ -98,7 +110,7 @@ function ContactContent() {
           <div className="overflow-hidden rounded-2xl border border-border shadow-soft">
             <iframe
               title={t('mapTitle')}
-              src="https://www.openstreetmap.org/export/embed.html?bbox=69.24%2C41.29%2C69.31%2C41.33&layer=mapnik&marker=41.311%2C69.279"
+              src={xarita}
               className="h-[420px] w-full"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"

@@ -312,6 +312,7 @@
     "addressLabel": "Address",
     "phoneLabel": "Phone",
     "emailLabel": "Email",
+    "hoursLabel": "Working hours",
     "socialLabel": "Social networks",
     "form_name": "Your name",
     "form_email": "Email",

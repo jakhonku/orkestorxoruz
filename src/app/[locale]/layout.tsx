@@ -9,6 +9,7 @@ import { SITE } from '@/lib/constants';
 import { pick } from '@/lib/utils';
 import { Header } from '@/components/site/header';
 import { Footer } from '@/components/site/footer';
+import { getSettings } from '@/server/queries/settings';
 
 const playfair = Playfair_Display({
   subsets: ['latin', 'cyrillic'],
@@ -86,7 +87,7 @@ export default async function LocaleLayout({
   if (!routing.locales.includes(locale)) notFound();
 
   setRequestLocale(locale);
-  const messages = await getMessages();
+  const [messages, settings] = await Promise.all([getMessages(), getSettings()]);
 
   return (
     <html lang={locale} className={`${playfair.variable} ${manrope.variable}`}>
@@ -94,7 +95,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           <Header />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <Footer settings={settings} />
         </NextIntlClientProvider>
       </body>
     </html>

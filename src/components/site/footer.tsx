@@ -3,8 +3,8 @@ import { Facebook, Instagram, Send, Youtube, MapPin, Mail, Phone } from 'lucide-
 import { Link } from '@/i18n/navigation';
 import { Logo } from './logo';
 import { NewsletterForm } from './newsletter-form';
-import { SITE, SOCIALS } from '@/lib/constants';
 import { pick } from '@/lib/utils';
+import type { SiteSettings } from '@/server/queries/settings';
 
 const socialIcons = {
   facebook: Facebook,
@@ -14,7 +14,8 @@ const socialIcons = {
   x: Send,
 } as const;
 
-export function Footer() {
+/** Kontakt ma'lumotlari va ijtimoiy tarmoqlar bazadagi sozlamalardan keladi */
+export function Footer({ settings }: { settings: SiteSettings }) {
   const t = useTranslations('Footer');
   const tn = useTranslations('Nav');
   const locale = useLocale();
@@ -59,15 +60,15 @@ export function Footer() {
             <ul className="mt-6 space-y-2.5 text-sm text-white/70">
               <li className="flex items-start gap-2.5">
                 <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                {pick(SITE.address, locale)}
+                {pick(settings.address, locale)}
               </li>
               <li className="flex items-center gap-2.5">
                 <Phone className="h-4 w-4 shrink-0 text-gold" />
-                {SITE.phone}
+                {settings.phone}
               </li>
               <li className="flex items-center gap-2.5">
                 <Mail className="h-4 w-4 shrink-0 text-gold" />
-                {SITE.email}
+                {settings.email}
               </li>
             </ul>
           </div>
@@ -103,11 +104,11 @@ export function Footer() {
 
         <div className="flex flex-col items-center justify-between gap-4 border-t border-white/10 py-6 md:flex-row">
           <p className="text-xs text-white/50">
-            © {new Date().getFullYear()} {pick(SITE.shortName, locale)}. {t('rights')}
+            © {new Date().getFullYear()} {pick(settings.shortName, locale)}. {t('rights')}
           </p>
           <div className="flex items-center gap-2">
-            {SOCIALS.map((s) => {
-              const Icon = socialIcons[s.platform];
+            {settings.socials.map((s) => {
+              const Icon = socialIcons[s.platform] ?? Send;
               return (
                 <a
                   key={s.platform}
