@@ -605,7 +605,8 @@ model Subscriber {
 model AdminUser {
   id           Int       @id @default(autoincrement())
   email        String    @unique @db.VarChar(160)
-  passwordHash String    @db.Text
+  /// Supabase Auth foydalanuvchisi (auth.users.id). Parol Supabase'da saqlanadi.
+  authUserId   String?   @unique @db.Uuid
   name         String    @db.VarChar(160)
   role         AdminRole @default(MUHARRIR)
   active       Boolean   @default(true)
@@ -630,4 +631,16 @@ model MediaFile {
 
   @@index([folder, createdAt])
   @@map("media_files")
+}
+
+/// Formalar uchun spam chegarasi — bitta IP dan kelgan so'nggi arizalar izi.
+/// Bazada saqlanadi, chunki Vercel'da har bir so'rov alohida nusxada
+/// bajarilishi mumkin va xotiradagi hisoblagich umumiy bo'lmaydi.
+model FormRateHit {
+  id        Int      @id @default(autoincrement())
+  ip        String   @db.VarChar(64)
+  createdAt DateTime @default(now())
+
+  @@index([ip, createdAt])
+  @@map("form_rate_hits")
 }

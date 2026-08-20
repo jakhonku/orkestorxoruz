@@ -14,7 +14,7 @@ function yaratish() {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) {
     throw new Error(
-      'DATABASE_URL topilmadi. `.env` faylni tekshiring yoki `npm run db:start` bilan bazani ishga tushiring.',
+      'DATABASE_URL topilmadi. `.env` faylini yoki Vercel muhit o‘zgaruvchilarini tekshiring.',
     );
   }
 
@@ -25,7 +25,10 @@ function yaratish() {
    * biri o'z hovuzini ochadi — cheklanmasa Postgres'ning `max_connections`
    * limiti tugab qoladi ("too many clients already").
    */
-  const hovuz = Number(process.env.DATABASE_POOL_MAX ?? 5);
+  // Vercel'da har bir funksiya nusxasi alohida hovuz ochadi — Supabase pooler
+  // ulanishlari tez tugab qolmasligi uchun bu yerda kichik son ushlanadi.
+  const sukut = process.env.VERCEL ? 3 : 5;
+  const hovuz = Number(process.env.DATABASE_POOL_MAX ?? sukut);
 
   return new PrismaClient({
     adapter: new PrismaPg({ connectionString, max: Number.isFinite(hovuz) ? hovuz : 5 }),

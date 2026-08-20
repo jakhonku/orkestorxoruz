@@ -29,32 +29,34 @@ const CHEGARA = 5;
 const OYNA_MS = 10 * 60 * 1000;
 
 /**
- * Oddiy xotiradagi hisoblagich. Bitta Node jarayoni uchun ishlaydi (VDS) —
- * bir nechta nusxa ishlaganda Redis kerak bo'ladi.
+ * Hisoblagich bazada saqlanadi (`form_rate_hits`). Vercel'da so'rovlar bir
+ * nechta nusxada bajarilishi mumkin — xotiradagi hisoblagich ularning
+ * hammasiga umumiy bo'lmaydi va chegara amalda ishlamay qoladi.
  */
-const soqbolgan = new Map<string, number[]>();
-
-function limitdanOshdimi(): boolean {
+async function limitdanOshdimi(): Promise<boolean> {
   const h = headers();
   const ip = (h.get('x-forwarded-for') ?? h.get('x-real-ip') ?? 'nomalum').split(',')[0].trim();
 
-  const hozir = Date.now();
-  const oldingi = (soqbolgan.get(ip) ?? []).filter((v) => hozir - v < OYNA_MS);
+  const chegaraVaqti = new Date(Date.now() - OYNA_MS);
 
-  if (oldingi.length >= CHEGARA) {
-    soqbolgan.set(ip, oldingi);
-    return true;
-  }
+  try {
+    const soni = await db.formRateHit.count({
+      where: { ip, createdAt: { gte: chegaraVaqti } },
+    });
+    if (soni >= CHEGARA) return true;
 
-  oldingi.push(hozir);
-  soqbolgan.set(ip, oldingi);
+    await db.formRateHit.create({ data: { ip } });
 
-  // Xotira o'smasligi uchun eskirgan yozuvlarni tozalab turamiz
-  if (soqbolgan.size > 500) {
-    for (const [k, v] of soqbolgan) {
-      if (v.every((t) => hozir - t >= OYNA_MS)) soqbolgan.delete(k);
+    // Jadval o'sib ketmasligi uchun eskirgan izlar vaqti-vaqti bilan tozalanadi
+    if (Math.random() < 0.05) {
+      await db.formRateHit.deleteMany({ where: { createdAt: { lt: chegaraVaqti } } });
     }
+  } catch {
+    // Baza javob bermasa ariza to'sib qo'yilmaydi — arizaning o'zini yozishda
+    // xato baribir chiqadi va foydalanuvchi xabar oladi
+    return false;
   }
+
   return false;
 }
 
@@ -83,17 +85,19 @@ const yoNull = (s: string) => (s.trim() === '' ? null : s.trim());
  * Har bir amal uchun bir xil boshlanish: tuzoq, limit va tekshiruv.
  * Tuzoqqa tushgan so'rov "muvaffaqiyatli" deb ko'rsatiladi, lekin yozilmaydi.
  */
-function tayyorgarlik<T>(
+async function tayyorgarlik<T>(
   sxema: z.ZodType<T>,
   malumot: unknown,
   tuzoqQiymati: string | undefined,
-): { holat: 'tuzoq' } | { holat: 'xato'; natija: FormaNatija } | { holat: 'ok'; qiymat: T } {
+): Promise<
+  { holat: 'tuzoq' } | { holat: 'xato'; natija: FormaNatija } | { holat: 'ok'; qiymat: T }
+> {
   if (tuzoqQiymati && tuzoqQiymati.trim() !== '') return { holat: 'tuzoq' };
 
   const tekshirilgan = sxema.safeParse(malumot);
   if (!tekshirilgan.success) return { holat: 'xato', natija: TEKSHIRUV };
 
-  if (limitdanOshdimi()) return { holat: 'xato', natija: { ok: false, kod: 'limit' } };
+  if (await limitdanOshdimi()) return { holat: 'xato', natija: { ok: false, kod: 'limit' } };
 
   return { holat: 'ok', qiymat: tekshirilgan.data };
 }
@@ -118,7 +122,7 @@ const aloqaSxemasi = z.object({
 });
 
 export async function aloqaYuborish(malumot: unknown): Promise<FormaNatija> {
-  const t = tayyorgarlik(aloqaSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
+  const t = await tayyorgarlik(aloqaSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
   if (t.holat === 'tuzoq') return { ok: true };
   if (t.holat === 'xato') return t.natija;
   const d = t.qiymat;
@@ -159,7 +163,7 @@ const jamoaSxemasi = z.object({
 });
 
 export async function jamoaArizasi(malumot: unknown): Promise<FormaNatija> {
-  const t = tayyorgarlik(jamoaSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
+  const t = await tayyorgarlik(jamoaSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
   if (t.holat === 'tuzoq') return { ok: true };
   if (t.holat === 'xato') return t.natija;
   const d = t.qiymat;
@@ -206,7 +210,7 @@ const tanlovSxemasi = z.object({
 });
 
 export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
-  const t = tayyorgarlik(tanlovSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
+  const t = await tayyorgarlik(tanlovSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
   if (t.holat === 'tuzoq') return { ok: true };
   if (t.holat === 'xato') return t.natija;
   const d = t.qiymat;
@@ -256,7 +260,7 @@ const talentSxemasi = z.object({
 });
 
 export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
-  const t = tayyorgarlik(talentSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
+  const t = await tayyorgarlik(talentSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
   if (t.holat === 'tuzoq') return { ok: true };
   if (t.holat === 'xato') return t.natija;
   const d = t.qiymat;
@@ -287,7 +291,7 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
 const obunaSxemasi = z.object({ email, locale: til, tuzoq });
 
 export async function obunaQoshish(malumot: unknown): Promise<FormaNatija> {
-  const t = tayyorgarlik(obunaSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
+  const t = await tayyorgarlik(obunaSxemasi, malumot, (malumot as { tuzoq?: string })?.tuzoq);
   if (t.holat === 'tuzoq') return { ok: true };
   if (t.holat === 'xato') return t.natija;
   const d = t.qiymat;

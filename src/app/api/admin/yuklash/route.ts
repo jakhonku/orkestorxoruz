@@ -1,16 +1,17 @@
 import { randomBytes } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
-import path from 'node:path';
 import { NextResponse } from 'next/server';
 
 import { db } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { BUCKET } from '@/lib/supabase/muhit';
 import { joriySessiya } from '@/server/auth';
 
 /**
  * Admin paneldan rasm/hujjat yuklash.
  *
- * Fayl `public/uploads/<yil-oy>/` ichiga yoziladi va `media_files` jadvaliga
- * qayd qilinadi. Diskka yozilgani uchun bu yo'l Node server (VDS) da ishlaydi.
+ * Fayl Supabase Storage'dagi `media` bucket'iga yoziladi va `media_files`
+ * jadvaliga qayd qilinadi. Vercel'da fayl tizimi faqat o'qish uchun ochiq,
+ * shuning uchun diskka emas — Storage'ga yoziladi.
  */
 
 export const runtime = 'nodejs';
@@ -65,16 +66,27 @@ export async function POST(request: Request) {
 
   const oy = new Date().toISOString().slice(0, 7); // 2026-08
   const nom = `${xavfsizNom(fayl.name) || 'fayl'}-${randomBytes(4).toString('hex')}${kengaytma}`;
+  const yol = `${papka}/${oy}/${nom}`;
 
-  const katalog = path.join(process.cwd(), 'public', 'uploads', oy);
-  await mkdir(katalog, { recursive: true });
-  await writeFile(path.join(katalog, nom), Buffer.from(await fayl.arrayBuffer()));
+  const supabase = supabaseAdmin();
+  const { error } = await supabase.storage
+    .from(BUCKET)
+    .upload(yol, await fayl.arrayBuffer(), { contentType: fayl.type, upsert: false });
 
-  const url = `/uploads/${oy}/${nom}`;
+  if (error) {
+    return NextResponse.json(
+      { xato: `Storage’ga yozib bo‘lmadi: ${error.message}` },
+      { status: 502 },
+    );
+  }
+
+  const {
+    data: { publicUrl },
+  } = supabase.storage.from(BUCKET).getPublicUrl(yol);
 
   await db.mediaFile.create({
     data: {
-      url,
+      url: publicUrl,
       filename: fayl.name.slice(0, 255),
       mimeType: fayl.type,
       size: fayl.size,
@@ -82,5 +94,5 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json({ url });
+  return NextResponse.json({ url: publicUrl });
 }

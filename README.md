@@ -1,8 +1,11 @@
 # "Orkestr va Xor" ijodiy birlashmasi — veb-sayt (frontend)
 
 O‘zbekistonda orkestr va xor san’atini rivojlantiruvchi davlat ijodiy tashkiloti uchun
-ko‘p tilli (uz / ru / en) sayt. Kontent **PostgreSQL bazasida** saqlanadi va
+ko‘p tilli (uz / ru / en) sayt. Kontent **Supabase Postgres** bazasida saqlanadi va
 Prisma orqali o‘qiladi — batafsil: [BAZA.md](./BAZA.md).
+
+Sayt **Vercel**'da ishlaydi, backend **Supabase**'da (baza, admin kirish, fayllar) —
+ishga tushirish yo‘riqnomasi: **[VERCEL.md](./VERCEL.md)**.
 
 ---
 
@@ -16,8 +19,10 @@ Prisma orqali o‘qiladi — batafsil: [BAZA.md](./BAZA.md).
 | Ikonkalar | **lucide-react** |
 | Ko‘p tillilik | **next-intl** (URL prefiks: `/uz`, `/ru`, `/en`) |
 | Shriftlar | **Playfair Display** (sarlavha, serif) + **Manrope** (matn) |
-| Ma’lumotlar bazasi | **PostgreSQL** + **Prisma 7** |
-| Deploy | Node.js server (Ahost VDS) — [DEPLOY.md](./DEPLOY.md) |
+| Ma’lumotlar bazasi | **Supabase Postgres** + **Prisma 7** |
+| Admin kirish | **Supabase Auth** (email + parol) |
+| Fayl saqlash | **Supabase Storage** (`media` bucket) |
+| Deploy | **Vercel** — [VERCEL.md](./VERCEL.md) |
 
 Brend ranglari: to‘q ko‘k `#0B3C7D`, oltin `#C9A227`, oq.
 
@@ -25,41 +30,39 @@ Brend ranglari: to‘q ko‘k `#0B3C7D`, oltin `#C9A227`, oq.
 
 ## O‘rnatish va ishga tushirish
 
+Avval Supabase loyihasi ochilishi kerak — [VERCEL.md](./VERCEL.md) dagi 1–4 qadamlar.
+
 ```bash
 # 1. Bog‘liqliklarni o‘rnatish
 npm install
 
-# 2. Muhit o‘zgaruvchilari
+# 2. Muhit o‘zgaruvchilari (Supabase manzillari va kalitlari)
 cp .env.example .env
 
-# 3. Bazani ishga tushirish (alohida terminalda, Docker kerak emas)
-npm run db:start
+# 3. Bazani tayyorlash (birinchi marta)
+npm run db:deploy    # jadvallarni yaratadi
+npm run db:seed      # boshlang‘ich kontent + admin hisobi
 
-# 4. Bazani tayyorlash (birinchi marta)
-npm run db:migrate
-npm run db:seed
-
-# 5. Development server (http://localhost:3000 → /uz ga yo‘naltiradi)
+# 4. Development server (http://localhost:3000 → /uz ga yo‘naltiradi)
 npm run dev
 
-# 3. Production build
+# 5. Production build
 npm run build
 npm run start
 
-# 4. Lint
+# 6. Lint
 npm run lint
 ```
 
 > Node.js 18.17+ (tavsiya: 20+) talab qilinadi.
 
-### Serverga chiqarish
+### Chiqarish
 
-Sayt Node.js va PostgreSQL talab qiladi — oddiy (PHP) hosting'da ishlamaydi.
-VDS'ga o'rnatishning bosqichma-bosqich yo'riqnomasi: **[DEPLOY.md](./DEPLOY.md)**.
+Sayt Vercel'da ishlaydi — GitHub'ga `push` qilinganda avtomatik deploy bo‘ladi.
+Bosqichma-bosqich yo‘riqnoma: **[VERCEL.md](./VERCEL.md)**.
 
-Tayyor konfiguratsiya fayllari `deploy/` papkasida:
-`orkestrvaxor.service` (systemd), `nginx.conf`, `backup.sh` (kunlik zaxira),
-`yangilash.sh` (saytni yangilash).
+Kelajakda o‘z serveriga (VDS) ko‘chirish kerak bo‘lsa — [DEPLOY.md](./DEPLOY.md)
+va `deploy/` papkasidagi konfiguratsiyalar saqlab qo‘yilgan.
 
 ---
 
@@ -92,11 +95,11 @@ src/
     cards/                    # EnsembleCard, ProjectCard, EventCard, ...
     shared/                   # Reveal, SectionTitle, PageHeader, Modal, Lightbox, ...
     features/                 # Interaktiv bloklar (filtr, tab, forma, galereya)
-  data/                       # ⚙️ MOCK DATA — keyin API ga almashtiriladi
+  data/                       # boshlang‘ich ma’lumot (faqat seed uchun manba)
   types/                      # barcha TypeScript interface'lar
-  lib/                        # utils, constants, images
+  lib/                        # utils, constants, images, db, supabase/
   i18n/                       # routing, request, navigation (next-intl)
-  middleware.ts               # locale yo‘naltirish
+  middleware.ts               # locale yo‘naltirish + /admin sessiyasi
 messages/                     # uz.json, ru.json, en.json (UI matnlari)
 ```
 
@@ -121,36 +124,25 @@ Til almashganda URL prefiksi o‘zgaradi (`/uz/...` → `/ru/...`), sahifa saqla
 
 ---
 
-## 🔌 Backend ulash (keyingi bosqich)
+## 🔌 Backend — Supabase
 
-Har bir data fayli alohida va **typed** — API ga o‘tish uchun faqat data'ni
-qaytaruvchi funksiyani `fetch` bilan almashtirish kifoya. Interfeys o‘zgarmaydi.
+Kontent bazadan olinadi; `src/data/*` fayllari endi faqat seed uchun manba
+sifatida qolgan. Batafsil: [BAZA.md](./BAZA.md).
 
-| Data fayli | Nima saqlaydi | Tavsiya etilgan API endpoint |
-|------------|---------------|------------------------------|
-| `data/ensembles.ts` | Orkestr / xor jamoalari | `GET /api/ensembles`, `GET /api/ensembles/:slug` |
-| `data/projects.ts` | Loyihalar (respublika/xalqaro) | `GET /api/projects`, `GET /api/projects/:slug` |
-| `data/competitions.ts` | Tanlov va festivallar | `GET /api/competitions`, `GET /api/competitions/:slug` |
-| `data/events.ts` | Afisha (konsertlar) | `GET /api/events` |
-| `data/news.ts` | Yangiliklar, video, foto | `GET /api/news`, `GET /api/news/:slug`, `GET /api/media` |
-| `data/experts.ts` | Ekspertlar, rahbariyat, hujjatlar | `GET /api/experts`, `GET /api/leaders`, `GET /api/documents` |
-| `data/kpi.ts` | KPI raqamlari, hamkorlar | `GET /api/stats`, `GET /api/partners` |
+| Qatlam | Qayerda |
+|--------|---------|
+| So'rovlar | `src/server/queries/*` — Prisma orqali Supabase Postgres |
+| Saytdagi formalar | `src/server/forms/amallar.ts` — server amallari, to'g'ridan-to'g'ri bazaga yozadi |
+| Admin panel | `src/app/admin/` — kirish Supabase Auth, rol `admin_users` jadvalida |
+| Fayl yuklash | `POST /api/admin/yuklash` — Supabase Storage (`media` bucket) |
+| Supabase klientlari | `src/lib/supabase/` — `server.ts` (sessiya), `admin.ts` (xizmat kaliti) |
 
-### Formalar (hozircha faqat UI validatsiya)
+### `Localized<T>` — uch tilli maydonlar
 
-Quyidagi formalar `// UI-only: ... here later` izohi bilan belgilangan —
-o‘sha joyga `fetch(POST ...)` qo‘shiladi:
-
-- `components/site/newsletter-form.tsx` → `POST /api/subscribe`
-- `components/features/contact-form.tsx` → `POST /api/contact`
-- `components/features/apply-modal.tsx` → `POST /api/competitions/:slug/apply`
-- `components/features/talent-form.tsx` → `POST /api/talent/apply`
-
-### Muhim eslatma: `Localized<T>` va API
-
-Agar backend bitta tildagi qiymatni qaytarsa, `pick()` chaqiruvlarini olib
-tashlang. Agar backend uch tilni ham qaytarsa (`{ uz, ru, en }`), hech narsa
-o‘zgartirmasdan ishlayveradi.
+Uch tildagi matn bazada bitta `jsonb` ustunda saqlanadi
+(`{"uz":"...","ru":"...","en":"..."}`) va frontenddagi
+`Localized<T>` tipiga aynan mos keladi — sahifada `pick(value, locale)`
+joriy tildagi qiymatni tanlaydi.
 
 ---
 

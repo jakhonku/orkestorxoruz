@@ -1,109 +1,68 @@
 import 'server-only';
-import { createHmac, timingSafeEqual } from 'node:crypto';
-import { cookies } from 'next/headers';
 import { cache } from 'react';
 
 import { db } from '@/lib/db';
+import { supabaseServer } from '@/lib/supabase/server';
 import type { AdminRole } from '@/generated/prisma/enums';
 
-const COOKIE = 'admin_session';
-/** Sessiya amal qilish muddati — 7 kun */
-const MUDDAT_MS = 7 * 24 * 60 * 60 * 1000;
+/**
+ * Admin panel sessiyasi.
+ *
+ * Kirish/chiqish va parol tekshiruvi — Supabase Auth zimmasida.
+ * Rol (ADMIN / MUHARRIR) va faollik esa bazadagi `admin_users` jadvalida
+ * saqlanadi: Supabase foydalanuvchisi shu jadvaldagi qayd bilan
+ * `authUserId` orqali bog'lanadi.
+ */
 
 export type Sessiya = {
+  /** `admin_users.id` — panel ichidagi havolalar shu raqamga tayanadi */
   userId: number;
+  /** Supabase Auth foydalanuvchisi (uuid) */
+  authId: string;
   email: string;
   name: string;
   role: AdminRole;
-  exp: number;
 };
 
-function kalit(): string {
-  const s = process.env.AUTH_SECRET;
-  if (!s || s.length < 16) {
-    throw new Error(
-      'AUTH_SECRET o‘rnatilmagan yoki juda qisqa. `.env` fayliga uzun tasodifiy satr qo‘shing.',
-    );
-  }
-  return s;
-}
-
-function imzo(data: string): string {
-  return createHmac('sha256', kalit()).update(data).digest('base64url');
-}
-
-/** Sessiyani imzolangan matnga aylantiradi: <payload>.<imzo> */
-function yigish(s: Sessiya): string {
-  const payload = Buffer.from(JSON.stringify(s)).toString('base64url');
-  return `${payload}.${imzo(payload)}`;
-}
-
-/** Imzolangan matnni tekshiradi va sessiyani qaytaradi (yaroqsiz bo'lsa null) */
-function ochish(token: string): Sessiya | null {
-  const [payload, berilgan] = token.split('.');
-  if (!payload || !berilgan) return null;
-
-  const kutilgan = imzo(payload);
-  const a = Buffer.from(berilgan);
-  const b = Buffer.from(kutilgan);
-  if (a.length !== b.length || !timingSafeEqual(a, b)) return null;
-
-  try {
-    const s = JSON.parse(Buffer.from(payload, 'base64url').toString()) as Sessiya;
-    if (typeof s.exp !== 'number' || s.exp < Date.now()) return null;
-    return s;
-  } catch {
-    return null;
-  }
-}
-
-/** Kirish muvaffaqiyatli bo'lgandan keyin cookie o'rnatadi */
-export function sessiyaOrnatish(user: {
-  id: number;
-  email: string;
-  name: string;
-  role: AdminRole;
-}) {
-  const s: Sessiya = {
-    userId: user.id,
-    email: user.email,
-    name: user.name,
-    role: user.role,
-    exp: Date.now() + MUDDAT_MS,
-  };
-
-  cookies().set(COOKIE, yigish(s), {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    maxAge: MUDDAT_MS / 1000,
-  });
-}
-
-export function sessiyaOchirish() {
-  cookies().delete(COOKIE);
-}
-
 /**
- * Joriy sessiya. Kirilmagan bo'lsa null.
+ * Joriy sessiya. Kirilmagan yoki hisob bloklangan bo'lsa — null.
  * `cache()` — bitta so'rov ichida bir marta hisoblanadi.
  */
 export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
-  const token = cookies().get(COOKIE)?.value;
-  if (!token) return null;
+  const supabase = supabaseServer();
 
-  const s = ochish(token);
-  if (!s) return null;
+  // getUser() tokenni Supabase serverida tekshiradi (getSession() dan xavfsizroq)
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return null;
 
-  // Foydalanuvchi o'chirilgan yoki bloklangan bo'lishi mumkin — bazadan tekshiriladi
-  const user = await db.adminUser.findUnique({
-    where: { id: s.userId },
-    select: { id: true, active: true },
+  const email = (user.email ?? '').trim().toLowerCase();
+
+  const qayd = await db.adminUser.findFirst({
+    where: { OR: [{ authUserId: user.id }, ...(email ? [{ email }] : [])] },
+    select: { id: true, email: true, name: true, role: true, active: true, authUserId: true },
   });
-  if (!user?.active) return null;
 
-  return s;
+  // Supabase'da hisob bor, lekin panelga ruxsat berilmagan — kirish yo'q
+  if (!qayd || !qayd.active) return null;
+
+  // Email bo'yicha topilgan bo'lsa, keyingi safarlar uchun bog'lab qo'yiladi
+  if (qayd.authUserId !== user.id) {
+    try {
+      await db.adminUser.update({ where: { id: qayd.id }, data: { authUserId: user.id } });
+    } catch {
+      // Boshqa qayd allaqachon shu uuid'ga bog'langan — jimgina o'tkazib yuboriladi
+    }
+  }
+
+  return {
+    userId: qayd.id,
+    authId: user.id,
+    email: qayd.email,
+    name: qayd.name,
+    role: qayd.role,
+  };
 });
 
 /** Faqat ADMIN bajarishi mumkin bo'lgan amallar uchun */

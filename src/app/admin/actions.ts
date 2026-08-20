@@ -1,13 +1,19 @@
 'use server';
 
 import { redirect } from 'next/navigation';
-import bcrypt from 'bcryptjs';
 
 import { db } from '@/lib/db';
-import { sessiyaOchirish, sessiyaOrnatish } from '@/server/auth';
+import { supabaseServer } from '@/lib/supabase/server';
 
 export type KirishHolati = { xato?: string };
 
+/**
+ * Admin panelga kirish.
+ *
+ * Parolni Supabase Auth tekshiradi; sessiya cookie'ni `@supabase/ssr` o'zi
+ * yozadi. Panelga ruxsat esa `admin_users` jadvalidagi qaydga bog'liq —
+ * Supabase'da hisobi bo'lsa ham, jadvalda faol qaydi yo'q odam kira olmaydi.
+ */
 export async function kirish(_avvalgi: KirishHolati, formData: FormData): Promise<KirishHolati> {
   const email = String(formData.get('email') ?? '')
     .trim()
@@ -18,26 +24,31 @@ export async function kirish(_avvalgi: KirishHolati, formData: FormData): Promis
     return { xato: 'Email va parolni kiriting.' };
   }
 
-  const user = await db.adminUser.findUnique({ where: { email } });
+  const qayd = await db.adminUser.findUnique({
+    where: { email },
+    select: { id: true, active: true },
+  });
+  if (!qayd || !qayd.active) {
+    return { xato: 'Email yoki parol noto‘g‘ri.' };
+  }
 
-  // Foydalanuvchi topilmasa ham bcrypt chaqiriladi — javob vaqti bir xil bo'lishi uchun
-  const soxta = '$2a$10$invalidinvalidinvalidinvalidinvalidinvalidinvalidinvalidi';
-  const togri = await bcrypt.compare(parol, user?.passwordHash ?? soxta);
+  const supabase = supabaseServer();
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password: parol });
 
-  if (!user || !user.active || !togri) {
+  if (error || !data.user) {
     return { xato: 'Email yoki parol noto‘g‘ri.' };
   }
 
   await db.adminUser.update({
-    where: { id: user.id },
-    data: { lastLoginAt: new Date() },
+    where: { id: qayd.id },
+    data: { lastLoginAt: new Date(), authUserId: data.user.id },
   });
 
-  sessiyaOrnatish(user);
   redirect('/admin');
 }
 
 export async function chiqish() {
-  sessiyaOchirish();
+  const supabase = supabaseServer();
+  await supabase.auth.signOut();
   redirect('/admin/kirish');
 }

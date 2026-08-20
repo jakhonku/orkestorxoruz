@@ -1,5 +1,15 @@
 # Serverga chiqarish (Ahost VDS)
 
+> **Diqqat.** Hozir sayt **Vercel + Supabase**'da ishlaydi — joriy yo'riqnoma
+> [VERCEL.md](./VERCEL.md) da. Bu fayl keyinchalik o'z serveringizga
+> (VDS) ko'chirish kerak bo'lsa qo'l keladi.
+>
+> VDS'ga o'tishda quyidagilar qo'shimcha ish talab qiladi:
+> - baza — Supabase o'rniga serverdagi PostgreSQL (`DATABASE_URL` almashadi)
+> - admin kirish — Supabase Auth'ga ulanish saqlanib qoladi yoki o'z tizimingizga
+>   qaytariladi
+> - yuklangan fayllar — Supabase Storage'da qolaveradi (VDS diskiga ko'chirish shart emas)
+
 «Orkestr va Xor» saytini VDS'ga o'rnatish yo'riqnomasi. Ubuntu 22.04 / 24.04 uchun
 yozilgan; boshqa distributivda buyruqlar ozgina farq qilishi mumkin.
 

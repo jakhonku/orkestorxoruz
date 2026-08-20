@@ -1,5 +1,22 @@
 import type { Localized, Region, SocialLink } from '@/types';
 
+/**
+ * Saytning asosiy manzili — sitemap, robots.txt va meta teglar uchun.
+ *
+ * Tartib: qo'lda ko'rsatilgan manzil -> Vercel'dagi domen -> mahalliy server.
+ * Vercel preview'larida shu tufayli havolalar o'sha nusxaga ishora qiladi.
+ */
+function saytManzili(): string {
+  const qol = process.env.NEXT_PUBLIC_SITE_URL;
+  if (qol) return qol.endsWith('/') ? qol.slice(0, -1) : qol;
+
+  const vercel =
+    process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL;
+  if (vercel) return `https://${vercel}`;
+
+  return 'http://localhost:3000';
+}
+
 export const SITE = {
   name: {
     uz: '"Orkestr va Xor" ijodiy birlashmasi',
@@ -16,7 +33,7 @@ export const SITE = {
     ru: 'За национальную академическую музыкальную культуру',
     en: 'For a national academic music culture',
   } as Localized,
-  url: 'https://orkestrvaxor.uz',
+  url: saytManzili(),
   email: 'info@orkestrvaxor.uz',
   phone: '+998 71 200 00 00',
   address: {

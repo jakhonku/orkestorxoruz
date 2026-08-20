@@ -9,7 +9,7 @@
  * Skript idempotent — qayta-qayta ishlatish mumkin (avval tozalaydi).
  */
 import 'dotenv/config';
-import bcrypt from 'bcryptjs';
+import { createClient } from '@supabase/supabase-js';
 import { PrismaPg } from '@prisma/adapter-pg';
 
 import { PrismaClient } from '../src/generated/prisma/client';
@@ -362,7 +362,7 @@ async function sozlamalar() {
 
 async function adminFoydalanuvchi() {
   // Parol .env dan olinadi — kodda ochiq saqlanmaydi.
-  // Serverda ADMIN_PASSWORD albatta o'rnatilishi shart.
+  // Hisob Supabase Auth'da ochiladi, bazada esa faqat rol va ism saqlanadi.
   const email = process.env.ADMIN_EMAIL ?? 'admin@orkestrvaxor.uz';
   const parol = process.env.ADMIN_PASSWORD;
 
@@ -373,15 +373,44 @@ async function adminFoydalanuvchi() {
     return;
   }
 
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const xizmatKaliti = process.env.SUPABASE_SERVICE_ROLE_KEY ?? process.env.SUPABASE_SECRET_KEY;
+  if (!url || !xizmatKaliti) {
+    console.log('');
+    console.log('  Admin foydalanuvchi yaratilmadi: NEXT_PUBLIC_SUPABASE_URL yoki');
+    console.log('  SUPABASE_SERVICE_ROLE_KEY o‘rnatilmagan.');
+    return;
+  }
+
+  const supabase = createClient(url, xizmatKaliti, {
+    auth: { autoRefreshToken: false, persistSession: false },
+  });
+
+  // Hisob bor bo'lsa — paroli yangilanadi, yo'q bo'lsa — yaratiladi
+  const { data: royxat } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
+  const bor = royxat?.users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
+
+  let authUserId = bor?.id ?? null;
+  if (authUserId) {
+    await supabase.auth.admin.updateUserById(authUserId, { password: parol });
+  } else {
+    const { data, error } = await supabase.auth.admin.createUser({
+      email,
+      password: parol,
+      email_confirm: true,
+    });
+    if (error) {
+      console.log('');
+      console.log(`  Supabase Auth'da hisob ochilmadi: ${error.message}`);
+      return;
+    }
+    authUserId = data.user?.id ?? null;
+  }
+
   await db.adminUser.upsert({
     where: { email },
-    update: {},
-    create: {
-      email,
-      name: 'Bosh administrator',
-      passwordHash: await bcrypt.hash(parol, 10),
-      role: 'ADMIN',
-    },
+    update: { authUserId, active: true, role: 'ADMIN' },
+    create: { email, name: 'Bosh administrator', role: 'ADMIN', authUserId },
   });
 
   console.log('');

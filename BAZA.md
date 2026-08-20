@@ -1,35 +1,32 @@
 # Ma'lumotlar bazasi — qo'llanma
 
-Sayt kontenti endi `src/data/*.ts` fayllardan emas, **PostgreSQL bazasidan** olinadi.
+Sayt kontenti `src/data/*.ts` fayllardan emas, **Supabase Postgres** bazasidan olinadi.
 
 ---
 
 ## Tez boshlash
 
-Ikki terminal kerak bo'ladi.
+Baza Supabase'da turadi — kompyuterda hech narsa o'rnatish shart emas.
+Supabase loyihasini ochish va kalitlarni olish: [VERCEL.md](./VERCEL.md).
 
-**1-terminal — baza:**
 ```bash
-npm run db:start
-```
-PostgreSQL 18 ni `.postgres/` papkasida ko'taradi. Docker ham, tizimga o'rnatish ham
-kerak emas. Ma'lumot papkada saqlanadi — qayta ishga tushirilganda yo'qolmaydi.
-To'xtatish: `Ctrl+C`.
-
-**2-terminal — sayt:**
-```bash
-npm run dev
-```
-
-Birinchi marta ishga tushirganda bazani tayyorlash kerak:
-```bash
-cp .env.example .env   # va qiymatlarni to'ldiring
-npm run db:migrate     # jadvallarni yaratadi
+cp .env.example .env   # va Supabase qiymatlarini to'ldiring
+npm install
+npm run db:deploy      # jadvallarni yaratadi
 npm run db:seed        # boshlang'ich ma'lumot bilan to'ldiradi
+npm run dev            # http://localhost:3000
 ```
 
-> Admin foydalanuvchi `.env` dagi `ADMIN_EMAIL` va `ADMIN_PASSWORD` bilan yaratiladi.
-> `ADMIN_PASSWORD` bo'sh bo'lsa, admin yaratilmaydi (parol kodda saqlanmaydi).
+> Admin hisobi `.env` dagi `ADMIN_EMAIL` va `ADMIN_PASSWORD` bilan
+> Supabase Auth'da ochiladi va unga ADMIN roli beriladi.
+> `ADMIN_PASSWORD` bo'sh bo'lsa, hisob yaratilmaydi.
+
+**Ikkita ulanish manzili bor:**
+
+| O'zgaruvchi | Qachon ishlatiladi |
+|-------------|--------------------|
+| `DATABASE_URL` | sayt ish paytida — Supabase **transaction pooler** (port 6543) |
+| `DIRECT_URL` | `prisma migrate` buyruqlari — to'g'ridan-to'g'ri ulanish (port 5432) |
 
 ---
 
@@ -37,7 +34,7 @@ npm run db:seed        # boshlang'ich ma'lumot bilan to'ldiradi
 
 | Buyruq | Vazifasi |
 |--------|----------|
-| `npm run db:start` | Mahalliy PostgreSQL serverini ishga tushiradi |
+| `npm run db:deploy` | Tayyor migratsiyalarni bazaga qo‘llaydi (Supabase uchun) |
 | `npm run db:migrate` | Sxemadagi o'zgarishni bazaga qo'llaydi (migratsiya yaratadi) |
 | `npm run db:seed` | Bazani boshlang'ich ma'lumot bilan to'ldiradi (avval tozalaydi) |
 | `npm run db:studio` | Brauzerda baza ko'rish/tahrirlash oynasini ochadi |
@@ -56,6 +53,10 @@ prisma/
 
 src/
   lib/db.ts              # Prisma klienti (singleton)
+  lib/supabase/
+    muhit.ts             # Supabase muhit o'zgaruvchilari bir joyda
+    server.ts            # sessiya bilan ishlaydigan klient (cookie)
+    admin.ts             # xizmat kaliti — Auth Admin API va Storage
   server/
     enums.ts             # baza enum'lari <-> frontend tiplari
     map.ts               # Json -> Localized o'girish yordamchilari
@@ -110,28 +111,17 @@ Har bir kontent jadvalida:
 
 ## Muhim texnik shartlar
 
-**Baza kodlashi UTF-8, lokal C.UTF-8 bo'lishi shart.**
-
-Aks holda ikki muammo chiqadi:
-1. O'zbekcha `o‘`, `g‘` belgilari buziladi (Windows'ning WIN1251 kodlashida)
-2. Qidiruv kirill harflarida katta/kichik harfni farqlamay ishlamaydi
-
-Serverda bazani shunday yarating:
-```sql
-CREATE DATABASE orkestrvaxor
-  ENCODING 'UTF8'
-  LOCALE_PROVIDER builtin
-  BUILTIN_LOCALE 'C.UTF-8'
-  TEMPLATE template0;
-```
+**Kodlash.** Supabase bazasi UTF-8 va `C.UTF-8` lokali bilan yaratiladi —
+qo'shimcha sozlash kerak emas. (O'zbekcha `o‘`, `g‘` belgilari va kirill
+harflarida katta/kichik harfni farqlamaydigan qidiruv shunga bog'liq.)
 
 **Prisma 7 driver adapter talab qiladi** — `src/lib/db.ts` da `@prisma/adapter-pg`
 orqali ulanadi, `DATABASE_URL` shu yerda o'qiladi.
 
-Bitta jarayon ochadigan ulanishlar soni 5 ta bilan cheklangan
-(`DATABASE_POOL_MAX` bilan o'zgartiriladi). `next build` sahifalarni bir nechta
-ishchi jarayonda tayyorlaydi — cheklanmasa Postgres'ning `max_connections`
-limiti tugab, "too many clients already" xatosi chiqadi.
+**Ulanishlar soni.** Vercel'da har bir funksiya nusxasi o'z hovuzini ochadi,
+shuning uchun hovuz kichik ushlanadi (Vercel'da 3, mahalliy ishda 5;
+`DATABASE_POOL_MAX` bilan o'zgartiriladi). Ulanish Supabase'ning transaction
+pooler'i orqali boradi — pooler minglab qisqa ulanishni bitta bazaga jamlaydi.
 
 ---
 
@@ -157,7 +147,12 @@ serverda `ILIKE` bilan bajariladi.
 ## Admin panel (`/admin`)
 
 Interfeys faqat o'zbek tilida, sayt qismidan mustaqil (`src/app/admin/`).
-Kirish — `/admin/kirish`, sessiya HMAC bilan imzolangan cookie'da (7 kun).
+Kirish — `/admin/kirish`: parolni **Supabase Auth** tekshiradi, sessiya
+Supabase cookie'sida saqlanadi va `src/middleware.ts` uni yangilab turadi.
+Rol (`ADMIN` / `MUHARRIR`) va faollik esa `admin_users` jadvalida —
+Supabase'da hisobi bo'lsa ham, jadvalda faol qaydi yo'q odam panelga kira olmaydi.
+Foydalanuvchi qo'shish/o'chirish va parol almashtirish Auth Admin API orqali
+bajariladi (`src/server/admin/foydalanuvchilar.ts`).
 
 **Bo'limlar bitta joyda tavsiflanadi** — `src/server/admin/registr.ts`. Har bir
 bo'lim uchun model nomi, maydonlar ro'yxati va ro'yxatdagi qator ko'rinishi
@@ -184,10 +179,11 @@ vaqti, ijtimoiy tarmoqlar va xarita nuqtasi) hamda «Haqida» sahifasidagi
 missiya matnida ishlatiladi. Bazada kalit bo'lmasa, `src/lib/constants.ts`
 dagi zaxira qiymat olinadi — shuning uchun baza bo'sh bo'lsa ham sayt ishlaydi.
 
-**Rasm yuklash:** `POST /api/admin/yuklash` — fayl `public/uploads/<yil-oy>/`
-ichiga yoziladi va `media_files` jadvaliga qayd qilinadi (8 MB gacha; JPG, PNG,
-WEBP, AVIF, SVG, PDF). Diskka yozgani uchun Node server (VDS) kerak — Vercel'da
-o'rniga obyekt saqlash (Blob) ulanadi.
+**Rasm yuklash:** `POST /api/admin/yuklash` — fayl **Supabase Storage**'dagi
+`media` bucket'iga (`<papka>/<yil-oy>/<nom>`) yoziladi va `media_files`
+jadvaliga qayd qilinadi (8 MB gacha; JPG, PNG, WEBP, AVIF, SVG, PDF).
+Bazaga faylning to'liq (public) manzili saqlanadi. Vercel'da disk faqat o'qish
+uchun ochiq — shuning uchun fayllar loyihaning ichida emas, Storage'da turadi.
 
 ---
 
@@ -211,8 +207,9 @@ xabarlar» bo'limida `YANGI` holatida ko'rinadi.
 - har bir formada yashirin «tuzoq» maydoni — robot to'ldirsa, ariza yozilmaydi
   (foydalanuvchiga esa muvaffaqiyat ko'rsatiladi, robot buni bilmaydi);
 - bitta IP dan 10 daqiqada 5 tadan ko'p ariza qabul qilinmaydi. Hisoblagich
-  jarayon xotirasida — bitta Node serverda (VDS) ishlaydi, bir nechta nusxa
-  ishlatilsa Redis kerak bo'ladi.
+  bazada (`form_rate_hits`) — Vercel'da so'rovlar bir nechta nusxada bajarilishi
+  mumkin va xotiradagi hisoblagich ularga umumiy bo'lmaydi. Eskirgan izlar
+  o'z-o'zidan tozalanadi.
 
 Xato matni serverdan qaytmaydi — faqat kod (`tekshiruv` / `limit` / `xato`)
 qaytadi, matnni klient foydalanuvchi tilida ko'rsatadi.
@@ -231,6 +228,7 @@ server tanlov haqiqatan «ochiq» ekanini qayta tekshiradi.
 
 - [x] Admin panel (`/admin`) — kirish, kontentni tahrirlash, rasm yuklash
 - [x] Formalarni bazaga ulash (aloqa, jamoa arizasi, tanlov arizasi, talent, obuna)
-- [x] Serverga chiqarish yo'riqnomasi va konfiguratsiyalari — [DEPLOY.md](./DEPLOY.md)
+- [x] Vercel + Supabase'ga moslash — [VERCEL.md](./VERCEL.md)
+- [x] VDS uchun yo'riqnoma va konfiguratsiyalar (keyinroq kerak bo'lsa) — [DEPLOY.md](./DEPLOY.md)
 - [ ] Yangi ariza tushganda xabarnoma emaili (`notifyEmail` sozlamasi tayyor)
-- [ ] Saytni serverga o'rnatish (DEPLOY.md bo'yicha)
+- [ ] Supabase loyihasini ochish va saytni Vercel'ga chiqarish (VERCEL.md bo'yicha)
