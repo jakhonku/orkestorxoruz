@@ -692,7 +692,9 @@ export const BOLIMLAR: Bolim[] = [
     izoh:
       'Saytdagi tayyor yozuvlar: tugmalar, sarlavhalar va izohlar. ' +
       'Kulrang yozuv — matnning kodadagi kaliti, u qaysi sahifada chiqishini ko‘rsatadi. ' +
-      'Maydon bo‘sh qoldirilsa, saytda standart matn ko‘rinadi.',
+      'Maydon bo‘sh qoldirilsa, saytda standart matn ko‘rinadi. ' +
+      'Kontent (yangiliklar, jamoalar, hujjatlar...), missiya matni va kontakt ' +
+      'ma’lumotlari bu yerda emas — o‘z bo‘limlarida tahrirlanadi.',
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.value) || r.key,

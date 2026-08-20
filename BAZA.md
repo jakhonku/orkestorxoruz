@@ -183,6 +183,15 @@ admin tahriri esa `ui_texts` jadvalida saqlanadi va standart ustidan yoziladi.
 Maydon bo'sh qoldirilsa — standart matn qaytadi. Kodga yangi matn qo'shilganda
 `npm run db:matnlar` ishga tushiriladi (bu buyruq mavjud tahrirlarga tegmaydi).
 
+Panelga faqat **kodda haqiqatan ishlatiladigan** kalitlar chiqadi: skript `src/`
+ni o'qib, `useTranslations` orqali chaqirilgan kalitlarni aniqlaydi (dinamik
+`t("type_" + x)` ko'rinishi ham hisobga olinadi). Ishlatilmaydigan kalit panelda
+ko'rinmaydi — aks holda admin tahrirlaydi-yu, saytda hech narsa o'zgarmaydi.
+
+Shu sababdan `About.missionText` ham panelda yo'q: missiya matni avval
+`settings` jadvalidan olinadi, ya'ni **Sozlamalar** bo'limida tahrirlanadi;
+`messages` dagi matn faqat sozlama bo'sh bo'lganda ishlatiladi.
+
 Sozlamalar saytning footer'i, «Aloqa» sahifasi (manzil, telefon, email, ish
 vaqti, ijtimoiy tarmoqlar va xarita nuqtasi) hamda «Haqida» sahifasidagi
 missiya matnida ishlatiladi. Bazada kalit bo'lmasa, `src/lib/constants.ts`
