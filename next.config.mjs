@@ -10,6 +10,18 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
   ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
   : null;
 
+/** Barcha sahifalarga qo'shiladigan xavfsizlik sarlavhalari */
+const XAVFSIZLIK_SARLAVHALARI = [
+  // Saytni boshqa saytning <iframe> iga joylab bo'lmaydi (clickjacking)
+  { key: 'X-Frame-Options', value: 'DENY' },
+  // Brauzer fayl turini o'zi "taxmin qilmaydi" — faqat serverdagi turga ishonadi
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  // Tashqi saytga o'tganda to'liq manzil emas, faqat domen yuboriladi
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  // Kamera, mikrofon va joylashuvga hech qanday skript so'rov yubora olmaydi
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+];
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -22,6 +34,22 @@ const nextConfig = {
       { protocol: 'https', hostname: 'picsum.photos' },
       { protocol: 'https', hostname: 'i.ytimg.com' },
     ],
+  },
+
+  experimental: {
+    /**
+     * Brauzerdagi "router keshi" — Next sahifalar orasida yurganda ilgari
+     * olingan sahifani qayta ishlatadi. Sukut bo'yicha 30 soniya (dinamik) va
+     * 5 daqiqa (statik) saqlanadi: admin panelda o'zgartirilgan ma'lumot
+     * saytda shuncha vaqt eski holida ko'rinib turishi mumkin edi.
+     *
+     * 0 — har o'tishda serverdan yangi nusxa olinadi.
+     */
+    staleTimes: { dynamic: 0, static: 0 },
+  },
+
+  async headers() {
+    return [{ source: '/:path*', headers: XAVFSIZLIK_SARLAVHALARI }];
   },
 };
 

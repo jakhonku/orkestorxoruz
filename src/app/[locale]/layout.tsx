@@ -67,14 +67,17 @@ export async function generateMetadata({
 }
 
 /**
- * Sahifalar build paytida tayyorlanadi (tez ochiladi), lekin har 5 daqiqada
- * bazadan qayta o'qiladi. Ya'ni admin panelda kiritilgan o'zgarish saytni
- * qayta qurmasdan ham ko'rinadi.
+ * Sahifalar build paytida tayyorlanadi (tez ochiladi) va keshlanadi.
  *
- * Keyinchalik admin panel qo'shilganda bu yerga "darhol yangilash"
- * (revalidatePath) qo'shiladi — o'shanda kutish ham kerak bo'lmaydi.
+ * Admin panelda biror yozuv saqlansa, `revalidatePath('/', 'layout')`
+ * chaqiriladi — kesh o'sha zahoti bekor qilinadi va keyingi so'rov bazadan
+ * yangi ma'lumot bilan quriladi. Ya'ni tahrir darhol ko'rinadi.
+ *
+ * Quyidagi 60 soniya — faqat zaxira: kimdir ma'lumotni Supabase panelidan
+ * to'g'ridan-to'g'ri o'zgartirsa (admin panelsiz), sayt shuncha vaqt ichida
+ * o'zi yangilanadi.
  */
-export const revalidate = 300;
+export const revalidate = 60;
 
 export default async function LocaleLayout({
   children,

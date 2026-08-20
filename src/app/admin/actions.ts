@@ -26,7 +26,7 @@ export async function kirish(_avvalgi: KirishHolati, formData: FormData): Promis
 
   const qayd = await db.adminUser.findUnique({
     where: { email },
-    select: { id: true, active: true },
+    select: { id: true, active: true, authUserId: true },
   });
   if (!qayd || !qayd.active) {
     return { xato: 'Email yoki parol noto‘g‘ri.' };
@@ -37,6 +37,13 @@ export async function kirish(_avvalgi: KirishHolati, formData: FormData): Promis
 
   if (error || !data.user) {
     return { xato: 'Email yoki parol noto‘g‘ri.' };
+  }
+
+  // Qayd boshqa Supabase hisobiga bog'langan bo'lsa — kirishga ruxsat yo'q.
+  // Bog'lanish faqat bir marta, birinchi kirishda o'rnatiladi.
+  if (qayd.authUserId && qayd.authUserId !== data.user.id) {
+    await supabase.auth.signOut();
+    return { xato: 'Bu hisob boshqa foydalanuvchiga bog‘langan. Administratorga murojaat qiling.' };
   }
 
   await db.adminUser.update({

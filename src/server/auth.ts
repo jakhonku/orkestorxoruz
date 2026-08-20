@@ -37,24 +37,21 @@ export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
   } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const email = (user.email ?? '').trim().toLowerCase();
-
-  const qayd = await db.adminUser.findFirst({
-    where: { OR: [{ authUserId: user.id }, ...(email ? [{ email }] : [])] },
-    select: { id: true, email: true, name: true, role: true, active: true, authUserId: true },
+  /**
+   * Qayd FAQAT `authUserId` bo'yicha topiladi — email bo'yicha emas.
+   *
+   * Aks holda Supabase'da o'zi ro'yxatdan o'tgan odam, agar uning emaili
+   * `admin_users` dagi biror qatorga to'g'ri kelib qolsa, o'sha qatorning
+   * huquqlarini olib qo'lardi. Bog'lanish faqat kirish paytida, parol
+   * tekshirilgandan keyin o'rnatiladi (`src/app/admin/actions.ts`).
+   */
+  const qayd = await db.adminUser.findUnique({
+    where: { authUserId: user.id },
+    select: { id: true, email: true, name: true, role: true, active: true },
   });
 
   // Supabase'da hisob bor, lekin panelga ruxsat berilmagan — kirish yo'q
   if (!qayd || !qayd.active) return null;
-
-  // Email bo'yicha topilgan bo'lsa, keyingi safarlar uchun bog'lab qo'yiladi
-  if (qayd.authUserId !== user.id) {
-    try {
-      await db.adminUser.update({ where: { id: qayd.id }, data: { authUserId: user.id } });
-    } catch {
-      // Boshqa qayd allaqachon shu uuid'ga bog'langan — jimgina o'tkazib yuboriladi
-    }
-  }
 
   return {
     userId: qayd.id,

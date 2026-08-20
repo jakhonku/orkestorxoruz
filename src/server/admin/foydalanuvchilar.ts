@@ -77,7 +77,14 @@ export async function foydalanuvchiQoshish(formData: FormData): Promise<Natija> 
       await supabase.auth.admin.updateUserById(authUserId, { password: parol });
     }
 
-    await db.adminUser.create({ data: { email, name, role, authUserId } });
+    try {
+      await db.adminUser.create({ data: { email, name, role, authUserId } });
+    } catch (e) {
+      // Bazaga yozib bo'lmadi — Supabase'da ochilgan hisob ham olib tashlanadi,
+      // aks holda hech kimga tegishli bo'lmagan hisob qolib ketadi
+      if (!error && authUserId) await supabase.auth.admin.deleteUser(authUserId);
+      throw e;
+    }
 
     revalidatePath('/admin/foydalanuvchilar');
     return { ok: true };
