@@ -6,22 +6,24 @@ import { UpcomingEvents } from '@/components/sections/upcoming-events';
 import { Directions } from '@/components/sections/directions';
 import { NewsSection } from '@/components/sections/news-section';
 import { Partners } from '@/components/sections/partners';
-import { NewsletterCta } from '@/components/sections/newsletter-cta';
+import { MapSection } from '@/components/sections/map-section';
 import { getKpiStats, getPartners, getStrategySlides } from '@/server/queries/home';
 import { getUpcomingEvents } from '@/server/queries/events';
 import { getLatestNews } from '@/server/queries/news';
+import { getSettings } from '@/server/queries/settings';
 import { pick } from '@/lib/utils';
 
 export default async function HomePage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
 
   // Bosh sahifadagi barcha bloklar uchun ma'lumot — parallel olinadi
-  const [slides, stats, events, articles, partners] = await Promise.all([
+  const [slides, stats, events, articles, partners, settings] = await Promise.all([
     getStrategySlides(),
     getKpiStats(),
     getUpcomingEvents(3),
     getLatestNews(3),
     getPartners(),
+    getSettings(),
   ]);
 
   // Hero mijoz komponenti — matnlar shu yerda joriy tilga o'giriladi
@@ -41,7 +43,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
       <Directions />
       <NewsSection articles={articles} />
       <Partners partners={partners} />
-      <NewsletterCta />
+      <MapSection settings={settings} />
     </>
   );
 }

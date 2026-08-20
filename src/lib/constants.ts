@@ -83,7 +83,7 @@ export const NAV_ITEMS: { key: string; href: string; children?: { key: string; h
   },
   { key: 'afisha', href: '/afisha' },
   {
-    key: 'media',
+    key: 'news',
     href: '/media',
     children: [
       { key: 'media', href: '/media' },
