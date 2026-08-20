@@ -16,6 +16,8 @@ export type SiteSettings = {
   url: string;
   workingHours: Localized;
   missionText: Localized;
+  /** "Birlashma haqida" sahifasidagi missiya rasmi */
+  missionImage: string;
   mapCoords: { lat: number; lng: number };
   socials: SocialLink[];
   notifyEmail: string;
@@ -46,6 +48,7 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
       en: 'Monday–Friday, 09:00–18:00',
     }),
     missionText: olish('missionText', { uz: '', ru: '', en: '' }),
+    missionImage: olish('missionImage', ''),
     mapCoords: olish('mapCoords', { lat: 41.311081, lng: 69.279737 }),
     socials: olish('socials', SOCIALS),
     notifyEmail: olish('notifyEmail', SITE.email),

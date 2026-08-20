@@ -38,6 +38,7 @@ export default async function AboutPage({ params }: { params: { locale: Locale }
       documents={documents}
       tasks={tasks}
       missionText={settings.missionText}
+      missionImage={settings.missionImage}
     />
   );
 }
@@ -47,11 +48,13 @@ function AboutContent({
   documents,
   tasks,
   missionText,
+  missionImage,
 }: {
   leaders: Leader[];
   documents: DocumentLink[];
   tasks: Localized[];
   missionText: Localized;
+  missionImage: string;
 }) {
   const t = useTranslations('About');
   const tn = useTranslations('Nav');
@@ -84,7 +87,7 @@ function AboutContent({
           <Reveal direction="left">
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-soft-lg">
               <Image
-                src="https://picsum.photos/seed/about-mission/900/700"
+                src={missionImage || 'https://picsum.photos/seed/about-mission/900/700'}
                 alt={t('missionTitle')}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"

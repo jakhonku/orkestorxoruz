@@ -17,6 +17,12 @@ export const SOZLAMA_MAYDONLARI: Maydon[] = [
   },
   { nom: 'slogan', yorliq: 'Shior', tur: 'kopTilli' },
   { nom: 'missionText', yorliq: 'Missiya matni', tur: 'kopTilliKatta' },
+  {
+    nom: 'missionImage',
+    yorliq: 'Missiya rasmi',
+    tur: 'rasm',
+    izoh: '"Birlashma haqida" sahifasida matn yonida chiqadi. Gorizontal, 900×700',
+  },
   { nom: 'address', yorliq: 'Manzil', tur: 'kopTilli' },
   { nom: 'workingHours', yorliq: 'Ish vaqti', tur: 'kopTilli' },
   { nom: 'phone', yorliq: 'Telefon', tur: 'matn', yarim: true },
