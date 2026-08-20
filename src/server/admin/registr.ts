@@ -426,12 +426,18 @@ export const BOLIMLAR: Bolim[] = [
     birlik: 'video',
     model: 'mediaVideo',
     saralash: [{ sortOrder: 'asc' }, { date: 'desc' }],
+    izoh:
+      'Uchta usuldan BITTASINI to‘ldiring: YouTube ID, Instagram havolasi yoki ' +
+      'video faylni yuklash. Instagram va yuklangan video uchun muqova rasmini ham qo‘ying.',
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.title),
       tavsif: new Date(r.date).toISOString().slice(0, 10),
+      belgi: r.youtubeId ? 'YouTube' : r.instagramUrl ? 'Instagram' : r.fileUrl ? 'Yuklangan' : '—',
       ochiqmi: r.published,
-      rasm: `https://i.ytimg.com/vi/${r.youtubeId}/mqdefault.jpg`,
+      rasm: r.youtubeId
+        ? `https://i.ytimg.com/vi/${r.youtubeId}/mqdefault.jpg`
+        : (r.coverUrl as string) || undefined,
     }),
     maydonlar: [
       { nom: 'title', yorliq: 'Video nomi', tur: 'kopTilli', talab: true },
@@ -439,9 +445,27 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'youtubeId',
         yorliq: 'YouTube ID',
         tur: 'matn',
-        talab: true,
         yarim: true,
         izoh: 'Havoladagi v= dan keyingi qism, masalan: jNQXAC9IVRw',
+      },
+      {
+        nom: 'instagramUrl',
+        yorliq: 'Instagram havolasi',
+        tur: 'havola',
+        yarim: true,
+        izoh: 'Masalan: https://www.instagram.com/reel/ABC123/',
+      },
+      {
+        nom: 'fileUrl',
+        yorliq: 'Video fayl',
+        tur: 'video',
+        izoh: 'YouTube ham, Instagram ham bo‘lmasa — videoni shu yerdan yuklang',
+      },
+      {
+        nom: 'coverUrl',
+        yorliq: 'Muqova rasmi',
+        tur: 'rasm',
+        izoh: 'Instagram va yuklangan video uchun. YouTube o‘z rasmini oladi',
       },
       { nom: 'date', yorliq: 'Sanasi', tur: 'sana', talab: true, yarim: true },
       tartib,

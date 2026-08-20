@@ -22,11 +22,14 @@ export function MediaTabs({
   videos,
   photos,
   documents,
+  pressKitUrl,
 }: {
   news: NewsArticle[];
   videos: MediaVideo[];
   photos: MediaPhoto[];
   documents: DocumentLink[];
+  /** Sozlamalarda yuklangan press-kit fayli. Bo'sh bo'lsa tugma ko'rsatilmaydi */
+  pressKitUrl: string;
 }) {
   const t = useTranslations('Media');
   const [tab, setTab] = useState<Tab>('news');
@@ -78,7 +81,7 @@ export function MediaTabs({
           {tab === 'news' && <NewsTab news={news} />}
           {tab === 'video' && <VideoTab videos={videos} />}
           {tab === 'photo' && <PhotoTab photos={photos} />}
-          {tab === 'press' && <PressTab documents={documents} />}
+          {tab === 'press' && <PressTab documents={documents} pressKitUrl={pressKitUrl} />}
         </motion.div>
       </AnimatePresence>
     </div>
@@ -115,7 +118,13 @@ function VideoTab({ videos }: { videos: MediaVideo[] }) {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {videos.map((video, i) => (
         <Reveal key={video.id} delay={(i % 3) * 0.08}>
-          <VideoEmbed youtubeId={video.youtubeId} title={pick(video.title, locale)} />
+          <VideoEmbed
+            youtubeId={video.youtubeId}
+            instagramUrl={video.instagramUrl}
+            fileUrl={video.fileUrl}
+            coverUrl={video.coverUrl}
+            title={pick(video.title, locale)}
+          />
           <p className="mt-3 font-medium text-navy">{pick(video.title, locale)}</p>
         </Reveal>
       ))}
@@ -154,7 +163,13 @@ function PhotoTab({ photos }: { photos: MediaPhoto[] }) {
   );
 }
 
-function PressTab({ documents }: { documents: DocumentLink[] }) {
+function PressTab({
+  documents,
+  pressKitUrl,
+}: {
+  documents: DocumentLink[];
+  pressKitUrl: string;
+}) {
   const t = useTranslations('Media');
   const locale = useLocale();
 
@@ -166,12 +181,15 @@ function PressTab({ documents }: { documents: DocumentLink[] }) {
         </span>
         <h3 className="font-serif text-2xl font-semibold text-navy">{t('pressTitle')}</h3>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{t('pressText')}</p>
-        <Button variant="gold" size="lg" className="mt-6" asChild>
-          <a href="#">
-            <Download className="h-4 w-4" />
-            {t('pressKit')}
-          </a>
-        </Button>
+        {/* Fayl sozlamalarda yuklanmagan bo'lsa, ishlamaydigan tugma ko'rsatilmaydi */}
+        {pressKitUrl && (
+          <Button variant="gold" size="lg" className="mt-6" asChild>
+            <a href={pressKitUrl} target="_blank" rel="noreferrer">
+              <Download className="h-4 w-4" />
+              {t('pressKit')}
+            </a>
+          </Button>
+        )}
       </div>
 
       <div className="mt-6 space-y-3">

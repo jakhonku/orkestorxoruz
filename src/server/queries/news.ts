@@ -63,12 +63,20 @@ export const getMediaVideos = cache(async (): Promise<MediaVideo[]> => {
     where: { published: true },
     orderBy: [{ sortOrder: 'asc' }, { date: 'desc' }],
   });
-  return rows.map((v: VideoQator) => ({
-    id: String(v.id),
-    title: loc(v.title),
-    youtubeId: v.youtubeId,
-    date: isoDate(v.date),
-  }));
+  return (
+    rows
+      .map((v: VideoQator) => ({
+        id: String(v.id),
+        title: loc(v.title),
+        youtubeId: v.youtubeId ?? '',
+        instagramUrl: v.instagramUrl ?? '',
+        fileUrl: v.fileUrl ?? '',
+        coverUrl: v.coverUrl ?? '',
+        date: isoDate(v.date),
+      }))
+      // Uch manbadan hech biri to'ldirilmagan yozuv saytda ko'rsatilmaydi
+      .filter((v) => v.youtubeId || v.instagramUrl || v.fileUrl)
+  );
 });
 
 export const getMediaPhotos = cache(async (): Promise<MediaPhoto[]> => {

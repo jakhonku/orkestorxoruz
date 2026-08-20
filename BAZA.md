@@ -200,8 +200,15 @@ dagi zaxira qiymat olinadi — shuning uchun baza bo'sh bo'lsa ham sayt ishlaydi
 **Rasm va hujjat yuklash:** `POST /api/admin/yuklash` — fayl **Supabase Storage**'dagi
 `media` bucket'iga (`<papka>/<yil-oy>/<nom>`) yoziladi va `media_files`
 jadvaliga qayd qilinadi. Rasmlar: JPG, PNG, WEBP, AVIF, SVG — 8 MB gacha;
-hujjatlar: PDF, DOC, DOCX, XLS, XLSX — 20 MB gacha. Shakldagi `rasm` maydoni
-rasm yuklaydi, `fayl` maydoni esa hujjat (Hujjatlar bo'limi va tanlov nizomi).
+hujjatlar: PDF, DOC, DOCX, XLS, XLSX — 20 MB gacha; videolar: MP4, WEBM, MOV —
+50 MB gacha. Shakldagi `rasm` maydoni rasm yuklaydi, `fayl` — hujjat (Hujjatlar
+bo'limi, tanlov nizomi, press-kit), `video` — video fayl.
+
+**Videolar uch manbadan biri bo'lishi mumkin** (`media_videos`): YouTube ID,
+Instagram havolasi (`instagramUrl`) yoki Storage'ga yuklangan fayl (`fileUrl`).
+Instagram va yuklangan video uchun muqova rasmi (`coverUrl`) qo'yiladi —
+YouTube o'z muqovasini o'zi beradi. Uchtasidan hech biri to'ldirilmagan yozuv
+saytda ko'rsatilmaydi.
 Bazaga faylning to'liq (public) manzili saqlanadi. Vercel'da disk faqat o'qish
 uchun ochiq — shuning uchun fayllar loyihaning ichida emas, Storage'da turadi.
 

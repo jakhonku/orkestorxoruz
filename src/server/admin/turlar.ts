@@ -28,6 +28,8 @@ export type MaydonTuri =
   | 'rasm'
   /** Hujjat (PDF, Word, Excel) — yuklash tugmasi bilan */
   | 'fayl'
+  /** Video fayl (MP4, WEBM, MOV) — yuklash tugmasi bilan */
+  | 'video'
   /** Uch tilli bir qatorli matn */
   | 'kopTilli'
   /** Uch tilli ko'p qatorli matn */

@@ -359,13 +359,22 @@ model NewsArticle {
   @@map("news")
 }
 
+/// Media bo'limidagi videolar. Uch manbadan biri to'ldiriladi:
+/// YouTube ID, Instagram havolasi yoki Storage'ga yuklangan fayl.
 model MediaVideo {
-  id        Int      @id @default(autoincrement())
-  title     Json
-  youtubeId String   @db.VarChar(40)
-  date      DateTime @db.Date
-  published Boolean  @default(true)
-  sortOrder Int      @default(0)
+  id           Int      @id @default(autoincrement())
+  title        Json
+  /// YouTube video ID — havoladagi `v=` dan keyingi qism
+  youtubeId    String?  @db.VarChar(40)
+  /// Instagram post yoki reel havolasi
+  instagramUrl String?  @db.Text
+  /// Supabase Storage'ga yuklangan video fayl
+  fileUrl      String?  @db.Text
+  /// Muqova rasmi — Instagram va yuklangan video uchun
+  coverUrl     String?  @db.Text
+  date         DateTime @db.Date
+  published    Boolean  @default(true)
+  sortOrder    Int      @default(0)
 
   @@index([published, date])
   @@map("media_videos")

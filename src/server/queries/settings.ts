@@ -18,6 +18,8 @@ export type SiteSettings = {
   missionText: Localized;
   /** "Birlashma haqida" sahifasidagi missiya rasmi */
   missionImage: string;
+  /** "Media → Matbuot uchun" bo'limidagi press-kit fayli */
+  pressKitUrl: string;
   mapCoords: { lat: number; lng: number };
   socials: SocialLink[];
   notifyEmail: string;
@@ -49,6 +51,7 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
     }),
     missionText: olish('missionText', { uz: '', ru: '', en: '' }),
     missionImage: olish('missionImage', ''),
+    pressKitUrl: olish('pressKitUrl', ''),
     mapCoords: olish('mapCoords', { lat: 41.311081, lng: 69.279737 }),
     socials: olish('socials', SOCIALS),
     notifyEmail: olish('notifyEmail', SITE.email),

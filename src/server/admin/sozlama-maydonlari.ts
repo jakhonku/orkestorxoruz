@@ -23,6 +23,12 @@ export const SOZLAMA_MAYDONLARI: Maydon[] = [
     tur: 'rasm',
     izoh: '"Birlashma haqida" sahifasida matn yonida chiqadi. Gorizontal, 900×700',
   },
+  {
+    nom: 'pressKitUrl',
+    yorliq: 'Press-kit fayli',
+    tur: 'fayl',
+    izoh: '"Media → Matbuot uchun" bo‘limidagi yuklab olish tugmasi. Bo‘sh bo‘lsa tugma ko‘rinmaydi',
+  },
   { nom: 'address', yorliq: 'Manzil', tur: 'kopTilli' },
   { nom: 'workingHours', yorliq: 'Ish vaqti', tur: 'kopTilli' },
   { nom: 'phone', yorliq: 'Telefon', tur: 'matn', yarim: true },

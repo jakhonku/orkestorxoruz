@@ -5,6 +5,7 @@ import { PageHeader } from '@/components/shared/page-header';
 import { MediaTabs } from '@/components/features/media-tabs';
 import { getMediaPhotos, getMediaVideos, getNews } from '@/server/queries/news';
 import { getDocuments } from '@/server/queries/experts';
+import { getSettings } from '@/server/queries/settings';
 
 export async function generateMetadata({
   params,
@@ -17,11 +18,12 @@ export async function generateMetadata({
 
 export default async function MediaPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
-  const [news, mediaVideos, mediaPhotos, documents] = await Promise.all([
+  const [news, mediaVideos, mediaPhotos, documents, settings] = await Promise.all([
     getNews(),
     getMediaVideos(),
     getMediaPhotos(),
     getDocuments(),
+    getSettings(),
   ]);
   const t = await getTranslations({ locale: params.locale, namespace: 'Media' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
@@ -35,7 +37,13 @@ export default async function MediaPage({ params }: { params: { locale: Locale }
       />
       <section className="section bg-white">
         <div className="container">
-          <MediaTabs news={news} videos={mediaVideos} photos={mediaPhotos} documents={documents} />
+          <MediaTabs
+            news={news}
+            videos={mediaVideos}
+            photos={mediaPhotos}
+            documents={documents}
+            pressKitUrl={settings.pressKitUrl}
+          />
         </div>
       </section>
     </>

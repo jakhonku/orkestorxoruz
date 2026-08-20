@@ -152,6 +152,9 @@ function Boshqaruv({
     case 'fayl':
       return <Fayl qiymat={matn} ozgartir={ozgartir} />;
 
+    case 'video':
+      return <Fayl qiymat={matn} ozgartir={ozgartir} tur="video" />;
+
     case 'kopTilli':
     case 'kopTilliKatta':
       return (
@@ -403,10 +406,33 @@ function faylNomi(url: string): string {
   }
 }
 
-function Fayl({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
+/** Fayl turiga qarab: qaysi fayllar tanlanadi va foydalanuvchiga qanday izoh ko'rsatiladi */
+const FAYL_TURLARI = {
+  hujjat: {
+    accept: '.pdf,.doc,.docx,.xls,.xlsx,application/pdf',
+    izoh: 'PDF, Word, Excel — 20 MB gacha',
+    papka: 'hujjatlar',
+  },
+  video: {
+    accept: '.mp4,.webm,.mov,video/mp4,video/webm,video/quicktime',
+    izoh: 'MP4, WEBM, MOV — 50 MB gacha',
+    papka: 'videolar',
+  },
+} as const;
+
+function Fayl({
+  qiymat,
+  ozgartir,
+  tur = 'hujjat',
+}: {
+  qiymat: string;
+  ozgartir: (yangi: string) => void;
+  tur?: keyof typeof FAYL_TURLARI;
+}) {
   const input = useRef<HTMLInputElement>(null);
   const [yuklanmoqda, setYuklanmoqda] = useState(false);
   const [xato, setXato] = useState<string | null>(null);
+  const sozlama = FAYL_TURLARI[tur];
 
   async function yukla(fayl: File) {
     setXato(null);
@@ -414,7 +440,7 @@ function Fayl({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) 
     try {
       const forma = new FormData();
       forma.append('fayl', fayl);
-      forma.append('papka', 'hujjatlar');
+      forma.append('papka', sozlama.papka);
       const javob = await fetch('/api/admin/yuklash', { method: 'POST', body: forma });
       const natija = (await javob.json()) as { url?: string; xato?: string };
       if (!javob.ok || !natija.url) throw new Error(natija.xato ?? 'Yuklab bo‘lmadi.');
@@ -468,14 +494,14 @@ function Fayl({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) 
           {yuklanmoqda ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
           {yuklanmoqda ? 'Yuklanmoqda...' : qiymat ? 'Boshqa fayl yuklash' : 'Kompyuterdan yuklash'}
         </button>
-        <span className="text-xs text-muted-foreground">PDF, Word, Excel — 20 MB gacha</span>
+        <span className="text-xs text-muted-foreground">{sozlama.izoh}</span>
         {xato && <span className="text-xs text-red-600">{xato}</span>}
       </div>
 
       <input
         ref={input}
         type="file"
-        accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf"
+        accept={sozlama.accept}
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];

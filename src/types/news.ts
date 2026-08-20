@@ -18,7 +18,14 @@ export interface NewsArticle {
 export interface MediaVideo {
   id: string;
   title: Localized;
+  /** YouTube video ID. Bo'sh bo'lsa — boshqa manba ishlatiladi */
   youtubeId: string;
+  /** Instagram post yoki reel havolasi */
+  instagramUrl?: string;
+  /** Saytga yuklangan video fayl manzili */
+  fileUrl?: string;
+  /** Muqova rasmi (Instagram va yuklangan video uchun) */
+  coverUrl?: string;
   date: string;
 }
 

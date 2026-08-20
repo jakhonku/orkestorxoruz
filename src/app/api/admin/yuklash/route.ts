@@ -34,11 +34,19 @@ const HUJJATLAR: Record<string, string> = {
   'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
 };
 
-const RUXSAT_ETILGAN: Record<string, string> = { ...RASMLAR, ...HUJJATLAR };
+/** Videolar — media bo'limiga to'g'ridan-to'g'ri yuklanadigan fayllar */
+const VIDEOLAR: Record<string, string> = {
+  'video/mp4': '.mp4',
+  'video/webm': '.webm',
+  'video/quicktime': '.mov',
+};
 
-/** Eng katta hajm: rasm — 8 MB, hujjat — 20 MB */
+const RUXSAT_ETILGAN: Record<string, string> = { ...RASMLAR, ...HUJJATLAR, ...VIDEOLAR };
+
+/** Eng katta hajm: rasm — 8 MB, hujjat — 20 MB, video — 50 MB */
 const RASM_CHEGARASI = 8 * 1024 * 1024;
 const HUJJAT_CHEGARASI = 20 * 1024 * 1024;
+const VIDEO_CHEGARASI = 50 * 1024 * 1024;
 
 function xavfsizNom(nom: string): string {
   return nom
@@ -66,13 +74,21 @@ export async function POST(request: Request) {
   const kengaytma = RUXSAT_ETILGAN[fayl.type];
   if (!kengaytma) {
     return NextResponse.json(
-      { xato: 'Faqat JPG, PNG, WEBP, AVIF, SVG, PDF, Word yoki Excel fayl yuklash mumkin.' },
+      {
+        xato:
+          'Faqat JPG, PNG, WEBP, AVIF, SVG, PDF, Word, Excel yoki ' +
+          'MP4 / WEBM / MOV video yuklash mumkin.',
+      },
       { status: 415 },
     );
   }
 
-  const hujjatmi = fayl.type in HUJJATLAR;
-  const chegara = hujjatmi ? HUJJAT_CHEGARASI : RASM_CHEGARASI;
+  const chegara =
+    fayl.type in VIDEOLAR
+      ? VIDEO_CHEGARASI
+      : fayl.type in HUJJATLAR
+        ? HUJJAT_CHEGARASI
+        : RASM_CHEGARASI;
   if (fayl.size > chegara) {
     return NextResponse.json(
       { xato: `Fayl hajmi ${chegara / 1024 / 1024} MB dan oshmasligi kerak.` },
