@@ -9,6 +9,9 @@ export function NewsSection({ articles }: { articles: NewsArticle[] }) {
   const t = useTranslations('Home');
   const tc = useTranslations('Common');
 
+  // Yangilik bo'lmasa — bo'sh blok o'rniga bo'lim umuman ko'rsatilmaydi
+  if (articles.length === 0) return null;
+
 
   return (
     <section className="section bg-navy-50/40">

@@ -53,7 +53,8 @@ export function EnsemblesExplorer({ ensembles }: { ensembles: Ensemble[] }) {
             className="pl-11"
           />
         </div>
-        <div className="grid grid-cols-2 gap-3 md:flex md:w-auto">
+        {/* Kichik telefonda ikkita ro'yxat yonma-yon sig'maydi — ustma-ust turadi */}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:flex md:w-auto">
           <Select
             value={type}
             onChange={(e) => setType(e.target.value as typeof type)}

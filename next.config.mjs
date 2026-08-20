@@ -12,8 +12,9 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
 
 /** Barcha sahifalarga qo'shiladigan xavfsizlik sarlavhalari */
 const XAVFSIZLIK_SARLAVHALARI = [
-  // Saytni boshqa saytning <iframe> iga joylab bo'lmaydi (clickjacking)
-  { key: 'X-Frame-Options', value: 'DENY' },
+  // Saytni BOSHQA saytning <iframe> iga joylab bo'lmaydi (clickjacking).
+  // O'zini o'zi ichiga olishi mumkin — ko'rinishni tekshirish uchun qulay.
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   // Brauzer fayl turini o'zi "taxmin qilmaydi" — faqat serverdagi turga ishonadi
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   // Tashqi saytga o'tganda to'liq manzil emas, faqat domen yuboriladi

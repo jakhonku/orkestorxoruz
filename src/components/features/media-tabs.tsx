@@ -8,6 +8,7 @@ import { Newspaper, Video, Images, Download, FileText } from 'lucide-react';
 import { NewsCard } from '@/components/cards/news-card';
 import { VideoEmbed } from '@/components/features/video-embed';
 import { Pagination } from '@/components/shared/pagination';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Lightbox, type LightboxImage } from '@/components/shared/lightbox';
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/shared/reveal';
@@ -43,7 +44,8 @@ export function MediaTabs({
 
   return (
     <div>
-      <div className="mb-10 flex flex-wrap gap-1 rounded-full border border-border bg-white p-1 shadow-soft">
+      {/* Mobilda bo'limlar qatorga sig'masa — yonga suriladi (o'ralib ketmaydi) */}
+      <div className="no-scrollbar mb-10 flex gap-1 overflow-x-auto rounded-full border border-border bg-white p-1 shadow-soft sm:w-fit">
         {tabs.map((item) => {
           const Icon = item.icon;
           const active = tab === item.key;
@@ -52,7 +54,7 @@ export function MediaTabs({
               key={item.key}
               onClick={() => setTab(item.key)}
               className={cn(
-                'relative flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors',
+                'relative flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full px-4 py-2.5 text-sm font-semibold transition-colors sm:px-5',
                 active ? 'text-white' : 'text-navy/70 hover:text-navy'
               )}
             >
@@ -89,9 +91,13 @@ export function MediaTabs({
 }
 
 function NewsTab({ news }: { news: NewsArticle[] }) {
+  const tc = useTranslations('Common');
   const [page, setPage] = useState(1);
   const totalPages = Math.ceil(news.length / PER_PAGE);
   const visible = news.slice((page - 1) * PER_PAGE, page * PER_PAGE);
+
+  // Ro'yxat bo'sh bo'lsa — bo'sh joy emas, tushunarli xabar ko'rsatiladi
+  if (news.length === 0) return <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />;
 
   return (
     <>
@@ -114,6 +120,10 @@ function NewsTab({ news }: { news: NewsArticle[] }) {
 
 function VideoTab({ videos }: { videos: MediaVideo[] }) {
   const locale = useLocale();
+  const tc = useTranslations('Common');
+
+  if (videos.length === 0) return <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />;
+
   return (
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {videos.map((video, i) => (
@@ -134,8 +144,11 @@ function VideoTab({ videos }: { videos: MediaVideo[] }) {
 
 function PhotoTab({ photos }: { photos: MediaPhoto[] }) {
   const locale = useLocale();
+  const tc = useTranslations('Common');
   const [active, setActive] = useState<number | null>(null);
   const images: LightboxImage[] = photos.map((p) => ({ src: p.src, caption: pick(p.caption, locale) }));
+
+  if (photos.length === 0) return <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />;
 
   return (
     <>

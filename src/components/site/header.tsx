@@ -55,7 +55,8 @@ export function Header() {
                   onMouseEnter={() => setOpenDropdown(item.key)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <button
+                  <Link
+                    href={item.href}
                     className={cn(
                       'flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors',
                       active ? 'text-white' : 'text-white/70 hover:text-white'
@@ -63,7 +64,7 @@ export function Header() {
                   >
                     {t(item.key)}
                     <ChevronDown className="h-3.5 w-3.5" />
-                  </button>
+                  </Link>
                   <AnimatePresence>
                     {openDropdown === item.key && (
                       <motion.div
@@ -114,9 +115,8 @@ export function Header() {
           >
             <Search className="h-5 w-5" />
           </button>
-          <div className="hidden lg:block">
-            <LocaleSwitcher light />
-          </div>
+          {/* Til almashtirish har qanday ekranda ko'rinib turadi — mobilda ham */}
+          <LocaleSwitcher light />
           <button
             onClick={() => setMobileOpen((v) => !v)}
             className="flex h-10 w-10 items-center justify-center rounded-full text-white transition-colors hover:bg-white/10 lg:hidden"
@@ -137,7 +137,8 @@ export function Header() {
             transition={{ duration: 0.25 }}
             className="overflow-hidden border-t border-white/10 bg-navy-900 lg:hidden"
           >
-            <nav className="container flex flex-col gap-1 py-4">
+            {/* Menyu ekranga sig'masa — ichida aylantiriladi (kichik telefonlar) */}
+            <nav className="container flex max-h-[calc(100vh-5rem)] flex-col gap-1 overflow-y-auto py-4">
               {NAV_ITEMS.map((item) => (
                 <div key={item.key}>
                   <Link
@@ -161,8 +162,8 @@ export function Header() {
                   )}
                 </div>
               ))}
-              <div className="mt-3 border-t border-white/10 pt-3">
-                <LocaleSwitcher light />
+              <div className="mt-3 border-t border-white/10 pt-4">
+                <LocaleSwitcher light inline />
               </div>
             </nav>
           </motion.div>

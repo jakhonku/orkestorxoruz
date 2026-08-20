@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
+import { EmptyState } from '@/components/shared/empty-state';
 import { Reveal } from '@/components/shared/reveal';
 import { CompetitionCard } from '@/components/cards/competition-card';
 import { getCompetitions } from '@/server/queries/competitions';
@@ -20,6 +21,7 @@ export default async function CompetitionsPage({ params }: { params: { locale: L
   const competitions = await getCompetitions();
   const t = await getTranslations({ locale: params.locale, namespace: 'Competitions' });
   const tn = await getTranslations({ locale: params.locale, namespace: 'Nav' });
+  const tc = await getTranslations({ locale: params.locale, namespace: 'Common' });
 
   return (
     <>
@@ -30,13 +32,17 @@ export default async function CompetitionsPage({ params }: { params: { locale: L
       />
       <section className="section bg-white">
         <div className="container">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {competitions.map((competition, i) => (
-              <Reveal key={competition.slug} delay={(i % 3) * 0.08}>
-                <CompetitionCard competition={competition} />
-              </Reveal>
-            ))}
-          </div>
+          {competitions.length === 0 ? (
+            <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {competitions.map((competition, i) => (
+                <Reveal key={competition.slug} delay={(i % 3) * 0.08}>
+                  <CompetitionCard competition={competition} />
+                </Reveal>
+              ))}
+            </div>
+          )}
         </div>
       </section>
     </>

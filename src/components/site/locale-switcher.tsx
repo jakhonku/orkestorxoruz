@@ -8,7 +8,20 @@ import { usePathname, useRouter } from '@/i18n/navigation';
 import { locales, localeNames, type Locale } from '@/i18n/routing';
 import { cn } from '@/lib/utils';
 
-export function LocaleSwitcher({ light = false }: { light?: boolean }) {
+/**
+ * Tilni almashtirish.
+ *
+ * `inline` — uchala til yonma-yon tugma bo'lib turadi. Mobil menyu uchun shu
+ * ko'rinish ishlatiladi: menyu `overflow-hidden` ichida bo'lgani uchun ochiladigan
+ * ro'yxat ko'rinmay qolardi.
+ */
+export function LocaleSwitcher({
+  light = false,
+  inline = false,
+}: {
+  light?: boolean;
+  inline?: boolean;
+}) {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
@@ -28,6 +41,35 @@ export function LocaleSwitcher({ light = false }: { light?: boolean }) {
     setOpen(false);
     // @ts-expect-error -- pathname params are compatible across locales here
     router.replace({ pathname, params }, { locale: next });
+  }
+
+  if (inline) {
+    return (
+      <div className="flex items-center gap-2">
+        <Globe className={cn('h-4 w-4 shrink-0', light ? 'text-white/60' : 'text-muted-foreground')} />
+        <div className="flex flex-1 gap-1.5">
+          {locales.map((l) => (
+            <button
+              key={l}
+              onClick={() => change(l)}
+              className={cn(
+                'flex-1 rounded-lg px-3 py-2 text-sm font-semibold uppercase transition-colors',
+                l === locale
+                  ? light
+                    ? 'bg-white/15 text-white'
+                    : 'bg-navy text-white'
+                  : light
+                    ? 'text-white/70 hover:bg-white/10 hover:text-white'
+                    : 'text-muted-foreground hover:bg-navy/5 hover:text-navy',
+              )}
+              aria-current={l === locale}
+            >
+              {l}
+            </button>
+          ))}
+        </div>
+      </div>
+    );
   }
 
   return (
