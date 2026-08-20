@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Check, PlusCircle } from 'lucide-react';
+import { Check, SendHorizontal, ArrowRight } from 'lucide-react';
 import { Modal } from '@/components/shared/modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -119,9 +119,10 @@ export function JoinEnsemble() {
             </h2>
             <p className="mt-3 text-white/70">{t('ctaText')}</p>
           </div>
-          <Button variant="gold" size="lg" className="shrink-0" onClick={() => setOpen(true)}>
-            <PlusCircle className="h-5 w-5" />
+          <Button variant="gold" size="lg" className="group shrink-0 gap-2.5" onClick={() => setOpen(true)}>
+            <SendHorizontal className="h-4.5 w-4.5 transition-transform duration-200 group-hover:-rotate-12" />
             {t('ctaButton')}
+            <ArrowRight className="h-4 w-4 opacity-0 -translate-x-1 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0" />
           </Button>
         </div>
       </div>

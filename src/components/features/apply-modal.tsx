@@ -2,7 +2,7 @@
 
 import { useState, useTransition, type FormEvent } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { Check, Lock } from 'lucide-react';
+import { Check, Lock, SendHorizontal } from 'lucide-react';
 import { Modal } from '@/components/shared/modal';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -100,8 +100,10 @@ export function ApplyModal({
 
   return (
     <>
-      <Button variant="gold" size="lg" disabled={disabled} onClick={() => setOpen(true)}>
-        {disabled && <Lock className="h-4 w-4" />}
+      <Button variant="gold" size="lg" disabled={disabled} className="group gap-2.5" onClick={() => setOpen(true)}>
+        {disabled
+          ? <Lock className="h-4 w-4" />
+          : <SendHorizontal className="h-4.5 w-4.5 transition-transform duration-200 group-hover:-rotate-12" />}
         {disabled ? t('status_yopiq') : t('applyButton')}
       </Button>
 
