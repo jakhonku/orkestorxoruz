@@ -186,6 +186,14 @@ function PressTab({
   const t = useTranslations('Media');
   const locale = useLocale();
 
+  /**
+   * Tugma qaysi faylni ochadi:
+   *   1) Sozlamalarda yuklangan press-kit
+   *   2) bo'lmasa — "Hujjatlar" bo'limidagi birinchi fayl
+   * Ikkalasi ham bo'lmasa, ochadigan narsa yo'q — tugma ko'rsatilmaydi.
+   */
+  const yuklanadigan = pressKitUrl || documents[0]?.href || '';
+
   return (
     <div className="mx-auto max-w-3xl">
       <div className="rounded-2xl border border-border bg-navy-50/50 p-8 text-center shadow-soft">
@@ -194,10 +202,9 @@ function PressTab({
         </span>
         <h3 className="font-serif text-2xl font-semibold text-navy">{t('pressTitle')}</h3>
         <p className="mx-auto mt-3 max-w-xl text-muted-foreground">{t('pressText')}</p>
-        {/* Fayl sozlamalarda yuklanmagan bo'lsa, ishlamaydigan tugma ko'rsatilmaydi */}
-        {pressKitUrl && (
+        {yuklanadigan && (
           <Button variant="gold" size="lg" className="mt-6" asChild>
-            <a href={pressKitUrl} target="_blank" rel="noreferrer">
+            <a href={yuklanadigan} target="_blank" rel="noreferrer">
               <Download className="h-4 w-4" />
               {t('pressKit')}
             </a>
