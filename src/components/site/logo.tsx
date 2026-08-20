@@ -25,13 +25,13 @@ export function Logo({ light = false }: { light?: boolean }) {
       : 'Ijodiy birlashma';
 
   return (
-    <Link href="/" className="group flex items-center gap-3.5" aria-label="Orkestr va Xor">
-      <span className="relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft ring-1 ring-navy/10">
+    <Link href="/" className="group flex items-center gap-4" aria-label="Orkestr va Xor">
+      <span className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white shadow-soft ring-1 ring-navy/10 transition-transform duration-300 group-hover:scale-105">
         <Image
           src="/logo.png"
           alt="Orkestr va Xor"
-          width={56}
-          height={56}
+          width={64}
+          height={64}
           className="h-full w-full object-contain p-0.5"
           priority
         />
@@ -39,7 +39,7 @@ export function Logo({ light = false }: { light?: boolean }) {
       <span className="hidden flex-col leading-none sm:flex">
         <span
           className={cn(
-            'font-serif text-xl font-semibold tracking-tight',
+            'font-serif text-[22px] font-bold tracking-tight md:text-2xl',
             light ? 'text-white' : 'text-navy'
           )}
         >
@@ -47,8 +47,8 @@ export function Logo({ light = false }: { light?: boolean }) {
         </span>
         <span
           className={cn(
-            'mt-1 text-[11px] font-medium uppercase tracking-[0.18em]',
-            light ? 'text-white/60' : 'text-muted-foreground'
+            'mt-1 text-xs font-semibold uppercase tracking-[0.2em]',
+            light ? 'text-white/70' : 'text-muted-foreground'
           )}
         >
           {subline}
