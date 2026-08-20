@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, Loader2, Plus, Trash2, Upload, X } from 'lucide-react';
+import { ArrowDown, ArrowUp, FileText, Loader2, Plus, Trash2, Upload, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import {
@@ -148,6 +148,9 @@ function Boshqaruv({
 
     case 'rasm':
       return <Rasm qiymat={matn} ozgartir={ozgartir} />;
+
+    case 'fayl':
+      return <Fayl qiymat={matn} ozgartir={ozgartir} />;
 
     case 'kopTilli':
     case 'kopTilliKatta':
@@ -382,6 +385,103 @@ function Rasm({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) 
           }}
         />
       </div>
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Hujjat (PDF, Word, Excel)                                           */
+/* ------------------------------------------------------------------ */
+
+/** Manzildan fayl nomini ajratib oladi */
+function faylNomi(url: string): string {
+  try {
+    const yol = url.startsWith('http') ? new URL(url).pathname : url;
+    return decodeURIComponent(yol.split('/').pop() ?? url);
+  } catch {
+    return url;
+  }
+}
+
+function Fayl({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
+  const input = useRef<HTMLInputElement>(null);
+  const [yuklanmoqda, setYuklanmoqda] = useState(false);
+  const [xato, setXato] = useState<string | null>(null);
+
+  async function yukla(fayl: File) {
+    setXato(null);
+    setYuklanmoqda(true);
+    try {
+      const forma = new FormData();
+      forma.append('fayl', fayl);
+      forma.append('papka', 'hujjatlar');
+      const javob = await fetch('/api/admin/yuklash', { method: 'POST', body: forma });
+      const natija = (await javob.json()) as { url?: string; xato?: string };
+      if (!javob.ok || !natija.url) throw new Error(natija.xato ?? 'Yuklab bo‘lmadi.');
+      ozgartir(natija.url);
+    } catch (e) {
+      setXato(e instanceof Error ? e.message : 'Yuklab bo‘lmadi.');
+    } finally {
+      setYuklanmoqda(false);
+      if (input.current) input.current.value = '';
+    }
+  }
+
+  return (
+    <div className="space-y-1.5">
+      {qiymat ? (
+        <div className="flex items-center gap-2 rounded-lg border border-border bg-navy-50/40 px-3 py-2">
+          <FileText className="h-4 w-4 shrink-0 text-navy" />
+          <a
+            href={qiymat}
+            target="_blank"
+            rel="noreferrer"
+            className="min-w-0 flex-1 truncate text-sm text-navy underline-offset-2 hover:underline"
+          >
+            {faylNomi(qiymat)}
+          </a>
+          <button
+            type="button"
+            onClick={() => ozgartir('')}
+            title="Faylni olib tashlash"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-white hover:text-navy"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        </div>
+      ) : (
+        <input
+          value={qiymat}
+          onChange={(e) => ozgartir(e.target.value)}
+          placeholder="Fayl yuklang yoki tashqi havola qo‘ying"
+          className={cn(INPUT, 'font-mono text-xs')}
+        />
+      )}
+
+      <div className="flex items-center gap-2">
+        <button
+          type="button"
+          disabled={yuklanmoqda}
+          onClick={() => input.current?.click()}
+          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white px-2.5 py-1.5 text-xs font-medium text-navy transition-colors hover:border-gold/50 disabled:opacity-60"
+        >
+          {yuklanmoqda ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
+          {yuklanmoqda ? 'Yuklanmoqda...' : qiymat ? 'Boshqa fayl yuklash' : 'Kompyuterdan yuklash'}
+        </button>
+        <span className="text-xs text-muted-foreground">PDF, Word, Excel — 20 MB gacha</span>
+        {xato && <span className="text-xs text-red-600">{xato}</span>}
+      </div>
+
+      <input
+        ref={input}
+        type="file"
+        accept=".pdf,.doc,.docx,.xls,.xlsx,application/pdf"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) void yukla(f);
+        }}
+      />
     </div>
   );
 }

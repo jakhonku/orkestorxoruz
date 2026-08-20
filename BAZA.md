@@ -37,6 +37,7 @@ npm run dev            # http://localhost:3000
 | `npm run db:deploy` | Tayyor migratsiyalarni bazaga qo‘llaydi (Supabase uchun) |
 | `npm run db:migrate` | Sxemadagi o'zgarishni bazaga qo'llaydi (migratsiya yaratadi) |
 | `npm run db:seed` | Bazani boshlang'ich ma'lumot bilan to'ldiradi (avval tozalaydi) |
+| `npm run db:matnlar` | Sahifa matnlarini `messages/*.json` dan bazaga sinxronlaydi |
 | `npm run db:studio` | Brauzerda baza ko'rish/tahrirlash oynasini ochadi |
 | `npm run db:generate` | Prisma klientini qayta yaratadi |
 | `npm run db:reset` | Bazani butunlay tozalab, qaytadan quradi va to'ldiradi |
@@ -101,7 +102,9 @@ Bu frontenddagi `Localized<T>` tipiga aynan mos keladi, shuning uchun sahifalard
 **Arizalar:** `contact_messages`, `ensemble_applications`,
 `competition_applications`, `talent_applications`, `subscribers`
 
-**Tizim:** `admin_users`, `media_files`
+**Sayt matnlari:** `ui_texts` — tugma, sarlavha va izohlar (`messages/*.json` ustidan yoziladi)
+
+**Tizim:** `admin_users`, `media_files`, `form_rate_hits`
 
 Har bir kontent jadvalida:
 - `published` — saytda ko'rinadimi (qoralama / e'lon qilingan)
@@ -174,14 +177,22 @@ Registrdan tashqari sahifalar: `/admin/arizalar` (murojaatlar holati va ichki
 eslatma), `/admin/obuna`, `/admin/sozlamalar` (`settings` jadvali),
 `/admin/foydalanuvchilar` (faqat ADMIN roli).
 
+**Sahifa matnlari** (`/admin/matnlar`): saytdagi tayyor yozuvlar — tugmalar,
+sarlavhalar, izohlar. Standart matnlar `messages/{uz,ru,en}.json` da qoladi,
+admin tahriri esa `ui_texts` jadvalida saqlanadi va standart ustidan yoziladi.
+Maydon bo'sh qoldirilsa — standart matn qaytadi. Kodga yangi matn qo'shilganda
+`npm run db:matnlar` ishga tushiriladi (bu buyruq mavjud tahrirlarga tegmaydi).
+
 Sozlamalar saytning footer'i, «Aloqa» sahifasi (manzil, telefon, email, ish
 vaqti, ijtimoiy tarmoqlar va xarita nuqtasi) hamda «Haqida» sahifasidagi
 missiya matnida ishlatiladi. Bazada kalit bo'lmasa, `src/lib/constants.ts`
 dagi zaxira qiymat olinadi — shuning uchun baza bo'sh bo'lsa ham sayt ishlaydi.
 
-**Rasm yuklash:** `POST /api/admin/yuklash` — fayl **Supabase Storage**'dagi
+**Rasm va hujjat yuklash:** `POST /api/admin/yuklash` — fayl **Supabase Storage**'dagi
 `media` bucket'iga (`<papka>/<yil-oy>/<nom>`) yoziladi va `media_files`
-jadvaliga qayd qilinadi (8 MB gacha; JPG, PNG, WEBP, AVIF, SVG, PDF).
+jadvaliga qayd qilinadi. Rasmlar: JPG, PNG, WEBP, AVIF, SVG — 8 MB gacha;
+hujjatlar: PDF, DOC, DOCX, XLS, XLSX — 20 MB gacha. Shakldagi `rasm` maydoni
+rasm yuklaydi, `fayl` maydoni esa hujjat (Hujjatlar bo'limi va tanlov nizomi).
 Bazaga faylning to'liq (public) manzili saqlanadi. Vercel'da disk faqat o'qish
 uchun ochiq — shuning uchun fayllar loyihaning ichida emas, Storage'da turadi.
 

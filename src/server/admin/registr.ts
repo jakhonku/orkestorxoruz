@@ -291,7 +291,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'location', yorliq: "O'tkaziladigan joy", tur: 'kopTilli', talab: true },
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
       { nom: 'regulations', yorliq: 'Nizom matni', tur: 'kopTilliKatta', talab: true },
-      { nom: 'regulationsFileUrl', yorliq: 'Nizom fayli (PDF)', tur: 'havola', yarim: true },
+      { nom: 'regulationsFileUrl', yorliq: 'Nizom fayli', tur: 'fayl' },
       { nom: 'applicationEmail', yorliq: 'Arizalar tushadigan email', tur: 'matn', yarim: true },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm' },
       { nom: 'prizeFund', yorliq: "Mukofot jamg'armasi", tur: 'kopTilli' },
@@ -559,7 +559,7 @@ export const BOLIMLAR: Bolim[] = [
     qator: (r) => ({ id: r.id, sarlavha: uz(r.title), tavsif: r.meta, ochiqmi: r.published }),
     maydonlar: [
       { nom: 'title', yorliq: 'Hujjat nomi', tur: 'kopTilli', talab: true },
-      { nom: 'href', yorliq: 'Fayl havolasi', tur: 'havola', talab: true },
+      { nom: 'href', yorliq: 'Hujjat fayli', tur: 'fayl', talab: true },
       { nom: 'meta', yorliq: 'Fayl haqida', tur: 'matn', yarim: true, bosh: '', izoh: 'Masalan: PDF · 480 KB' },
       tartib,
       nashr,
@@ -678,6 +678,34 @@ export const BOLIMLAR: Bolim[] = [
       },
       tartib,
       nashr,
+    ],
+  },
+
+  // ============ SAHIFA MATNLARI ============
+  {
+    kalit: 'matnlar',
+    nom: 'Sahifa matnlari',
+    birlik: 'matn',
+    model: 'uiText',
+    qoshishMumkin: false,
+    saralash: [{ grp: 'asc' }, { sortOrder: 'asc' }],
+    izoh:
+      'Saytdagi tayyor yozuvlar: tugmalar, sarlavhalar va izohlar. ' +
+      'Kulrang yozuv — matnning kodadagi kaliti, u qaysi sahifada chiqishini ko‘rsatadi. ' +
+      'Maydon bo‘sh qoldirilsa, saytda standart matn ko‘rinadi.',
+    qator: (r) => ({
+      id: r.id,
+      sarlavha: uz(r.value) || r.key,
+      tavsif: r.key,
+      belgi: r.grp,
+    }),
+    maydonlar: [
+      {
+        nom: 'value',
+        yorliq: 'Matn',
+        tur: 'kopTilliKatta',
+        izoh: 'Uch tilda ham to‘ldiring — bo‘sh til uchun standart matn ishlatiladi',
+      },
     ],
   },
 ];

@@ -26,6 +26,8 @@ export type MaydonTuri =
   | 'havola'
   /** Rasm — yuklash tugmasi bilan */
   | 'rasm'
+  /** Hujjat (PDF, Word, Excel) — yuklash tugmasi bilan */
+  | 'fayl'
   /** Uch tilli bir qatorli matn */
   | 'kopTilli'
   /** Uch tilli ko'p qatorli matn */

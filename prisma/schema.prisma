@@ -644,3 +644,20 @@ model FormRateHit {
   @@index([ip, createdAt])
   @@map("form_rate_hits")
 }
+
+/// Sahifalardagi tayyor matnlar: tugmalar, sarlavhalar, izohlar.
+/// `messages/{uz,ru,en}.json` dagi standart matn ustidan yoziladi —
+/// qator bo'sh qoldirilsa yoki o'chirilsa, standart matn qaytadi.
+model UiText {
+  id        Int      @id @default(autoincrement())
+  /// Nuqtali kalit: "Home.hero.title"
+  key       String   @unique @db.VarChar(160)
+  /// Kalitning birinchi qismi — panelda guruhlash uchun ("Home", "Nav", ...)
+  grp       String   @db.VarChar(60)
+  /// {"uz": "...", "ru": "...", "en": "..."}
+  value     Json
+  sortOrder Int      @default(0)
+
+  @@index([grp, key])
+  @@map("ui_texts")
+}

@@ -17,17 +17,28 @@ import { joriySessiya } from '@/server/auth';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const RUXSAT_ETILGAN: Record<string, string> = {
+const RASMLAR: Record<string, string> = {
   'image/jpeg': '.jpg',
   'image/png': '.png',
   'image/webp': '.webp',
   'image/avif': '.avif',
   'image/svg+xml': '.svg',
-  'application/pdf': '.pdf',
 };
 
-/** Eng katta fayl hajmi — 8 MB */
-const CHEGARA = 8 * 1024 * 1024;
+/** Hujjatlar — nizom, buyruq, hisobot va shu kabilar */
+const HUJJATLAR: Record<string, string> = {
+  'application/pdf': '.pdf',
+  'application/msword': '.doc',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+  'application/vnd.ms-excel': '.xls',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+};
+
+const RUXSAT_ETILGAN: Record<string, string> = { ...RASMLAR, ...HUJJATLAR };
+
+/** Eng katta hajm: rasm — 8 MB, hujjat — 20 MB */
+const RASM_CHEGARASI = 8 * 1024 * 1024;
+const HUJJAT_CHEGARASI = 20 * 1024 * 1024;
 
 function xavfsizNom(nom: string): string {
   return nom
@@ -55,13 +66,18 @@ export async function POST(request: Request) {
   const kengaytma = RUXSAT_ETILGAN[fayl.type];
   if (!kengaytma) {
     return NextResponse.json(
-      { xato: 'Faqat JPG, PNG, WEBP, AVIF, SVG yoki PDF yuklash mumkin.' },
+      { xato: 'Faqat JPG, PNG, WEBP, AVIF, SVG, PDF, Word yoki Excel fayl yuklash mumkin.' },
       { status: 415 },
     );
   }
 
-  if (fayl.size > CHEGARA) {
-    return NextResponse.json({ xato: 'Fayl hajmi 8 MB dan oshmasligi kerak.' }, { status: 413 });
+  const hujjatmi = fayl.type in HUJJATLAR;
+  const chegara = hujjatmi ? HUJJAT_CHEGARASI : RASM_CHEGARASI;
+  if (fayl.size > chegara) {
+    return NextResponse.json(
+      { xato: `Fayl hajmi ${chegara / 1024 / 1024} MB dan oshmasligi kerak.` },
+      { status: 413 },
+    );
   }
 
   const oy = new Date().toISOString().slice(0, 7); // 2026-08

@@ -23,6 +23,7 @@ import {
   Settings,
   Shield,
   Trophy,
+  Type,
   UserRound,
   Users,
   Video,
@@ -53,6 +54,7 @@ const IKONKALAR: Record<string, LucideIcon> = {
   mail: Mail,
   settings: Settings,
   shield: Shield,
+  type: Type,
 };
 
 export function YonMenyu({
