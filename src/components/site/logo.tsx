@@ -32,7 +32,7 @@ export function Logo({ light = false }: { light?: boolean }) {
           alt="Orkestr va Xor"
           width={64}
           height={64}
-          className="h-full w-full object-contain p-0.5"
+          className="h-full w-full object-contain"
           priority
         />
       </span>
