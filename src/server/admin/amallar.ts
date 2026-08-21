@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/db';
+import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
 import { boshQiymat, type Maydon, type Qiymatlar } from './turlar';
@@ -70,6 +71,11 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       const s = String(qiymat ?? '').trim();
       return s === '' ? bosh() : s;
     }
+    case 'youtube': {
+      // To'liq havola qo'yilgan bo'lsa ham bazaga faqat ID yoziladi
+      const s = youtubeIdAjrat(String(qiymat ?? ''));
+      return s === '' ? bosh() : s;
+    }
     default:
       // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga o'zgarishsiz tushadi.
       // Qiymat umuman kelmasa bo'sh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
@@ -100,6 +106,45 @@ function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
     if (m.tur === 'qatorlar') continue;
 
     if (!String(v ?? '').trim()) return `"${m.yorliq}" to‘ldirilishi shart.`;
+  }
+  return uzunlikTekshir(maydonlar, qiymatlar);
+}
+
+/**
+ * Matn maydonlari bazadagi ustunga sig'adimi — tekshiradi.
+ * Sig'masa Postgres "value too long for the column's type" deb qaytaradi,
+ * bu esa foydalanuvchiga qaysi maydon aybdorligini aytmaydi.
+ */
+function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
+  for (const m of maydonlar) {
+    if (m.tur === 'qatorlar') {
+      const xom = (qiymatlar[m.nom] as Record<string, unknown>[]) ?? [];
+      for (const q of xom) {
+        const ichkiXato = uzunlikTekshir(m.maydonlar ?? [], q);
+        if (ichkiXato) return `"${m.yorliq}": ${ichkiXato}`;
+      }
+      continue;
+    }
+
+    if (m.tur === 'youtube') {
+      const xom = String(qiymatlar[m.nom] ?? '').trim();
+      if (!xom) continue;
+      if (!youtubeIdTogrimi(youtubeIdAjrat(xom))) {
+        return (
+          `"${m.yorliq}" — YouTube ID noto‘g‘ri. To‘liq havolani qo‘ying ` +
+          `(masalan https://www.youtube.com/watch?v=jNQXAC9IVRw) yoki 11 belgili ID ni kiriting.`
+        );
+      }
+      continue;
+    }
+
+    if (!m.uzunlik) continue;
+    const qiymat = qiymatlar[m.nom];
+    if (typeof qiymat !== 'string') continue;
+    const uzunlik = qiymat.trim().length;
+    if (uzunlik > m.uzunlik) {
+      return `"${m.yorliq}" juda uzun: ${uzunlik} belgi, ruxsat etilgani — ${m.uzunlik}.`;
+    }
   }
   return null;
 }
@@ -186,6 +231,14 @@ export async function yozuvSaqlash(
   } catch (e) {
     const xabar = e instanceof Error ? e.message : String(e);
     // Takrorlanuvchi slug eng ko'p uchraydigan xato
+    if (xabar.includes('too long for the column')) {
+      return {
+        ok: false,
+        xato:
+          'Maydonlardan biri juda uzun bo‘lgani uchun saqlanmadi. Qisqartiring — ' +
+          'masalan "YouTube ID" maydoniga to‘liq havola emas, faqat v= dan keyingi qism yoziladi.',
+      };
+    }
     if (xabar.includes('Unique constraint') || xabar.includes('slug')) {
       return { ok: false, xato: 'Bunday manzil qismi (slug) allaqachon band. Boshqasini kiriting.' };
     }

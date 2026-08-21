@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { ArrowDown, ArrowUp, FileText, Loader2, Plus, Trash2, Upload, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { youtubeIdAjrat } from '@/lib/youtube';
 import {
   TILLAR,
   boshQiymat,
@@ -79,7 +80,14 @@ function Boshqaruv({
 
   switch (maydon.tur) {
     case 'matnKatta':
-      return <textarea value={matn} onChange={(e) => ozgartir(e.target.value)} className={TEXTAREA} />;
+      return (
+        <textarea
+          value={matn}
+          maxLength={maydon.uzunlik}
+          onChange={(e) => ozgartir(e.target.value)}
+          className={TEXTAREA}
+        />
+      );
 
     case 'slug':
       return (
@@ -94,6 +102,7 @@ function Boshqaruv({
             )
           }
           placeholder="masalan-shu-korinishda"
+          maxLength={maydon.uzunlik}
           className={cn(INPUT, 'font-mono')}
         />
       );
@@ -155,6 +164,9 @@ function Boshqaruv({
     case 'video':
       return <Fayl qiymat={matn} ozgartir={ozgartir} tur="video" />;
 
+    case 'youtube':
+      return <YouTubeId qiymat={matn} ozgartir={ozgartir} />;
+
     case 'kopTilli':
     case 'kopTilliKatta':
       return (
@@ -183,7 +195,14 @@ function Boshqaruv({
       );
 
     default:
-      return <input value={matn} onChange={(e) => ozgartir(e.target.value)} className={INPUT} />;
+      return (
+        <input
+          value={matn}
+          maxLength={maydon.uzunlik}
+          onChange={(e) => ozgartir(e.target.value)}
+          className={INPUT}
+        />
+      );
   }
 }
 
@@ -298,6 +317,43 @@ function KopTilliRoyxatKiritish({
         placeholder="Har bir band — alohida qatorda"
         className={TEXTAREA}
       />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* YouTube ID                                                          */
+/* ------------------------------------------------------------------ */
+
+/**
+ * To'liq havola qo'yilsa ham ID ni o'zi ajratib oladi — bazadagi ustun
+ * qisqa ID uchun mo'ljallangan, uzun havola saqlanmaydi.
+ */
+function YouTubeId({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
+  const toza = youtubeIdAjrat(qiymat);
+  const havolaQoyilgan = Boolean(qiymat.trim()) && toza !== qiymat.trim();
+
+  return (
+    <div>
+      <input
+        value={qiymat}
+        onChange={(e) => ozgartir(e.target.value)}
+        onBlur={() => ozgartir(youtubeIdAjrat(qiymat))}
+        onPaste={(e) => {
+          const matn = e.clipboardData.getData('text');
+          if (matn) {
+            e.preventDefault();
+            ozgartir(youtubeIdAjrat(matn));
+          }
+        }}
+        placeholder="jNQXAC9IVRw yoki to‘liq havola"
+        className={cn(INPUT, 'font-mono')}
+      />
+      {havolaQoyilgan && (
+        <p className="mt-1.5 text-xs text-navy">
+          Havoladan ID ajratildi: <span className="font-mono font-medium">{toza}</span>
+        </p>
+      )}
     </div>
   );
 }

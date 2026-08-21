@@ -30,6 +30,8 @@ export type MaydonTuri =
   | 'fayl'
   /** Video fayl (MP4, WEBM, MOV) — yuklash tugmasi bilan */
   | 'video'
+  /** YouTube video ID — to'liq havola qo'yilsa ID avtomatik ajratiladi */
+  | 'youtube'
   /** Uch tilli bir qatorli matn */
   | 'kopTilli'
   /** Uch tilli ko'p qatorli matn */
@@ -51,6 +53,12 @@ export type Maydon = {
   maydonlar?: Maydon[];
   /** Shaklda ikki ustunga joylashtirish */
   yarim?: boolean;
+  /**
+   * Matn uchun ruxsat etilgan eng katta uzunlik.
+   * Bazadagi VarChar ustunlar bilan mos bo'lishi kerak — aks holda saqlashda
+   * tushunarsiz "value too long" xatosi chiqadi.
+   */
+  uzunlik?: number;
   /**
    * Maydon bo'sh qoldirilsa bazaga yoziladigan qiymat.
    * Bazada NULL qabul qilmaydigan ustunlar uchun kerak (masalan `sortOrder`).
