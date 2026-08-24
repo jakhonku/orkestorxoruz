@@ -10,6 +10,8 @@ export interface Expert {
   role: Localized;
   bio: Localized;
   specialties: Localized<string[]>;
+  /** Hamkorlik shakli */
+  cooperation?: Localized;
 }
 
 export interface Leader {
@@ -17,6 +19,10 @@ export interface Leader {
   role: Localized;
   photo: string;
   bio: Localized;
+  /** Unvon / ilmiy daraja */
+  honorific?: Localized;
+  /** Qabul kunlari */
+  receptionDay?: Localized;
 }
 
 export interface DocumentLink {

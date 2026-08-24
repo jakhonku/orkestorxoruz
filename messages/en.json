@@ -175,6 +175,7 @@
     "missionText": "The union aims to advance orchestral and choral art in Uzbekistan, preserve the national musical heritage and ensure integration with world music culture.",
     "tasksTitle": "Organisational objectives",
     "leadershipTitle": "Leadership",
+    "receptionLabel": "Reception days",
     "documentsTitle": "Documents",
     "task1": "Coordinating the work of orchestral and choral ensembles",
     "task2": "Organising competitions and festivals",
@@ -227,7 +228,8 @@
     "periodTitle": "Period",
     "locationTitle": "Location",
     "resultsTitle": "Results",
-    "galleryTitle": "Gallery"
+    "galleryTitle": "Gallery",
+    "partnersTitle": "Partner organisations"
   },
   "Competitions": {
     "title": "Competitions & Festivals",
@@ -238,6 +240,8 @@
     "kind_tanlov": "Competition",
     "kind_festival": "Festival",
     "regulationsTitle": "Regulations",
+    "regulationsFile": "Download regulations",
+    "prizeTitle": "Prize fund",
     "timelineTitle": "Timeline",
     "juryTitle": "Jury",
     "applyButton": "Apply now",
@@ -285,7 +289,8 @@
     "category_forum": "Forum",
     "category_tanlov": "Competition",
     "at": "at",
-    "noEvents": "No events are scheduled for this month."
+    "noEvents": "No events are scheduled for this month.",
+    "performer": "Performer"
   },
   "Media": {
     "title": "Media",
@@ -307,7 +312,8 @@
     "title": "International experts",
     "subtitle": "International specialists cooperating with the union",
     "specialtiesTitle": "Areas of specialisation",
-    "bioTitle": "Biography"
+    "bioTitle": "Biography",
+    "cooperationTitle": "Cooperation"
   },
   "Contact": {
     "title": "Contact",

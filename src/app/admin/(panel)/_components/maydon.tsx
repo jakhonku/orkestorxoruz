@@ -245,6 +245,27 @@ function TilTugmalari({
   );
 }
 
+/**
+ * Tarjima bo'sh qolganda ko'rsatiladigan eslatma.
+ *
+ * Saytda bo'sh tarjima o'rniga o'zbekcha matn chiqadi (`pick`), lekin
+ * muharrir buni bilib turishi va bir bosishda nusxa ko'chira olishi kerak.
+ */
+function TarjimaEslatmasi({ nusxala }: { nusxala: () => void }) {
+  return (
+    <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-amber-700">
+      <span>Bo‘sh — saytda o‘zbekcha matn ko‘rsatiladi.</span>
+      <button
+        type="button"
+        onClick={nusxala}
+        className="rounded-md bg-amber-100 px-2 py-0.5 font-semibold text-amber-800 transition-colors hover:bg-amber-200"
+      >
+        O‘zbekchadan nusxalash
+      </button>
+    </p>
+  );
+}
+
 function KopTilliKiritish({
   qiymat,
   ozgartir,
@@ -274,6 +295,9 @@ function KopTilliKiritish({
         <textarea value={joriy} onChange={(e) => yoz(e.target.value)} className={TEXTAREA} />
       ) : (
         <input value={joriy} onChange={(e) => yoz(e.target.value)} className={INPUT} />
+      )}
+      {til !== 'uz' && !joriy.trim() && Boolean(qiymat?.uz?.trim()) && (
+        <TarjimaEslatmasi nusxala={() => yoz(qiymat.uz)} />
       )}
     </div>
   );
@@ -317,6 +341,9 @@ function KopTilliRoyxatKiritish({
         placeholder="Har bir band — alohida qatorda"
         className={TEXTAREA}
       />
+      {til !== 'uz' && bandlar.length === 0 && (qiymat?.uz ?? []).length > 0 && (
+        <TarjimaEslatmasi nusxala={() => ozgartir({ ...qiymat, [til]: [...qiymat.uz] })} />
+      )}
     </div>
   );
 }

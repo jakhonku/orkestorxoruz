@@ -25,6 +25,10 @@ export interface Competition {
   location: Localized;
   shortDescription: Localized;
   regulations: Localized;
+  /** Nizomning yuklab olinadigan fayli (PDF va h.k.) */
+  regulationsFile?: string;
+  /** Mukofot jamg'armasi */
+  prizeFund?: Localized;
   timeline: TimelineStage[];
   jury: JuryMember[];
 }

@@ -2,7 +2,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { Target, FileText, Download } from 'lucide-react';
+import { CalendarClock, Target, FileText, Download } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
@@ -139,7 +139,21 @@ function AboutContent({
                     <p className="mt-1 text-sm font-medium text-gold-700">
                       {pick(leader.role, locale)}
                     </p>
+                    {leader.honorific && pick(leader.honorific, locale) && (
+                      <p className="mt-1.5 text-xs font-medium text-navy/70">
+                        {pick(leader.honorific, locale)}
+                      </p>
+                    )}
                     <p className="mt-2 text-sm text-muted-foreground">{pick(leader.bio, locale)}</p>
+                    {leader.receptionDay && pick(leader.receptionDay, locale) && (
+                      <p className="mt-3 flex items-start gap-1.5 border-t border-border pt-3 text-xs text-muted-foreground">
+                        <CalendarClock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+                        <span>
+                          <span className="font-semibold text-navy/80">{t('receptionLabel')}:</span>{' '}
+                          {pick(leader.receptionDay, locale)}
+                        </span>
+                      </p>
+                    )}
                   </div>
                 </div>
               </Reveal>

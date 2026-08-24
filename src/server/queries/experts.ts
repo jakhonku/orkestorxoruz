@@ -8,7 +8,7 @@ import type {
   LeaderModel as LeaderQator,
 } from '@/generated/prisma/models';
 import type { DocumentLink, Expert, Leader } from '@/types';
-import { loc, locList } from '@/server/map';
+import { loc, locList, locOpt } from '@/server/map';
 
 function moslashExpert(e: ExpertQator): Expert {
   return {
@@ -20,6 +20,7 @@ function moslashExpert(e: ExpertQator): Expert {
     role: loc(e.role),
     bio: loc(e.bio),
     specialties: locList(e.specialties),
+    cooperation: locOpt(e.cooperation),
   };
 }
 
@@ -46,6 +47,8 @@ export const getLeaders = cache(async (): Promise<Leader[]> => {
     role: loc(l.role),
     photo: l.photoUrl ?? '',
     bio: loc(l.bio),
+    honorific: locOpt(l.honorific),
+    receptionDay: locOpt(l.receptionDay),
   }));
 });
 

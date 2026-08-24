@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import type { CompetitionGetPayload } from '@/generated/prisma/models';
 import type { Competition } from '@/types';
 import { competitionKindFromDb, competitionStatusFromDb } from '@/server/enums';
-import { loc } from '@/server/map';
+import { loc, locOpt } from '@/server/map';
 
 const toliq = {
   timeline: { orderBy: { sortOrder: 'asc' } },
@@ -25,6 +25,8 @@ function moslash(c: Qator): Competition {
     location: loc(c.location),
     shortDescription: loc(c.shortDescription),
     regulations: loc(c.regulations),
+    regulationsFile: c.regulationsFileUrl ?? undefined,
+    prizeFund: locOpt(c.prizeFund),
     timeline: c.timeline.map((s) => ({
       date: loc(s.date),
       title: loc(s.title),

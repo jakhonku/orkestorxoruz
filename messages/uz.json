@@ -175,6 +175,7 @@
     "missionText": "Birlashma O‘zbekistonda orkestr va xor san’atini yuksaltirish, milliy musiqa merosini asrash va jahon musiqa madaniyati bilan integratsiyani ta’minlashni maqsad qiladi.",
     "tasksTitle": "Tashkiliy vazifalar",
     "leadershipTitle": "Rahbariyat",
+    "receptionLabel": "Qabul kunlari",
     "documentsTitle": "Hujjatlar",
     "task1": "Orkestr va xor jamoalari faoliyatini muvofiqlashtirish",
     "task2": "Tanlov va festivallar tashkil etish",
@@ -227,7 +228,8 @@
     "periodTitle": "Muddat",
     "locationTitle": "Joy",
     "resultsTitle": "Natijalar",
-    "galleryTitle": "Galereya"
+    "galleryTitle": "Galereya",
+    "partnersTitle": "Hamkor tashkilotlar"
   },
   "Competitions": {
     "title": "Tanlov va festivallar",
@@ -238,6 +240,8 @@
     "kind_tanlov": "Tanlov",
     "kind_festival": "Festival",
     "regulationsTitle": "Nizom",
+    "regulationsFile": "Nizomni yuklab olish",
+    "prizeTitle": "Mukofot jamg‘armasi",
     "timelineTitle": "Muddatlar",
     "juryTitle": "Hakamlar hay’ati",
     "applyButton": "Ariza topshirish",
@@ -285,7 +289,8 @@
     "category_forum": "Forum",
     "category_tanlov": "Tanlov",
     "at": "da",
-    "noEvents": "Bu oy uchun tadbirlar rejalashtirilmagan."
+    "noEvents": "Bu oy uchun tadbirlar rejalashtirilmagan.",
+    "performer": "Ijrochi"
   },
   "Media": {
     "title": "Media",
@@ -307,7 +312,8 @@
     "title": "Xorijiy ekspertlar",
     "subtitle": "Birlashma bilan hamkorlik qiluvchi xalqaro mutaxassislar",
     "specialtiesTitle": "Mutaxassislik yo‘nalishlari",
-    "bioTitle": "Biografiya"
+    "bioTitle": "Biografiya",
+    "cooperationTitle": "Hamkorlik shakli"
   },
   "Contact": {
     "title": "Aloqa",

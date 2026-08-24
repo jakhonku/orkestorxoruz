@@ -19,5 +19,7 @@ export interface Project {
   description: Localized;
   results: ProjectResult[];
   gallery: GalleryPhoto[];
+  /** Hamkor tashkilotlar haqida izoh */
+  partnersNote?: Localized;
   featured?: boolean;
 }

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, MapPin, ScrollText, Users } from 'lucide-react';
+import { CalendarDays, Download, MapPin, ScrollText, Trophy, Users } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Reveal } from '@/components/shared/reveal';
@@ -68,6 +68,7 @@ function Detail({
   const locale = useLocale();
   const t = useTranslations('Competitions');
   const tn = useTranslations('Nav');
+  const mukofot = competition.prizeFund ? pick(competition.prizeFund, locale) : '';
 
   return (
     <>
@@ -118,6 +119,13 @@ function Detail({
               <MapPin className="h-5 w-5 text-gold" />
               {pick(competition.location, locale)}
             </span>
+            {mukofot && (
+              <span className="flex items-center gap-2 text-sm font-medium text-navy-900">
+                <Trophy className="h-5 w-5 text-gold" />
+                <span className="text-muted-foreground">{t('prizeTitle')}:</span>
+                {mukofot}
+              </span>
+            )}
           </div>
           <ApplyModal status={competition.status} competitionId={competitionId} />
         </div>
@@ -136,6 +144,17 @@ function Detail({
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 {pick(competition.regulations, locale)}
               </p>
+              {competition.regulationsFile && (
+                <a
+                  href={competition.regulationsFile}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-6 inline-flex items-center gap-2 rounded-xl border border-border bg-white px-5 py-3 text-sm font-semibold text-navy shadow-soft transition-colors hover:border-gold hover:bg-gold/5"
+                >
+                  <Download className="h-4 w-4 text-gold" />
+                  {t('regulationsFile')}
+                </a>
+              )}
             </Reveal>
 
             {/* Timeline */}

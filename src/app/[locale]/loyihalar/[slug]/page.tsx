@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, MapPin } from 'lucide-react';
+import { CalendarDays, Handshake, MapPin } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Reveal } from '@/components/shared/reveal';
@@ -47,6 +47,7 @@ function Detail({ project }: { project: Project }) {
   const locale = useLocale();
   const t = useTranslations('Projects');
   const tn = useTranslations('Nav');
+  const hamkorlar = project.partnersNote ? pick(project.partnersNote, locale) : '';
 
   return (
     <>
@@ -106,6 +107,15 @@ function Detail({ project }: { project: Project }) {
                 </p>
                 <p className="mt-1 font-medium text-navy">{pick(project.location, locale)}</p>
               </div>
+              {hamkorlar && (
+                <div>
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold-700">
+                    <Handshake className="h-4 w-4" />
+                    {t('partnersTitle')}
+                  </p>
+                  <p className="mt-1 font-medium leading-relaxed text-navy">{hamkorlar}</p>
+                </div>
+              )}
               <div className="border-t border-border pt-6">
                 <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-gold-700">
                   {t('resultsTitle')}

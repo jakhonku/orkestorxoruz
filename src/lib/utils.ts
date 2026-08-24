@@ -7,9 +7,44 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-/** Resolve a Localized value for the active locale, falling back to uz. */
+/**
+ * Har bir til uchun zaxira tartibi.
+ *
+ * Admin panelda yozuv ko'pincha avval o'zbekcha to'ldiriladi, tarjimalar esa
+ * keyinroq qo'shiladi. Shu sababli tanlangan tildagi matn bo'sh bo'lsa,
+ * sahifada bo'sh joy qolmasligi uchun keyingi tildagi matn ko'rsatiladi.
+ */
+const ZAXIRA_TARTIBI: Record<Locale, Locale[]> = {
+  uz: ['uz', 'ru', 'en'],
+  ru: ['ru', 'uz', 'en'],
+  en: ['en', 'uz', 'ru'],
+};
+
+/** Matn ham, ro'yxat ham bo'sh sanaladi — ikkalasi ham zaxiraga o'tadi */
+function boshmi(qiymat: unknown): boolean {
+  if (qiymat === null || qiymat === undefined) return true;
+  if (typeof qiymat === 'string') return qiymat.trim() === '';
+  if (Array.isArray(qiymat)) {
+    return qiymat.every((band) => typeof band === 'string' && band.trim() === '');
+  }
+  return false;
+}
+
+/**
+ * Localized qiymatdan joriy tildagisini oladi.
+ * Tanlangan tilda matn bo'lmasa — zaxira tartibi bo'yicha to'ldirilgani.
+ */
 export function pick<T>(value: Localized<T>, locale: string): T {
-  return (value as Record<string, T>)[locale] ?? value.uz;
+  const tartib = ZAXIRA_TARTIBI[locale as Locale] ?? ZAXIRA_TARTIBI.uz;
+  const manba = (value ?? {}) as Record<string, T>;
+
+  for (const til of tartib) {
+    const qiymat = manba[til];
+    if (!boshmi(qiymat)) return qiymat;
+  }
+
+  // Hamma til bo'sh — tanlangan tildagi (bo'sh) qiymat qaytariladi
+  return manba[tartib[0]] ?? manba.uz;
 }
 
 /** Turn an ISO 3166 country code into a flag emoji. */

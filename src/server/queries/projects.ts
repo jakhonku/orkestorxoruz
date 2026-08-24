@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import type { ProjectGetPayload } from '@/generated/prisma/models';
 import type { Project } from '@/types';
 import { projectScopeFromDb } from '@/server/enums';
-import { loc } from '@/server/map';
+import { loc, locOpt } from '@/server/map';
 
 const toliq = {
   results: { orderBy: { sortOrder: 'asc' } },
@@ -26,6 +26,7 @@ function moslash(p: Qator): Project {
     description: loc(p.description),
     results: p.results.map((r) => ({ label: loc(r.label), value: r.value })),
     gallery: p.gallery.map((g) => ({ src: g.src, caption: loc(g.caption) })),
+    partnersNote: locOpt(p.partnersNote),
     featured: p.featured,
   };
 }

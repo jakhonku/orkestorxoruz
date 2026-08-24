@@ -1,13 +1,15 @@
 'use client';
 
 import Image from 'next/image';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Badge } from '@/components/ui/badge';
 import { pick, flagEmoji } from '@/lib/utils';
 import type { Expert } from '@/types';
 
 export function ExpertCard({ expert }: { expert: Expert }) {
   const locale = useLocale();
+  const t = useTranslations('Experts');
+  const hamkorlik = expert.cooperation ? pick(expert.cooperation, locale) : '';
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
@@ -40,6 +42,14 @@ export function ExpertCard({ expert }: { expert: Expert }) {
               </Badge>
             ))}
         </div>
+        {hamkorlik && (
+          <p className="mt-4 border-t border-border pt-3 text-xs text-muted-foreground">
+            <span className="font-semibold uppercase tracking-wider text-gold-700">
+              {t('cooperationTitle')}:
+            </span>{' '}
+            {hamkorlik}
+          </p>
+        )}
       </div>
     </article>
   );

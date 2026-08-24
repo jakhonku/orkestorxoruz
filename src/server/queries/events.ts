@@ -20,6 +20,7 @@ function moslash(e: Qator): ConcertEvent {
     ticketUrl: e.ticketUrl ?? undefined,
     price: locOpt(e.price),
     shortDescription: loc(e.shortDescription),
+    performerNote: locOpt(e.performerNote),
     featured: e.featured,
   };
 }

@@ -7,12 +7,16 @@ export const dynamic = 'force-dynamic';
 
 type Natija = { label: string; href: string; group: string };
 
+/** Bazadan qaytadigan qator — sarlavha hech bir tilda bo'lmasa NULL bo'lishi mumkin */
+type Qator = { slug: string; label: string | null };
+
 /**
  * Sayt bo'ylab qidiruv.
  *
  * Jamoalar, loyihalar, tadbirlar va yangiliklar sarlavhasi bo'yicha qidiradi.
- * Qidiruv jsonb ustunning joriy til kaliti bo'yicha ILIKE bilan bajariladi
- * (katta-kichik harf farqlanmaydi).
+ * Qidiruv uchala tilda ham bajariladi (katta-kichik harf farqlanmaydi) —
+ * sarlavha faqat o'zbekcha to'ldirilgan bo'lsa ham yozuv inglizcha/ruscha
+ * sahifada topiladi. Ko'rsatiladigan matn: joriy til, bo'sh bo'lsa zaxirasi.
  *
  * GET /api/search?q=orkestr&locale=uz
  */
@@ -33,18 +37,42 @@ export async function GET(request: Request) {
   const pattern = `%${q}%`;
 
   const [ensembles, projects, events, news] = await Promise.all([
-    db.$queryRaw<{ slug: string; label: string }[]>`
-      SELECT slug, name->>${locale} AS label FROM ensembles
-      WHERE published = true AND name->>${locale} ILIKE ${pattern} LIMIT 5`,
-    db.$queryRaw<{ slug: string; label: string }[]>`
-      SELECT slug, title->>${locale} AS label FROM projects
-      WHERE published = true AND title->>${locale} ILIKE ${pattern} LIMIT 5`,
-    db.$queryRaw<{ slug: string; label: string }[]>`
-      SELECT slug, title->>${locale} AS label FROM events
-      WHERE published = true AND title->>${locale} ILIKE ${pattern} LIMIT 5`,
-    db.$queryRaw<{ slug: string; label: string }[]>`
-      SELECT slug, title->>${locale} AS label FROM news
-      WHERE published = true AND title->>${locale} ILIKE ${pattern} LIMIT 5`,
+    db.$queryRaw<Qator[]>`
+      SELECT slug, COALESCE(
+               NULLIF(btrim(name->>${locale}), ''), NULLIF(btrim(name->>'uz'), ''),
+               NULLIF(btrim(name->>'ru'), ''), NULLIF(btrim(name->>'en'), '')
+             ) AS label
+      FROM ensembles
+      WHERE published = true AND (
+        name->>'uz' ILIKE ${pattern} OR name->>'ru' ILIKE ${pattern} OR name->>'en' ILIKE ${pattern}
+      ) LIMIT 5`,
+    db.$queryRaw<Qator[]>`
+      SELECT slug, COALESCE(
+               NULLIF(btrim(title->>${locale}), ''), NULLIF(btrim(title->>'uz'), ''),
+               NULLIF(btrim(title->>'ru'), ''), NULLIF(btrim(title->>'en'), '')
+             ) AS label
+      FROM projects
+      WHERE published = true AND (
+        title->>'uz' ILIKE ${pattern} OR title->>'ru' ILIKE ${pattern} OR title->>'en' ILIKE ${pattern}
+      ) LIMIT 5`,
+    db.$queryRaw<Qator[]>`
+      SELECT slug, COALESCE(
+               NULLIF(btrim(title->>${locale}), ''), NULLIF(btrim(title->>'uz'), ''),
+               NULLIF(btrim(title->>'ru'), ''), NULLIF(btrim(title->>'en'), '')
+             ) AS label
+      FROM events
+      WHERE published = true AND (
+        title->>'uz' ILIKE ${pattern} OR title->>'ru' ILIKE ${pattern} OR title->>'en' ILIKE ${pattern}
+      ) LIMIT 5`,
+    db.$queryRaw<Qator[]>`
+      SELECT slug, COALESCE(
+               NULLIF(btrim(title->>${locale}), ''), NULLIF(btrim(title->>'uz'), ''),
+               NULLIF(btrim(title->>'ru'), ''), NULLIF(btrim(title->>'en'), '')
+             ) AS label
+      FROM news
+      WHERE published = true AND (
+        title->>'uz' ILIKE ${pattern} OR title->>'ru' ILIKE ${pattern} OR title->>'en' ILIKE ${pattern}
+      ) LIMIT 5`,
   ]);
 
   const results: Natija[] = [
@@ -52,7 +80,10 @@ export async function GET(request: Request) {
     ...projects.map((r) => ({ label: r.label, href: `/loyihalar/${r.slug}`, group: 'projects' })),
     ...events.map((r) => ({ label: r.label, href: '/afisha', group: 'afisha' })),
     ...news.map((r) => ({ label: r.label, href: `/media/${r.slug}`, group: 'media' })),
-  ].slice(0, 8);
+  ]
+    // Hech bir tilda sarlavhasi yo'q yozuv ro'yxatda ko'rsatilmaydi
+    .filter((r): r is Natija => Boolean(r.label))
+    .slice(0, 8);
 
   return NextResponse.json({ results });
 }
