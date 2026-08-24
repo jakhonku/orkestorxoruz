@@ -39,11 +39,11 @@ export function Header() {
           : 'bg-gradient-to-b from-navy-950/85 via-navy-950/40 to-transparent'
       )}
     >
-      <div className="container flex h-20 items-center justify-between gap-4">
+      <div className="container flex h-20 items-center justify-between gap-2">
         <Logo light />
 
         {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 lg:flex">
+        <nav className="hidden items-center gap-0 lg:flex">
           {NAV_ITEMS.map((item) => {
             const active =
               item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
@@ -58,7 +58,7 @@ export function Header() {
                   <Link
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-1 rounded-full px-4 py-2 text-sm font-medium transition-colors',
+                      'flex items-center gap-1 rounded-full px-2.5 py-2 text-sm font-medium transition-colors xl:px-4',
                       active ? 'text-white' : 'text-white/70 hover:text-white'
                     )}
                   >
@@ -97,7 +97,7 @@ export function Header() {
                 key={item.key}
                 href={item.href}
                 className={cn(
-                  'rounded-full px-4 py-2 text-sm font-medium transition-colors',
+                  'rounded-full px-2.5 py-2 text-sm font-medium transition-colors xl:px-4',
                   active ? 'text-white' : 'text-white/70 hover:text-white'
                 )}
               >
