@@ -70,52 +70,67 @@ export function Hero({ slides }: { slides: Slide[] }) {
 
   const slide = slides[index];
 
+  // Tor ekranda matn chetdan chiqib ketmasligi uchun siljish masofasi kichikroq
+  const shift = 32;
   const variants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
+    enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? shift : -shift }),
     center: { opacity: 1, x: 0 },
-    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -60 : 60 }),
+    exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -shift : shift }),
   };
 
   return (
     <section
-      className="relative min-h-screen min-h-[100dvh] overflow-hidden bg-navy-900"
+      /*
+       * Mobil: tepada rasm bloki, pastida navy fonda matn (flex ustun).
+       * md dan boshlab: rasm butun ekran foni, matn uning ustida (avvalgidek).
+       *
+       * Sabab: hero suratlari gorizontal (1.5–2.2), telefon ekrani esa tik.
+       * To'liq fon qilinsa `object-cover` rasmning tor o'rta bo'lagini kesib
+       * oladi — kompozitsiya buziladi va matn suratning band joyiga tushadi.
+       */
+      className="relative flex min-h-[100svh] flex-col overflow-hidden bg-navy-900 md:block md:min-h-screen md:min-h-[100dvh]"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Crossfading photo background — changes to match each slide's text */}
-      <AnimatePresence initial={false}>
-        <motion.div
-          key={index}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: 'easeInOut' }}
-          className="absolute inset-0"
-        >
-          <Image
-            src={slide.image || '/hero.png'}
-            alt=""
-            fill
-            priority={index === 0}
-            sizes="100vw"
-            className="object-cover object-center"
-          />
-        </motion.div>
-      </AnimatePresence>
+      <div className="relative h-[32svh] min-h-[190px] w-full shrink-0 md:absolute md:inset-0 md:h-auto md:min-h-0">
+        {/* Crossfading photo — changes to match each slide's text */}
+        <AnimatePresence initial={false}>
+          <motion.div
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: 'easeInOut' }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={slide.image || '/hero.png'}
+              alt=""
+              fill
+              priority={index === 0}
+              sizes="100vw"
+              className="object-cover object-[50%_30%] md:object-center"
+            />
+          </motion.div>
+        </AnimatePresence>
 
-      {/* Navy overlay — keeps the photo visible while text on the left stays readable */}
-      <div className="absolute inset-0 bg-gradient-to-r from-navy-900/90 via-navy-900/55 to-navy-900/25" />
-      <div className="absolute inset-0 bg-gradient-to-t from-navy-900/60 via-transparent to-navy-900/20" />
+        {/* Mobil: rasm pastdan navy ga singib ketadi, tepasi sal quyuqlashadi */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-navy-900/45 md:hidden" />
+      </div>
+
+      {/* Katta ekran uchun qatlamlar — matn chapda o'qiladigan bo'lib turishi uchun */}
+      <div className="absolute inset-0 hidden bg-gradient-to-r from-navy-900/90 via-navy-900/55 to-navy-900/25 md:block" />
+      <div className="absolute inset-0 hidden bg-gradient-to-t from-navy-900/60 via-transparent to-navy-900/20 md:block" />
       {/* gold glow accent */}
       <div
-        className="absolute inset-0 opacity-60"
+        className="absolute inset-0 hidden opacity-60 md:block"
         style={{
           backgroundImage:
             'radial-gradient(ellipse at 80% 22%, rgba(201,162,39,0.16), transparent 45%)',
         }}
       />
 
-      <div className="container relative flex min-h-screen min-h-[100dvh] flex-col justify-center pt-28 pb-20">
+      <div className="container relative flex flex-1 flex-col justify-center pt-7 pb-14 md:min-h-screen md:min-h-[100dvh] md:pt-28 md:pb-20">
 
         {/* Swipeable slide area */}
         <motion.div
@@ -144,19 +159,19 @@ export function Hero({ slides }: { slides: Slide[] }) {
                 {slide.tag}
               </span>
 
-              <h1 className="mt-5 max-w-4xl font-serif text-4xl font-semibold leading-[1.1] text-white drop-shadow-sm sm:text-5xl md:text-6xl">
+              <h1 className="mt-4 max-w-4xl font-serif text-[28px] font-semibold leading-[1.12] text-white drop-shadow-sm sm:mt-5 sm:text-5xl md:text-6xl">
                 {slide.title}
               </h1>
 
-              <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/85 md:text-xl">
+              <p className="mt-3.5 max-w-2xl text-[15px] leading-relaxed text-white/85 sm:mt-5 sm:text-lg md:text-xl">
                 {slide.text}
               </p>
 
-              <ul className="mt-6 flex flex-wrap gap-x-6 gap-y-2">
+              <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-1.5 sm:mt-6 sm:gap-x-6 sm:gap-y-2">
                 {slide.points.map((point) => (
                   <li
                     key={point}
-                    className="flex items-center gap-2 text-sm font-medium text-white/75 md:text-base"
+                    className="flex items-center gap-2 text-[13px] font-medium text-white/75 sm:text-sm md:text-base"
                   >
                     <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
                     {point}
@@ -168,7 +183,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
         </motion.div>
 
         {/* Controls: arrows, dots, hint */}
-        <div className="mt-8 flex items-center gap-4">
+        <div className="mt-6 flex items-center gap-4 sm:mt-8">
           <div className="flex items-center gap-2">
             <button
               type="button"
@@ -213,7 +228,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.3 }}
-          className="mt-10 flex flex-wrap items-center gap-4"
+          className="mt-7 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4"
         >
           <Button
             asChild
