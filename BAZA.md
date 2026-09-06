@@ -164,10 +164,21 @@ yoziladi; ro'yxat sahifasi (`/admin/<bolim>`), tahrirlash shakli
 avtomatik quriladi. Yangi bo'lim qo'shish uchun registrga bitta yozuv va
 `_lib/bolimlar.ts` dagi menyuga bitta qator qo'shiladi — sahifa yozilmaydi.
 
-Maydon turlari (`src/server/admin/turlar.ts`): `matn`, `matnKatta`, `slug`,
-`raqam`, `belgi`, `tanlov`, `sana`, `vaqt`, `havola`, `rasm`, uch tilli
-`kopTilli` / `kopTilliKatta` / `kopTilliRoyxat` va takrorlanuvchi `qatorlar`
-(a'zolar, repertuar, galereya, hakamlar...).
+Maydon turlari (`src/server/admin/turlar.ts`): `matn`, `matnKatta`, `raqam`,
+`belgi`, `tanlov`, `sana`, `vaqt`, `havola`, `rasm`, `fayl`, `video`,
+`youtube`, uch tilli `kopTilli` / `kopTilliKatta` / `kopTilliRoyxat` va
+takrorlanuvchi `qatorlar` (a'zolar, repertuar, galereya, hakamlar...).
+
+**Manzil qismi (slug) panelda yo'q** — muharrir faqat nomni yozadi. Slug
+yozuv birinchi marta saqlanganda nomdan avtomatik yasaladi
+(`src/lib/slug.ts`; kirill harflari lotinga o'giriladi, band nom oxiriga
+raqam qo'shiladi). Qaysi maydondan olinishi registrdagi `slugManbasi` da
+ko'rsatiladi. Tahrirlashda slug **o'zgarmaydi** — tarqatilgan havolalar
+ishlab turaveradi.
+
+Kam ishlatiladigan maydonga `qoshimcha: true` qo'yiladi — u shaklda yopiq
+"Qo‘shimcha maydonlar" bo‘limiga tushadi (ichida to‘ldirilgani bo‘lsa,
+bo‘lim ochiq holda chiqadi). Shakl shu tariqa qisqa va tushunarli qoladi.
 
 > Bazada NULL qabul qilmaydigan ustunlar uchun maydonga `bosh` qiymati
 > beriladi (masalan `sortOrder` uchun `bosh: 0`) — aks holda bo'sh qoldirilgan
@@ -197,12 +208,29 @@ vaqti, ijtimoiy tarmoqlar va xarita nuqtasi) hamda «Haqida» sahifasidagi
 missiya matnida ishlatiladi. Bazada kalit bo'lmasa, `src/lib/constants.ts`
 dagi zaxira qiymat olinadi — shuning uchun baza bo'sh bo'lsa ham sayt ishlaydi.
 
-**Rasm va hujjat yuklash:** `POST /api/admin/yuklash` — fayl **Supabase Storage**'dagi
-`media` bucket'iga (`<papka>/<yil-oy>/<nom>`) yoziladi va `media_files`
-jadvaliga qayd qilinadi. Rasmlar: JPG, PNG, WEBP, AVIF, SVG — 8 MB gacha;
-hujjatlar: PDF, DOC, DOCX, XLS, XLSX — 20 MB gacha; videolar: MP4, WEBM, MOV —
-50 MB gacha. Shakldagi `rasm` maydoni rasm yuklaydi, `fayl` — hujjat (Hujjatlar
-bo'limi, tanlov nizomi, press-kit), `video` — video fayl.
+**Rasm, hujjat va video yuklash** — fayl brauzerdan **to‘g‘ridan-to‘g‘ri**
+Supabase Storage'ga ketadi, server orqali o'tmaydi:
+
+1. `POST /api/admin/yuklash` — sessiya, fayl turi va hajmi tekshiriladi,
+   javobda bir martalik imzolangan manzil qaytadi;
+2. brauzer faylni o‘sha manzilga `PUT` qiladi (`_lib/yuklash.ts`), yuklash
+   foizi tugmada ko‘rinib turadi;
+3. `POST /api/admin/yuklash/qayd` — `media_files` jadvaliga qayd yoziladi
+   (qayd yozilmasa ham fayl joyida qoladi).
+
+Shu sxema tufayli Vercel funksiyasining so‘rov hajmi cheklovi yo‘l to‘smaydi.
+Yo‘l: `<papka>/<yil-oy>/<nom>-<tasodifiy>.<kengaytma>`.
+
+Chegaralar va turlar bitta joyda — `src/lib/yuklash.ts` (server ham, brauzer
+ham shundan o‘qiydi): rasm — JPG, PNG, WEBP, AVIF, GIF, SVG, 15 MB gacha;
+hujjat — PDF, DOC, DOCX, XLS, XLSX, 30 MB gacha; video — MP4, WEBM, MOV,
+50 MB gacha (Supabase loyihasining umumiy chegarasi ham 50 MB). Brauzer fayl
+turini aytmasa (ko‘pincha `.mov` bilan shunday bo‘ladi) tur kengaytmadan
+aniqlanadi. HEIC va MKV kabi qabul qilinmaydigan formatlar uchun nima qilish
+kerakligi yozilgan tushunarli xato chiqadi.
+
+Shakldagi `rasm` maydoni rasm yuklaydi, `fayl` — hujjat (Hujjatlar bo‘limi,
+tanlov nizomi, press-kit), `video` — video fayl.
 
 **Videolar uch manbadan biri bo'lishi mumkin** (`media_videos`): YouTube ID,
 Instagram havolasi (`instagramUrl`) yoki Storage'ga yuklangan fayl (`fileUrl`).

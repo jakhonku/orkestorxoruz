@@ -1,7 +1,17 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { ArrowDown, ArrowUp, FileText, Loader2, Plus, Trash2, Upload, X } from 'lucide-react';
+import {
+  AlertCircle,
+  ArrowDown,
+  ArrowUp,
+  FileText,
+  Loader2,
+  Plus,
+  Trash2,
+  Upload,
+  X,
+} from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { youtubeIdAjrat } from '@/lib/youtube';
@@ -13,6 +23,7 @@ import {
   type KopTilliRoyxat,
   type Maydon,
 } from '@/server/admin/turlar';
+import { faylYukla } from '../_lib/yuklash';
 
 export const INPUT =
   'h-10 w-full rounded-lg border border-input bg-white px-3 text-sm text-navy-900 transition-colors placeholder:text-muted-foreground focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/15';
@@ -86,24 +97,6 @@ function Boshqaruv({
           maxLength={maydon.uzunlik}
           onChange={(e) => ozgartir(e.target.value)}
           className={TEXTAREA}
-        />
-      );
-
-    case 'slug':
-      return (
-        <input
-          value={matn}
-          onChange={(e) =>
-            ozgartir(
-              e.target.value
-                .toLowerCase()
-                .replace(/[^a-z0-9-]+/g, '-')
-                .replace(/-{2,}/g, '-'),
-            )
-          }
-          placeholder="masalan-shu-korinishda"
-          maxLength={maydon.uzunlik}
-          className={cn(INPUT, 'font-mono')}
         />
       );
 
@@ -389,94 +382,143 @@ function YouTubeId({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: str
 /* Rasm                                                                */
 /* ------------------------------------------------------------------ */
 
-function Rasm({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
-  const input = useRef<HTMLInputElement>(null);
+/** Yuklash tugmasi va jarayon foizi — rasm ham, fayl ham shuni ishlatadi */
+function YuklashTugmasi({
+  matn,
+  foiz,
+  yuklanmoqda,
+  bosildi,
+}: {
+  matn: string;
+  foiz: number;
+  yuklanmoqda: boolean;
+  bosildi: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      disabled={yuklanmoqda}
+      onClick={bosildi}
+      className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-semibold text-navy transition-colors hover:border-gold/60 disabled:opacity-70"
+    >
+      {yuklanmoqda ? (
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />
+      ) : (
+        <Upload className="h-3.5 w-3.5" />
+      )}
+      {yuklanmoqda ? `Yuklanmoqda... ${foiz}%` : matn}
+    </button>
+  );
+}
+
+/** Yuklash jarayonini boshqaradigan umumiy mantiq */
+function useYuklash(papka: string, tayyor: (url: string) => void) {
   const [yuklanmoqda, setYuklanmoqda] = useState(false);
+  const [foiz, setFoiz] = useState(0);
   const [xato, setXato] = useState<string | null>(null);
 
   async function yukla(fayl: File) {
     setXato(null);
+    setFoiz(0);
     setYuklanmoqda(true);
     try {
-      const forma = new FormData();
-      forma.append('fayl', fayl);
-      const javob = await fetch('/api/admin/yuklash', { method: 'POST', body: forma });
-      const natija = (await javob.json()) as { url?: string; xato?: string };
-      if (!javob.ok || !natija.url) throw new Error(natija.xato ?? 'Yuklab bo‘lmadi.');
-      ozgartir(natija.url);
+      tayyor(await faylYukla(fayl, papka, setFoiz));
     } catch (e) {
       setXato(e instanceof Error ? e.message : 'Yuklab bo‘lmadi.');
     } finally {
       setYuklanmoqda(false);
-      if (input.current) input.current.value = '';
     }
   }
 
+  return { yuklanmoqda, foiz, xato, yukla };
+}
+
+function Xato({ matn }: { matn: string }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-border bg-navy-50/50">
-        {qiymat ? (
-          <>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={qiymat} alt="" className="h-full w-full object-cover" />
-            <button
-              type="button"
-              onClick={() => ozgartir('')}
-              title="Rasmni olib tashlash"
-              className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-navy-900/70 text-white"
-            >
-              <X className="h-3 w-3" />
-            </button>
-          </>
-        ) : (
-          <span className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
-            rasm yo‘q
-          </span>
-        )}
-      </div>
+    <p className="mt-1.5 flex items-start gap-1.5 rounded-lg bg-red-50 px-2.5 py-2 text-xs text-red-700">
+      <AlertCircle className="mt-px h-3.5 w-3.5 shrink-0" />
+      <span>{matn}</span>
+    </p>
+  );
+}
 
-      <div className="min-w-0 flex-1">
-        <input
-          value={qiymat}
-          onChange={(e) => ozgartir(e.target.value)}
-          placeholder="/uploads/... yoki tashqi havola"
-          className={cn(INPUT, 'font-mono text-xs')}
-        />
+function Rasm({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
+  const input = useRef<HTMLInputElement>(null);
+  const [havolaKorinsin, setHavolaKorinsin] = useState(false);
+  const { yuklanmoqda, foiz, xato, yukla } = useYuklash('rasmlar', ozgartir);
 
-        <div className="mt-1.5 flex items-center gap-2">
-          <button
-            type="button"
-            disabled={yuklanmoqda}
-            onClick={() => input.current?.click()}
-            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white px-2.5 py-1.5 text-xs font-medium text-navy transition-colors hover:border-gold/50 disabled:opacity-60"
-          >
-            {yuklanmoqda ? (
-              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <Upload className="h-3.5 w-3.5" />
-            )}
-            {yuklanmoqda ? 'Yuklanmoqda...' : 'Kompyuterdan yuklash'}
-          </button>
-          {xato && <span className="text-xs text-red-600">{xato}</span>}
+  return (
+    <div>
+      <div className="flex items-start gap-3">
+        <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border border-border bg-navy-50/50">
+          {qiymat ? (
+            <>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={qiymat} alt="" className="h-full w-full object-cover" />
+              <button
+                type="button"
+                onClick={() => ozgartir('')}
+                title="Rasmni olib tashlash"
+                className="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-navy-900/70 text-white"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </>
+          ) : (
+            <span className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
+              rasm yo‘q
+            </span>
+          )}
         </div>
 
-        <input
-          ref={input}
-          type="file"
-          accept="image/*"
-          className="hidden"
-          onChange={(e) => {
-            const f = e.target.files?.[0];
-            if (f) void yukla(f);
-          }}
-        />
+        <div className="min-w-0 flex-1">
+          <YuklashTugmasi
+            matn={qiymat ? 'Boshqa rasm yuklash' : 'Kompyuterdan rasm yuklash'}
+            foiz={foiz}
+            yuklanmoqda={yuklanmoqda}
+            bosildi={() => input.current?.click()}
+          />
+          <p className="mt-1.5 text-xs text-muted-foreground">
+            JPG, PNG, WEBP — 15 MB gacha.{' '}
+            <button
+              type="button"
+              onClick={() => setHavolaKorinsin((v) => !v)}
+              className="font-medium text-navy underline-offset-2 hover:underline"
+            >
+              {havolaKorinsin ? 'havolani yashirish' : 'yoki havola qo‘yish'}
+            </button>
+          </p>
+
+          {(havolaKorinsin || (Boolean(qiymat) && !qiymat.includes('/storage/v1/'))) && (
+            <input
+              value={qiymat}
+              onChange={(e) => ozgartir(e.target.value)}
+              placeholder="https://..."
+              className={cn(INPUT, 'mt-1.5 font-mono text-xs')}
+            />
+          )}
+        </div>
       </div>
+
+      {xato && <Xato matn={xato} />}
+
+      <input
+        ref={input}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/avif,image/gif,image/svg+xml"
+        className="hidden"
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          e.target.value = '';
+          if (f) void yukla(f);
+        }}
+      />
     </div>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* Hujjat (PDF, Word, Excel)                                           */
+/* Hujjat (PDF, Word, Excel) va video fayl                             */
 /* ------------------------------------------------------------------ */
 
 /** Manzildan fayl nomini ajratib oladi */
@@ -489,17 +531,19 @@ function faylNomi(url: string): string {
   }
 }
 
-/** Fayl turiga qarab: qaysi fayllar tanlanadi va foydalanuvchiga qanday izoh ko'rsatiladi */
+/** Fayl turiga qarab: qaysi fayllar tanlanadi va qanday izoh ko'rsatiladi */
 const FAYL_TURLARI = {
   hujjat: {
     accept: '.pdf,.doc,.docx,.xls,.xlsx,application/pdf',
-    izoh: 'PDF, Word, Excel — 20 MB gacha',
+    izoh: 'PDF, Word, Excel — 30 MB gacha',
     papka: 'hujjatlar',
+    tugma: 'Hujjat yuklash',
   },
   video: {
     accept: '.mp4,.webm,.mov,video/mp4,video/webm,video/quicktime',
     izoh: 'MP4, WEBM, MOV — 50 MB gacha',
     papka: 'videolar',
+    tugma: 'Video yuklash',
   },
 } as const;
 
@@ -513,28 +557,8 @@ function Fayl({
   tur?: keyof typeof FAYL_TURLARI;
 }) {
   const input = useRef<HTMLInputElement>(null);
-  const [yuklanmoqda, setYuklanmoqda] = useState(false);
-  const [xato, setXato] = useState<string | null>(null);
   const sozlama = FAYL_TURLARI[tur];
-
-  async function yukla(fayl: File) {
-    setXato(null);
-    setYuklanmoqda(true);
-    try {
-      const forma = new FormData();
-      forma.append('fayl', fayl);
-      forma.append('papka', sozlama.papka);
-      const javob = await fetch('/api/admin/yuklash', { method: 'POST', body: forma });
-      const natija = (await javob.json()) as { url?: string; xato?: string };
-      if (!javob.ok || !natija.url) throw new Error(natija.xato ?? 'Yuklab bo‘lmadi.');
-      ozgartir(natija.url);
-    } catch (e) {
-      setXato(e instanceof Error ? e.message : 'Yuklab bo‘lmadi.');
-    } finally {
-      setYuklanmoqda(false);
-      if (input.current) input.current.value = '';
-    }
-  }
+  const { yuklanmoqda, foiz, xato, yukla } = useYuklash(sozlama.papka, ozgartir);
 
   return (
     <div className="space-y-1.5">
@@ -567,19 +591,17 @@ function Fayl({
         />
       )}
 
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          disabled={yuklanmoqda}
-          onClick={() => input.current?.click()}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white px-2.5 py-1.5 text-xs font-medium text-navy transition-colors hover:border-gold/50 disabled:opacity-60"
-        >
-          {yuklanmoqda ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Upload className="h-3.5 w-3.5" />}
-          {yuklanmoqda ? 'Yuklanmoqda...' : qiymat ? 'Boshqa fayl yuklash' : 'Kompyuterdan yuklash'}
-        </button>
+      <div className="flex flex-wrap items-center gap-2">
+        <YuklashTugmasi
+          matn={qiymat ? 'Boshqa fayl yuklash' : sozlama.tugma}
+          foiz={foiz}
+          yuklanmoqda={yuklanmoqda}
+          bosildi={() => input.current?.click()}
+        />
         <span className="text-xs text-muted-foreground">{sozlama.izoh}</span>
-        {xato && <span className="text-xs text-red-600">{xato}</span>}
       </div>
+
+      {xato && <Xato matn={xato} />}
 
       <input
         ref={input}
@@ -588,6 +610,7 @@ function Fayl({
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
+          e.target.value = '';
           if (f) void yukla(f);
         }}
       />
