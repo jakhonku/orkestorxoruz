@@ -31,11 +31,17 @@ export type Sessiya = {
 export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
   const supabase = supabaseServer();
 
-  // getUser() tokenni Supabase serverida tekshiradi (getSession() dan xavfsizroq)
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return null;
+  /**
+   * Token imzosi mahalliy tekshiriladi (`getClaims`) — Supabase serveriga
+   * so‘rov ketmaydi. Cookie’ni o‘zgartirib qo‘yish foyda bermaydi: imzo
+   * loyihaning ochiq kaliti bilan tekshiriladi, soxta token o‘tmaydi.
+   *
+   * Hisob bloklangani esa quyida — har so‘rovda bazadan o‘qiladi, ya’ni
+   * huquqni olib qo‘yish darhol kuchga kiradi.
+   */
+  const { data: dalil } = await supabase.auth.getClaims();
+  const authId = dalil?.claims?.sub;
+  if (!authId) return null;
 
   /**
    * Qayd FAQAT `authUserId` bo'yicha topiladi — email bo'yicha emas.
@@ -46,7 +52,7 @@ export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
    * tekshirilgandan keyin o'rnatiladi (`src/app/admin/actions.ts`).
    */
   const qayd = await db.adminUser.findUnique({
-    where: { authUserId: user.id },
+    where: { authUserId: authId },
     select: { id: true, email: true, name: true, role: true, active: true },
   });
 
@@ -55,7 +61,7 @@ export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
 
   return {
     userId: qayd.id,
-    authId: user.id,
+    authId,
     email: qayd.email,
     name: qayd.name,
     role: qayd.role,

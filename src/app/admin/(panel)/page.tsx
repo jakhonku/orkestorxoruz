@@ -1,32 +1,46 @@
 import Link from 'next/link';
+import { unstable_cache } from 'next/cache';
 import { ArrowRight, Inbox, Mail, Music4, Users2 } from 'lucide-react';
 
 import { db } from '@/lib/db';
 import { joriySessiya } from '@/server/auth';
 import { BOLIMLAR } from '@/server/admin/registr';
+import { ADMIN_SANOQ } from '@/server/admin/keshlar';
 
 export const metadata = { title: 'Bosh sahifa' };
 
 /** Prisma modellari dinamik chaqiriladi — bo'lim registridagi `model` nomi bo'yicha */
 type Sanovchi = { count: (a?: unknown) => Promise<number> };
 
-async function bolimSanoqlari() {
-  const juftlar = await Promise.all(
-    BOLIMLAR.map(async (b) => {
-      const delegat = (db as unknown as Record<string, Sanovchi>)[b.model];
-      try {
-        const [jami, nashr] = await Promise.all([
-          delegat.count(),
-          delegat.count({ where: { published: true } }),
-        ]);
-        return [b.kalit, { jami, nashr }] as const;
-      } catch {
-        return [b.kalit, { jami: 0, nashr: 0 }] as const;
-      }
-    }),
-  );
-  return Object.fromEntries(juftlar);
-}
+/**
+ * Har bir bo‘limdagi yozuvlar soni.
+ *
+ * Bu — o‘ttizdan ortiq `count` so‘rovi, ya’ni bazaga o‘ttizdan ortiq marta
+ * borib kelish. Sanoqlar tez-tez o‘zgarmaydi, shuning uchun natija keshda
+ * saqlanadi va admin panelda biror yozuv saqlangan/o‘chirilgan zahoti
+ * (`revalidateTag`) yangilanadi — sahifa esa darhol ochiladi.
+ */
+const bolimSanoqlari = unstable_cache(
+  async () => {
+    const juftlar = await Promise.all(
+      BOLIMLAR.map(async (b) => {
+        const delegat = (db as unknown as Record<string, Sanovchi>)[b.model];
+        try {
+          const [jami, nashr] = await Promise.all([
+            delegat.count(),
+            delegat.count({ where: { published: true } }),
+          ]);
+          return [b.kalit, { jami, nashr }] as const;
+        } catch {
+          return [b.kalit, { jami: 0, nashr: 0 }] as const;
+        }
+      }),
+    );
+    return Object.fromEntries(juftlar);
+  },
+  ['admin-bolim-sanoqlari'],
+  { tags: [ADMIN_SANOQ], revalidate: 300 },
+);
 
 export default async function AdminBoshSahifa() {
   const sessiya = await joriySessiya();

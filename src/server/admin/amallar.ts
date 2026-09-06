@@ -1,9 +1,10 @@
 'use server';
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 import { db } from '@/lib/db';
 import { bosSlugTanla } from '@/lib/slug';
+import { ADMIN_SANOQ } from './keshlar';
 import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
@@ -40,6 +41,8 @@ async function ruxsat() {
 /** Saytdagi barcha sahifalarni yangilaydi — o'zgarish darhol ko'rinadi */
 function saytniYangilash() {
   revalidatePath('/', 'layout');
+  // Admin bosh sahifasidagi yozuvlar soni ham qayta hisoblansin
+  revalidateTag(ADMIN_SANOQ);
 }
 
 // ------------------------------------------------------------------

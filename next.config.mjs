@@ -40,13 +40,16 @@ const nextConfig = {
   experimental: {
     /**
      * Brauzerdagi "router keshi" — Next sahifalar orasida yurganda ilgari
-     * olingan sahifani qayta ishlatadi. Sukut bo'yicha 30 soniya (dinamik) va
-     * 5 daqiqa (statik) saqlanadi: admin panelda o'zgartirilgan ma'lumot
-     * saytda shuncha vaqt eski holida ko'rinib turishi mumkin edi.
+     * olingan sahifani qayta ishlatadi.
      *
-     * 0 — har o'tishda serverdan yangi nusxa olinadi.
+     * `dynamic: 0` — admin panel har doim bazadan yangi ma’lumot oladi.
+     * `static: 180` — saytning ochiq qismi (oldindan tayyorlangan sahifalar)
+     * 3 daqiqa brauzer keshidan ochiladi: menyu bo‘ylab yurish va orqaga
+     * qaytish darhol bo‘ladi, serverga so‘rov ketmaydi. Admin panelda
+     * kontent saqlanganda `revalidatePath` keshni bekor qiladi, shuning
+     * uchun o‘zgarish baribir tez ko‘rinadi.
      */
-    staleTimes: { dynamic: 0, static: 0 },
+    staleTimes: { dynamic: 0, static: 180 },
   },
 
   async headers() {

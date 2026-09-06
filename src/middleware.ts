@@ -43,13 +43,21 @@ async function adminMiddleware(request: NextRequest) {
     },
   });
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  /**
+   * `getClaims()` tokenni Supabase loyihasining ochiq kaliti bilan SHU YERDA
+   * tekshiradi — tarmoqqa chiqmaydi (kalitlar bir marta olinib keshlanadi).
+   * Ilgari ishlatilgan `getUser()` har bir so‘rovda Supabase serveriga
+   * borardi: borib-kelish ~0.5 soniya, ya’ni admin paneldagi har bir sahifa
+   * shuncha kutib turardi.
+   *
+   * Bu yerda faqat "kirganmi yoki yo‘q" tekshiriladi. Haqiqiy huquq esa
+   * `joriySessiya()` da: u bazadan rolni va hisob faolligini o‘qiydi.
+   */
+  const { data: dalil } = await supabase.auth.getClaims();
 
   const kirishSahifasi = request.nextUrl.pathname.startsWith('/admin/kirish');
 
-  if (!user && !kirishSahifasi) {
+  if (!dalil?.claims && !kirishSahifasi) {
     const manzil = request.nextUrl.clone();
     manzil.pathname = '/admin/kirish';
     manzil.search = '';
