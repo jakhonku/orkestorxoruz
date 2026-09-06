@@ -3,8 +3,18 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, ArrowLeft, Check, Loader2, Save, Trash2 } from 'lucide-react';
+import {
+  AlertCircle,
+  ArrowLeft,
+  Check,
+  ChevronDown,
+  Loader2,
+  Save,
+  Settings2,
+  Trash2,
+} from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { yozuvOchirish, yozuvSaqlash } from '@/server/admin/amallar';
 import { boshQiymat, type Maydon, type Qiymatlar } from '@/server/admin/turlar';
 import { MaydonKiritish } from './maydon';
@@ -39,6 +49,17 @@ export function Shakl({
   const [xato, setXato] = useState<string | null>(null);
   const [saqlandi, setSaqlandi] = useState(false);
   const [ochirishTasdiq, setOchirishTasdiq] = useState(false);
+
+  const asosiy = bolim.maydonlar.filter((m) => !m.qoshimcha);
+  const qoshimcha = bolim.maydonlar.filter((m) => m.qoshimcha);
+
+  /**
+   * Qo'shimcha bo'lim odatda yopiq. Lekin tahrirlashda ichidagi biror maydon
+   * to'ldirilgan bo'lsa — muharrir uni izlab yurmasin deb ochiq holda chiqadi.
+   */
+  const [qoshimchaOchiq, setQoshimchaOchiq] = useState(() =>
+    qoshimcha.some((m) => toldirilganmi(boshlangich[m.nom])),
+  );
   const [kutilmoqda, boshla] = useTransition();
 
   const ozgartir = (nom: string, qiymat: unknown) => {
@@ -102,18 +123,37 @@ export function Shakl({
         </p>
       )}
 
-      {/* Maydonlar */}
-      <div className="grid grid-cols-1 gap-5 rounded-2xl border border-border bg-white p-5 sm:grid-cols-2 sm:p-6">
-        {bolim.maydonlar.map((m) => (
-          <div key={m.nom} className={m.yarim ? 'sm:col-span-1' : 'sm:col-span-2'}>
-            <MaydonKiritish
-              maydon={m}
-              qiymat={qiymatlar[m.nom]}
-              ozgartir={(v) => ozgartir(m.nom, v)}
+      {/* Asosiy maydonlar */}
+      <Panel maydonlar={asosiy} qiymatlar={qiymatlar} ozgartir={ozgartir} />
+
+      {/* Kam ishlatiladigan maydonlar — yopiq turadi, kerak bo‘lsa ochiladi */}
+      {qoshimcha.length > 0 && (
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => setQoshimchaOchiq((v) => !v)}
+            className="flex w-full items-center gap-2 rounded-2xl border border-border bg-white px-5 py-3.5 text-left text-sm font-medium text-navy transition-colors hover:border-gold/50"
+          >
+            <Settings2 className="h-4 w-4 text-muted-foreground" />
+            Qo‘shimcha maydonlar
+            <span className="text-xs font-normal text-muted-foreground">
+              ({qoshimcha.length} ta — ixtiyoriy)
+            </span>
+            <ChevronDown
+              className={cn(
+                'ml-auto h-4 w-4 text-muted-foreground transition-transform',
+                qoshimchaOchiq && 'rotate-180',
+              )}
             />
-          </div>
-        ))}
-      </div>
+          </button>
+
+          {qoshimchaOchiq && (
+            <div className="mt-3">
+              <Panel maydonlar={qoshimcha} qiymatlar={qiymatlar} ozgartir={ozgartir} />
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Pastda turadigan amallar paneli */}
       <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-white/95 backdrop-blur lg:left-72">
@@ -178,4 +218,42 @@ export function Shakl({
       </div>
     </div>
   );
+}
+
+/** Maydonlar to'plamini bitta oq kartochkada chizadi */
+function Panel({
+  maydonlar,
+  qiymatlar,
+  ozgartir,
+}: {
+  maydonlar: Maydon[];
+  qiymatlar: Qiymatlar;
+  ozgartir: (nom: string, qiymat: unknown) => void;
+}) {
+  return (
+    <div className="grid grid-cols-1 gap-5 rounded-2xl border border-border bg-white p-5 sm:grid-cols-2 sm:p-6">
+      {maydonlar.map((m) => (
+        <div key={m.nom} className={m.yarim ? 'sm:col-span-1' : 'sm:col-span-2'}>
+          <MaydonKiritish
+            maydon={m}
+            qiymat={qiymatlar[m.nom]}
+            ozgartir={(v) => ozgartir(m.nom, v)}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/** Qiymat bo'sh emasmi — qo'shimcha bo'limni ochiq ko'rsatish uchun */
+function toldirilganmi(qiymat: unknown): boolean {
+  if (qiymat === null || qiymat === undefined) return false;
+  if (typeof qiymat === 'string') return qiymat.trim() !== '';
+  if (typeof qiymat === 'number') return qiymat !== 0;
+  if (typeof qiymat === 'boolean') return qiymat;
+  if (Array.isArray(qiymat)) return qiymat.length > 0;
+  if (typeof qiymat === 'object') {
+    return Object.values(qiymat as Record<string, unknown>).some((v) => toldirilganmi(v));
+  }
+  return false;
 }

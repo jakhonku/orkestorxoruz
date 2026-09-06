@@ -10,8 +10,6 @@ export type MaydonTuri =
   | 'matn'
   /** Ko'p qatorli matn */
   | 'matnKatta'
-  /** Manzil qismi: faqat lotin harflari, raqam va chiziqcha */
-  | 'slug'
   /** Butun son */
   | 'raqam'
   /** Ha / Yo'q */
@@ -53,6 +51,11 @@ export type Maydon = {
   maydonlar?: Maydon[];
   /** Shaklda ikki ustunga joylashtirish */
   yarim?: boolean;
+  /**
+   * Kam ishlatiladigan maydon — shaklda yopiq turadigan
+   * "Qo‘shimcha" bo‘limiga tushadi.
+   */
+  qoshimcha?: boolean;
   /**
    * Matn uchun ruxsat etilgan eng katta uzunlik.
    * Bazadagi VarChar ustunlar bilan mos bo'lishi kerak — aks holda saqlashda

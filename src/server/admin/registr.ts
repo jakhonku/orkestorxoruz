@@ -14,6 +14,11 @@ export type Bolim = {
   birlik: string;
   /** Prisma modeli nomi (db.<model>) */
   model: string;
+  /**
+   * Saytdagi manzil (slug) shu maydondan avtomatik yasaladi.
+   * Admin panelda alohida maydon yo‘q — muharrir manzil haqida o‘ylamaydi.
+   */
+  slugManbasi?: string;
   maydonlar: Maydon[];
   /** Ro'yxatdagi qatorni yasaydi */
   qator: (row: Record<string, any>) => RoyxatQatori;
@@ -42,6 +47,7 @@ const tartib: Maydon = {
   yarim: true,
   bosh: 0,
   izoh: 'Kichik raqam yuqorida turadi',
+  qoshimcha: true,
 };
 
 const tanlangan: Maydon = {
@@ -49,16 +55,6 @@ const tanlangan: Maydon = {
   yorliq: 'Bosh sahifada ko‘rsatilsin',
   tur: 'belgi',
   yarim: true,
-};
-
-const slug: Maydon = {
-  nom: 'slug',
-  yorliq: 'Manzil qismi (slug)',
-  tur: 'slug',
-  talab: true,
-  yarim: true,
-  uzunlik: 140,
-  izoh: 'Faqat lotin harflari va chiziqcha: masalan buxoro-yoshlar-xori',
 };
 
 const galereya = (yorliq = 'Foto galereya'): Maydon => ({
@@ -99,6 +95,7 @@ export const BOLIMLAR: Bolim[] = [
     nom: 'Jamoalar',
     birlik: 'jamoa',
     model: 'ensemble',
+    slugManbasi: 'name',
     bogliqlar: {
       members: 'members',
       repertoire: 'repertoire',
@@ -115,9 +112,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.bannerUrl,
     }),
     maydonlar: [
-      { nom: 'name', yorliq: 'Jamoa nomi', tur: 'kopTilli', talab: true },
-      slug,
-      {
+      { nom: 'name', yorliq: 'Jamoa nomi', tur: 'kopTilli', talab: true },      {
         nom: 'type',
         yorliq: 'Turi',
         tur: 'tanlov',
@@ -133,9 +128,9 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'city', yorliq: 'Shahar / tuman', tur: 'kopTilli', talab: true },
       { nom: 'conductor', yorliq: 'Bosh dirijyor / rahbar', tur: 'matn', talab: true, yarim: true, uzunlik: 160 },
       { nom: 'memberCount', yorliq: "A'zolar soni", tur: 'raqam', yarim: true },
-      { nom: 'foundedYear', yorliq: 'Tashkil etilgan yil', tur: 'raqam', yarim: true },
-      { nom: 'phone', yorliq: 'Telefon', tur: 'matn', yarim: true, uzunlik: 40 },
-      { nom: 'email', yorliq: 'Email', tur: 'matn', yarim: true, uzunlik: 160 },
+      { nom: 'foundedYear', yorliq: 'Tashkil etilgan yil', tur: 'raqam', yarim: true, qoshimcha: true },
+      { nom: 'phone', yorliq: 'Telefon', tur: 'matn', yarim: true, uzunlik: 40, qoshimcha: true },
+      { nom: 'email', yorliq: 'Email', tur: 'matn', yarim: true, uzunlik: 160, qoshimcha: true },
       {
         nom: 'shortDescription',
         yorliq: 'Qisqa tavsif',
@@ -195,6 +190,7 @@ export const BOLIMLAR: Bolim[] = [
     nom: 'Loyihalar',
     birlik: 'loyiha',
     model: 'project',
+    slugManbasi: 'title',
     bogliqlar: { results: 'results', gallery: 'gallery' },
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
@@ -206,9 +202,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Loyiha nomi', tur: 'kopTilli', talab: true },
-      slug,
-      {
+      { nom: 'title', yorliq: 'Loyiha nomi', tur: 'kopTilli', talab: true },      {
         nom: 'scope',
         yorliq: "Ko'lami",
         tur: 'tanlov',
@@ -246,7 +240,7 @@ export const BOLIMLAR: Bolim[] = [
         ],
       },
       galereya('Galereya'),
-      { nom: 'partnersNote', yorliq: 'Hamkor tashkilotlar', tur: 'kopTilli' },
+      { nom: 'partnersNote', yorliq: 'Hamkor tashkilotlar', tur: 'kopTilli', qoshimcha: true },
       tanlangan,
       tartib,
       nashr,
@@ -259,6 +253,7 @@ export const BOLIMLAR: Bolim[] = [
     nom: 'Tanlov va festivallar',
     birlik: 'tanlov',
     model: 'competition',
+    slugManbasi: 'title',
     bogliqlar: { timeline: 'timeline', jury: 'jury' },
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
@@ -270,9 +265,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Nomi', tur: 'kopTilli', talab: true },
-      slug,
-      {
+      { nom: 'title', yorliq: 'Nomi', tur: 'kopTilli', talab: true },      {
         nom: 'kind',
         yorliq: 'Turi',
         tur: 'tanlov',
@@ -300,9 +293,16 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
       { nom: 'regulations', yorliq: 'Nizom matni', tur: 'kopTilliKatta', talab: true },
       { nom: 'regulationsFileUrl', yorliq: 'Nizom fayli', tur: 'fayl' },
-      { nom: 'applicationEmail', yorliq: 'Arizalar tushadigan email', tur: 'matn', yarim: true, uzunlik: 160 },
+      {
+        nom: 'applicationEmail',
+        yorliq: 'Arizalar tushadigan email',
+        tur: 'matn',
+        yarim: true,
+        uzunlik: 160,
+        qoshimcha: true,
+      },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm' },
-      { nom: 'prizeFund', yorliq: "Mukofot jamg'armasi", tur: 'kopTilli' },
+      { nom: 'prizeFund', yorliq: "Mukofot jamg'armasi", tur: 'kopTilli', qoshimcha: true },
       {
         nom: 'timeline',
         yorliq: 'Muddatlar jadvali',
@@ -335,6 +335,7 @@ export const BOLIMLAR: Bolim[] = [
     nom: 'Afisha',
     birlik: 'tadbir',
     model: 'concertEvent',
+    slugManbasi: 'title',
     saralash: [{ date: 'desc' }],
     qator: (r) => ({
       id: r.id,
@@ -347,9 +348,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.posterUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Tadbir nomi', tur: 'kopTilli', talab: true },
-      slug,
-      {
+      { nom: 'title', yorliq: 'Tadbir nomi', tur: 'kopTilli', talab: true },      {
         nom: 'category',
         yorliq: 'Turkumi',
         tur: 'tanlov',
@@ -369,7 +368,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'price', yorliq: 'Chipta narxi', tur: 'kopTilli', izoh: 'Masalan: 70 000 so‘mdan' },
       { nom: 'ticketUrl', yorliq: 'Chipta havolasi', tur: 'havola' },
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
-      { nom: 'performerNote', yorliq: 'Ijrochi jamoa', tur: 'kopTilli' },
+      { nom: 'performerNote', yorliq: 'Ijrochi jamoa', tur: 'kopTilli', qoshimcha: true },
       {
         nom: 'posterUrl',
         yorliq: 'Poster',
@@ -387,6 +386,7 @@ export const BOLIMLAR: Bolim[] = [
     nom: 'Yangiliklar',
     birlik: 'yangilik',
     model: 'newsArticle',
+    slugManbasi: 'title',
     saralash: [{ date: 'desc' }],
     qator: (r) => ({
       id: r.id,
@@ -397,9 +397,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Sarlavha', tur: 'kopTilli', talab: true },
-      slug,
-      {
+      { nom: 'title', yorliq: 'Sarlavha', tur: 'kopTilli', talab: true },      {
         nom: 'category',
         yorliq: 'Turkumi',
         tur: 'tanlov',
@@ -412,7 +410,7 @@ export const BOLIMLAR: Bolim[] = [
         ],
       },
       { nom: 'date', yorliq: 'Sanasi', tur: 'sana', talab: true, yarim: true },
-      { nom: 'author', yorliq: 'Muallif / manba', tur: 'kopTilli' },
+      { nom: 'author', yorliq: 'Muallif / manba', tur: 'kopTilli', qoshimcha: true },
       { nom: 'excerpt', yorliq: 'Qisqa mazmuni', tur: 'kopTilliKatta', talab: true },
       {
         nom: 'body',
@@ -534,8 +532,8 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'role', yorliq: 'Lavozimi', tur: 'kopTilli', talab: true },
       { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm', izoh: 'Vertikal, 600×800' },
       { nom: 'bio', yorliq: "Qisqacha ma'lumot", tur: 'kopTilliKatta' },
-      { nom: 'honorific', yorliq: 'Unvon / daraja', tur: 'kopTilli' },
-      { nom: 'receptionDay', yorliq: 'Qabul kunlari', tur: 'kopTilli' },
+      { nom: 'honorific', yorliq: 'Unvon / daraja', tur: 'kopTilli', qoshimcha: true },
+      { nom: 'receptionDay', yorliq: 'Qabul kunlari', tur: 'kopTilli', qoshimcha: true },
       tartib,
       nashr,
     ],
@@ -547,6 +545,7 @@ export const BOLIMLAR: Bolim[] = [
     nom: 'Ekspertlar',
     birlik: 'ekspert',
     model: 'expert',
+    slugManbasi: 'name',
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
       id: r.id,
@@ -556,9 +555,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.photoUrl,
     }),
     maydonlar: [
-      { nom: 'name', yorliq: 'F.I.SH.', tur: 'matn', talab: true, uzunlik: 160 },
-      slug,
-      { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli', talab: true },
+      { nom: 'name', yorliq: 'F.I.SH.', tur: 'matn', talab: true, uzunlik: 160 },      { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli', talab: true },
       {
         nom: 'countryCode',
         yorliq: 'Davlat kodi',
@@ -576,7 +573,7 @@ export const BOLIMLAR: Bolim[] = [
         tur: 'kopTilliRoyxat',
         izoh: 'Har bir yo‘nalish alohida qatorda',
       },
-      { nom: 'cooperation', yorliq: 'Hamkorlik shakli', tur: 'kopTilli' },
+      { nom: 'cooperation', yorliq: 'Hamkorlik shakli', tur: 'kopTilli', qoshimcha: true },
       tartib,
       nashr,
     ],
@@ -593,7 +590,16 @@ export const BOLIMLAR: Bolim[] = [
     maydonlar: [
       { nom: 'title', yorliq: 'Hujjat nomi', tur: 'kopTilli', talab: true },
       { nom: 'href', yorliq: 'Hujjat fayli', tur: 'fayl', talab: true },
-      { nom: 'meta', yorliq: 'Fayl haqida', tur: 'matn', yarim: true, bosh: '', uzunlik: 60, izoh: 'Masalan: PDF · 480 KB' },
+      {
+        nom: 'meta',
+        yorliq: 'Fayl haqida',
+        tur: 'matn',
+        yarim: true,
+        bosh: '',
+        uzunlik: 60,
+        izoh: 'Masalan: PDF · 480 KB',
+        qoshimcha: true,
+      },
       tartib,
       nashr,
     ],
@@ -702,9 +708,10 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'logoText', yorliq: 'Logotip matni', tur: 'matn', talab: true, yarim: true, uzunlik: 60, izoh: 'Rasm bo‘lmasa shu matn chiqadi' },
       { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli', talab: true },
       { nom: 'logoUrl', yorliq: 'Logotip', tur: 'rasm', izoh: 'PNG, shaffof fon' },
-      { nom: 'url', yorliq: 'Rasmiy sayti', tur: 'havola', yarim: true },
+      { nom: 'url', yorliq: 'Rasmiy sayti', tur: 'havola', yarim: true, qoshimcha: true },
       {
         nom: 'agreement',
+        qoshimcha: true,
         yorliq: 'Hamkorlik asosi',
         tur: 'matn',
         uzunlik: 200,

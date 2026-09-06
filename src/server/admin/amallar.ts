@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/db';
+import { bosSlugTanla } from '@/lib/slug';
 import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
@@ -61,7 +62,6 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       return qiymat ? new Date(String(qiymat)) : null;
     case 'matn':
     case 'matnKatta':
-    case 'slug':
     case 'vaqt':
     case 'havola':
     case 'rasm':
@@ -81,6 +81,32 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       // Qiymat umuman kelmasa bo'sh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
       return qiymat ?? boshQiymat(m);
   }
+}
+
+// ------------------------------------------------------------------
+// Manzil qismi (slug)
+// ------------------------------------------------------------------
+
+/**
+ * Sarlavhadan bo'sh manzil qismini topadi.
+ *
+ * Admin panelda slug maydoni yo'q: muharrir faqat nomni yozadi, manzil
+ * (masalan /jamoalar/buxoro-yoshlar-xori) shundan yasaladi. Nom band bo'lsa
+ * oxiriga raqam qo'shiladi — "…-2", "…-3".
+ */
+async function bosSlug(d: Delegat, manba: string): Promise<string> {
+  const band = (
+    await d.findMany({ select: { slug: true } })
+  ).map((r) => String(r.slug));
+
+  return bosSlugTanla(manba, band);
+}
+
+/** Slug yasash uchun ishlatiladigan matn: ko'p tilli maydondan o'zbekchasi olinadi */
+function slugManbaMatni(qiymat: unknown): string {
+  if (typeof qiymat === 'string') return qiymat;
+  const uz = (qiymat as { uz?: string })?.uz;
+  return typeof uz === 'string' ? uz : '';
 }
 
 /** Majburiy maydonlarni tekshiradi */
@@ -205,6 +231,12 @@ export async function yozuvSaqlash(
       // qiymatlar (`@default`) o'z ishini qilsin
       const yangiData = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== null));
 
+      // Manzil qismi sarlavhadan avtomatik yasaladi (bir marta, yaratilganda).
+      // Tahrirlashda o'zgarmaydi — aks holda tarqatilgan havolalar ishlamay qoladi.
+      if (bolim.slugManbasi) {
+        yangiData.slug = await bosSlug(d, slugManbaMatni(qiymatlar[bolim.slugManbasi]));
+      }
+
       const yaratilgan = await d.create({
         data: {
           ...yangiData,
@@ -230,7 +262,7 @@ export async function yozuvSaqlash(
     return { ok: true, id: yozuvId };
   } catch (e) {
     const xabar = e instanceof Error ? e.message : String(e);
-    // Takrorlanuvchi slug eng ko'p uchraydigan xato
+    // Xatoni foydalanuvchi tushunadigan tilga o‘giramiz
     if (xabar.includes('too long for the column')) {
       return {
         ok: false,
@@ -239,8 +271,12 @@ export async function yozuvSaqlash(
           'masalan "YouTube ID" maydoniga to‘liq havola emas, faqat v= dan keyingi qism yoziladi.',
       };
     }
-    if (xabar.includes('Unique constraint') || xabar.includes('slug')) {
-      return { ok: false, xato: 'Bunday manzil qismi (slug) allaqachon band. Boshqasini kiriting.' };
+    if (xabar.includes('Unique constraint')) {
+      return {
+        ok: false,
+        xato:
+          'Xuddi shunday yozuv allaqachon bor. Nomni biroz o‘zgartirib, qaytadan saqlang.',
+      };
     }
     return { ok: false, xato: `Saqlashda xatolik: ${xabar}` };
   }
