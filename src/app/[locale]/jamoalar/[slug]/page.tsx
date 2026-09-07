@@ -90,7 +90,7 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
         <div className="container grid grid-cols-2 gap-6 py-6 md:grid-cols-4">
           {[
             { icon: MapPin, label: pick(REGION_NAMES[ensemble.region], locale) },
-            { icon: UserRound, label: `${t('conductor')}: ${ensemble.conductor}` },
+            { icon: UserRound, label: `${t('conductor')}: ${pick(ensemble.conductor, locale)}` },
             { icon: Users, label: `${ensemble.memberCount} ${t('members')}` },
             { icon: CalendarDays, label: `${t('founded')}: ${ensemble.foundedYear}` },
           ].map((fact, i) => (
@@ -128,7 +128,7 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
                   <Music2 className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
                   <div>
                     <p className="font-medium text-navy">{pick(item.work, locale)}</p>
-                    <p className="text-sm text-muted-foreground">{item.composer}</p>
+                    <p className="text-sm text-muted-foreground">{pick(item.composer, locale)}</p>
                   </div>
                 </li>
               ))}
@@ -142,7 +142,7 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
               <ul className="mt-4 divide-y divide-border">
                 {ensemble.members.map((member, i) => (
                   <li key={i} className="flex items-center justify-between py-3">
-                    <span className="text-sm font-medium text-navy-900">{member.name}</span>
+                    <span className="text-sm font-medium text-navy-900">{pick(member.name, locale)}</span>
                     <span className="text-xs text-muted-foreground">{pick(member.role, locale)}</span>
                   </li>
                 ))}

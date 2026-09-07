@@ -2,7 +2,7 @@ import type { Localized } from './common';
 
 export interface Expert {
   slug: string;
-  name: string;
+  name: Localized;
   /** ISO 3166-1 alpha-2 for flag emoji, e.g. 'DE' */
   countryCode: string;
   country: Localized;
@@ -15,7 +15,7 @@ export interface Expert {
 }
 
 export interface Leader {
-  name: string;
+  name: Localized;
   role: Localized;
   photo: string;
   bio: Localized;

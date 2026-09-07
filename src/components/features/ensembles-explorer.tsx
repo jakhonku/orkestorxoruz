@@ -34,7 +34,7 @@ export function EnsemblesExplorer({ ensembles }: { ensembles: Ensemble[] }) {
       if (type !== 'all' && e.type !== type) return false;
       if (region !== 'all' && e.region !== region) return false;
       if (q) {
-        const hay = `${pick(e.name, locale)} ${e.conductor}`.toLowerCase();
+        const hay = `${pick(e.name, locale)} ${pick(e.conductor, locale)}`.toLowerCase();
         if (!hay.includes(q)) return false;
       }
       return true;

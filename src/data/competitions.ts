@@ -1,5 +1,6 @@
 import type { Competition } from '@/types';
 import { img } from '@/lib/images';
+import { bir } from './_bir';
 
 export const competitions: Competition[] = [
   {
@@ -30,8 +31,8 @@ export const competitions: Competition[] = [
       { date: { uz: '2027-yil 15-mart', ru: '15 марта 2027', en: '15 March 2027' }, title: { uz: 'Festival ochilishi', ru: 'Открытие фестиваля', en: 'Festival opening' }, description: { uz: 'Gala-konsert bilan ochiladi.', ru: 'Открывается гала-концертом.', en: 'Opens with a gala concert.' } },
     ],
     jury: [
-      { name: 'Liliya Bekirova', country: { uz: 'Germaniya', ru: 'Германия', en: 'Germany' }, title: { uz: 'Xor dirijyori', ru: 'Хоровой дирижёр', en: 'Choral conductor' } },
-      { name: 'Aziz Shohakimov', country: { uz: 'O‘zbekiston', ru: 'Узбекистан', en: 'Uzbekistan' }, title: { uz: 'Dirijyor', ru: 'Дирижёр', en: 'Conductor' } },
+      { name: bir('Liliya Bekirova'), country: { uz: 'Germaniya', ru: 'Германия', en: 'Germany' }, title: { uz: 'Xor dirijyori', ru: 'Хоровой дирижёр', en: 'Choral conductor' } },
+      { name: bir('Aziz Shohakimov'), country: { uz: 'O‘zbekiston', ru: 'Узбекистан', en: 'Uzbekistan' }, title: { uz: 'Dirijyor', ru: 'Дирижёр', en: 'Conductor' } },
     ],
   },
   {
@@ -62,8 +63,8 @@ export const competitions: Competition[] = [
       { date: { uz: '2026-yil 17-oktyabr', ru: '17 октября 2026', en: '17 October 2026' }, title: { uz: 'Final va mukofotlash', ru: 'Финал и награждение', en: 'Final and awards' }, description: { uz: 'Orkestr bilan final chiqishi.', ru: 'Финальное выступление с оркестром.', en: 'Final performance with orchestra.' } },
     ],
     jury: [
-      { name: 'Denis Vlasenko', country: { uz: 'O‘zbekiston', ru: 'Узбекистан', en: 'Uzbekistan' }, title: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
-      { name: 'Tigran Shiganyan', country: { uz: 'AQSh', ru: 'США', en: 'USA' }, title: { uz: 'Dirijyor, pedagog', ru: 'Дирижёр, педагог', en: 'Conductor, pedagogue' } },
+      { name: bir('Denis Vlasenko'), country: { uz: 'O‘zbekiston', ru: 'Узбекистан', en: 'Uzbekistan' }, title: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
+      { name: bir('Tigran Shiganyan'), country: { uz: 'AQSh', ru: 'США', en: 'USA' }, title: { uz: 'Dirijyor, pedagog', ru: 'Дирижёр, педагог', en: 'Conductor, pedagogue' } },
     ],
   },
   {
@@ -93,7 +94,7 @@ export const competitions: Competition[] = [
       { date: { uz: '2027-yil, aprel', ru: 'Апрель 2027', en: 'April 2027' }, title: { uz: 'Tanlov o‘tkaziladi', ru: 'Проведение конкурса', en: 'Competition held' }, description: { uz: 'Barcha bosqichlar o‘tkaziladi.', ru: 'Проводятся все туры.', en: 'All rounds take place.' } },
     ],
     jury: [
-      { name: 'Nasser Sahim', country: { uz: 'Qatar', ru: 'Катар', en: 'Qatar' }, title: { uz: 'Bastakor', ru: 'Композитор', en: 'Composer' } },
+      { name: bir('Nasser Sahim'), country: { uz: 'Qatar', ru: 'Катар', en: 'Qatar' }, title: { uz: 'Bastakor', ru: 'Композитор', en: 'Composer' } },
     ],
   },
   {
@@ -123,7 +124,7 @@ export const competitions: Competition[] = [
       { date: { uz: '2026-yil, may', ru: 'Май 2026', en: 'May 2026' }, title: { uz: 'Festival o‘tkazildi', ru: 'Фестиваль проведён', en: 'Festival held' }, description: { uz: 'Yakuniy gala-konsert bo‘lib o‘tdi.', ru: 'Состоялся заключительный гала-концерт.', en: 'Closing gala concert took place.' } },
     ],
     jury: [
-      { name: 'Feruza Abdurahimova', country: { uz: 'O‘zbekiston', ru: 'Узбекистан', en: 'Uzbekistan' }, title: { uz: 'Dirijyor', ru: 'Дирижёр', en: 'Conductor' } },
+      { name: bir('Feruza Abdurahimova'), country: { uz: 'O‘zbekiston', ru: 'Узбекистан', en: 'Uzbekistan' }, title: { uz: 'Dirijyor', ru: 'Дирижёр', en: 'Conductor' } },
     ],
   },
 ];

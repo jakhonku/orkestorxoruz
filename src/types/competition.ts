@@ -4,7 +4,7 @@ export type CompetitionStatus = 'ochiq' | 'yopiq' | 'tez-kunda';
 export type CompetitionKind = 'tanlov' | 'festival';
 
 export interface JuryMember {
-  name: string;
+  name: Localized;
   country: Localized;
   title: Localized;
 }

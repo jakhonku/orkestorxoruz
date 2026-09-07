@@ -123,19 +123,19 @@ function AboutContent({
           <SectionTitle title={t('leadershipTitle')} />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {leaders.map((leader, i) => (
-              <Reveal key={leader.name} delay={i * 0.08}>
+              <Reveal key={i} delay={i * 0.08}>
                 <div className="group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all hover:-translate-y-1 hover:shadow-soft-lg">
                   <div className="relative aspect-[4/5] overflow-hidden">
                     <Image
                       src={leader.photo}
-                      alt={leader.name}
+                      alt={pick(leader.name, locale)}
                       fill
                       sizes="(max-width: 768px) 100vw, 25vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
                   <div className="p-5">
-                    <h3 className="font-serif text-lg font-semibold text-navy">{leader.name}</h3>
+                    <h3 className="font-serif text-lg font-semibold text-navy">{pick(leader.name, locale)}</h3>
                     <p className="mt-1 text-sm font-medium text-gold-700">
                       {pick(leader.role, locale)}
                     </p>

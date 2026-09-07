@@ -108,7 +108,7 @@ model Ensemble {
   type             EnsembleType
   region           Region
   city             Json
-  conductor        String       @db.VarChar(160)
+  conductor        Json
   memberCount      Int?
   foundedYear      Int?
   logoUrl          String?      @db.Text
@@ -137,7 +137,7 @@ model Ensemble {
 model EnsembleMember {
   id         Int    @id @default(autoincrement())
   ensembleId Int
-  name       String @db.VarChar(160)
+  name       Json
   role       Json
   sortOrder  Int    @default(0)
 
@@ -150,7 +150,7 @@ model EnsembleMember {
 model RepertoireItem {
   id         Int    @id @default(autoincrement())
   ensembleId Int
-  composer   String @db.VarChar(160)
+  composer   Json
   work       Json
   sortOrder  Int    @default(0)
 
@@ -292,7 +292,7 @@ model CompetitionStage {
 model JuryMember {
   id            Int     @id @default(autoincrement())
   competitionId Int
-  name          String  @db.VarChar(160)
+  name          Json
   country       Json
   title         Json
   photoUrl      String? @db.Text
@@ -399,7 +399,7 @@ model MediaPhoto {
 model Expert {
   id          Int     @id @default(autoincrement())
   slug        String  @unique @db.VarChar(140)
-  name        String  @db.VarChar(160)
+  name        Json
   countryCode String  @db.VarChar(2)
   country     Json
   photoUrl    String? @db.Text
@@ -417,7 +417,7 @@ model Expert {
 
 model Leader {
   id           Int      @id @default(autoincrement())
-  name         String   @db.VarChar(160)
+  name         Json
   role         Json
   photoUrl     String?  @db.Text
   bio          Json

@@ -3,12 +3,12 @@ import type { ImageAsset, Localized, Region } from './common';
 export type EnsembleType = 'orkestr' | 'xor' | 'ansambl';
 
 export interface EnsembleMember {
-  name: string;
+  name: Localized;
   role: Localized;
 }
 
 export interface RepertoireItem {
-  composer: string;
+  composer: Localized;
   work: Localized;
 }
 
@@ -28,7 +28,7 @@ export interface Ensemble {
   type: EnsembleType;
   region: Region;
   city: Localized;
-  conductor: string;
+  conductor: Localized;
   memberCount: number;
   foundedYear: number;
   logo: string;

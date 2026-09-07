@@ -16,7 +16,7 @@ export function ExpertCard({ expert }: { expert: Expert }) {
       <div className="relative aspect-[4/5] overflow-hidden">
         <Image
           src={expert.photo}
-          alt={expert.name}
+          alt={pick(expert.name, locale)}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
           className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -28,7 +28,7 @@ export function ExpertCard({ expert }: { expert: Expert }) {
         </span>
       </div>
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="font-serif text-lg font-semibold text-navy">{expert.name}</h3>
+        <h3 className="font-serif text-lg font-semibold text-navy">{pick(expert.name, locale)}</h3>
         <p className="mt-1 text-sm font-medium text-gold-700">{pick(expert.role, locale)}</p>
         <p className="mt-3 line-clamp-3 flex-1 text-sm text-muted-foreground">
           {pick(expert.bio, locale)}

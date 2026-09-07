@@ -13,7 +13,7 @@ import { loc, locList, locOpt } from '@/server/map';
 function moslashExpert(e: ExpertQator): Expert {
   return {
     slug: e.slug,
-    name: e.name,
+    name: loc(e.name),
     countryCode: e.countryCode,
     country: loc(e.country),
     photo: e.photoUrl ?? '',
@@ -43,7 +43,7 @@ export const getLeaders = cache(async (): Promise<Leader[]> => {
     orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
   });
   return rows.map((l: LeaderQator) => ({
-    name: l.name,
+    name: loc(l.name),
     role: loc(l.role),
     photo: l.photoUrl ?? '',
     bio: loc(l.bio),

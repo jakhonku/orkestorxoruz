@@ -203,7 +203,7 @@ function Detail({
                       {flagEmoji(memberFlag(member.country))}
                     </span>
                     <div>
-                      <p className="font-medium text-navy">{member.name}</p>
+                      <p className="font-medium text-navy">{pick(member.name, locale)}</p>
                       <p className="text-xs text-muted-foreground">{pick(member.title, locale)}</p>
                       <p className="text-xs text-gold-700">{pick(member.country, locale)}</p>
                     </div>

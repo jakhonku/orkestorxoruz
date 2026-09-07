@@ -1,5 +1,6 @@
 import type { Ensemble } from '@/types';
 import { img, portrait, square } from '@/lib/images';
+import { bir } from './_bir';
 
 export const ensembles: Ensemble[] = [
   {
@@ -12,7 +13,7 @@ export const ensembles: Ensemble[] = [
     type: 'orkestr',
     region: 'toshkent-shahri',
     city: { uz: 'Toshkent', ru: 'Ташкент', en: 'Tashkent' },
-    conductor: 'Aziz Shohakimov',
+    conductor: bir('Aziz Shohakimov'),
     memberCount: 92,
     foundedYear: 1938,
     logo: square('sso-logo'),
@@ -28,16 +29,16 @@ export const ensembles: Ensemble[] = [
       en: 'Founded in 1938, the orchestra was pivotal in shaping Uzbek symphonic music. The ensemble has toured major world stages, championing the works of national composers.',
     },
     members: [
-      { name: 'Aziz Shohakimov', role: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
-      { name: 'Kamola Yusupova', role: { uz: 'Konsertmeyster', ru: 'Концертмейстер', en: 'Concertmaster' } },
-      { name: 'Rustam Ibragimov', role: { uz: 'Birinchi violonchel', ru: 'Первая виолончель', en: 'Principal cello' } },
-      { name: 'Dilnoza Karimova', role: { uz: 'Fleyta', ru: 'Флейта', en: 'Flute' } },
+      { name: bir('Aziz Shohakimov'), role: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
+      { name: bir('Kamola Yusupova'), role: { uz: 'Konsertmeyster', ru: 'Концертмейстер', en: 'Concertmaster' } },
+      { name: bir('Rustam Ibragimov'), role: { uz: 'Birinchi violonchel', ru: 'Первая виолончель', en: 'Principal cello' } },
+      { name: bir('Dilnoza Karimova'), role: { uz: 'Fleyta', ru: 'Флейта', en: 'Flute' } },
     ],
     repertoire: [
-      { composer: 'Muxtor Ashrafiy', work: { uz: '"Amir Temur" simfoniyasi', ru: 'Симфония «Амир Темур»', en: '“Amir Temur” Symphony' } },
-      { composer: 'P. Chaykovskiy', work: { uz: '5-simfoniya', ru: 'Симфония № 5', en: 'Symphony No. 5' } },
-      { composer: 'G. Mahler', work: { uz: '1-simfoniya', ru: 'Симфония № 1', en: 'Symphony No. 1' } },
-      { composer: 'Xamid Rahimov', work: { uz: '"Vatan" uvertyurasi', ru: 'Увертюра «Ватан»', en: '“Vatan” Overture' } },
+      { composer: bir('Muxtor Ashrafiy'), work: { uz: '"Amir Temur" simfoniyasi', ru: 'Симфония «Амир Темур»', en: '“Amir Temur” Symphony' } },
+      { composer: bir('P. Chaykovskiy'), work: { uz: '5-simfoniya', ru: 'Симфония № 5', en: 'Symphony No. 5' } },
+      { composer: bir('G. Mahler'), work: { uz: '1-simfoniya', ru: 'Симфония № 1', en: 'Symphony No. 1' } },
+      { composer: bir('Xamid Rahimov'), work: { uz: '"Vatan" uvertyurasi', ru: 'Увертюра «Ватан»', en: '“Vatan” Overture' } },
     ],
     gallery: [
       { src: img('sso-g1'), caption: { uz: 'Katta zaldagi konsert', ru: 'Концерт в большом зале', en: 'Concert in the grand hall' } },
@@ -61,7 +62,7 @@ export const ensembles: Ensemble[] = [
     type: 'orkestr',
     region: 'toshkent-shahri',
     city: { uz: 'Toshkent', ru: 'Ташкент', en: 'Tashkent' },
-    conductor: 'Denis Vlasenko',
+    conductor: bir('Denis Vlasenko'),
     memberCount: 78,
     foundedYear: 1939,
     logo: square('navoi-logo'),
@@ -77,14 +78,14 @@ export const ensembles: Ensemble[] = [
       en: 'The theatre orchestra is the musical foundation of opera and ballet productions, performing national and world repertoire.',
     },
     members: [
-      { name: 'Denis Vlasenko', role: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
-      { name: 'Nigora Rahmonova', role: { uz: 'Konsertmeyster', ru: 'Концертмейстер', en: 'Concertmaster' } },
-      { name: 'Bobur Tojiyev', role: { uz: 'Klarnet', ru: 'Кларнет', en: 'Clarinet' } },
+      { name: bir('Denis Vlasenko'), role: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
+      { name: bir('Nigora Rahmonova'), role: { uz: 'Konsertmeyster', ru: 'Концертмейстер', en: 'Concertmaster' } },
+      { name: bir('Bobur Tojiyev'), role: { uz: 'Klarnet', ru: 'Кларнет', en: 'Clarinet' } },
     ],
     repertoire: [
-      { composer: 'S. Yudakov', work: { uz: '"Maysaraning ishi" operasi', ru: 'Опера «Проделки Майсары»', en: '“Maysara’s Mischief” opera' } },
-      { composer: 'G. Verdi', work: { uz: '"Aida" operasi', ru: 'Опера «Аида»', en: '“Aida” opera' } },
-      { composer: 'P. Chaykovskiy', work: { uz: '"Oqqush ko‘li" baleti', ru: 'Балет «Лебединое озеро»', en: '“Swan Lake” ballet' } },
+      { composer: bir('S. Yudakov'), work: { uz: '"Maysaraning ishi" operasi', ru: 'Опера «Проделки Майсары»', en: '“Maysara’s Mischief” opera' } },
+      { composer: bir('G. Verdi'), work: { uz: '"Aida" operasi', ru: 'Опера «Аида»', en: '“Aida” opera' } },
+      { composer: bir('P. Chaykovskiy'), work: { uz: '"Oqqush ko‘li" baleti', ru: 'Балет «Лебединое озеро»', en: '“Swan Lake” ballet' } },
     ],
     gallery: [
       { src: img('navoi-g1'), caption: { uz: 'Opera premyerasi', ru: 'Премьера оперы', en: 'Opera premiere' } },
@@ -106,7 +107,7 @@ export const ensembles: Ensemble[] = [
     type: 'xor',
     region: 'toshkent-shahri',
     city: { uz: 'Toshkent', ru: 'Ташкент', en: 'Tashkent' },
-    conductor: 'Surayyo Alimova',
+    conductor: bir('Surayyo Alimova'),
     memberCount: 56,
     foundedYear: 1948,
     logo: square('choir-logo'),
@@ -122,14 +123,14 @@ export const ensembles: Ensemble[] = [
       en: 'Active since 1948, the choir is a pillar of national choral art and performs the world choral repertoire.',
     },
     members: [
-      { name: 'Surayyo Alimova', role: { uz: 'Bosh xormeyster', ru: 'Главный хормейстер', en: 'Principal choirmaster' } },
-      { name: 'Jamshid Nazarov', role: { uz: 'Tenor solisti', ru: 'Солист-тенор', en: 'Tenor soloist' } },
-      { name: 'Malika Ismoilova', role: { uz: 'Sopranо solisti', ru: 'Солистка-сопрано', en: 'Soprano soloist' } },
+      { name: bir('Surayyo Alimova'), role: { uz: 'Bosh xormeyster', ru: 'Главный хормейстер', en: 'Principal choirmaster' } },
+      { name: bir('Jamshid Nazarov'), role: { uz: 'Tenor solisti', ru: 'Солист-тенор', en: 'Tenor soloist' } },
+      { name: bir('Malika Ismoilova'), role: { uz: 'Sopranо solisti', ru: 'Солистка-сопрано', en: 'Soprano soloist' } },
     ],
     repertoire: [
-      { composer: 'S. Rahmaninov', work: { uz: '"Butun tun qo‘riqlash"', ru: '«Всенощное бдение»', en: '“All-Night Vigil”' } },
-      { composer: 'Mustafo Bafoyev', work: { uz: '"Navoiy" xor poemasi', ru: 'Хоровая поэма «Навои»', en: '“Navoi” choral poem' } },
-      { composer: 'W. A. Mozart', work: { uz: '"Requiem"', ru: '«Реквием»', en: '“Requiem”' } },
+      { composer: bir('S. Rahmaninov'), work: { uz: '"Butun tun qo‘riqlash"', ru: '«Всенощное бдение»', en: '“All-Night Vigil”' } },
+      { composer: bir('Mustafo Bafoyev'), work: { uz: '"Navoiy" xor poemasi', ru: 'Хоровая поэма «Навои»', en: '“Navoi” choral poem' } },
+      { composer: bir('W. A. Mozart'), work: { uz: '"Requiem"', ru: '«Реквием»', en: '“Requiem”' } },
     ],
     gallery: [
       { src: img('choir-g1'), caption: { uz: 'A cappella konserti', ru: 'Концерт a cappella', en: 'A cappella concert' } },
@@ -151,7 +152,7 @@ export const ensembles: Ensemble[] = [
     type: 'orkestr',
     region: 'toshkent-shahri',
     city: { uz: 'Toshkent', ru: 'Ташкент', en: 'Tashkent' },
-    conductor: 'Feruza Abdurahimova',
+    conductor: bir('Feruza Abdurahimova'),
     memberCount: 45,
     foundedYear: 1996,
     logo: square('turon-logo'),
@@ -167,13 +168,13 @@ export const ensembles: Ensemble[] = [
       en: 'The orchestra advances an academic performance school on traditional instruments — dutar, rubab, gijjak and nay.',
     },
     members: [
-      { name: 'Feruza Abdurahimova', role: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
-      { name: 'Sardor Xolmatov', role: { uz: 'Rubob', ru: 'Рубаб', en: 'Rubab' } },
-      { name: 'Gulnora Tosheva', role: { uz: 'Nay', ru: 'Най', en: 'Nay' } },
+      { name: bir('Feruza Abdurahimova'), role: { uz: 'Bosh dirijyor', ru: 'Главный дирижёр', en: 'Principal conductor' } },
+      { name: bir('Sardor Xolmatov'), role: { uz: 'Rubob', ru: 'Рубаб', en: 'Rubab' } },
+      { name: bir('Gulnora Tosheva'), role: { uz: 'Nay', ru: 'Най', en: 'Nay' } },
     ],
     repertoire: [
-      { composer: 'Xalq musiqasi', work: { uz: '"Munojot" makomi', ru: 'Маком «Мунаджат»', en: '“Munojot” maqom' } },
-      { composer: 'Feruz Ashrafiy', work: { uz: '"Turon" syuitasi', ru: 'Сюита «Турон»', en: '“Turon” suite' } },
+      { composer: bir('Xalq musiqasi'), work: { uz: '"Munojot" makomi', ru: 'Маком «Мунаджат»', en: '“Munojot” maqom' } },
+      { composer: bir('Feruz Ashrafiy'), work: { uz: '"Turon" syuitasi', ru: 'Сюита «Турон»', en: '“Turon” suite' } },
     ],
     gallery: [
       { src: img('turon-g1'), caption: { uz: 'Milliy cholg‘ular', ru: 'Национальные инструменты', en: 'National instruments' } },
@@ -193,7 +194,7 @@ export const ensembles: Ensemble[] = [
     type: 'ansambl',
     region: 'samarqand',
     city: { uz: 'Samarqand', ru: 'Самарканд', en: 'Samarkand' },
-    conductor: 'Timur Mahmudov',
+    conductor: bir('Timur Mahmudov'),
     memberCount: 24,
     foundedYear: 2004,
     logo: square('sam-logo'),
@@ -209,12 +210,12 @@ export const ensembles: Ensemble[] = [
       en: 'Performs regularly at Samarkand’s historic venues, promoting chamber music in the region.',
     },
     members: [
-      { name: 'Timur Mahmudov', role: { uz: 'Badiiy rahbar', ru: 'Художественный руководитель', en: 'Artistic director' } },
-      { name: 'Ozoda Rasulova', role: { uz: 'Skripka', ru: 'Скрипка', en: 'Violin' } },
+      { name: bir('Timur Mahmudov'), role: { uz: 'Badiiy rahbar', ru: 'Художественный руководитель', en: 'Artistic director' } },
+      { name: bir('Ozoda Rasulova'), role: { uz: 'Skripka', ru: 'Скрипка', en: 'Violin' } },
     ],
     repertoire: [
-      { composer: 'A. Vivaldi', work: { uz: '"Fasllar"', ru: '«Времена года»', en: '“The Four Seasons”' } },
-      { composer: 'W. A. Mozart', work: { uz: '"Eine kleine Nachtmusik"', ru: '«Маленькая ночная серенада»', en: '“Eine kleine Nachtmusik”' } },
+      { composer: bir('A. Vivaldi'), work: { uz: '"Fasllar"', ru: '«Времена года»', en: '“The Four Seasons”' } },
+      { composer: bir('W. A. Mozart'), work: { uz: '"Eine kleine Nachtmusik"', ru: '«Маленькая ночная серенада»', en: '“Eine kleine Nachtmusik”' } },
     ],
     gallery: [
       { src: img('sam-g1'), caption: { uz: 'Registon sahnasida', ru: 'На сцене Регистана', en: 'On the Registan stage' } },
@@ -234,7 +235,7 @@ export const ensembles: Ensemble[] = [
     type: 'xor',
     region: 'buxoro',
     city: { uz: 'Buxoro', ru: 'Бухара', en: 'Bukhara' },
-    conductor: 'Zilola Yodgorova',
+    conductor: bir('Zilola Yodgorova'),
     memberCount: 38,
     foundedYear: 2012,
     logo: square('bux-logo'),
@@ -250,12 +251,12 @@ export const ensembles: Ensemble[] = [
       en: 'The ensemble was founded to bring young talents into academic choral art.',
     },
     members: [
-      { name: 'Zilola Yodgorova', role: { uz: 'Xormeyster', ru: 'Хормейстер', en: 'Choirmaster' } },
-      { name: 'Aziza Qodirova', role: { uz: 'Solist', ru: 'Солистка', en: 'Soloist' } },
+      { name: bir('Zilola Yodgorova'), role: { uz: 'Xormeyster', ru: 'Хормейстер', en: 'Choirmaster' } },
+      { name: bir('Aziza Qodirova'), role: { uz: 'Solist', ru: 'Солистка', en: 'Soloist' } },
     ],
     repertoire: [
-      { composer: 'Milliy xalq qo‘shiqlari', work: { uz: '"Yor-yor" turkumi', ru: 'Цикл «Ёр-ёр»', en: '“Yor-yor” cycle' } },
-      { composer: 'J. Rutter', work: { uz: '"For the Beauty of the Earth"', ru: '«For the Beauty of the Earth»', en: '“For the Beauty of the Earth”' } },
+      { composer: bir('Milliy xalq qo‘shiqlari'), work: { uz: '"Yor-yor" turkumi', ru: 'Цикл «Ёр-ёр»', en: '“Yor-yor” cycle' } },
+      { composer: bir('J. Rutter'), work: { uz: '"For the Beauty of the Earth"', ru: '«For the Beauty of the Earth»', en: '“For the Beauty of the Earth”' } },
     ],
     gallery: [
       { src: img('bux-g1'), caption: { uz: 'Yoshlar konserti', ru: 'Молодёжный концерт', en: 'Youth concert' } },

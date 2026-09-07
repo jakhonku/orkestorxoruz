@@ -106,13 +106,14 @@ export const BOLIMLAR: Bolim[] = [
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.name),
-      tavsif: `${r.conductor} · ${r.memberCount ?? '—'} a'zo`,
+      tavsif: `${uz(r.conductor)} · ${r.memberCount ?? '—'} a'zo`,
       belgi: { ORKESTR: 'Orkestr', XOR: 'Xor', ANSAMBL: 'Ansambl' }[r.type as string],
       ochiqmi: r.published,
       rasm: r.bannerUrl,
     }),
     maydonlar: [
-      { nom: 'name', yorliq: 'Jamoa nomi', tur: 'kopTilli', talab: true },      {
+      { nom: 'name', yorliq: 'Jamoa nomi', tur: 'kopTilli', talab: true },
+      {
         nom: 'type',
         yorliq: 'Turi',
         tur: 'tanlov',
@@ -126,7 +127,7 @@ export const BOLIMLAR: Bolim[] = [
       },
       { nom: 'region', yorliq: 'Viloyat', tur: 'tanlov', talab: true, yarim: true, variantlar: VILOYATLAR },
       { nom: 'city', yorliq: 'Shahar / tuman', tur: 'kopTilli', talab: true },
-      { nom: 'conductor', yorliq: 'Bosh dirijyor / rahbar', tur: 'matn', talab: true, yarim: true, uzunlik: 160 },
+      { nom: 'conductor', yorliq: 'Bosh dirijyor / rahbar', tur: 'kopTilli', talab: true },
       { nom: 'memberCount', yorliq: "A'zolar soni", tur: 'raqam', yarim: true },
       { nom: 'foundedYear', yorliq: 'Tashkil etilgan yil', tur: 'raqam', yarim: true, qoshimcha: true },
       { nom: 'phone', yorliq: 'Telefon', tur: 'matn', yarim: true, uzunlik: 40, qoshimcha: true },
@@ -147,7 +148,7 @@ export const BOLIMLAR: Bolim[] = [
         tur: 'qatorlar',
         izoh: '4–8 ta asosiy shaxs',
         maydonlar: [
-          { nom: 'name', yorliq: 'F.I.SH.', tur: 'matn', talab: true, uzunlik: 160 },
+          { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
           { nom: 'role', yorliq: 'Lavozimi', tur: 'kopTilli' },
         ],
       },
@@ -156,7 +157,7 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Repertuar',
         tur: 'qatorlar',
         maydonlar: [
-          { nom: 'composer', yorliq: 'Bastakor', tur: 'matn', talab: true, uzunlik: 160 },
+          { nom: 'composer', yorliq: 'Bastakor', tur: 'kopTilli', talab: true },
           { nom: 'work', yorliq: 'Asar nomi', tur: 'kopTilli' },
         ],
       },
@@ -202,7 +203,8 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Loyiha nomi', tur: 'kopTilli', talab: true },      {
+      { nom: 'title', yorliq: 'Loyiha nomi', tur: 'kopTilli', talab: true },
+      {
         nom: 'scope',
         yorliq: "Ko'lami",
         tur: 'tanlov',
@@ -265,7 +267,8 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Nomi', tur: 'kopTilli', talab: true },      {
+      { nom: 'title', yorliq: 'Nomi', tur: 'kopTilli', talab: true },
+      {
         nom: 'kind',
         yorliq: 'Turi',
         tur: 'tanlov',
@@ -318,7 +321,7 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: "Hakamlar hay'ati",
         tur: 'qatorlar',
         maydonlar: [
-          { nom: 'name', yorliq: 'F.I.SH.', tur: 'matn', talab: true, uzunlik: 160 },
+          { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
           { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli' },
           { nom: 'title', yorliq: 'Lavozimi', tur: 'kopTilli' },
           { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm' },
@@ -348,7 +351,8 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.posterUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Tadbir nomi', tur: 'kopTilli', talab: true },      {
+      { nom: 'title', yorliq: 'Tadbir nomi', tur: 'kopTilli', talab: true },
+      {
         nom: 'category',
         yorliq: 'Turkumi',
         tur: 'tanlov',
@@ -397,7 +401,8 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Sarlavha', tur: 'kopTilli', talab: true },      {
+      { nom: 'title', yorliq: 'Sarlavha', tur: 'kopTilli', talab: true },
+      {
         nom: 'category',
         yorliq: 'Turkumi',
         tur: 'tanlov',
@@ -522,13 +527,13 @@ export const BOLIMLAR: Bolim[] = [
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
       id: r.id,
-      sarlavha: r.name,
+      sarlavha: uz(r.name),
       tavsif: uz(r.role),
       ochiqmi: r.published,
       rasm: r.photoUrl,
     }),
     maydonlar: [
-      { nom: 'name', yorliq: 'F.I.SH.', tur: 'matn', talab: true, uzunlik: 160 },
+      { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
       { nom: 'role', yorliq: 'Lavozimi', tur: 'kopTilli', talab: true },
       { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm', izoh: 'Vertikal, 600×800' },
       { nom: 'bio', yorliq: "Qisqacha ma'lumot", tur: 'kopTilliKatta' },
@@ -549,13 +554,14 @@ export const BOLIMLAR: Bolim[] = [
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
       id: r.id,
-      sarlavha: r.name,
+      sarlavha: uz(r.name),
       tavsif: `${uz(r.country)} · ${uz(r.role)}`,
       ochiqmi: r.published,
       rasm: r.photoUrl,
     }),
     maydonlar: [
-      { nom: 'name', yorliq: 'F.I.SH.', tur: 'matn', talab: true, uzunlik: 160 },      { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli', talab: true },
+      { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
+      { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli', talab: true },
       {
         nom: 'countryCode',
         yorliq: 'Davlat kodi',

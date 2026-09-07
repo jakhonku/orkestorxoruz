@@ -1,10 +1,11 @@
 import type { DocumentLink, Expert, Leader } from '@/types';
 import { portrait } from '@/lib/images';
+import { bir } from './_bir';
 
 export const experts: Expert[] = [
   {
     slug: 'liliya-bekirova',
-    name: 'Liliya Bekirova',
+    name: bir('Liliya Bekirova'),
     countryCode: 'DE',
     country: { uz: 'Germaniya', ru: 'Германия', en: 'Germany' },
     photo: '/experts/bekirova.png',
@@ -22,7 +23,7 @@ export const experts: Expert[] = [
   },
   {
     slug: 'tigran-shiganyan',
-    name: 'Tigran Shiganyan',
+    name: bir('Tigran Shiganyan'),
     countryCode: 'US',
     country: { uz: 'AQSh', ru: 'США', en: 'USA' },
     photo: '/experts/shiganyan.png',
@@ -40,7 +41,7 @@ export const experts: Expert[] = [
   },
   {
     slug: 'nasser-sahim',
-    name: 'Nasser Sahim',
+    name: bir('Nasser Sahim'),
     countryCode: 'QA',
     country: { uz: 'Qatar', ru: 'Катар', en: 'Qatar' },
     photo: '/experts/sahim.png',
@@ -60,7 +61,7 @@ export const experts: Expert[] = [
 
 export const leaders: Leader[] = [
   {
-    name: 'Botir Zokirov',
+    name: bir('Botir Zokirov'),
     role: { uz: 'Bosh direktor', ru: 'Генеральный директор', en: 'Director General' },
     photo: portrait('lead-1'),
     bio: {
@@ -70,7 +71,7 @@ export const leaders: Leader[] = [
     },
   },
   {
-    name: 'Dilnoza Rahimova',
+    name: bir('Dilnoza Rahimova'),
     role: { uz: 'Badiiy rahbar', ru: 'Художественный руководитель', en: 'Artistic Director' },
     photo: portrait('lead-2'),
     bio: {
@@ -80,7 +81,7 @@ export const leaders: Leader[] = [
     },
   },
   {
-    name: 'Sanjar Umarov',
+    name: bir('Sanjar Umarov'),
     role: { uz: 'Loyihalar bo‘yicha direktor o‘rinbosari', ru: 'Заместитель директора по проектам', en: 'Deputy Director for Projects' },
     photo: portrait('lead-3'),
     bio: {
@@ -90,7 +91,7 @@ export const leaders: Leader[] = [
     },
   },
   {
-    name: 'Kamola Yusupova',
+    name: bir('Kamola Yusupova'),
     role: { uz: 'Ta’lim dasturlari rahbari', ru: 'Руководитель образовательных программ', en: 'Head of Education Programmes' },
     photo: portrait('lead-4'),
     bio: {

@@ -49,7 +49,7 @@ export function EnsembleCard({ ensemble }: { ensemble: Ensemble }) {
           </span>
         </div>
         <p className="mt-2 text-xs font-medium text-navy/70">
-          {t('conductor')}: {ensemble.conductor}
+          {t('conductor')}: {pick(ensemble.conductor, locale)}
         </p>
       </div>
     </Link>

@@ -32,7 +32,7 @@ function moslash(c: Qator): Competition {
       title: loc(s.title),
       description: loc(s.description),
     })),
-    jury: c.jury.map((j) => ({ name: j.name, country: loc(j.country), title: loc(j.title) })),
+    jury: c.jury.map((j) => ({ name: loc(j.name), country: loc(j.country), title: loc(j.title) })),
   };
 }
 
