@@ -2,20 +2,29 @@
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
+import { ArrowRight } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { pick, flagEmoji } from '@/lib/utils';
 import type { Expert } from '@/types';
 
-export function ExpertCard({ expert }: { expert: Expert }) {
+/**
+ * Ekspert kartochkasi.
+ *
+ * `ochish` berilgan bo'lsa kartochka bosiladigan tugmaga aylanadi va to'liq
+ * biografiya oynasini ochadi — bu yerda matn uch qator bilan cheklangan,
+ * chunki aks holda kartochkalar turli balandlikda chiqardi.
+ */
+export function ExpertCard({ expert, ochish }: { expert: Expert; ochish?: () => void }) {
   const locale = useLocale();
   const t = useTranslations('Experts');
+  const tc = useTranslations('Common');
   const hamkorlik = expert.cooperation ? pick(expert.cooperation, locale) : '';
 
-  return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
+  const ichi = (
+    <>
       <div className="relative aspect-[4/5] overflow-hidden">
         <Image
-          src={expert.photo}
+          src={expert.photo || '/hero.png'}
           alt={pick(expert.name, locale)}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
@@ -50,7 +59,30 @@ export function ExpertCard({ expert }: { expert: Expert }) {
             {hamkorlik}
           </p>
         )}
+
+        {ochish && (
+          <span className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-navy">
+            {tc('readMore')}
+            <ArrowRight className="h-4 w-4 text-gold transition-transform group-hover:translate-x-1" />
+          </span>
+        )}
       </div>
-    </article>
+    </>
+  );
+
+  const uslub =
+    'group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg';
+
+  if (!ochish) return <article className={uslub}>{ichi}</article>;
+
+  return (
+    <button
+      type="button"
+      onClick={ochish}
+      aria-haspopup="dialog"
+      className={`${uslub} w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-navy/30`}
+    >
+      {ichi}
+    </button>
   );
 }
