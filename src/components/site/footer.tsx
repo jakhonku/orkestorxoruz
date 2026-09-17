@@ -57,7 +57,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
         <div className="grid gap-12 py-16 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
           <div>
             <div className="[&_span]:text-white">
-              <Logo light />
+              <Logo light nom={settings.shortName} ostidagi={settings.logoSubline} />
             </div>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/60">{t('tagline')}</p>
             <ul className="mt-6 space-y-2.5 text-sm text-white/70">

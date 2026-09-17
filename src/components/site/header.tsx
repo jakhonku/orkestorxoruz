@@ -7,6 +7,7 @@ import { ChevronDown, Menu, Search, X } from 'lucide-react';
 import { Link, usePathname } from '@/i18n/navigation';
 import { DINAMIK_MENYU_KALITI, NAV_ITEMS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
+import type { Localized } from '@/types';
 import { Logo } from './logo';
 import { LocaleSwitcher } from './locale-switcher';
 import { SearchDialog } from './search-dialog';
@@ -17,7 +18,16 @@ export type DinamikHavola = { href: string; label: string };
 /** Menyudagi ichki havola: tarjima kaliti bo'yicha yoki tayyor sarlavha bilan */
 type Ichki = { href: string; key?: string; label?: string };
 
-export function Header({ dinamikHavolalar = [] }: { dinamikHavolalar?: DinamikHavola[] }) {
+export function Header({
+  dinamikHavolalar = [],
+  logoNomi,
+  logoOstidagi,
+}: {
+  dinamikHavolalar?: DinamikHavola[];
+  /** "Sayt sozlamalari" dagi qisqa nom va uning ostidagi yozuv */
+  logoNomi?: Localized;
+  logoOstidagi?: Localized;
+}) {
   const t = useTranslations('Nav');
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -59,7 +69,7 @@ export function Header({ dinamikHavolalar = [] }: { dinamikHavolalar?: DinamikHa
       )}
     >
       <div className="container flex h-20 items-center justify-between gap-2">
-        <Logo light />
+        <Logo light nom={logoNomi} ostidagi={logoOstidagi} />
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-0 lg:flex">

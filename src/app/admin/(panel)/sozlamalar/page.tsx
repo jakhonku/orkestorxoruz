@@ -11,6 +11,7 @@ export default async function SozlamalarSahifasi() {
   const boshlangich: Qiymatlar = {
     siteName: s.name,
     siteShortName: s.shortName,
+    logoSubline: s.logoSubline,
     slogan: s.slogan,
     missionText: s.missionText,
     missionImage: s.missionImage,

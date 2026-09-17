@@ -28,6 +28,12 @@ export const SITE = {
     ru: 'Оркестр и Хор',
     en: 'Orchestra & Choir',
   } as Localized,
+  /** Logotip yonidagi nom ostidagi mayda yozuv */
+  logoSubline: {
+    uz: 'Ijodiy birlashma',
+    ru: 'Творческое объединение',
+    en: 'Creative Union',
+  } as Localized,
   slogan: {
     uz: 'Milliy akademik musiqa madaniyati uchun',
     ru: 'За национальную академическую музыкальную культуру',

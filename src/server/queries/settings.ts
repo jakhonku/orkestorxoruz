@@ -9,6 +9,8 @@ import { SITE, SOCIALS } from '@/lib/constants';
 export type SiteSettings = {
   name: Localized;
   shortName: Localized;
+  /** Logotip yonidagi nom ostidagi mayda yozuv */
+  logoSubline: Localized;
   slogan: Localized;
   address: Localized;
   phone: string;
@@ -41,6 +43,7 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
   return {
     name: olish('siteName', SITE.name),
     shortName: olish('siteShortName', SITE.shortName),
+    logoSubline: olish('logoSubline', SITE.logoSubline),
     slogan: olish('slogan', SITE.slogan),
     address: olish('address', SITE.address),
     phone: olish('phone', SITE.phone),

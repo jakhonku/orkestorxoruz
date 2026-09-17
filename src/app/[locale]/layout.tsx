@@ -108,7 +108,11 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${playfair.variable} ${manrope.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <NextIntlClientProvider messages={messages}>
-          <Header dinamikHavolalar={xalqaroHavolalar} />
+          <Header
+            dinamikHavolalar={xalqaroHavolalar}
+            logoNomi={settings.shortName}
+            logoOstidagi={settings.logoSubline}
+          />
           <main className="flex-1">{children}</main>
           <Footer settings={settings} />
         </NextIntlClientProvider>
