@@ -62,9 +62,19 @@ export function Shakl({
   );
   const [kutilmoqda, boshla] = useTransition();
 
+  /**
+   * Maydon qiymatini o'zgartirish.
+   *
+   * `qiymat` funksiya bo'lishi ham mumkin — u holda maydonning ENG OXIRGI
+   * qiymatidan hisoblanadi. Bu rasm yuklash kabi uzoq davom etadigan ishlar
+   * uchun kerak: yuklash tugaganda oradagi boshqa o'zgarishlar yo'qolmaydi.
+   */
   const ozgartir = (nom: string, qiymat: unknown) => {
     setSaqlandi(false);
-    setQiymatlar((eski) => ({ ...eski, [nom]: qiymat }));
+    setQiymatlar((eski) => ({
+      ...eski,
+      [nom]: typeof qiymat === 'function' ? (qiymat as (e: unknown) => unknown)(eski[nom]) : qiymat,
+    }));
   };
 
   function saqla() {

@@ -59,7 +59,12 @@ export function SozlamalarShakli({
               qiymat={qiymatlar[m.nom]}
               ozgartir={(v) => {
                 setSaqlandi(false);
-                setQiymatlar((eski) => ({ ...eski, [m.nom]: v }));
+                // `v` funksiya bo'lsa — maydonning eng oxirgi qiymatidan
+                // hisoblanadi (rasm yuklash kabi uzoq ishlar uchun kerak)
+                setQiymatlar((eski) => ({
+                  ...eski,
+                  [m.nom]: typeof v === 'function' ? (v as (e: unknown) => unknown)(eski[m.nom]) : v,
+                }));
               }}
             />
           </div>

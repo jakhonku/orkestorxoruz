@@ -9,6 +9,7 @@ import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
 import { boshQiymat, type Maydon, type Qiymatlar } from './turlar';
+import { qatorlarTekshir, qatorlarniTozala } from './qatorlar';
 
 /**
  * Bo'limlar uchun umumiy saqlash / o'chirish amallari.
@@ -138,6 +139,10 @@ function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
 
     if (!String(v ?? '').trim()) return `"${m.yorliq}" to‘ldirilishi shart.`;
   }
+
+  const qatorXatosi = qatorlarTekshir(maydonlar, qiymatlar);
+  if (qatorXatosi) return qatorXatosi;
+
   return uzunlikTekshir(maydonlar, qiymatlar);
 }
 
@@ -217,7 +222,8 @@ export async function yozuvSaqlash(
       const bogliq = bolim.bogliqlar?.[m.nom];
       if (!bogliq) continue;
 
-      const xom = (qiymatlar[m.nom] as Record<string, unknown>[]) ?? [];
+      // Bo'sh qatorlar bazaga bormaydi — NOT NULL ustunlar ularni rad etardi
+      const xom = qatorlarniTozala(m, qiymatlar[m.nom]);
       const qatorlar = xom.map((q, i) => {
         const r: Record<string, unknown> = { sortOrder: i };
         for (const im of m.maydonlar ?? []) {

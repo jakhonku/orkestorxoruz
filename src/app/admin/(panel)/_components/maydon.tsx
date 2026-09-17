@@ -623,19 +623,31 @@ function Fayl({
 /* Takrorlanuvchi qatorlar                                             */
 /* ------------------------------------------------------------------ */
 
+/** Takrorlanuvchi jadvaldagi bitta qator */
+type Qator = Record<string, unknown>;
+
 function Qatorlar({
   maydon,
   qatorlar,
   ozgartir,
 }: {
   maydon: Maydon;
-  qatorlar: Record<string, unknown>[];
-  ozgartir: (yangi: Record<string, unknown>[]) => void;
+  qatorlar: Qator[];
+  ozgartir: (yangi: Qator[] | ((eski: Qator[]) => Qator[])) => void;
 }) {
   const ichki = maydon.maydonlar ?? [];
 
+  /**
+   * Qatorni yangilash — ro'yxatning eng oxirgi holatidan hisoblanadi.
+   *
+   * Rasm yuklash bir necha soniya davom etadi. Tugaganda o'sha paytdagi
+   * ro'yxat bilan ishlansa, ikkita rasmni ketma-ket yuklaganda keyingisining
+   * natijasi oldingisini o'chirib yuborardi — galereyaga qo'yilgan rasm
+   * yo'qolib qolardi. Shu sababli yangi qiymat emas, YANGILASH FUNKSIYASI
+   * uzatiladi: u ishlaganda ro'yxat allaqachon yangilangan bo'ladi.
+   */
   const yangilash = (i: number, nom: string, v: unknown) =>
-    ozgartir(qatorlar.map((q, j) => (i === j ? { ...q, [nom]: v } : q)));
+    ozgartir((eski) => eski.map((q, j) => (i === j ? { ...q, [nom]: v } : q)));
 
   const kochirish = (i: number, yon: -1 | 1) => {
     const j = i + yon;
@@ -680,7 +692,7 @@ function Qatorlar({
               </button>
               <button
                 type="button"
-                onClick={() => ozgartir(qatorlar.filter((_, j) => j !== i))}
+                onClick={() => ozgartir((eski) => eski.filter((_, j) => j !== i))}
                 title="O‘chirish"
                 className="rounded p-1 text-muted-foreground transition-colors hover:bg-white hover:text-red-600"
               >
@@ -705,7 +717,7 @@ function Qatorlar({
 
       <button
         type="button"
-        onClick={() => ozgartir([...qatorlar, boshYozuv(ichki)])}
+        onClick={() => ozgartir((eski) => [...eski, boshYozuv(ichki)])}
         className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-navy/25 px-3 py-2 text-xs font-semibold text-navy transition-colors hover:border-gold hover:bg-gold/5"
       >
         <Plus className="h-3.5 w-3.5" />
@@ -716,7 +728,7 @@ function Qatorlar({
         <ExcelYuklash
           maydon={maydon}
           mavjudSoni={qatorlar.length}
-          qoshish={(yangi) => ozgartir([...qatorlar, ...yangi])}
+          qoshish={(yangi) => ozgartir((eski) => [...eski, ...yangi])}
           almashtirish={(yangi) => ozgartir(yangi)}
         />
       )}
