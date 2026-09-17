@@ -22,7 +22,7 @@ export default async function SozlamalarSahifasi() {
     phone: s.phone,
     email: s.email,
     siteUrl: s.url,
-    notifyEmail: s.notifyEmail,
+    telegramChatId: s.telegramChatId,
     mapLat: String(s.mapCoords.lat),
     mapLng: String(s.mapCoords.lng),
     socials: s.socials,

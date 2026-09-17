@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { db } from '@/lib/db';
 import { ensembleTypeToDb, regionToDb } from '@/server/enums';
+import { arizaXabari } from '@/server/xabarnoma/telegram';
 import type { EnsembleType, Region } from '@/types';
 
 /**
@@ -137,6 +138,16 @@ export async function aloqaYuborish(malumot: unknown): Promise<FormaNatija> {
         locale: d.locale,
       },
     });
+
+    // Xabarnoma ariza SAQLANGANDAN keyin yuboriladi va xatosi yutiladi —
+    // Telegram ishlamay qolsa ham odamning xabari yo'qolmaydi
+    await arizaXabari('📨 Yangi aloqa xabari', [
+      { yorliq: 'Ism', qiymat: d.name },
+      { yorliq: 'Email', qiymat: d.email },
+      { yorliq: 'Mavzu', qiymat: d.subject || MAVZU_ZAXIRA[d.locale] },
+      { yorliq: 'Xabar', qiymat: d.message },
+    ]);
+
     return { ok: true };
   } catch {
     return XATO;
@@ -187,6 +198,19 @@ export async function jamoaArizasi(malumot: unknown): Promise<FormaNatija> {
         locale: d.locale,
       },
     });
+
+    await arizaXabari('🎻 Yangi jamoa arizasi', [
+      { yorliq: 'Jamoa', qiymat: d.ensembleName },
+      { yorliq: 'Turi', qiymat: d.type },
+      { yorliq: 'Shahar', qiymat: d.city },
+      { yorliq: 'Rahbar', qiymat: d.conductor },
+      { yorliq: "A'zolar soni", qiymat: d.memberCount },
+      { yorliq: 'Aloqa uchun', qiymat: d.contactName },
+      { yorliq: 'Telefon', qiymat: d.phone },
+      { yorliq: 'Email', qiymat: d.email },
+      { yorliq: 'Izoh', qiymat: d.message },
+    ]);
+
     return { ok: true };
   } catch {
     return XATO;
@@ -237,6 +261,16 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
         locale: d.locale,
       },
     });
+
+    await arizaXabari('🏆 Yangi tanlov arizasi', [
+      { yorliq: 'F.I.SH.', qiymat: d.fullName },
+      { yorliq: 'Jamoa', qiymat: d.ensembleName },
+      { yorliq: 'Yo‘nalish', qiymat: d.category },
+      { yorliq: 'Telefon', qiymat: d.phone },
+      { yorliq: 'Email', qiymat: d.email },
+      { yorliq: 'Izoh', qiymat: d.message },
+    ]);
+
     return { ok: true };
   } catch {
     return XATO;
@@ -278,6 +312,17 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
         locale: d.locale,
       },
     });
+
+    await arizaXabari('⭐ Yangi iste’dod arizasi', [
+      { yorliq: 'F.I.SH.', qiymat: d.fullName },
+      { yorliq: 'Yoshi', qiymat: d.age },
+      { yorliq: 'Cholg‘u', qiymat: d.instrument },
+      { yorliq: 'Telefon', qiymat: d.phone },
+      { yorliq: 'Email', qiymat: d.email },
+      { yorliq: 'Video', qiymat: d.videoUrl },
+      { yorliq: 'O‘zi haqida', qiymat: d.about },
+    ]);
+
     return { ok: true };
   } catch {
     return XATO;

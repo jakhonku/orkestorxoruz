@@ -53,11 +53,14 @@ export const SOZLAMA_MAYDONLARI: Maydon[] = [
   { nom: 'email', yorliq: 'Email', tur: 'matn', yarim: true },
   { nom: 'siteUrl', yorliq: 'Sayt manzili', tur: 'havola', yarim: true },
   {
-    nom: 'notifyEmail',
-    yorliq: 'Xabarnoma emaili',
+    nom: 'telegramChatId',
+    yorliq: 'Telegram chat ID',
     tur: 'matn',
-    yarim: true,
-    izoh: 'Yangi arizalar haqida shu manzilga xabar boradi',
+    uzunlik: 40,
+    izoh:
+      'Yangi ariza kelganda shu chatga xabar boradi. ID ni olish uchun Telegramda ' +
+      '@userinfobot ga yozing (shaxsiy chat) yoki botni guruhga qo‘shib, @RawDataBot ' +
+      'dan guruh ID sini oling — guruh ID si minus bilan boshlanadi.',
   },
   { nom: 'mapLat', yorliq: 'Xarita — kenglik (lat)', tur: 'matn', yarim: true, izoh: 'Masalan: 41.311081' },
   { nom: 'mapLng', yorliq: 'Xarita — uzunlik (lng)', tur: 'matn', yarim: true, izoh: 'Masalan: 69.279737' },

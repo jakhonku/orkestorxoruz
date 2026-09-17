@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { AlertCircle, Check, Loader2, Save } from 'lucide-react';
+import { AlertCircle, Check, Loader2, Save, Send } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import { sozlamalarSaqlash } from '@/server/admin/sozlamalar';
+import { telegramSinov } from '@/server/admin/telegram-sinov';
 import { boshQiymat, type Maydon, type Qiymatlar } from '@/server/admin/turlar';
 import { MaydonKiritish } from '../_components/maydon';
 
@@ -71,6 +72,8 @@ export function SozlamalarShakli({
         ))}
       </div>
 
+      {toplam === 'sayt' && <TelegramSinovi />}
+
       <div className="fixed bottom-0 left-0 right-0 z-30 border-t border-border bg-white/95 backdrop-blur lg:left-72">
         <div className="mx-auto max-w-5xl px-4 py-3 sm:px-6 lg:px-8">
           <button
@@ -90,6 +93,67 @@ export function SozlamalarShakli({
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+/**
+ * Telegram xabarnomasini tekshirish.
+ *
+ * Sozlash uch qismdan iborat — bot tokeni (Vercel'da), chat ID (yuqorida) va
+ * botga /start bosilgani. Qaysi biri yetishmayotganini haqiqiy ariza kelishini
+ * kutmasdan bilib olish uchun shu tugma.
+ */
+function TelegramSinovi() {
+  const [holat, setHolat] = useState<'tinch' | 'yuborilmoqda' | 'yuborildi'>('tinch');
+  const [xato, setXato] = useState<string | null>(null);
+
+  async function sinab() {
+    setXato(null);
+    setHolat('yuborilmoqda');
+    const natija = await telegramSinov();
+    if (natija.ok) {
+      setHolat('yuborildi');
+    } else {
+      setHolat('tinch');
+      setXato(natija.xato);
+    }
+  }
+
+  return (
+    <div className="mt-5 rounded-2xl border border-border bg-white p-5 sm:p-6">
+      <h2 className="text-sm font-semibold text-navy">Telegram xabarnomasi</h2>
+      <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+        Yangi ariza kelganda yuqoridagi chat ID ga xabar boradi. Sozlanganini shu
+        yerda tekshirib ko‘ring — chat ID ni o‘zgartirgan bo‘lsangiz, avval Saqlang.
+      </p>
+
+      <button
+        type="button"
+        onClick={sinab}
+        disabled={holat === 'yuborilmoqda'}
+        className="mt-3 inline-flex items-center gap-1.5 rounded-lg border border-navy/25 px-3 py-2 text-xs font-semibold text-navy transition-colors hover:border-gold hover:bg-gold/5 disabled:opacity-60"
+      >
+        {holat === 'yuborilmoqda' ? (
+          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+        ) : holat === 'yuborildi' ? (
+          <Check className="h-3.5 w-3.5" />
+        ) : (
+          <Send className="h-3.5 w-3.5" />
+        )}
+        {holat === 'yuborilmoqda'
+          ? 'Yuborilmoqda...'
+          : holat === 'yuborildi'
+            ? 'Yuborildi — Telegramni tekshiring'
+            : 'Sinov xabari yuborish'}
+      </button>
+
+      {xato && (
+        <p className="mt-3 flex items-start gap-2 rounded-xl bg-red-50 p-3 text-xs leading-relaxed text-red-700">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          {xato}
+        </p>
+      )}
     </div>
   );
 }
