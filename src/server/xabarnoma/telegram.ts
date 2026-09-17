@@ -31,15 +31,24 @@ const KUTISH_MS = 6000;
  * Shu tartibda qilingani — qabul qiluvchini almashtirish uchun saytni qayta
  * joylash shart emas, admin paneldan o'zgartirilaveradi.
  */
-async function chatId(): Promise<string> {
+async function chatIdlar(): Promise<string[]> {
+  let xom = '';
+
   try {
     const qator = await db.setting.findUnique({ where: { key: 'telegramChatId' } });
-    const qiymat = String(qator?.value ?? '').trim();
-    if (qiymat) return qiymat;
+    xom = String(qator?.value ?? '').trim();
   } catch {
     // Baza javob bermadi — muhit o'zgaruvchisiga tushamiz
   }
-  return (process.env.TELEGRAM_CHAT_ID ?? '').trim();
+
+  if (!xom) xom = (process.env.TELEGRAM_CHAT_ID ?? '').trim();
+
+  // Vergul yoki bo'sh joy bilan ajratilgan bir nechta chat bo'lishi mumkin —
+  // masalan rahbar va kotib bir vaqtda xabar olsin
+  return xom
+    .split(/[,;\s]+/)
+    .map((x) => x.trim())
+    .filter(Boolean);
 }
 
 /** Admin paneldagi arizalar sahifasiga havola */
@@ -56,34 +65,41 @@ export async function telegramYubor(matn: string): Promise<boolean> {
   const token = (process.env.TELEGRAM_BOT_TOKEN ?? '').trim();
   if (!token) return false;
 
-  const chat = await chatId();
-  if (!chat) return false;
+  const chatlar = await chatIdlar();
+  if (chatlar.length === 0) return false;
 
-  try {
-    const javob = await fetch(`${API}/bot${token}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: chat,
-        text: matn,
-        parse_mode: 'HTML',
-        disable_web_page_preview: true,
-      }),
-      signal: AbortSignal.timeout(KUTISH_MS),
-      cache: 'no-store',
-    });
+  /** Bitta chatga yuborish — xatosi shu yerda yutiladi */
+  const bittaga = async (chat: string): Promise<boolean> => {
+    try {
+      const javob = await fetch(`${API}/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: chat,
+          text: matn,
+          parse_mode: 'HTML',
+          disable_web_page_preview: true,
+        }),
+        signal: AbortSignal.timeout(KUTISH_MS),
+        cache: 'no-store',
+      });
 
-    if (!javob.ok) {
-      // Sozlamalar noto'g'ri bo'lsa (token eskirgan, chat topilmadi) —
-      // jurnalga yoziladi, lekin ariza qabul qilinaveradi
-      console.error('Telegram xabar yuborilmadi:', javob.status, await javob.text());
+      if (!javob.ok) {
+        // Sozlamalar noto'g'ri bo'lsa (token eskirgan, chat topilmadi) —
+        // jurnalga yoziladi, lekin ariza qabul qilinaveradi
+        console.error(`Telegram (${chat}) xabarni qabul qilmadi:`, javob.status, await javob.text());
+        return false;
+      }
+      return true;
+    } catch (e) {
+      console.error(`Telegram (${chat}) xabar yuborilmadi:`, e instanceof Error ? e.message : e);
       return false;
     }
-    return true;
-  } catch (e) {
-    console.error('Telegram xabar yuborilmadi:', e instanceof Error ? e.message : e);
-    return false;
-  }
+  };
+
+  // Bir chat ishlamay qolsa ham qolganlariga xabar boradi
+  const natijalar = await Promise.all(chatlar.map(bittaga));
+  return natijalar.some(Boolean);
 }
 
 /** Ariza haqidagi xabarni tayyorlab yuboradi */
