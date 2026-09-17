@@ -30,7 +30,7 @@ export async function generateMetadata({
   return {
     title: pick(ensemble.name, params.locale),
     description: pick(ensemble.shortDescription, params.locale),
-    openGraph: { images: [ensemble.banner] },
+    openGraph: { images: [ensemble.banner || ensemble.logo || '/hero.png'] },
   };
 }
 
@@ -55,7 +55,7 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
       {/* Banner */}
       <section className="relative flex min-h-[420px] w-full flex-col justify-end overflow-hidden bg-navy-950 pt-28 pb-12 md:min-h-[460px] md:pt-36 md:pb-16">
         <Image
-          src={ensemble.banner}
+          src={ensemble.banner || '/hero.png'}
           alt={pick(ensemble.name, locale)}
           fill
           priority
@@ -74,7 +74,19 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
               { label: pick(ensemble.name, locale) },
             ]}
           />
-          <div className="mt-4">
+          <div className="mt-4 flex items-center gap-4">
+            {/* Admin paneldan yuklangan logotip */}
+            {ensemble.logo && (
+              <span className="relative block h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 border-white/80 bg-white shadow-soft md:h-20 md:w-20">
+                <Image
+                  src={ensemble.logo}
+                  alt=""
+                  fill
+                  sizes="80px"
+                  className="object-contain p-1"
+                />
+              </span>
+            )}
             <Badge variant="gold" className="w-fit">
               {t(`type_${ensemble.type}`)}
             </Badge>

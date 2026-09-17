@@ -9,9 +9,12 @@ import { boshQiymat, type Maydon, type Qiymatlar } from '@/server/admin/turlar';
 import { MaydonKiritish } from '../_components/maydon';
 
 export function SozlamalarShakli({
+  toplam,
   maydonlar,
   boshlangich,
 }: {
+  /** Qaysi shakl saqlanayotgani — server maydonlarni shu kalitdan topadi */
+  toplam: string;
   maydonlar: Maydon[];
   boshlangich: Qiymatlar;
 }) {
@@ -29,7 +32,7 @@ export function SozlamalarShakli({
   function saqla() {
     setXato(null);
     boshla(async () => {
-      const natija = await sozlamalarSaqlash(JSON.stringify(qiymatlar));
+      const natija = await sozlamalarSaqlash(toplam, JSON.stringify(qiymatlar));
       if (!natija.ok) {
         setXato(natija.xato);
         return;

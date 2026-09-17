@@ -18,7 +18,10 @@ export interface Leader {
   name: Localized;
   role: Localized;
   photo: string;
+  /** Kartochkadagi qisqacha matn */
   bio: Localized;
+  /** Faqat "Batafsil" oynasida ochiladigan to'liq ma'lumot */
+  fullBio?: Localized;
   /** Unvon / ilmiy daraja */
   honorific?: Localized;
   /** Qabul kunlari */

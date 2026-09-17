@@ -11,6 +11,8 @@
     "projects": "Projects",
     "competitions": "Competitions & Festivals",
     "talent": "Talent Platform",
+    "international": "International",
+    "internationalProjects": "International projects",
     "afisha": "What's On",
     "news": "News",
     "media": "Media",
@@ -278,6 +280,12 @@
     "form_video": "Performance video link",
     "form_about": "About yourself"
   },
+  "Activity": {
+    "title": "Activity",
+    "subtitle": "Key areas of the association",
+    "introTitle": "Our areas",
+    "blocksTitle": "Sections"
+  },
   "Afisha": {
     "title": "What's On",
     "subtitle": "A calendar of concerts and events",
@@ -307,6 +315,16 @@
     "pressKit": "Download press kit",
     "author": "Author",
     "relatedTitle": "More news"
+  },
+  "International": {
+    "title": "International cooperation",
+    "subtitle": "International activity and partners of the association",
+    "pagesTitle": "Sections",
+    "linksTitle": "Useful links",
+    "expertsCard": "Foreign specialists cooperating with the association",
+    "projectsTitle": "International projects",
+    "projectsSubtitle": "Projects of the association at the international level",
+    "projectsCard": "Projects carried out together with foreign organisations"
   },
   "Experts": {
     "title": "International experts",

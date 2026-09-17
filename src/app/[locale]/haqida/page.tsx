@@ -2,11 +2,12 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarClock, Target, FileText, Download } from 'lucide-react';
+import { Target, FileText, Download } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
+import { Rahbariyat } from '@/components/features/rahbariyat';
 import type { DocumentLink, Leader, Localized } from '@/types';
 import { getDocuments, getLeaders } from '@/server/queries/experts';
 import { getAboutTasks } from '@/server/queries/home';
@@ -121,44 +122,7 @@ function AboutContent({
       <section className="section bg-white">
         <div className="container">
           <SectionTitle title={t('leadershipTitle')} />
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {leaders.map((leader, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <div className="group overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all hover:-translate-y-1 hover:shadow-soft-lg">
-                  <div className="relative aspect-[4/5] overflow-hidden">
-                    <Image
-                      src={leader.photo}
-                      alt={pick(leader.name, locale)}
-                      fill
-                      sizes="(max-width: 768px) 100vw, 25vw"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-serif text-lg font-semibold text-navy">{pick(leader.name, locale)}</h3>
-                    <p className="mt-1 text-sm font-medium text-gold-700">
-                      {pick(leader.role, locale)}
-                    </p>
-                    {leader.honorific && pick(leader.honorific, locale) && (
-                      <p className="mt-1.5 text-xs font-medium text-navy/70">
-                        {pick(leader.honorific, locale)}
-                      </p>
-                    )}
-                    <p className="mt-2 text-sm text-muted-foreground">{pick(leader.bio, locale)}</p>
-                    {leader.receptionDay && pick(leader.receptionDay, locale) && (
-                      <p className="mt-3 flex items-start gap-1.5 border-t border-border pt-3 text-xs text-muted-foreground">
-                        <CalendarClock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
-                        <span>
-                          <span className="font-semibold text-navy/80">{t('receptionLabel')}:</span>{' '}
-                          {pick(leader.receptionDay, locale)}
-                        </span>
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Rahbariyat leaders={leaders} />
         </div>
       </section>
 

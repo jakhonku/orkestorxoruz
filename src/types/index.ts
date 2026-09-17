@@ -6,3 +6,4 @@ export * from './event';
 export * from './news';
 export * from './expert';
 export * from './kpi';
+export * from './international';

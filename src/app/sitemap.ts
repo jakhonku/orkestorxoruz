@@ -5,26 +5,31 @@ import { getEnsembleSlugs } from '@/server/queries/ensembles';
 import { getProjectSlugs } from '@/server/queries/projects';
 import { getCompetitionSlugs } from '@/server/queries/competitions';
 import { getNewsSlugs } from '@/server/queries/news';
+import { getInternationalPages } from '@/server/queries/xalqaro';
 
 const staticPaths = [
   '',
   '/haqida',
   '/jamoalar',
+  '/faoliyat',
   '/loyihalar',
   '/tanlovlar',
   '/talent',
   '/afisha',
   '/media',
+  '/xalqaro',
+  '/xalqaro/loyihalar',
   '/ekspertlar',
   '/aloqa',
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [ensembleSlugs, projectSlugs, competitionSlugs, newsSlugs] = await Promise.all([
+  const [ensembleSlugs, projectSlugs, competitionSlugs, newsSlugs, xalqaro] = await Promise.all([
     getEnsembleSlugs(),
     getProjectSlugs(),
     getCompetitionSlugs(),
     getNewsSlugs(),
+    getInternationalPages(),
   ]);
 
   const dynamicPaths = [
@@ -32,6 +37,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...projectSlugs.map((slug) => `/loyihalar/${slug}`),
     ...competitionSlugs.map((slug) => `/tanlovlar/${slug}`),
     ...newsSlugs.map((slug) => `/media/${slug}`),
+    ...xalqaro.map((p) => `/xalqaro/${p.slug}`),
   ];
 
   const all = [...staticPaths, ...dynamicPaths];

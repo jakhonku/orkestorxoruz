@@ -10,6 +10,7 @@ import { pick } from '@/lib/utils';
 import { Header } from '@/components/site/header';
 import { Footer } from '@/components/site/footer';
 import { getSettings } from '@/server/queries/settings';
+import { getInternationalPages } from '@/server/queries/xalqaro';
 
 const playfair = Playfair_Display({
   subsets: ['latin', 'cyrillic'],
@@ -90,13 +91,24 @@ export default async function LocaleLayout({
   if (!routing.locales.includes(locale)) notFound();
 
   setRequestLocale(locale);
-  const [messages, settings] = await Promise.all([getMessages(), getSettings()]);
+  const [messages, settings, xalqaro] = await Promise.all([
+    getMessages(),
+    getSettings(),
+    getInternationalPages(),
+  ]);
+
+  // Admin paneldan qo'shilgan sahifalar "Xalqaro" menyusiga ulanadi.
+  // Sarlavha bazadan kelgani uchun joriy tilga shu yerda o'giriladi.
+  const xalqaroHavolalar = xalqaro.map((p) => ({
+    href: `/xalqaro/${p.slug}`,
+    label: pick(p.title, locale),
+  }));
 
   return (
     <html lang={locale} className={`${playfair.variable} ${manrope.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <NextIntlClientProvider messages={messages}>
-          <Header />
+          <Header dinamikHavolalar={xalqaroHavolalar} />
           <main className="flex-1">{children}</main>
           <Footer settings={settings} />
         </NextIntlClientProvider>

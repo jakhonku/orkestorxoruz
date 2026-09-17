@@ -11,6 +11,8 @@
     "projects": "Loyihalar",
     "competitions": "Tanlov va festivallar",
     "talent": "Talent platformasi",
+    "international": "Xalqaro",
+    "internationalProjects": "Xalqaro loyihalar",
     "afisha": "Afisha",
     "news": "Yangiliklar",
     "media": "Media",
@@ -278,6 +280,12 @@
     "form_video": "Ijro video havolasi",
     "form_about": "O‘zingiz haqingizda"
   },
+  "Activity": {
+    "title": "Faoliyat",
+    "subtitle": "Birlashmaning asosiy yo‘nalishlari",
+    "introTitle": "Yo‘nalishlarimiz",
+    "blocksTitle": "Bo‘limlar"
+  },
   "Afisha": {
     "title": "Afisha",
     "subtitle": "Konsertlar va tadbirlar taqvimi",
@@ -307,6 +315,16 @@
     "pressKit": "Press-kit yuklab olish",
     "author": "Muallif",
     "relatedTitle": "Boshqa yangiliklar"
+  },
+  "International": {
+    "title": "Xalqaro hamkorlik",
+    "subtitle": "Birlashmaning xalqaro faoliyati va hamkorlari",
+    "pagesTitle": "Bo‘limlar",
+    "linksTitle": "Foydali havolalar",
+    "expertsCard": "Birlashma bilan hamkorlik qiluvchi xorijiy mutaxassislar",
+    "projectsTitle": "Xalqaro loyihalar",
+    "projectsSubtitle": "Birlashmaning xalqaro darajadagi loyihalari",
+    "projectsCard": "Xorijiy tashkilotlar bilan birgalikda amalga oshirilayotgan loyihalar"
   },
   "Experts": {
     "title": "Xorijiy ekspertlar",

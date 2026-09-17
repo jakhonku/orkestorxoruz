@@ -31,9 +31,16 @@ export const MENYU: BolimGuruhi[] = [
     nom: 'Birlashma',
     bolimlar: [
       { kalit: 'rahbariyat', nom: 'Rahbariyat', ikonka: 'user-round' },
-      { kalit: 'ekspertlar', nom: 'Ekspertlar', ikonka: 'globe' },
       { kalit: 'hujjatlar', nom: 'Hujjatlar', ikonka: 'file-text' },
       { kalit: 'vazifalar', nom: 'Tashkiliy vazifalar', ikonka: 'list-checks' },
+    ],
+  },
+  {
+    nom: 'Sahifalar',
+    bolimlar: [
+      { kalit: 'faoliyat', nom: 'Faoliyat sahifasi', ikonka: 'layout-dashboard' },
+      { kalit: 'xalqaro', nom: 'Xalqaro sahifalar', ikonka: 'globe' },
+      { kalit: 'ekspertlar', nom: 'Ekspertlar', ikonka: 'user-search' },
     ],
   },
   {

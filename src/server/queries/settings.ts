@@ -20,6 +20,8 @@ export type SiteSettings = {
   missionImage: string;
   /** "Media → Matbuot uchun" bo'limidagi press-kit fayli */
   pressKitUrl: string;
+  /** Bosh sahifadagi "Raqamlarda birlashma" (KPI) bloki ko'rinsinmi */
+  showKpi: boolean;
   mapCoords: { lat: number; lng: number };
   socials: SocialLink[];
   notifyEmail: string;
@@ -52,6 +54,8 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
     missionText: olish('missionText', { uz: '', ru: '', en: '' }),
     missionImage: olish('missionImage', ''),
     pressKitUrl: olish('pressKitUrl', ''),
+    // Kalit hali bazada bo'lmasa — ko'rinadi (eski xatti-harakat saqlanadi)
+    showKpi: s.showKpi === undefined || s.showKpi === null ? true : Boolean(s.showKpi),
     mapCoords: olish('mapCoords', { lat: 41.311081, lng: 69.279737 }),
     socials: olish('socials', SOCIALS),
     notifyEmail: olish('notifyEmail', SITE.email),

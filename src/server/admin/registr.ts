@@ -19,6 +19,12 @@ export type Bolim = {
    * Admin panelda alohida maydon yo‘q — muharrir manzil haqida o‘ylamaydi.
    */
   slugManbasi?: string;
+  /**
+   * Kodda belgilangan manzillar — ular bilan bir xil slug yozilmaydi.
+   * Masalan /xalqaro/loyihalar doimiy sahifa: shu nomli yozuv yaratilsa,
+   * uning sahifasi hech qachon ochilmaydi.
+   */
+  bandSluglar?: string[];
   maydonlar: Maydon[];
   /** Ro'yxatdagi qatorni yasaydi */
   qator: (row: Record<string, any>) => RoyxatQatori;
@@ -146,7 +152,8 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'members',
         yorliq: 'Tarkib',
         tur: 'qatorlar',
-        izoh: '4–8 ta asosiy shaxs',
+        excel: true,
+        izoh: "Bittalab kiritish yoki Excel jadvalni butunlay yuklash — a'zolar soni ko'p bo'lsa ikkinchisi qulay",
         maydonlar: [
           { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
           { nom: 'role', yorliq: 'Lavozimi', tur: 'kopTilli' },
@@ -156,6 +163,7 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'repertoire',
         yorliq: 'Repertuar',
         tur: 'qatorlar',
+        excel: true,
         maydonlar: [
           { nom: 'composer', yorliq: 'Bastakor', tur: 'kopTilli', talab: true },
           { nom: 'work', yorliq: 'Asar nomi', tur: 'kopTilli' },
@@ -536,7 +544,20 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
       { nom: 'role', yorliq: 'Lavozimi', tur: 'kopTilli', talab: true },
       { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm', izoh: 'Vertikal, 600×800' },
-      { nom: 'bio', yorliq: "Qisqacha ma'lumot", tur: 'kopTilliKatta' },
+      {
+        nom: 'bio',
+        yorliq: "Qisqacha ma'lumot",
+        tur: 'kopTilliKatta',
+        izoh: 'Kartochkada chiqadi — 2–3 qator',
+      },
+      {
+        nom: 'fullBio',
+        yorliq: "Batafsil ma'lumot",
+        tur: 'kopTilliKatta',
+        izoh:
+          'Rahbar ustiga bosilganda ochiladigan oynada chiqadi: tarjimai hol, ' +
+          'mehnat faoliyati, yutuqlar. Bo‘sh qator yangi abzatsni boshlaydi',
+      },
       { nom: 'honorific', yorliq: 'Unvon / daraja', tur: 'kopTilli', qoshimcha: true },
       { nom: 'receptionDay', yorliq: 'Qabul kunlari', tur: 'kopTilli', qoshimcha: true },
       tartib,
@@ -722,6 +743,58 @@ export const BOLIMLAR: Bolim[] = [
         tur: 'matn',
         uzunlik: 200,
         izoh: 'Faqat ichki foydalanish uchun — saytda chiqmaydi',
+      },
+      tartib,
+      nashr,
+    ],
+  },
+
+  // ============ XALQARO SAHIFALAR ============
+  {
+    kalit: 'xalqaro',
+    nom: 'Xalqaro sahifalar',
+    birlik: 'sahifa',
+    model: 'internationalPage',
+    slugManbasi: 'title',
+    bandSluglar: ['loyihalar'],
+    bogliqlar: { links: 'links' },
+    saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
+    izoh:
+      'Menyudagi «Xalqaro» ro‘yxatiga va /xalqaro sahifasiga avtomatik chiqadi. ' +
+      'Yangi sahifa qo‘shish uchun kod o‘zgartirish shart emas.',
+    qator: (r) => ({
+      id: r.id,
+      sarlavha: uz(r.title),
+      tavsif: `/xalqaro/${r.slug}`,
+      ochiqmi: r.published,
+      rasm: r.coverUrl,
+    }),
+    maydonlar: [
+      { nom: 'title', yorliq: 'Sahifa nomi', tur: 'kopTilli', talab: true },
+      {
+        nom: 'summary',
+        yorliq: 'Qisqa tavsif',
+        tur: 'kopTilliKatta',
+        talab: true,
+        izoh: 'Bannerda sarlavha ostida va /xalqaro ro‘yxatidagi kartochkada chiqadi',
+      },
+      {
+        nom: 'body',
+        yorliq: 'Asosiy matn',
+        tur: 'kopTilliKatta',
+        izoh: 'Bo‘sh qator yangi abzatsni boshlaydi',
+      },
+      { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1600×900' },
+      {
+        nom: 'links',
+        yorliq: 'Foydali havolalar',
+        tur: 'qatorlar',
+        excel: true,
+        izoh: 'Sahifa oxirida ro‘yxat bo‘lib chiqadi — hamkor tashkilotlar, hujjatlar va h.k.',
+        maydonlar: [
+          { nom: 'label', yorliq: 'Havola nomi', tur: 'kopTilli', talab: true },
+          { nom: 'url', yorliq: 'Manzil', tur: 'havola', talab: true },
+        ],
       },
       tartib,
       nashr,

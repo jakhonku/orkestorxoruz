@@ -25,6 +25,7 @@ import {
   Trophy,
   Type,
   UserRound,
+  UserSearch,
   Users,
   Video,
   X,
@@ -55,6 +56,8 @@ const IKONKALAR: Record<string, LucideIcon> = {
   settings: Settings,
   shield: Shield,
   type: Type,
+  'layout-dashboard': LayoutDashboard,
+  'user-search': UserSearch,
 };
 
 export function YonMenyu({

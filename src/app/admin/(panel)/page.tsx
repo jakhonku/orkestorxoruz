@@ -25,12 +25,15 @@ const bolimSanoqlari = unstable_cache(
     const juftlar = await Promise.all(
       BOLIMLAR.map(async (b) => {
         const delegat = (db as unknown as Record<string, Sanovchi>)[b.model];
+        // Hamma bo'limda ham `published` ustuni yo'q (masalan "Sahifa matnlari") —
+        // bunday bo'limda faqat umumiy soni sanaladi.
+        const nashrBor = b.maydonlar.some((m) => m.nom === 'published');
         try {
           const [jami, nashr] = await Promise.all([
             delegat.count(),
-            delegat.count({ where: { published: true } }),
+            nashrBor ? delegat.count({ where: { published: true } }) : Promise.resolve(0),
           ]);
-          return [b.kalit, { jami, nashr }] as const;
+          return [b.kalit, { jami, nashr: nashrBor ? nashr : jami }] as const;
         } catch {
           return [b.kalit, { jami: 0, nashr: 0 }] as const;
         }

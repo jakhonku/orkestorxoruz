@@ -23,6 +23,7 @@ import {
   type KopTilliRoyxat,
   type Maydon,
 } from '@/server/admin/turlar';
+import { ExcelYuklash } from './excel-import';
 import { faylYukla } from '../_lib/yuklash';
 
 export const INPUT =
@@ -710,6 +711,15 @@ function Qatorlar({
         <Plus className="h-3.5 w-3.5" />
         Qator qo‘shish
       </button>
+
+      {maydon.excel && (
+        <ExcelYuklash
+          maydon={maydon}
+          mavjudSoni={qatorlar.length}
+          qoshish={(yangi) => ozgartir([...qatorlar, ...yangi])}
+          almashtirish={(yangi) => ozgartir(yangi)}
+        />
+      )}
     </div>
   );
 }

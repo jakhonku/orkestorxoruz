@@ -13,6 +13,9 @@ export default async function SozlamalarSahifasi() {
     siteShortName: s.shortName,
     slogan: s.slogan,
     missionText: s.missionText,
+    missionImage: s.missionImage,
+    pressKitUrl: s.pressKitUrl,
+    showKpi: s.showKpi,
     address: s.address,
     workingHours: s.workingHours,
     phone: s.phone,
@@ -34,7 +37,7 @@ export default async function SozlamalarSahifasi() {
         </p>
       </div>
 
-      <SozlamalarShakli maydonlar={SOZLAMA_MAYDONLARI} boshlangich={boshlangich} />
+      <SozlamalarShakli toplam="sayt" maydonlar={SOZLAMA_MAYDONLARI} boshlangich={boshlangich} />
     </div>
   );
 }

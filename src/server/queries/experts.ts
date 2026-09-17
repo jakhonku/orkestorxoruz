@@ -47,6 +47,7 @@ export const getLeaders = cache(async (): Promise<Leader[]> => {
     role: loc(l.role),
     photo: l.photoUrl ?? '',
     bio: loc(l.bio),
+    fullBio: locOpt(l.fullBio),
     honorific: locOpt(l.honorific),
     receptionDay: locOpt(l.receptionDay),
   }));

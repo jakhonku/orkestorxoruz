@@ -67,6 +67,13 @@ export type Maydon = {
    * Bazada NULL qabul qilmaydigan ustunlar uchun kerak (masalan `sortOrder`).
    */
   bosh?: string | number;
+  /**
+   * `qatorlar` uchun: shakl ostida "Excel'dan yuklash" va "Namuna fayl"
+   * tugmalari chiqadi — uzun ro'yxatni bittalab qo'lda kiritish shart emas.
+   * Faqat matn/raqamdan iborat jadvallarga qo'yiladi (rasm yoki video
+   * yuklanadigan qatorlarga mos emas).
+   */
+  excel?: boolean;
 };
 
 /** Uch tilli qiymat */

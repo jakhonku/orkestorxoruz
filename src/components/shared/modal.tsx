@@ -9,10 +9,17 @@ interface ModalProps {
   open: boolean;
   onClose: () => void;
   title?: string;
+  /** Oyna kengligi — kengroq mazmun (surat + matn) uchun */
+  kenglik?: 'lg' | '3xl';
   children: ReactNode;
 }
 
-export function Modal({ open, onClose, title, children }: ModalProps) {
+const KENGLIKLAR = {
+  lg: 'max-w-lg',
+  '3xl': 'max-w-3xl',
+} as const;
+
+export function Modal({ open, onClose, title, kenglik = 'lg', children }: ModalProps) {
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
@@ -38,7 +45,7 @@ export function Modal({ open, onClose, title, children }: ModalProps) {
             onClick={onClose}
           />
           <motion.div
-            className="relative z-10 w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-soft-lg"
+            className={`relative z-10 w-full ${KENGLIKLAR[kenglik]} overflow-hidden rounded-2xl bg-white shadow-soft-lg`}
             initial={{ opacity: 0, scale: 0.96, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}

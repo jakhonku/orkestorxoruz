@@ -97,12 +97,14 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
  * (masalan /jamoalar/buxoro-yoshlar-xori) shundan yasaladi. Nom band bo'lsa
  * oxiriga raqam qo'shiladi — "…-2", "…-3".
  */
-async function bosSlug(d: Delegat, manba: string): Promise<string> {
+async function bosSlug(d: Delegat, manba: string, qoshimchaBand: string[] = []): Promise<string> {
   const band = (
     await d.findMany({ select: { slug: true } })
   ).map((r) => String(r.slug));
 
-  return bosSlugTanla(manba, band);
+  // Kodda belgilangan manzillar ham band hisoblanadi: masalan
+  // /xalqaro/loyihalar — unga mos slug yozilsa, sahifa umuman ochilmaydi.
+  return bosSlugTanla(manba, [...band, ...qoshimchaBand]);
 }
 
 /** Slug yasash uchun ishlatiladigan matn: ko'p tilli maydondan o'zbekchasi olinadi */
@@ -237,7 +239,11 @@ export async function yozuvSaqlash(
       // Manzil qismi sarlavhadan avtomatik yasaladi (bir marta, yaratilganda).
       // Tahrirlashda o'zgarmaydi — aks holda tarqatilgan havolalar ishlamay qoladi.
       if (bolim.slugManbasi) {
-        yangiData.slug = await bosSlug(d, slugManbaMatni(qiymatlar[bolim.slugManbasi]));
+        yangiData.slug = await bosSlug(
+          d,
+          slugManbaMatni(qiymatlar[bolim.slugManbasi]),
+          bolim.bandSluglar,
+        );
       }
 
       const yaratilgan = await d.create({

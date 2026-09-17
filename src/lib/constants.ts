@@ -68,27 +68,39 @@ export const REGION_NAMES: Record<Region, Localized> = {
 };
 
 /** Primary navigation — keys map to messages.Nav.* labels */
-export const NAV_ITEMS: { key: string; href: string; children?: { key: string; href: string }[] }[] = [
+export type NavItem = {
+  key: string;
+  href: string;
+  children?: { key: string; href: string }[];
+};
+
+export const NAV_ITEMS: NavItem[] = [
   { key: 'home', href: '/' },
   { key: 'about', href: '/haqida' },
   { key: 'ensembles', href: '/jamoalar' },
   {
     key: 'activity',
-    href: '/loyihalar',
+    href: '/faoliyat',
     children: [
       { key: 'projects', href: '/loyihalar' },
       { key: 'competitions', href: '/tanlovlar' },
       { key: 'talent', href: '/talent' },
     ],
   },
-  { key: 'afisha', href: '/afisha' },
   {
-    key: 'news',
-    href: '/media',
+    // Ichki sahifalari admin paneldan qo'shiladi — ular bu ro'yxatga
+    // `Header` ichida, bazadan olingan holda ulanadi.
+    key: 'international',
+    href: '/xalqaro',
     children: [
-      { key: 'media', href: '/media' },
+      { key: 'internationalProjects', href: '/xalqaro/loyihalar' },
       { key: 'experts', href: '/ekspertlar' },
     ],
   },
+  { key: 'afisha', href: '/afisha' },
+  { key: 'news', href: '/media', children: [{ key: 'media', href: '/media' }] },
   { key: 'contact', href: '/aloqa' },
 ];
+
+/** Admin paneldan qo'shilgan sahifalar shu bo'limning ro'yxatiga ulanadi */
+export const DINAMIK_MENYU_KALITI = 'international';

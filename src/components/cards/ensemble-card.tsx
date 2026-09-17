@@ -20,7 +20,7 @@ export function EnsembleCard({ ensemble }: { ensemble: Ensemble }) {
     >
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image
-          src={ensemble.banner}
+          src={ensemble.banner || '/hero.png'}
           alt={pick(ensemble.name, locale)}
           fill
           sizes="(max-width: 768px) 100vw, 33vw"
@@ -32,6 +32,18 @@ export function EnsembleCard({ ensemble }: { ensemble: Ensemble }) {
         </Badge>
       </div>
       <div className="flex flex-1 flex-col p-6">
+        {/* Logotip bannerning pastki chetiga chiqib turadi */}
+        {ensemble.logo && (
+          <span className="relative -mt-14 mb-3 block h-16 w-16 shrink-0 overflow-hidden rounded-xl border-2 border-white bg-white shadow-soft">
+            <Image
+              src={ensemble.logo}
+              alt=""
+              fill
+              sizes="64px"
+              className="object-contain p-1"
+            />
+          </span>
+        )}
         <h3 className="font-serif text-lg font-semibold leading-snug text-navy transition-colors group-hover:text-navy-600">
           {pick(ensemble.name, locale)}
         </h3>

@@ -38,11 +38,16 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
   return (
     <>
       <Hero slides={heroSlides} />
-      <KpiStats stats={stats} />
+      {/*
+        "Raqamlarda birlashma" bloki ikki shartda chiqadi:
+        sozlamalarda yoqilgan bo'lsa VA kamida bitta ochiq ko'rsatkich bo'lsa.
+        Shu sababli bo'sh sarlavhali blok sahifada osilib qolmaydi.
+      */}
+      {settings.showKpi && stats.length > 0 && <KpiStats stats={stats} />}
       <UpcomingEvents events={events} />
       <Directions />
       <NewsSection articles={articles} />
-      <Partners partners={partners} />
+      {partners.length > 0 && <Partners partners={partners} />}
       <MapSection settings={settings} />
     </>
   );

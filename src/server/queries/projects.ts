@@ -40,6 +40,22 @@ export const getProjects = cache(async (): Promise<Project[]> => {
   return rows.map(moslash);
 });
 
+/**
+ * Faqat xalqaro darajadagi loyihalar — "Xalqaro" bo'limidagi
+ * /xalqaro/loyihalar sahifasi uchun.
+ *
+ * Loyihaning o'zi odatdagidek "Loyihalar" bo'limida tahrirlanadi,
+ * bu yerga "Ko'lami" maydoni «Xalqaro darajada» qo'yilganlari tushadi.
+ */
+export const getInternationalProjects = cache(async (): Promise<Project[]> => {
+  const rows = await db.project.findMany({
+    where: { published: true, scope: 'XALQARO' },
+    include: toliq,
+    orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+  });
+  return rows.map(moslash);
+});
+
 export const getProjectBySlug = cache(async (slug: string): Promise<Project | undefined> => {
   const row = await db.project.findFirst({ where: { slug, published: true }, include: toliq });
   return row ? moslash(row) : undefined;

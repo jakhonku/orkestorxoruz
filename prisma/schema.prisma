@@ -135,11 +135,11 @@ model Ensemble {
 }
 
 model EnsembleMember {
-  id         Int    @id @default(autoincrement())
+  id         Int  @id @default(autoincrement())
   ensembleId Int
   name       Json
   role       Json
-  sortOrder  Int    @default(0)
+  sortOrder  Int  @default(0)
 
   ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
 
@@ -148,11 +148,11 @@ model EnsembleMember {
 }
 
 model RepertoireItem {
-  id         Int    @id @default(autoincrement())
+  id         Int  @id @default(autoincrement())
   ensembleId Int
   composer   Json
   work       Json
-  sortOrder  Int    @default(0)
+  sortOrder  Int  @default(0)
 
   ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
 
@@ -276,12 +276,12 @@ model Competition {
 }
 
 model CompetitionStage {
-  id            Int    @id @default(autoincrement())
+  id            Int  @id @default(autoincrement())
   competitionId Int
   date          Json
   title         Json
   description   Json
-  sortOrder     Int    @default(0)
+  sortOrder     Int  @default(0)
 
   competition Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
 
@@ -421,6 +421,8 @@ model Leader {
   role         Json
   photoUrl     String?  @db.Text
   bio          Json
+  /// Kartochkada emas, faqat batafsil oynada chiqadigan to'liq ma'lumot
+  fullBio      Json?
   honorific    Json?
   receptionDay Json?
   published    Boolean  @default(true)
@@ -612,31 +614,31 @@ model Subscriber {
 // ============================================================
 
 model AdminUser {
-  id           Int       @id @default(autoincrement())
-  email        String    @unique @db.VarChar(160)
+  id          Int       @id @default(autoincrement())
+  email       String    @unique @db.VarChar(160)
   /// Supabase Auth foydalanuvchisi (auth.users.id). Parol Supabase'da saqlanadi.
-  authUserId   String?   @unique @db.Uuid
-  name         String    @db.VarChar(160)
-  role         AdminRole @default(MUHARRIR)
-  active       Boolean   @default(true)
-  lastLoginAt  DateTime?
-  createdAt    DateTime  @default(now())
+  authUserId  String?   @unique @db.Uuid
+  name        String    @db.VarChar(160)
+  role        AdminRole @default(MUHARRIR)
+  active      Boolean   @default(true)
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
 
   @@map("admin_users")
 }
 
 /// Admin panel orqali yuklangan rasm va hujjatlar
 model MediaFile {
-  id         Int      @id @default(autoincrement())
-  url        String   @unique @db.Text
-  filename   String   @db.VarChar(255)
-  mimeType   String   @db.VarChar(100)
-  size       Int
-  width      Int?
-  height     Int?
-  alt        Json?
-  folder     String   @default("umumiy") @db.VarChar(60)
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  url       String   @unique @db.Text
+  filename  String   @db.VarChar(255)
+  mimeType  String   @db.VarChar(100)
+  size      Int
+  width     Int?
+  height    Int?
+  alt       Json?
+  folder    String   @default("umumiy") @db.VarChar(60)
+  createdAt DateTime @default(now())
 
   @@index([folder, createdAt])
   @@map("media_files")
@@ -658,15 +660,55 @@ model FormRateHit {
 /// `messages/{uz,ru,en}.json` dagi standart matn ustidan yoziladi —
 /// qator bo'sh qoldirilsa yoki o'chirilsa, standart matn qaytadi.
 model UiText {
-  id        Int      @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
   /// Nuqtali kalit: "Home.hero.title"
-  key       String   @unique @db.VarChar(160)
+  key       String @unique @db.VarChar(160)
   /// Kalitning birinchi qismi — panelda guruhlash uchun ("Home", "Nav", ...)
-  grp       String   @db.VarChar(60)
+  grp       String @db.VarChar(60)
   /// {"uz": "...", "ru": "...", "en": "..."}
   value     Json
-  sortOrder Int      @default(0)
+  sortOrder Int    @default(0)
 
   @@index([grp, key])
   @@map("ui_texts")
+}
+
+// ============================================================
+// XALQARO BO'LIMI
+// ============================================================
+
+/// "Xalqaro" menyusidagi erkin sahifalar — admin paneldan qo'shiladi va
+/// menyuga o'zi chiqadi. Kod o'zgartirmasdan yangi sahifa ochish uchun.
+model InternationalPage {
+  id        Int      @id @default(autoincrement())
+  slug      String   @unique @db.VarChar(140)
+  title     Json
+  /// Banner ostidagi bir-ikki jumla — ro'yxatdagi kartochkada ham chiqadi
+  summary   Json
+  /// Asosiy matn. Bo'sh qator yangi abzatsni boshlaydi.
+  body      Json?
+  coverUrl  String?  @db.Text
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  links InternationalPageLink[]
+
+  @@index([published, sortOrder])
+  @@map("international_pages")
+}
+
+/// Xalqaro sahifadagi foydali havolalar ro'yxati
+model InternationalPageLink {
+  id        Int    @id @default(autoincrement())
+  pageId    Int
+  label     Json
+  url       String @db.Text
+  sortOrder Int    @default(0)
+
+  page InternationalPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId, sortOrder])
+  @@map("international_page_links")
 }
