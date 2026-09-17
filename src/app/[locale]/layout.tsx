@@ -9,6 +9,7 @@ import { SITE } from '@/lib/constants';
 import { pick } from '@/lib/utils';
 import { Header } from '@/components/site/header';
 import { Footer } from '@/components/site/footer';
+import { HarakatSozlamalari } from '@/components/shared/harakat-sozlamalari';
 import { getSettings } from '@/server/queries/settings';
 import { getInternationalPages } from '@/server/queries/xalqaro';
 
@@ -108,13 +109,15 @@ export default async function LocaleLayout({
     <html lang={locale} className={`${playfair.variable} ${manrope.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <NextIntlClientProvider messages={messages}>
-          <Header
-            dinamikHavolalar={xalqaroHavolalar}
-            logoNomi={settings.shortName}
-            logoOstidagi={settings.logoSubline}
-          />
-          <main className="flex-1">{children}</main>
-          <Footer settings={settings} />
+          <HarakatSozlamalari>
+            <Header
+              dinamikHavolalar={xalqaroHavolalar}
+              logoNomi={settings.shortName}
+              logoOstidagi={settings.logoSubline}
+            />
+            <main className="flex-1">{children}</main>
+            <Footer settings={settings} />
+          </HarakatSozlamalari>
         </NextIntlClientProvider>
       </body>
     </html>

@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X } from 'lucide-react';
 
+import { useSahifaQulfi } from './sahifa-qulfi';
+
 export interface LightboxImage {
   src: string;
   caption?: string;
@@ -21,6 +23,10 @@ interface LightboxProps {
 export function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) {
   const open = index !== null;
 
+  // Qulf faqat ochilish/yopilishga bog'liq — suratdan suratga o'tganda
+  // sahifa orqa fonida scroll qayta-qayta yoqilib-o'chmaydi
+  useSahifaQulfi(open);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
@@ -30,11 +36,7 @@ export function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) 
         onNavigate((index - 1 + images.length) % images.length);
     };
     document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
+    return () => document.removeEventListener('keydown', onKey);
   }, [open, index, images.length, onClose, onNavigate]);
 
   if (typeof document === 'undefined') return null;

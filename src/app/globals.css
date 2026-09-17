@@ -26,8 +26,15 @@
     @apply border-border;
   }
 
-  html {
-    scroll-behavior: smooth;
+  /*
+   * Silliq scroll — faqat tizimda "harakatni kamaytirish" yoqilmagan bo'lsa.
+   * macOS'da bu sozlama yoqilganda smooth scroll trackpad inertsiyasi bilan
+   * to'qnashib, aylantirishda seziladigan to'xtalishlar berardi.
+   */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
   }
 
   body {

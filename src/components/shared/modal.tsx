@@ -5,6 +5,8 @@ import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 
+import { useSahifaQulfi } from './sahifa-qulfi';
+
 interface ModalProps {
   open: boolean;
   onClose: () => void;
@@ -20,15 +22,13 @@ const KENGLIKLAR = {
 } as const;
 
 export function Modal({ open, onClose, title, kenglik = 'lg', children }: ModalProps) {
+  useSahifaQulfi(open);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose();
     document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
+    return () => document.removeEventListener('keydown', onKey);
   }, [open, onClose]);
 
   if (typeof document === 'undefined') return null;

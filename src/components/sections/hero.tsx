@@ -51,16 +51,41 @@ export function Hero({ slides }: { slides: Slide[] }) {
     [index]
   );
 
+  /**
+   * Boshqa varaqqa o'tilganda slayder to'xtaydi.
+   *
+   * Aks holda ko'rinmayotgan sahifada ham har 6 soniyada rasm almashib,
+   * brauzer uni qayta chizib turardi — varaqqa qaytilganda to'planib qolgan
+   * ish bir yo'la bajarilib, seziladigan to'xtalish berardi.
+   */
+  const [korinmayapti, setKorinmayapti] = useState(false);
+  useEffect(() => {
+    const ozgardi = () => setKorinmayapti(document.hidden);
+    ozgardi();
+    document.addEventListener('visibilitychange', ozgardi);
+    return () => document.removeEventListener('visibilitychange', ozgardi);
+  }, []);
+
   // Auto-advance (pauses on hover / focus / drag)
   useEffect(() => {
-    if (paused) return;
+    if (paused || korinmayapti || count < 2) return;
     const id = setInterval(() => go(1), AUTOPLAY_MS);
     return () => clearInterval(id);
-  }, [paused, go, index]);
+  }, [paused, korinmayapti, count, go, index]);
 
   // Keyboard arrows
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      // Maydonga yozayotgan odamning strelkalari slaydni surmasin
+      // (qidiruv oynasi, obuna formasi bosh sahifada ham ochiladi)
+      const nishon = e.target as HTMLElement | null;
+      if (
+        nishon &&
+        (nishon.isContentEditable ||
+          ['INPUT', 'TEXTAREA', 'SELECT'].includes(nishon.tagName))
+      ) {
+        return;
+      }
       if (e.key === 'ArrowLeft') go(-1);
       if (e.key === 'ArrowRight') go(1);
     };
@@ -69,6 +94,8 @@ export function Hero({ slides }: { slides: Slide[] }) {
   }, [go]);
 
   const slide = slides[index];
+  /** Keyingi slayd surati — almashishdan oldin yuklab qo'yiladi */
+  const keyingiRasm = count > 1 ? slides[(index + 1) % count].image || '/hero.png' : null;
 
   // Tor ekranda matn chetdan chiqib ketmasligi uchun siljish masofasi kichikroq
   const shift = 32;
@@ -113,6 +140,24 @@ export function Hero({ slides }: { slides: Slide[] }) {
             />
           </motion.div>
         </AnimatePresence>
+
+        {/*
+          Keyingi slayd surati ko'rinmas holda oldindan yuklanadi.
+          Ilgari har bir almashishda rasm o'sha zahoti yuklanib, dekodlanardi —
+          bu bir lahzalik to'xtalish berardi (ayniqsa Retina ekranlarda, chunki
+          u yerda surat ikki barobar kattaroq o'lchamda olinadi).
+        */}
+        {keyingiRasm && (
+          <Image
+            key={`oldindan-${keyingiRasm}`}
+            src={keyingiRasm}
+            alt=""
+            fill
+            sizes="100vw"
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10 object-cover opacity-0"
+          />
+        )}
 
         {/* Mobil: rasm pastdan navy ga singib ketadi, tepasi sal quyuqlashadi */}
         <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-navy-900/45 md:hidden" />

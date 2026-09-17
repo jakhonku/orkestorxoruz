@@ -35,10 +35,30 @@ export function Header({
   const [searchOpen, setSearchOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
+  /**
+   * Sarlavha foni scroll paytida o'zgaradi.
+   *
+   * Hodisa sekundiga yuzlab marta keladi, shuning uchun ish `requestAnimationFrame`
+   * ichida bir marta bajariladi va holat faqat haqiqatan o'zgarganda yangilanadi.
+   * Tinglovchi `passive` — brauzer aylantirishni kutib turmaydi.
+   */
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 12);
-    onScroll();
-    window.addEventListener('scroll', onScroll);
+    let rejalashtirilgan = false;
+
+    const hisobla = () => {
+      rejalashtirilgan = false;
+      const yangi = window.scrollY > 12;
+      setScrolled((eski) => (eski === yangi ? eski : yangi));
+    };
+
+    const onScroll = () => {
+      if (rejalashtirilgan) return;
+      rejalashtirilgan = true;
+      requestAnimationFrame(hisobla);
+    };
+
+    hisobla();
+    window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
