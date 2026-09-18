@@ -232,7 +232,9 @@
     "locationTitle": "Location",
     "resultsTitle": "Results",
     "galleryTitle": "Gallery",
-    "partnersTitle": "Partner organisations"
+    "partnersTitle": "Partner organisations",
+    "websiteTitle": "Project website",
+    "websiteCta": "Visit the project website"
   },
   "Competitions": {
     "title": "Competitions & Festivals",

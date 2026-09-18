@@ -251,6 +251,16 @@ export const BOLIMLAR: Bolim[] = [
       },
       galereya('Galereya'),
       { nom: 'partnersNote', yorliq: 'Hamkor tashkilotlar', tur: 'kopTilli', qoshimcha: true },
+      {
+        nom: 'websiteUrl',
+        yorliq: 'Loyiha sayti',
+        tur: 'havola',
+        izoh:
+          'Loyihaning o‘z sayti yoki rasmiy sahifasi — masalan https://example.org. ' +
+          'Ayniqsa xalqaro loyihalar uchun. To‘ldirilsa, loyihaning «Batafsil» ' +
+          'sahifasida «Loyiha saytiga o‘tish» tugmasi chiqadi va yangi oynada ' +
+          'o‘sha saytni ochadi. Bo‘sh qoldirilsa tugma ko‘rinmaydi.',
+      },
       tanlangan,
       tartib,
       nashr,

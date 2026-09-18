@@ -202,6 +202,7 @@ model Project {
   shortDescription Json
   description      Json
   partnersNote     Json?
+  websiteUrl       String?       @db.Text
   featured         Boolean       @default(false)
   published        Boolean       @default(true)
   sortOrder        Int           @default(0)

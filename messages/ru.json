@@ -232,7 +232,9 @@
     "locationTitle": "Место",
     "resultsTitle": "Результаты",
     "galleryTitle": "Галерея",
-    "partnersTitle": "Организации-партнёры"
+    "partnersTitle": "Организации-партнёры",
+    "websiteTitle": "Сайт проекта",
+    "websiteCta": "Перейти на сайт проекта"
   },
   "Competitions": {
     "title": "Конкурсы и фестивали",

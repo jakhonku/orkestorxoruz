@@ -21,5 +21,7 @@ export interface Project {
   gallery: GalleryPhoto[];
   /** Hamkor tashkilotlar haqida izoh */
   partnersNote?: Localized;
+  /** Loyihaning o'z sayti — "Batafsil" sahifasidagi tugma shu yerga olib boradi */
+  website?: string;
   featured?: boolean;
 }

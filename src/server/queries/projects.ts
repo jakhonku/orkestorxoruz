@@ -27,6 +27,7 @@ function moslash(p: Qator): Project {
     results: p.results.map((r) => ({ label: loc(r.label), value: r.value })),
     gallery: p.gallery.map((g) => ({ src: g.src, caption: loc(g.caption) })),
     partnersNote: locOpt(p.partnersNote),
+    website: p.websiteUrl ?? undefined,
     featured: p.featured,
   };
 }

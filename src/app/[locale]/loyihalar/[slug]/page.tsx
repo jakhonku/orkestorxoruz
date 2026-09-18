@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, Handshake, MapPin } from 'lucide-react';
+import { CalendarDays, ExternalLink, Globe, Handshake, MapPin } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Reveal } from '@/components/shared/reveal';
@@ -48,6 +48,9 @@ function Detail({ project }: { project: Project }) {
   const t = useTranslations('Projects');
   const tn = useTranslations('Nav');
   const hamkorlar = project.partnersNote ? pick(project.partnersNote, locale) : '';
+
+  /** Tugma ostida ko'rinadigan qisqa manzil: https:// va oxirgi "/" olib tashlanadi */
+  const saytManzili = (project.website ?? '').replace(/^https?:\/\//i, '').replace(/\/+$/, '');
 
   return (
     <>
@@ -129,6 +132,28 @@ function Detail({ project }: { project: Project }) {
                   ))}
                 </div>
               </div>
+
+              {/* Loyihaning o'z sayti — admin panelda to'ldirilgan bo'lsa */}
+              {project.website && (
+                <div className="border-t border-border pt-6">
+                  <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold-700">
+                    <Globe className="h-4 w-4" />
+                    {t('websiteTitle')}
+                  </p>
+                  <a
+                    href={project.website}
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-navy px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-navy-900"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    {t('websiteCta')}
+                  </a>
+                  <p className="mt-2 break-all text-center text-xs text-muted-foreground">
+                    {saytManzili}
+                  </p>
+                </div>
+              )}
             </div>
           </Reveal>
         </div>
