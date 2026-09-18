@@ -11,9 +11,10 @@ import { Badge } from '@/components/ui/badge';
 import { GalleryGrid } from '@/components/features/gallery-grid';
 import { VideoEmbed } from '@/components/features/video-embed';
 import { REGION_NAMES } from '@/lib/constants';
-import { pick } from '@/lib/utils';
+import { cn, pick } from '@/lib/utils';
 import type { Ensemble } from '@/types';
 import { getEnsembleBySlug, getEnsembleSlugs } from '@/server/queries/ensembles';
+import { getSettings } from '@/server/queries/settings';
 
 export async function generateStaticParams() {
   const slugs = await getEnsembleSlugs();
@@ -40,12 +41,36 @@ export default async function EnsembleProfilePage({
   params: { locale: Locale; slug: string };
 }) {
   setRequestLocale(params.locale);
-  const ensemble = await getEnsembleBySlug(params.slug);
+  const [ensemble, sozlamalar] = await Promise.all([
+    getEnsembleBySlug(params.slug),
+    getSettings(),
+  ]);
   if (!ensemble) notFound();
-  return <Profile ensemble={ensemble} />;
+
+  /**
+   * "Tarkib" va "Repertuar" bloklari admin panelda yopib qo'yilishi mumkin
+   * ("Sayt sozlamalari"). Ma'lumot hali yig'ilmagan bo'lsa — sahifada
+   * bo'sh ro'yxat turmaydi. Blok yopilmagan bo'lsa ham, bo'sh jamoada
+   * chizilmaydi.
+   */
+  return (
+    <Profile
+      ensemble={ensemble}
+      tarkibKorinsin={sozlamalar.showEnsembleMembers && ensemble.members.length > 0}
+      repertuarKorinsin={sozlamalar.showEnsembleRepertoire && ensemble.repertoire.length > 0}
+    />
+  );
 }
 
-function Profile({ ensemble }: { ensemble: Ensemble }) {
+function Profile({
+  ensemble,
+  tarkibKorinsin,
+  repertuarKorinsin,
+}: {
+  ensemble: Ensemble;
+  tarkibKorinsin: boolean;
+  repertuarKorinsin: boolean;
+}) {
   const locale = useLocale();
   const t = useTranslations('Ensembles');
   const tn = useTranslations('Nav');
@@ -117,7 +142,9 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
       </section>
 
       <section className="section bg-white">
-        <div className="container grid gap-12 lg:grid-cols-[1.6fr_1fr]">
+        <div
+          className={cn('container grid gap-12', tarkibKorinsin && 'lg:grid-cols-[1.6fr_1fr]')}
+        >
           {/* History */}
           <Reveal>
             <h2 className="font-serif text-2xl font-semibold text-navy">{t('historyTitle')}</h2>
@@ -127,40 +154,52 @@ function Profile({ ensemble }: { ensemble: Ensemble }) {
             </p>
 
             {/* Repertoire */}
-            <h2 className="mt-12 font-serif text-2xl font-semibold text-navy">
-              {t('repertoireTitle')}
-            </h2>
-            <div className="mt-3 h-1 w-16 rounded-full bg-gold" />
-            <ul className="mt-6 space-y-3">
-              {ensemble.repertoire.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 rounded-xl border border-border bg-white p-4 shadow-soft"
-                >
-                  <Music2 className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
-                  <div>
-                    <p className="font-medium text-navy">{pick(item.work, locale)}</p>
-                    <p className="text-sm text-muted-foreground">{pick(item.composer, locale)}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+            {repertuarKorinsin && (
+              <>
+                <h2 className="mt-12 font-serif text-2xl font-semibold text-navy">
+                  {t('repertoireTitle')}
+                </h2>
+                <div className="mt-3 h-1 w-16 rounded-full bg-gold" />
+                <ul className="mt-6 space-y-3">
+                  {ensemble.repertoire.map((item, i) => (
+                    <li
+                      key={i}
+                      className="flex items-start gap-3 rounded-xl border border-border bg-white p-4 shadow-soft"
+                    >
+                      <Music2 className="mt-0.5 h-5 w-5 shrink-0 text-gold" />
+                      <div>
+                        <p className="font-medium text-navy">{pick(item.work, locale)}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {pick(item.composer, locale)}
+                        </p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </Reveal>
 
           {/* Members */}
-          <Reveal delay={0.1}>
-            <div className="rounded-2xl border border-border bg-navy-50/50 p-6">
-              <h2 className="font-serif text-xl font-semibold text-navy">{t('membersTitle')}</h2>
-              <ul className="mt-4 divide-y divide-border">
-                {ensemble.members.map((member, i) => (
-                  <li key={i} className="flex items-center justify-between py-3">
-                    <span className="text-sm font-medium text-navy-900">{pick(member.name, locale)}</span>
-                    <span className="text-xs text-muted-foreground">{pick(member.role, locale)}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </Reveal>
+          {tarkibKorinsin && (
+            <Reveal delay={0.1}>
+              <div className="rounded-2xl border border-border bg-navy-50/50 p-6">
+                <h2 className="font-serif text-xl font-semibold text-navy">{t('membersTitle')}</h2>
+                <ul className="mt-4 divide-y divide-border">
+                  {ensemble.members.map((member, i) => (
+                    <li key={i} className="flex items-center justify-between py-3">
+                      <span className="text-sm font-medium text-navy-900">
+                        {pick(member.name, locale)}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        {pick(member.role, locale)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </Reveal>
+          )}
         </div>
       </section>
 
