@@ -20,6 +20,25 @@ export type XatoKodi = 'tekshiruv' | 'limit' | 'xato' | 'yopiq';
 export type FormaNatija = { ok: true } | { ok: false; kod: XatoKodi };
 
 const XATO: FormaNatija = { ok: false, kod: 'xato' };
+
+/**
+ * Yozuv saqlangandan keyingi xabarnoma.
+ *
+ * Alohida funksiya: xabar ketmasa ham ariza qabul qilingan hisoblanadi.
+ * Nosozlik faqat jurnalga yoziladi — Vercel'dagi "Logs" bo'limida ko'rinadi.
+ */
+async function xabarBer(sarlavha: string, qatorlar: Parameters<typeof arizaXabari>[1]) {
+  try {
+    await arizaXabari(sarlavha, qatorlar);
+  } catch (e) {
+    console.error('Xabarnoma xatosi:', e instanceof Error ? e.message : e);
+  }
+}
+
+/** Saqlashdagi xatoni jurnalga yozadi — sababini keyin ko'rish uchun */
+function xatoniYoz(qayerda: string, e: unknown) {
+  console.error(`${qayerda} — ariza saqlanmadi:`, e instanceof Error ? (e.stack ?? e.message) : e);
+}
 const TEKSHIRUV: FormaNatija = { ok: false, kod: 'tekshiruv' };
 
 // ------------------------------------------------------------------
@@ -142,7 +161,7 @@ export async function aloqaYuborish(malumot: unknown): Promise<FormaNatija> {
 
     // Xabarnoma ariza SAQLANGANDAN keyin yuboriladi va xatosi yutiladi —
     // Telegram ishlamay qolsa ham odamning xabari yo'qolmaydi
-    await arizaXabari('📨 Yangi aloqa xabari', [
+    await xabarBer('📨 Yangi aloqa xabari', [
       { yorliq: 'Ism', qiymat: d.name },
       { yorliq: 'Email', qiymat: d.email },
       { yorliq: 'Mavzu', qiymat: d.subject || MAVZU_ZAXIRA[d.locale] },
@@ -150,7 +169,8 @@ export async function aloqaYuborish(malumot: unknown): Promise<FormaNatija> {
     ]);
 
     return { ok: true };
-  } catch {
+  } catch (e) {
+    xatoniYoz('aloqaYuborish', e);
     return XATO;
   }
 }
@@ -200,7 +220,7 @@ export async function jamoaArizasi(malumot: unknown): Promise<FormaNatija> {
       },
     });
 
-    await arizaXabari('🎻 Yangi jamoa arizasi', [
+    await xabarBer('🎻 Yangi jamoa arizasi', [
       { yorliq: 'Jamoa', qiymat: d.ensembleName },
       { yorliq: 'Turi', qiymat: d.type },
       { yorliq: 'Shahar', qiymat: d.city },
@@ -213,7 +233,8 @@ export async function jamoaArizasi(malumot: unknown): Promise<FormaNatija> {
     ]);
 
     return { ok: true };
-  } catch {
+  } catch (e) {
+    xatoniYoz('jamoaArizasi', e);
     return XATO;
   }
 }
@@ -263,7 +284,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
       },
     });
 
-    await arizaXabari('🏆 Yangi tanlov arizasi', [
+    await xabarBer('🏆 Yangi tanlov arizasi', [
       { yorliq: 'F.I.SH.', qiymat: d.fullName },
       { yorliq: 'Jamoa', qiymat: d.ensembleName },
       { yorliq: 'Yo‘nalish', qiymat: d.category },
@@ -273,7 +294,8 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
     ]);
 
     return { ok: true };
-  } catch {
+  } catch (e) {
+    xatoniYoz('tanlovArizasi', e);
     return XATO;
   }
 }
@@ -320,7 +342,7 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
       },
     });
 
-    await arizaXabari('⭐ Yangi iste’dod arizasi', [
+    await xabarBer('⭐ Yangi iste’dod arizasi', [
       { yorliq: 'F.I.SH.', qiymat: d.fullName },
       { yorliq: 'Yoshi', qiymat: d.age },
       { yorliq: 'Cholg‘u', qiymat: d.instrument },
@@ -331,7 +353,8 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
     ]);
 
     return { ok: true };
-  } catch {
+  } catch (e) {
+    xatoniYoz('talentArizasi', e);
     return XATO;
   }
 }
@@ -356,7 +379,8 @@ export async function obunaQoshish(malumot: unknown): Promise<FormaNatija> {
       update: { active: true, locale: d.locale },
     });
     return { ok: true };
-  } catch {
+  } catch (e) {
+    xatoniYoz('obunaQoshish', e);
     return XATO;
   }
 }

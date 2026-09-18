@@ -102,7 +102,18 @@ export async function telegramYubor(matn: string): Promise<boolean> {
   return natijalar.some(Boolean);
 }
 
-/** Ariza haqidagi xabarni tayyorlab yuboradi */
-export async function arizaXabari(sarlavha: string, qatorlar: Qator[]): Promise<void> {
-  await telegramYubor(xabarMatni(sarlavha, qatorlar, arizalarHavolasi()));
+/**
+ * Ariza haqidagi xabarni tayyorlab yuboradi.
+ *
+ * Butun tanasi `try` ichida: xabarnomadagi hech qanday nosozlik yuqoriga
+ * chiqmaydi. Ariza allaqachon bazaga yozilgan bo'ladi — xabar bormagani
+ * uchun odamga "yuborib bo'lmadi" deyish noto'g'ri bo'lardi.
+ */
+export async function arizaXabari(sarlavha: string, qatorlar: Qator[]): Promise<boolean> {
+  try {
+    return await telegramYubor(xabarMatni(sarlavha, qatorlar, arizalarHavolasi()));
+  } catch (e) {
+    console.error('Telegram xabarnomasi yuborilmadi:', e instanceof Error ? e.message : e);
+    return false;
+  }
 }
