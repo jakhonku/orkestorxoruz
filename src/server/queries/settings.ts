@@ -35,8 +35,8 @@ export type SiteSettings = {
    * Yopiq bo'lsa sahifa 404 qaytaradi va menyudan chiqib turadi.
    */
   talentOpen: boolean;
-  /** Yangi ariza kelganda xabar boradigan Telegram chat ID */
-  telegramChatId: string;
+  /** Yangi ariza kelganda xat boradigan pochta manzil(lar)i */
+  notifyEmail: string;
   mapCoords: { lat: number; lng: number };
   socials: SocialLink[];
 };
@@ -83,7 +83,7 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
         : Boolean(s.showEnsembleRepertoire),
     // Kalit hali bazada bo'lmasa — platforma ochiq deb hisoblanadi
     talentOpen: s.talentOpen === undefined || s.talentOpen === null ? true : Boolean(s.talentOpen),
-    telegramChatId: olish('telegramChatId', process.env.TELEGRAM_CHAT_ID ?? ''),
+    notifyEmail: olish('notifyEmail', process.env.SMTP_USER ?? ''),
     mapCoords: olish('mapCoords', { lat: 41.311081, lng: 69.279737 }),
     socials: olish('socials', SOCIALS),
   };

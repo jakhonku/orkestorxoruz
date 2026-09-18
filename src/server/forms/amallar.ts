@@ -6,7 +6,7 @@ import { z } from 'zod';
 import { db } from '@/lib/db';
 import { getSettings } from '@/server/queries/settings';
 import { ensembleTypeToDb, regionToDb } from '@/server/enums';
-import { arizaXabari } from '@/server/xabarnoma/telegram';
+import { arizaXabari } from '@/server/xabarnoma/pochta';
 import type { EnsembleType, Region } from '@/types';
 
 /**
@@ -22,9 +22,9 @@ export type FormaNatija = { ok: true } | { ok: false; kod: XatoKodi };
 const XATO: FormaNatija = { ok: false, kod: 'xato' };
 
 /**
- * Yozuv saqlangandan keyingi xabarnoma.
+ * Yozuv saqlangandan keyingi pochta xabarnomasi.
  *
- * Alohida funksiya: xabar ketmasa ham ariza qabul qilingan hisoblanadi.
+ * Alohida funksiya: xat ketmasa ham ariza qabul qilingan hisoblanadi.
  * Nosozlik faqat jurnalga yoziladi — Vercel'dagi "Logs" bo'limida ko'rinadi.
  */
 async function xabarBer(sarlavha: string, qatorlar: Parameters<typeof arizaXabari>[1]) {
