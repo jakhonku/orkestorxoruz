@@ -140,6 +140,27 @@ export function Footer({
           </div>
         </div>
       </div>
+
+      {/* Saytni ishlab chiqqan kompaniya */}
+      <div className="relative border-t border-white/10 bg-navy-950/60">
+        <div className="container flex justify-center py-5">
+          <a
+            href="https://gway.uz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2.5 text-xs text-white/40 transition-colors hover:text-white/70"
+          >
+            <span className="tracking-wide">{t('developedBy')}</span>
+            <span className="h-3.5 w-px bg-white/15" />
+            <span className="inline-flex items-center gap-1.5 font-medium text-white/70 transition-colors group-hover:text-gold-300">
+              <span className="flex h-5 w-5 items-center justify-center rounded-md bg-white/10 font-serif text-[11px] font-bold leading-none text-gold transition-colors group-hover:bg-gold group-hover:text-navy-900">
+                G
+              </span>
+              Gway Studio
+            </span>
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }
