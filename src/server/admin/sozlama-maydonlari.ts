@@ -33,6 +33,14 @@ export const SOZLAMA_MAYDONLARI: Maydon[] = [
     izoh: '"Birlashma haqida" sahifasida matn yonida chiqadi. Gorizontal, 900×700',
   },
   {
+    nom: 'aboutHeaderImage',
+    yorliq: '«Birlashma haqida» sahifasi bannerdagi rasm',
+    tur: 'rasm',
+    izoh:
+      'Sahifaning eng tepasidagi to‘q ko‘k bannerda, sarlavhaning o‘ng yonida chiqadi. ' +
+      'Gorizontal, 900×700. Bo‘sh qoldirilsa banner avvalgidek faqat matndan iborat bo‘ladi.',
+  },
+  {
     nom: 'pressKitUrl',
     yorliq: 'Press-kit fayli',
     tur: 'fayl',
@@ -46,6 +54,34 @@ export const SOZLAMA_MAYDONLARI: Maydon[] = [
       'Belgi olib tashlansa blok saytda umuman chiqmaydi. Ko‘rsatkichlarning o‘zi ' +
       '«Raqamlar (KPI)» bo‘limida kiritiladi — u yerda bironta ochiq ko‘rsatkich ' +
       'bo‘lmasa, belgi turgan bo‘lsa ham blok ko‘rinmaydi.',
+  },
+  {
+    nom: 'showEnsembleMembers',
+    yorliq: 'Jamoa sahifasida «Tarkib» bloki ko‘rinsin',
+    tur: 'belgi',
+    izoh:
+      'Jamoaning a’zolari ro‘yxati. Belgi olib tashlansa blok saytda umuman chiqmaydi — ' +
+      'ma’lumot hali yig‘ilmagan bo‘lsa shunday qoldiring. Belgi tursa ham, jamoaga ' +
+      'bironta a’zo kiritilmagan bo‘lsa blok ko‘rinmaydi.',
+  },
+  {
+    nom: 'showEnsembleRepertoire',
+    yorliq: 'Jamoa sahifasida «Repertuar» bloki ko‘rinsin',
+    tur: 'belgi',
+    izoh:
+      'Jamoaning asarlar ro‘yxati. Belgi olib tashlansa blok saytda umuman chiqmaydi. ' +
+      'Belgi tursa ham, repertuar kiritilmagan jamoada blok ko‘rinmaydi.',
+  },
+  {
+    nom: 'talentOpen',
+    yorliq: 'Talent platformasi saytda ko‘rinsin',
+    tur: 'belgi',
+    izoh:
+      'Belgi olib tashlansa «Talent» sahifasi saytda umuman ko‘rinmaydi: menyudan, ' +
+      'footerdan, bosh sahifadagi yo‘nalishlardan va «Faoliyat» kartochkalaridan ' +
+      'chiqib ketadi, manzili to‘g‘ridan-to‘g‘ri terilsa ham sahifa topilmadi deb ' +
+      'javob beradi va ariza qabul qilinmaydi. Oldin kelgan arizalar joyida qoladi. ' +
+      'Shu tugma admin panelning bosh sahifasida ham bor — bir bosishda yopib-ochiladi.',
   },
   { nom: 'address', yorliq: 'Manzil', tur: 'kopTilli' },
   { nom: 'workingHours', yorliq: 'Ish vaqti', tur: 'kopTilli' },

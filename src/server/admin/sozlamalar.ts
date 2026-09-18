@@ -15,6 +15,9 @@ import { SOZLAMA_TOPLAMLARI } from './sozlama-maydonlari';
  * alohida amal yozilgan.
  */
 
+/** Talent platformasi ochiqmi — `settings` jadvalidagi kalit */
+const TALENT_KALITI = 'talentOpen';
+
 /** `mapCoords` bazada bitta obyekt, shaklda esa ikki maydon */
 const KOORDINATA_KALITI = 'mapCoords';
 
@@ -95,6 +98,31 @@ export async function sozlamalarSaqlash(
         }),
       ),
     );
+
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, xato: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/**
+ * Talent platformasini bir bosishda yopish/ochish.
+ *
+ * Xuddi shu kalit ("Sayt sozlamalari" dagi belgi) admin panelning bosh
+ * sahifasidan ham boshqariladi — platformani shoshilinch yopish uchun uzun
+ * shaklni ochib, hamma maydonni qayta saqlash shart bo‘lmasin.
+ */
+export async function talentHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNatija> {
+  try {
+    const sessiya = await joriySessiya();
+    if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+
+    await db.setting.upsert({
+      where: { key: TALENT_KALITI },
+      create: { key: TALENT_KALITI, value: ochiq as never },
+      update: { value: ochiq as never },
+    });
 
     revalidatePath('/', 'layout');
     return { ok: true };

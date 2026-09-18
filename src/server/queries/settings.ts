@@ -20,10 +20,21 @@ export type SiteSettings = {
   missionText: Localized;
   /** "Birlashma haqida" sahifasidagi missiya rasmi */
   missionImage: string;
+  /** "Birlashma haqida" sahifasi bannerida, sarlavha yonida chiqadigan rasm */
+  aboutHeaderImage: string;
   /** "Media → Matbuot uchun" bo'limidagi press-kit fayli */
   pressKitUrl: string;
   /** Bosh sahifadagi "Raqamlarda birlashma" (KPI) bloki ko'rinsinmi */
   showKpi: boolean;
+  /** Jamoa sahifasidagi "Tarkib" bloki ko'rinsinmi */
+  showEnsembleMembers: boolean;
+  /** Jamoa sahifasidagi "Repertuar" bloki ko'rinsinmi */
+  showEnsembleRepertoire: boolean;
+  /**
+   * Talent platformasi ochiqmi (admin panelda yopib-ochiladi).
+   * Yopiq bo'lsa sahifa 404 qaytaradi va menyudan chiqib turadi.
+   */
+  talentOpen: boolean;
   /** Yangi ariza kelganda xabar boradigan Telegram chat ID */
   telegramChatId: string;
   mapCoords: { lat: number; lng: number };
@@ -57,9 +68,21 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
     }),
     missionText: olish('missionText', { uz: '', ru: '', en: '' }),
     missionImage: olish('missionImage', ''),
+    aboutHeaderImage: olish('aboutHeaderImage', ''),
     pressKitUrl: olish('pressKitUrl', ''),
     // Kalit hali bazada bo'lmasa — ko'rinadi (eski xatti-harakat saqlanadi)
     showKpi: s.showKpi === undefined || s.showKpi === null ? true : Boolean(s.showKpi),
+    // Bu bloklar ham — kalit bo'lmasa ko'rinadigan holatda qoladi
+    showEnsembleMembers:
+      s.showEnsembleMembers === undefined || s.showEnsembleMembers === null
+        ? true
+        : Boolean(s.showEnsembleMembers),
+    showEnsembleRepertoire:
+      s.showEnsembleRepertoire === undefined || s.showEnsembleRepertoire === null
+        ? true
+        : Boolean(s.showEnsembleRepertoire),
+    // Kalit hali bazada bo'lmasa — platforma ochiq deb hisoblanadi
+    talentOpen: s.talentOpen === undefined || s.talentOpen === null ? true : Boolean(s.talentOpen),
     telegramChatId: olish('telegramChatId', process.env.TELEGRAM_CHAT_ID ?? ''),
     mapCoords: olish('mapCoords', { lat: 41.311081, lng: 69.279737 }),
     socials: olish('socials', SOCIALS),
