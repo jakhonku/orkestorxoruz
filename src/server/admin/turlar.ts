@@ -32,8 +32,8 @@ export type MaydonTuri =
   | 'youtube'
   /** Instagram post/reel havolasi — bir xil ko'rinishga keltiriladi */
   | 'instagram'
-  /** Bitta maydon: YouTube yoki Instagram havolasi (qaysi biri ekani o'zi aniqlanadi) */
-  | 'videoHavola'
+  /** Bitta maydon: YouTube, Instagram yoki Telegram havolasi (turi o'zi aniqlanadi) */
+  | 'postHavola'
   /** Uch tilli bir qatorli matn */
   | 'kopTilli'
   /** Uch tilli ko'p qatorli matn */

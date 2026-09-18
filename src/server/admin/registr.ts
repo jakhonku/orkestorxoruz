@@ -445,12 +445,13 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1200×800' },
       {
         nom: 'videoUrl',
-        yorliq: 'Video havolasi (YouTube yoki Instagram)',
-        tur: 'videoHavola',
+        yorliq: 'Video yoki post havolasi (YouTube, Instagram, Telegram)',
+        tur: 'postHavola',
         izoh:
-          'To‘liq havolani qo‘ying — masalan https://youtu.be/… yoki ' +
-          'https://www.instagram.com/reel/… . Yangilik sahifasida muqova ostida pleyer ' +
-          'bo‘lib chiqadi: bosilganda o‘sha yerda ochiladi, saytdan chiqib ketilmaydi. ' +
+          'To‘liq havolani qo‘ying — masalan https://youtu.be/… , ' +
+          'https://www.instagram.com/reel/… yoki https://t.me/kanal/123 . ' +
+          'Yangilik sahifasida muqova ostida chiqadi: YouTube va Instagram pleyer bo‘lib ' +
+          'o‘sha yerda ochiladi, Telegram posti esa matni va rasmi bilan to‘liq ko‘rinadi. ' +
           'Bo‘sh qoldirilsa hech narsa ko‘rinmaydi.',
       },
       tanlangan,

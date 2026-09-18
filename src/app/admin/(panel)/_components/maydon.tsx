@@ -16,7 +16,8 @@ import {
 import { cn } from '@/lib/utils';
 import { youtubeIdAjrat } from '@/lib/youtube';
 import { instagramAjrat, instagramUlashishmi } from '@/lib/instagram';
-import { videoManbasi } from '@/lib/video';
+import { postManbaNomi, postManbasi } from '@/lib/post';
+import { telegramYopiqmi } from '@/lib/telegram';
 import {
   TILLAR,
   boshQiymat,
@@ -166,8 +167,8 @@ function Boshqaruv({
     case 'instagram':
       return <InstagramHavola qiymat={matn} ozgartir={ozgartir} />;
 
-    case 'videoHavola':
-      return <VideoHavola qiymat={matn} ozgartir={ozgartir} />;
+    case 'postHavola':
+      return <PostHavola qiymat={matn} ozgartir={ozgartir} />;
 
     case 'kopTilli':
     case 'kopTilliKatta':
@@ -400,6 +401,15 @@ function HavolaHolati({ qiymat, manba }: { qiymat: string; manba: string | null 
     return <p className="mt-1.5 text-xs text-emerald-700">Tanildi: {manba}. Saytda pleyer bo‘lib ochiladi.</p>;
   }
 
+  if (telegramYopiqmi(matn)) {
+    return (
+      <p className="mt-1.5 text-xs text-red-600">
+        Bu yopiq kanal posti — uni saytga o‘rnatib bo‘lmaydi. Ochiq kanaldagi postning
+        havolasini qo‘ying (https://t.me/kanal/123).
+      </p>
+    );
+  }
+
   if (instagramUlashishmi(matn)) {
     return (
       <p className="mt-1.5 text-xs text-red-600">
@@ -441,11 +451,11 @@ function InstagramHavola({
 }
 
 /* ------------------------------------------------------------------ */
-/* Video havolasi: YouTube yoki Instagram                              */
+/* Post havolasi: YouTube, Instagram yoki Telegram                     */
 /* ------------------------------------------------------------------ */
 
-function VideoHavola({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
-  const manba = videoManbasi(qiymat);
+function PostHavola({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
+  const manba = postManbasi(qiymat);
 
   return (
     <div>
@@ -453,19 +463,10 @@ function VideoHavola({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: s
         type="url"
         value={qiymat}
         onChange={(e) => ozgartir(e.target.value)}
-        placeholder="https://youtu.be/… yoki https://www.instagram.com/reel/…"
+        placeholder="https://youtu.be/… , https://www.instagram.com/reel/… yoki https://t.me/kanal/123"
         className={INPUT}
       />
-      <HavolaHolati
-        qiymat={qiymat}
-        manba={
-          manba
-            ? manba.tur === 'youtube'
-              ? `YouTube (${manba.youtubeId})`
-              : 'Instagram'
-            : null
-        }
-      />
+      <HavolaHolati qiymat={qiymat} manba={manba ? postManbaNomi(manba) : null} />
     </div>
   );
 }

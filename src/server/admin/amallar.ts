@@ -7,7 +7,8 @@ import { bosSlugTanla } from '@/lib/slug';
 import { ADMIN_SANOQ } from './keshlar';
 import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
 import { instagramAjrat, instagramKanonik, instagramUlashishmi } from '@/lib/instagram';
-import { videoHavolaKanonik, videoManbasi } from '@/lib/video';
+import { postHavolaKanonik, postManbasi } from '@/lib/post';
+import { telegramYopiqmi } from '@/lib/telegram';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
 import { boshQiymat, type Maydon, type Qiymatlar } from './turlar';
@@ -87,8 +88,8 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       const s = instagramKanonik(String(qiymat ?? ''));
       return s === '' ? bosh() : s;
     }
-    case 'videoHavola': {
-      const s = videoHavolaKanonik(String(qiymat ?? ''));
+    case 'postHavola': {
+      const s = postHavolaKanonik(String(qiymat ?? ''));
       return s === '' ? bosh() : s;
     }
     default:
@@ -185,14 +186,20 @@ function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | nul
       continue;
     }
 
-    if (m.tur === 'videoHavola') {
+    if (m.tur === 'postHavola') {
       const xom = String(qiymatlar[m.nom] ?? '').trim();
       if (!xom) continue;
-      if (!videoManbasi(xom)) {
+      if (telegramYopiqmi(xom)) {
         return (
-          `"${m.yorliq}" — havola tanilmadi. YouTube havolasini ` +
-          `(https://www.youtube.com/watch?v=… yoki https://youtu.be/…) yoki Instagram post/reel ` +
-          `havolasini (https://www.instagram.com/reel/…) qo‘ying.`
+          `"${m.yorliq}" — yopiq kanal postini saytga o‘rnatib bo‘lmaydi. ` +
+          `Ochiq kanaldagi postning havolasini qo‘ying (https://t.me/kanal/123).`
+        );
+      }
+      if (!postManbasi(xom)) {
+        return (
+          `"${m.yorliq}" — havola tanilmadi. YouTube (https://youtu.be/…), ` +
+          `Instagram post/reel (https://www.instagram.com/reel/…) yoki Telegram post ` +
+          `(https://t.me/kanal/123) havolasini qo‘ying.`
         );
       }
       continue;
@@ -258,7 +265,7 @@ async function ulashishHavolasiniYech(havola: string): Promise<string | null> {
 /** Shakldagi "ulashish" havolalarini haqiqiy havolaga almashtiradi */
 async function ulashishHavolalariniTuzat(maydonlar: Maydon[], qiymatlar: Qiymatlar) {
   for (const m of maydonlar) {
-    if (m.tur !== 'instagram' && m.tur !== 'videoHavola') continue;
+    if (m.tur !== 'instagram' && m.tur !== 'postHavola') continue;
 
     const xom = String(qiymatlar[m.nom] ?? '').trim();
     if (!xom || !instagramUlashishmi(xom)) continue;

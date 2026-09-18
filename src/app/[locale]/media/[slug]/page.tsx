@@ -9,9 +9,9 @@ import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { NewsCard } from '@/components/cards/news-card';
-import { VideoEmbed } from '@/components/features/video-embed';
+import { PostEmbed } from '@/components/features/post-embed';
 import { pick, formatDate } from '@/lib/utils';
-import { videoManbasi } from '@/lib/video';
+import { postManbasi } from '@/lib/post';
 import type { NewsArticle } from '@/types';
 import { getNewsBySlug, getNewsSlugs, getRelatedNews } from '@/server/queries/news';
 
@@ -51,8 +51,9 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
   const t = useTranslations('Media');
   const tn = useTranslations('Nav');
 
-  // Admin panelda qo'yilgan havola YouTube nikimi yoki Instagram niki — shu yerda aniqlanadi
-  const video = videoManbasi(article.video ?? '');
+  // Admin panelda qo'yilgan havola YouTube, Instagram yoki Telegram niki —
+  // qaysi biri ekani shu yerda aniqlanadi
+  const post = postManbasi(article.video ?? '');
 
   return (
     <>
@@ -100,17 +101,21 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
           </Reveal>
         </div>
 
-        {/* Video — admin panelda havola qo'yilgan bo'lsa */}
-        {video && (
+        {/* Video yoki ijtimoiy tarmoq posti — admin panelda havola qo'yilgan bo'lsa */}
+        {post && (
           <div className="container max-w-4xl">
             <Reveal delay={0.15}>
-              {/* Instagram reeli tik turadi — kengligi cheklanadi, aks holda ulkan bo'lib ketadi */}
-              <div className={video.tur === 'instagram' ? 'mx-auto mt-8 max-w-sm' : 'mt-8'}>
-                <VideoEmbed
-                  youtubeId={video.tur === 'youtube' ? video.youtubeId : undefined}
-                  instagramUrl={video.tur === 'instagram' ? video.havola : undefined}
-                  title={pick(article.title, locale)}
-                />
+              {/* Instagram reeli va Telegram posti tik turadi — kengligi cheklanadi */}
+              <div
+                className={
+                  post.tur === 'youtube'
+                    ? 'mt-8'
+                    : post.tur === 'telegram'
+                      ? 'mx-auto mt-8 max-w-xl'
+                      : 'mx-auto mt-8 max-w-md'
+                }
+              >
+                <PostEmbed manba={post} title={pick(article.title, locale)} />
               </div>
             </Reveal>
           </div>
