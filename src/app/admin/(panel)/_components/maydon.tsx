@@ -43,11 +43,18 @@ export function MaydonKiritish({
   maydon,
   qiymat,
   ozgartir,
+  talab,
 }: {
   maydon: Maydon;
   qiymat: unknown;
   ozgartir: (yangi: unknown) => void;
+  /**
+   * Maydon shu topshiriqda majburiymi. Berilmasa — maydon ta'rifidagi
+   * qiymat olinadi. Shartli maydonlar uchun shakl o'zi hisoblab uzatadi.
+   */
+  talab?: boolean;
 }) {
+  const majburiy = talab ?? Boolean(maydon.talab);
   // "Ha / Yo'q" maydoni — yorliq yonida turadi
   if (maydon.tur === 'belgi') {
     return (
@@ -72,7 +79,7 @@ export function MaydonKiritish({
     <div>
       <label className="mb-1.5 flex items-center gap-1.5 text-sm font-medium text-navy">
         {maydon.yorliq}
-        {maydon.talab && <span className="text-red-500">*</span>}
+        {majburiy && <span className="text-red-500">*</span>}
       </label>
 
       <Boshqaruv maydon={maydon} qiymat={qiymat} ozgartir={ozgartir} />

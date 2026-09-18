@@ -48,6 +48,14 @@ export type Maydon = {
   yorliq: string;
   tur: MaydonTuri;
   talab?: boolean;
+  /**
+   * Shu nomdagi maydon to'ldirilgan bo'lsa, joriy maydon majburiy bo'lmaydi.
+   *
+   * Masalan yangilikda ijtimoiy tarmoq havolasi qo'yilgan bo'lsa, sarlavha
+   * va matn shart emas — post o'zi hammasini ko'rsatadi. Havola bo'lmasa,
+   * ular yana majburiy bo'ladi.
+   */
+  ixtiyoriyAgar?: string;
   izoh?: string;
   /** `tanlov` uchun variantlar */
   variantlar?: { qiymat: string; yorliq: string }[];
@@ -133,4 +141,36 @@ export function boshQiymat(m: Maydon): unknown {
 /** Maydonlar ro'yxatiga mos bo'sh yozuv */
 export function boshYozuv(maydonlar: Maydon[]): Qiymatlar {
   return Object.fromEntries(maydonlar.map((m) => [m.nom, boshQiymat(m)]));
+}
+
+/** Maydon qiymati bo'shmi — turiga qarab tekshiriladi */
+export function qiymatBoshmi(m: Maydon, qiymat: unknown): boolean {
+  if (m.tur === 'kopTilli' || m.tur === 'kopTilliKatta') {
+    const v = qiymat as Record<string, unknown> | null;
+    return !TILLAR.some((t) => String(v?.[t.kalit] ?? '').trim() !== '');
+  }
+  if (m.tur === 'kopTilliRoyxat') {
+    const v = qiymat as Record<string, unknown[]> | null;
+    return !TILLAR.some((t) => (v?.[t.kalit] ?? []).some((x) => String(x ?? '').trim() !== ''));
+  }
+  if (m.tur === 'qatorlar') return ((qiymat as unknown[]) ?? []).length === 0;
+  if (m.tur === 'raqam') return qiymat === null || qiymat === undefined || qiymat === '';
+  if (m.tur === 'belgi') return !qiymat;
+  return String(qiymat ?? '').trim() === '';
+}
+
+/**
+ * Maydon shu topshiriqda majburiymi.
+ *
+ * Odatda `talab` yetarli, lekin ba'zi maydonlar shartli: boshqa maydon
+ * to'ldirilgan bo'lsa majburiylik olib tashlanadi (`ixtiyoriyAgar`).
+ */
+export function talabMi(m: Maydon, qiymatlar: Qiymatlar, maydonlar: Maydon[]): boolean {
+  if (!m.talab) return false;
+  if (!m.ixtiyoriyAgar) return true;
+
+  const boshqa = maydonlar.find((x) => x.nom === m.ixtiyoriyAgar);
+  if (!boshqa) return true;
+
+  return qiymatBoshmi(boshqa, qiymatlar[boshqa.nom]);
 }

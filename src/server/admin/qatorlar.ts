@@ -8,21 +8,11 @@
 
 import { instagramAjrat, instagramUlashishmi } from '@/lib/instagram';
 import { postManbasi } from '@/lib/post';
-import { TILLAR, type Maydon, type Qiymatlar } from './turlar';
+import { qiymatBoshmi, type Maydon, type Qiymatlar } from './turlar';
 
-/** Qator ichidagi bitta maydon bo'shmi */
+/** Qator ichidagi bitta maydon bo'shmi — oddiy maydonlar bilan bir xil qoida */
 export function ichkiBoshmi(im: Maydon, qiymat: unknown): boolean {
-  if (im.tur === 'kopTilli' || im.tur === 'kopTilliKatta') {
-    const v = qiymat as Record<string, unknown> | null;
-    return !TILLAR.some((t) => String(v?.[t.kalit] ?? '').trim() !== '');
-  }
-  if (im.tur === 'kopTilliRoyxat') {
-    const v = qiymat as Record<string, unknown[]> | null;
-    return !TILLAR.some((t) => (v?.[t.kalit] ?? []).some((x) => String(x ?? '').trim() !== ''));
-  }
-  if (im.tur === 'raqam') return qiymat === null || qiymat === undefined || qiymat === '';
-  if (im.tur === 'belgi') return !qiymat;
-  return String(qiymat ?? '').trim() === '';
+  return qiymatBoshmi(im, qiymat);
 }
 
 /**

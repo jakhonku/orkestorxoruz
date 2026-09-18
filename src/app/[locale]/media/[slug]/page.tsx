@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
 import { CalendarDays, UserRound } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge';
 import { NewsCard } from '@/components/cards/news-card';
 import { PostEmbed } from '@/components/features/post-embed';
 import { cn, pick, formatDate } from '@/lib/utils';
-import { postManbasi } from '@/lib/post';
+import { postManbasi, postYorligiKaliti } from '@/lib/post';
 import type { NewsArticle } from '@/types';
 import { getNewsBySlug, getNewsSlugs, getRelatedNews } from '@/server/queries/news';
 
@@ -27,8 +27,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const article = await getNewsBySlug(params.slug);
   if (!article) return {};
+
+  const t = await getTranslations({ locale: params.locale, namespace: 'Media' });
+  const yorliq = postYorligiKaliti(article.video);
+  const sarlavha =
+    pick(article.title, params.locale).trim() || t(yorliq ?? `category_${article.category}`);
+
   return {
-    title: pick(article.title, params.locale),
+    title: sarlavha,
     description: pick(article.excerpt, params.locale),
     openGraph: {
       images: article.cover ? [article.cover] : undefined,
@@ -59,6 +65,13 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
   const post = postManbasi(article.video ?? '');
   const muqova = article.cover.trim();
 
+  // Faqat post havolasi qo'yilgan yangilikda sarlavha bo'sh bo'lishi mumkin —
+  // o'rniga manba yozuvi ("Telegram post") ishlatiladi
+  const yorliq = postYorligiKaliti(article.video);
+  const sarlavha =
+    pick(article.title, locale).trim() || t(yorliq ?? `category_${article.category}`);
+  const abzatslar = pick(article.body, locale).filter((band) => band.trim() !== '');
+
   return (
     <>
       <article className="bg-white">
@@ -74,7 +87,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                 crumbs={[
                   { label: tn('home'), href: '/' },
                   { label: tn('media'), href: '/media' },
-                  { label: pick(article.title, locale) },
+                  { label: sarlavha },
                 ]}
               />
               <Reveal>
@@ -82,7 +95,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                   {t(`category_${article.category}`)}
                 </Badge>
                 <h1 className="mt-4 font-serif text-3xl font-semibold leading-tight text-navy md:text-4xl">
-                  {pick(article.title, locale)}
+                  {sarlavha}
                 </h1>
                 <Malumot article={article} />
               </Reveal>
@@ -93,7 +106,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                 <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-soft-lg">
                   <Image
                     src={muqova}
-                    alt={pick(article.title, locale)}
+                    alt={sarlavha}
                     fill
                     priority
                     sizes="(max-width: 896px) 100vw, 896px"
@@ -123,7 +136,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                 crumbs={[
                   { label: tn('home'), href: '/' },
                   { label: tn('media'), href: '/media' },
-                  { label: pick(article.title, locale) },
+                  { label: sarlavha },
                 ]}
               />
               <Reveal>
@@ -131,7 +144,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                   {t(`category_${article.category}`)}
                 </Badge>
                 <h1 className="mt-4 font-serif text-3xl font-semibold leading-tight text-white drop-shadow-sm md:text-4xl">
-                  {pick(article.title, locale)}
+                  {sarlavha}
                 </h1>
                 <Malumot article={article} light />
                 <div className="mt-6 h-1 w-20 rounded-full bg-gold" />
@@ -154,21 +167,26 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                       : 'mx-auto mt-8 max-w-md'
                 }
               >
-                <PostEmbed manba={post} title={pick(article.title, locale)} />
+                <PostEmbed manba={post} title={sarlavha} />
               </div>
             </Reveal>
           </div>
         )}
 
-        <div className="container max-w-3xl py-10">
-          <div className="prose-custom space-y-5">
-            {pick(article.body, locale).map((para, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <p className="text-lg leading-relaxed text-navy-900/80">{para}</p>
-              </Reveal>
-            ))}
+        {abzatslar.length > 0 ? (
+          <div className="container max-w-3xl py-10">
+            <div className="prose-custom space-y-5">
+              {abzatslar.map((para, i) => (
+                <Reveal key={i} delay={i * 0.05}>
+                  <p className="text-lg leading-relaxed text-navy-900/80">{para}</p>
+                </Reveal>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          // Matnsiz yangilik (faqat post): pastda ortiqcha bo'sh joy qolmasin
+          <div className="pb-12" />
+        )}
       </article>
 
       {related.length > 0 && (
@@ -195,6 +213,9 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
 function Malumot({ article, light = false }: { article: NewsArticle; light?: boolean }) {
   const locale = useLocale() as Locale;
   const t = useTranslations('Media');
+  // Muallif ko'rsatilmagan bo'lsa (faqat post havolasi qo'yilgan yangilik)
+  // bo'sh "Muallif:" yozuvi chiqmaydi
+  const muallif = pick(article.author, locale).trim();
 
   return (
     <div
@@ -207,10 +228,12 @@ function Malumot({ article, light = false }: { article: NewsArticle; light?: boo
         <CalendarDays className="h-4 w-4 text-gold" />
         {formatDate(article.date, locale)}
       </span>
-      <span className="flex items-center gap-1.5">
-        <UserRound className="h-4 w-4 text-gold" />
-        {t('author')}: {pick(article.author, locale)}
-      </span>
+      {muallif && (
+        <span className="flex items-center gap-1.5">
+          <UserRound className="h-4 w-4 text-gold" />
+          {t('author')}: {muallif}
+        </span>
+      )}
     </div>
   );
 }

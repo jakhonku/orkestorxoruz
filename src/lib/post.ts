@@ -44,3 +44,14 @@ export function postManbaNomi(manba: PostManba): string {
   if (manba.tur === 'youtube') return `YouTube (${manba.youtubeId})`;
   return manba.tur === 'instagram' ? 'Instagram post' : 'Telegram post';
 }
+
+/**
+ * Sarlavhasiz yangilik uchun zaxira yorliqning tarjima kaliti.
+ *
+ * Muharrir faqat post havolasini qo'ysa, sarlavha bo'sh qoladi — ro'yxatda
+ * va sahifada "Telegram post" kabi yozuv ko'rsatiladi.
+ */
+export function postYorligiKaliti(havola?: string): string | null {
+  const manba = postManbasi(havola ?? '');
+  return manba ? `source_${manba.tur}` : null;
+}

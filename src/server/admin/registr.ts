@@ -436,7 +436,16 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.coverUrl,
     }),
     maydonlar: [
-      { nom: 'title', yorliq: 'Sarlavha', tur: 'kopTilli', talab: true },
+      {
+        nom: 'title',
+        yorliq: 'Sarlavha',
+        tur: 'kopTilli',
+        talab: true,
+        ixtiyoriyAgar: 'videoUrl',
+        izoh:
+          'Pastda post havolasi qo‘yilsa, sarlavha shart emas — saytda postning ' +
+          'o‘zi ko‘rinadi. Yozib qo‘ysangiz, ro‘yxatda va sahifada shu sarlavha chiqadi.',
+      },
       {
         nom: 'category',
         yorliq: 'Turkumi',
@@ -451,13 +460,23 @@ export const BOLIMLAR: Bolim[] = [
       },
       { nom: 'date', yorliq: 'Sanasi', tur: 'sana', talab: true, yarim: true },
       { nom: 'author', yorliq: 'Muallif / manba', tur: 'kopTilli', qoshimcha: true },
-      { nom: 'excerpt', yorliq: 'Qisqa mazmuni', tur: 'kopTilliKatta', talab: true },
+      {
+        nom: 'excerpt',
+        yorliq: 'Qisqa mazmuni',
+        tur: 'kopTilliKatta',
+        talab: true,
+        ixtiyoriyAgar: 'videoUrl',
+        izoh: 'Ro‘yxatdagi kartochkada chiqadi. Post havolasi qo‘yilsa — shart emas',
+      },
       {
         nom: 'body',
         yorliq: "To'liq matn",
         tur: 'kopTilliRoyxat',
         talab: true,
-        izoh: 'Har bir abzats alohida qatorda yoziladi',
+        ixtiyoriyAgar: 'videoUrl',
+        izoh:
+          'Har bir abzats alohida qatorda yoziladi. Post havolasi qo‘yilsa shart ' +
+          'emas — matnni postning o‘zi ko‘rsatadi',
       },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1200×800' },
       {

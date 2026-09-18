@@ -11,7 +11,7 @@ import { postHavolaKanonik, postManbasi } from '@/lib/post';
 import { telegramYopiqmi } from '@/lib/telegram';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
-import { boshQiymat, type Maydon, type Qiymatlar } from './turlar';
+import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from './turlar';
 import { qatorlarTekshir, qatorlarniTozala } from './qatorlar';
 
 /**
@@ -130,7 +130,9 @@ function slugManbaMatni(qiymat: unknown): string {
 /** Majburiy maydonlarni tekshiradi */
 function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
   for (const m of maydonlar) {
-    if (!m.talab) continue;
+    // Ba'zi maydonlar shartli majburiy — masalan yangilikda havola qo'yilgan
+    // bo'lsa sarlavha va matn talab qilinmaydi
+    if (!talabMi(m, qiymatlar, maydonlar)) continue;
     const v = qiymatlar[m.nom];
 
     if (m.tur === 'kopTilli' || m.tur === 'kopTilliKatta') {
@@ -356,11 +358,13 @@ export async function yozuvSaqlash(
       // Manzil qismi sarlavhadan avtomatik yasaladi (bir marta, yaratilganda).
       // Tahrirlashda o'zgarmaydi — aks holda tarqatilgan havolalar ishlamay qoladi.
       if (bolim.slugManbasi) {
-        yangiData.slug = await bosSlug(
-          d,
-          slugManbaMatni(qiymatlar[bolim.slugManbasi]),
-          bolim.bandSluglar,
-        );
+        // Sarlavha bo'sh bo'lsa (masalan faqat post havolasi qo'yilgan
+        // yangilik) manzil sana asosida yasaladi: yangilik-2026-09-18
+        const sarlavha = slugManbaMatni(qiymatlar[bolim.slugManbasi]).trim();
+        const sana = String(qiymatlar.date ?? '').slice(0, 10);
+        const manba = sarlavha || (sana ? `${bolim.birlik}-${sana}` : '');
+
+        yangiData.slug = await bosSlug(d, manba, bolim.bandSluglar);
       }
 
       const yaratilgan = await d.create({

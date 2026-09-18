@@ -6,6 +6,7 @@ import { CalendarDays, ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { pick, formatDate } from '@/lib/utils';
+import { postYorligiKaliti } from '@/lib/post';
 import type { NewsArticle } from '@/types';
 import type { Locale } from '@/i18n/routing';
 
@@ -13,6 +14,15 @@ export function NewsCard({ article }: { article: NewsArticle }) {
   const locale = useLocale() as Locale;
   const t = useTranslations('Media');
   const tc = useTranslations('Common');
+
+  /**
+   * Sarlavha yozilmagan bo'lsa (faqat post havolasi qo'yilgan yangilik)
+   * uning o'rniga manba yozuvi chiqadi: "Telegram post", "Video"...
+   */
+  const yorliq = postYorligiKaliti(article.video);
+  const sarlavha = pick(article.title, locale).trim();
+  const korinadiganSarlavha = sarlavha || t(yorliq ?? `category_${article.category}`);
+  const qisqacha = pick(article.excerpt, locale).trim();
 
   return (
     <Link
@@ -23,7 +33,7 @@ export function NewsCard({ article }: { article: NewsArticle }) {
         {article.cover ? (
           <Image
             src={article.cover}
-            alt={pick(article.title, locale)}
+            alt={korinadiganSarlavha}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-105"
@@ -66,12 +76,12 @@ export function NewsCard({ article }: { article: NewsArticle }) {
           {formatDate(article.date, locale)}
         </span>
         <h3 className="font-serif text-lg font-semibold leading-snug text-navy transition-colors group-hover:text-navy-600">
-          {pick(article.title, locale)}
+          {korinadiganSarlavha}
         </h3>
-        <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">
-          {pick(article.excerpt, locale)}
-        </p>
-        <span className="mt-4 flex items-center gap-1.5 text-sm font-semibold text-navy">
+        {qisqacha && (
+          <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">{qisqacha}</p>
+        )}
+        <span className="mt-4 flex flex-1 items-end gap-1.5 text-sm font-semibold text-navy">
           {tc('readMore')}
           <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
         </span>

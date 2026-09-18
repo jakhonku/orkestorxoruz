@@ -16,7 +16,7 @@ import {
 
 import { cn } from '@/lib/utils';
 import { yozuvOchirish, yozuvSaqlash } from '@/server/admin/amallar';
-import { boshQiymat, type Maydon, type Qiymatlar } from '@/server/admin/turlar';
+import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from '@/server/admin/turlar';
 import { MaydonKiritish } from './maydon';
 
 /** Shaklga kerak bo'ladigan bo'lim ma'lumoti (klientga uzatiladigan qismi) */
@@ -247,6 +247,7 @@ function Panel({
           <MaydonKiritish
             maydon={m}
             qiymat={qiymatlar[m.nom]}
+            talab={talabMi(m, qiymatlar, maydonlar)}
             ozgartir={(v) => ozgartir(m.nom, v)}
           />
         </div>
