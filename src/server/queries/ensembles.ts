@@ -34,7 +34,15 @@ function moslash(e: Qator): Ensemble {
     members: e.members.map((m) => ({ name: loc(m.name), role: loc(m.role) })),
     repertoire: e.repertoire.map((r) => ({ composer: loc(r.composer), work: loc(r.work) })),
     gallery: e.gallery.map((g) => ({ src: g.src, caption: loc(g.caption) })),
-    videos: e.videos.map((v) => ({ title: loc(v.title), youtubeId: v.youtubeId })),
+    // Manbasi ko'rsatilmagan video sahifada bo'sh joy bo'lib qolmasin
+    videos: e.videos
+      .filter((v) => v.youtubeId || v.instagramUrl)
+      .map((v) => ({
+        title: loc(v.title),
+        youtubeId: v.youtubeId ?? '',
+        instagramUrl: v.instagramUrl ?? undefined,
+        coverUrl: v.coverUrl ?? undefined,
+      })),
     featured: e.featured,
   };
 }

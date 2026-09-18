@@ -174,17 +174,34 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'videos',
         yorliq: 'Videolar',
         tur: 'qatorlar',
-        izoh: 'YouTube video ID — havoladagi v= dan keyingi qism',
+        izoh:
+          'Har bir qatorda ikkitadan BITTASINI to‘ldiring: YouTube havolasi yoki ' +
+          'Instagram post/reel havolasi.',
         maydonlar: [
           {
             nom: 'youtubeId',
             yorliq: 'YouTube ID',
             tur: 'youtube',
-            talab: true,
+            yarim: true,
             uzunlik: 40,
             izoh: 'To‘liq havolani ham qo‘yish mumkin — ID o‘zi ajratiladi',
           },
+          {
+            nom: 'instagramUrl',
+            yorliq: 'Instagram havolasi',
+            tur: 'instagram',
+            yarim: true,
+            izoh: 'Post yoki reel havolasi — masalan https://www.instagram.com/reel/ABC123/',
+          },
           { nom: 'title', yorliq: 'Video nomi', tur: 'kopTilli' },
+          {
+            nom: 'coverUrl',
+            yorliq: 'Muqova rasmi',
+            tur: 'rasm',
+            izoh:
+              'Instagram videosi uchun. Bo‘sh bo‘lsa Instagram belgisi chiqadi. ' +
+              'YouTube o‘z rasmini oladi',
+          },
         ],
       },
       tanlangan,

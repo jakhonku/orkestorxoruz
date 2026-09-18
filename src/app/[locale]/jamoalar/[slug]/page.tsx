@@ -219,7 +219,12 @@ function Profile({
             <div className="grid gap-6 md:grid-cols-2">
               {ensemble.videos.map((video, i) => (
                 <Reveal key={i} delay={i * 0.1}>
-                  <VideoEmbed youtubeId={video.youtubeId} title={pick(video.title, locale)} />
+                  <VideoEmbed
+                    youtubeId={video.youtubeId}
+                    instagramUrl={video.instagramUrl}
+                    coverUrl={video.coverUrl}
+                    title={pick(video.title, locale)}
+                  />
                   <p className="mt-3 font-medium text-navy">{pick(video.title, locale)}</p>
                 </Reveal>
               ))}

@@ -19,7 +19,12 @@ export interface GalleryPhoto {
 
 export interface VideoRef {
   title: Localized;
+  /** YouTube video ID. Bo'sh bo'lsa — Instagram havolasi ishlatiladi */
   youtubeId: string;
+  /** Instagram post yoki reel havolasi */
+  instagramUrl?: string;
+  /** Muqova rasmi — Instagram uchun (YouTube o'z rasmini oladi) */
+  coverUrl?: string;
 }
 
 export interface Ensemble {

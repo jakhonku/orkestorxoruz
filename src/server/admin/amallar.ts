@@ -262,16 +262,35 @@ async function ulashishHavolasiniYech(havola: string): Promise<string | null> {
   }
 }
 
-/** Shakldagi "ulashish" havolalarini haqiqiy havolaga almashtiradi */
+/** Bitta qiymat "ulashish" havolasi bo'lsa — haqiqiy havolaga almashtiradi */
+async function havolaniTuzat(
+  m: Maydon,
+  idish: Record<string, unknown>,
+): Promise<void> {
+  if (m.tur !== 'instagram' && m.tur !== 'postHavola') return;
+
+  const xom = String(idish[m.nom] ?? '').trim();
+  if (!xom || !instagramUlashishmi(xom)) return;
+
+  const yechilgan = await ulashishHavolasiniYech(xom);
+  if (yechilgan) idish[m.nom] = yechilgan;
+}
+
+/**
+ * Shakldagi "ulashish" havolalarini haqiqiy havolaga almashtiradi —
+ * oddiy maydonlarda ham, takrorlanuvchi qatorlar ichida ham (jamoa videolari).
+ */
 async function ulashishHavolalariniTuzat(maydonlar: Maydon[], qiymatlar: Qiymatlar) {
   for (const m of maydonlar) {
-    if (m.tur !== 'instagram' && m.tur !== 'postHavola') continue;
+    if (m.tur === 'qatorlar') {
+      const qatorlar = (qiymatlar[m.nom] as Record<string, unknown>[]) ?? [];
+      for (const qator of qatorlar) {
+        for (const im of m.maydonlar ?? []) await havolaniTuzat(im, qator);
+      }
+      continue;
+    }
 
-    const xom = String(qiymatlar[m.nom] ?? '').trim();
-    if (!xom || !instagramUlashishmi(xom)) continue;
-
-    const yechilgan = await ulashishHavolasiniYech(xom);
-    if (yechilgan) qiymatlar[m.nom] = yechilgan;
+    await havolaniTuzat(m, qiymatlar as Record<string, unknown>);
   }
 }
 

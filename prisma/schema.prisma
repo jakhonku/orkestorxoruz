@@ -173,12 +173,15 @@ model EnsembleGalleryPhoto {
   @@map("ensemble_gallery")
 }
 
+/// Jamoa sahifasidagi videolar. Manba — YouTube yoki Instagram.
 model EnsembleVideo {
-  id         Int    @id @default(autoincrement())
-  ensembleId Int
-  title      Json
-  youtubeId  String @db.VarChar(40)
-  sortOrder  Int    @default(0)
+  id           Int     @id @default(autoincrement())
+  ensembleId   Int
+  title        Json
+  youtubeId    String? @db.VarChar(40)
+  instagramUrl String? @db.Text
+  coverUrl     String? @db.Text
+  sortOrder    Int     @default(0)
 
   ensemble Ensemble @relation(fields: [ensembleId], references: [id], onDelete: Cascade)
 
