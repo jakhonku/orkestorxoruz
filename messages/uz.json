@@ -317,7 +317,10 @@
     "pressText": "OAV vakillari uchun press-kit, logotiplar va rasmiy materiallar. Akkreditatsiya uchun matbuot xizmatiga murojaat qiling.",
     "pressKit": "Press-kit yuklab olish",
     "author": "Muallif",
-    "relatedTitle": "Boshqa yangiliklar"
+    "relatedTitle": "Boshqa yangiliklar",
+    "pressReleasesTitle": "Press-relizlar",
+    "pressReleaseOpen": "To‘liq matni",
+    "pressReleaseDownload": "Press-relizni yuklab olish"
   },
   "International": {
     "title": "Xalqaro hamkorlik",

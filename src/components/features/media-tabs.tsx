@@ -4,16 +4,18 @@ import { useMemo, useState } from 'react';
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Newspaper, Video, Images, Download, FileText } from 'lucide-react';
+import { Newspaper, Video, Images, Download, FileText, CalendarDays, ArrowRight } from 'lucide-react';
 import { NewsCard } from '@/components/cards/news-card';
 import { VideoEmbed } from '@/components/features/video-embed';
 import { Pagination } from '@/components/shared/pagination';
 import { EmptyState } from '@/components/shared/empty-state';
 import { Lightbox, type LightboxImage } from '@/components/shared/lightbox';
+import { Modal } from '@/components/shared/modal';
 import { Button } from '@/components/ui/button';
 import { Reveal } from '@/components/shared/reveal';
-import { cn, pick } from '@/lib/utils';
-import type { DocumentLink, MediaPhoto, MediaVideo, NewsArticle } from '@/types';
+import { cn, formatDate, pick } from '@/lib/utils';
+import type { DocumentLink, MediaPhoto, MediaVideo, NewsArticle, PressRelease } from '@/types';
+import type { Locale } from '@/i18n/routing';
 
 type Tab = 'news' | 'video' | 'photo' | 'press';
 const PER_PAGE = 6;
@@ -23,12 +25,15 @@ export function MediaTabs({
   videos,
   photos,
   documents,
+  releases,
   pressKitUrl,
 }: {
   news: NewsArticle[];
   videos: MediaVideo[];
   photos: MediaPhoto[];
   documents: DocumentLink[];
+  /** Admin paneldagi "Press-relizlar" bo'limidagi yozuvlar */
+  releases: PressRelease[];
   /** Sozlamalarda yuklangan press-kit fayli. Bo'sh bo'lsa tugma ko'rsatilmaydi */
   pressKitUrl: string;
 }) {
@@ -83,7 +88,9 @@ export function MediaTabs({
           {tab === 'news' && <NewsTab news={news} />}
           {tab === 'video' && <VideoTab videos={videos} />}
           {tab === 'photo' && <PhotoTab photos={photos} />}
-          {tab === 'press' && <PressTab documents={documents} pressKitUrl={pressKitUrl} />}
+          {tab === 'press' && (
+            <PressTab documents={documents} releases={releases} pressKitUrl={pressKitUrl} />
+          )}
         </motion.div>
       </AnimatePresence>
     </div>
@@ -178,13 +185,17 @@ function PhotoTab({ photos }: { photos: MediaPhoto[] }) {
 
 function PressTab({
   documents,
+  releases,
   pressKitUrl,
 }: {
   documents: DocumentLink[];
+  releases: PressRelease[];
   pressKitUrl: string;
 }) {
   const t = useTranslations('Media');
   const locale = useLocale();
+  const [ochiq, setOchiq] = useState<number | null>(null);
+  const tanlangan = ochiq === null ? null : (releases[ochiq] ?? null);
 
   /**
    * Tugma qaysi faylni ochadi:
@@ -212,6 +223,46 @@ function PressTab({
         )}
       </div>
 
+      {/* Press-relizlar — har biri bitta tadbir bo'yicha */}
+      {releases.length > 0 && (
+        <div className="mt-10">
+          <h4 className="mb-4 font-serif text-xl font-semibold text-navy">
+            {t('pressReleasesTitle')}
+          </h4>
+          <div className="space-y-3">
+            {releases.map((reliz, i) => (
+              <button
+                key={reliz.id}
+                type="button"
+                onClick={() => setOchiq(i)}
+                className="group block w-full rounded-xl border border-border bg-white p-5 text-left shadow-soft transition-all hover:border-gold/40 hover:shadow-soft-lg"
+              >
+                <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                  <CalendarDays className="h-3.5 w-3.5 text-gold" />
+                  {formatDate(reliz.date, locale as Locale)}
+                </p>
+                <p className="mt-1.5 font-serif text-lg font-semibold leading-snug text-navy">
+                  {pick(reliz.title, locale)}
+                </p>
+                {reliz.summary && pick(reliz.summary, locale) && (
+                  <p className="mt-1.5 line-clamp-2 text-sm text-muted-foreground">
+                    {pick(reliz.summary, locale)}
+                  </p>
+                )}
+                <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-semibold text-navy">
+                  {t('pressReleaseOpen')}
+                  <ArrowRight className="h-4 w-4 text-gold transition-transform group-hover:translate-x-1" />
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <Modal open={tanlangan !== null} onClose={() => setOchiq(null)} kenglik="3xl">
+        {tanlangan && <RelizMatni reliz={tanlangan} />}
+      </Modal>
+
       <div className="mt-6 space-y-3">
         {documents.map((doc, i) => (
           <a
@@ -230,6 +281,43 @@ function PressTab({
           </a>
         ))}
       </div>
+    </div>
+  );
+}
+
+/** Press-relizning to'liq matni — kartochka bosilganda ochiladigan oyna */
+function RelizMatni({ reliz }: { reliz: PressRelease }) {
+  const t = useTranslations('Media');
+  const locale = useLocale();
+  const abzatslar = pick(reliz.body, locale).filter((band) => band.trim() !== '');
+
+  return (
+    <div>
+      <p className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+        <CalendarDays className="h-3.5 w-3.5 text-gold" />
+        {formatDate(reliz.date, locale as Locale)}
+      </p>
+      <h3 className="mt-2 font-serif text-2xl font-semibold leading-tight text-navy">
+        {pick(reliz.title, locale)}
+      </h3>
+      <div className="mt-4 h-1 w-14 rounded-full bg-gold" />
+
+      <div className="mt-5 space-y-4">
+        {abzatslar.map((band, i) => (
+          <p key={i} className="whitespace-pre-line leading-relaxed text-navy-900/80">
+            {band}
+          </p>
+        ))}
+      </div>
+
+      {reliz.fileUrl && (
+        <Button variant="gold" className="mt-6" asChild>
+          <a href={reliz.fileUrl} target="_blank" rel="noreferrer">
+            <Download className="h-4 w-4" />
+            {t('pressReleaseDownload')}
+          </a>
+        </Button>
+      )}
     </div>
   );
 }

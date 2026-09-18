@@ -3,7 +3,12 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
 import { MediaTabs } from '@/components/features/media-tabs';
-import { getMediaPhotos, getMediaVideos, getNews } from '@/server/queries/news';
+import {
+  getMediaPhotos,
+  getMediaVideos,
+  getNews,
+  getPressReleases,
+} from '@/server/queries/news';
 import { getDocuments } from '@/server/queries/experts';
 import { getSettings } from '@/server/queries/settings';
 
@@ -18,11 +23,12 @@ export async function generateMetadata({
 
 export default async function MediaPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
-  const [news, mediaVideos, mediaPhotos, documents, settings] = await Promise.all([
+  const [news, mediaVideos, mediaPhotos, documents, releases, settings] = await Promise.all([
     getNews(),
     getMediaVideos(),
     getMediaPhotos(),
     getDocuments(),
+    getPressReleases(),
     getSettings(),
   ]);
   const t = await getTranslations({ locale: params.locale, namespace: 'Media' });
@@ -42,6 +48,7 @@ export default async function MediaPage({ params }: { params: { locale: Locale }
             videos={mediaVideos}
             photos={mediaPhotos}
             documents={documents}
+            releases={releases}
             pressKitUrl={settings.pressKitUrl}
           />
         </div>

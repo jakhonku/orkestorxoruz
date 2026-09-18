@@ -6,8 +6,9 @@ import type {
   MediaPhotoModel as FotoQator,
   MediaVideoModel as VideoQator,
   NewsArticleModel as NewsQator,
+  PressReleaseModel as PressQator,
 } from '@/generated/prisma/models';
-import type { MediaPhoto, MediaVideo, NewsArticle } from '@/types';
+import type { MediaPhoto, MediaVideo, NewsArticle, PressRelease } from '@/types';
 import { newsCategoryFromDb, photoRatioFromDb } from '@/server/enums';
 import { isoDate, loc, locList } from '@/server/map';
 
@@ -97,3 +98,25 @@ export async function getNewsSlugs(): Promise<string[]> {
   const rows = await db.newsArticle.findMany({ where: { published: true }, select: { slug: true } });
   return rows.map((r) => r.slug);
 }
+
+/**
+ * "Media → Matbuot uchun" bo'limidagi press-relizlar.
+ *
+ * Matni bo'sh yozuv ro'yxatda ko'rsatilmaydi — bosilganda bo'sh oyna
+ * ochilmasin (fayl bo'lsa, u yetarli deb hisoblanadi).
+ */
+export const getPressReleases = cache(async (): Promise<PressRelease[]> => {
+  const rows = await db.pressRelease.findMany({
+    where: { published: true },
+    orderBy: [{ sortOrder: 'asc' }, { date: 'desc' }],
+  });
+
+  return rows.map((r: PressQator) => ({
+    id: String(r.id),
+    title: loc(r.title),
+    date: isoDate(r.date),
+    summary: r.summary ? loc(r.summary) : undefined,
+    body: locList(r.body),
+    fileUrl: r.fileUrl ?? undefined,
+  }));
+});

@@ -317,7 +317,10 @@
     "pressText": "Press kit, logos and official materials for media representatives. For accreditation, contact the press office.",
     "pressKit": "Download press kit",
     "author": "Author",
-    "relatedTitle": "More news"
+    "relatedTitle": "More news",
+    "pressReleasesTitle": "Press releases",
+    "pressReleaseOpen": "Read the full text",
+    "pressReleaseDownload": "Download the press release"
   },
   "International": {
     "title": "International cooperation",

@@ -31,6 +31,20 @@ export interface MediaVideo {
   date: string;
 }
 
+/** "Matbuot uchun" bo'limidagi press-reliz — bitta tadbir bo'yicha */
+export interface PressRelease {
+  id: string;
+  /** Tadbir nomi */
+  title: Localized;
+  date: string;
+  /** Kartochkada ko'rinadigan qisqa mazmuni */
+  summary?: Localized;
+  /** To'liq matn — har bir band alohida abzats */
+  body: Localized<string[]>;
+  /** Yuklab olish uchun fayl (PDF, Word). Bo'sh bo'lsa tugma chiqmaydi */
+  fileUrl?: string;
+}
+
 export interface MediaPhoto {
   id: string;
   src: string;

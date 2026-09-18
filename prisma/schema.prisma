@@ -437,6 +437,25 @@ model Leader {
   @@map("leaders")
 }
 
+/// "Media → Matbuot uchun" bo'limidagi press-relizlar.
+/// Har bir yozuv bitta tadbirga tegishli: tadbir nomi, sanasi va matni.
+model PressRelease {
+  id        Int      @id @default(autoincrement())
+  title     Json
+  date      DateTime @db.Date
+  summary   Json?
+  /// {"uz": ["1-abzats", "2-abzats"], "ru": [...], "en": [...]}
+  body      Json
+  fileUrl   String?  @db.Text
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, date])
+  @@map("press_releases")
+}
+
 model DocumentLink {
   id        Int     @id @default(autoincrement())
   title     Json

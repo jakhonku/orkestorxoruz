@@ -630,6 +630,52 @@ export const BOLIMLAR: Bolim[] = [
     ],
   },
 
+  // ============ PRESS-RELIZLAR ============
+  {
+    kalit: 'press',
+    nom: 'Press-relizlar',
+    birlik: 'press-reliz',
+    model: 'pressRelease',
+    saralash: [{ sortOrder: 'asc' }, { date: 'desc' }],
+    izoh:
+      'Saytdagi «Media → Matbuot uchun» bo‘limida chiqadi. Har bir yozuv bitta ' +
+      'tadbirga tegishli: tadbir nomi, sanasi va press-reliz matni. Kartochka ' +
+      'bosilganda to‘liq matn oynada ochiladi, fayl yuklangan bo‘lsa yuklab olish ' +
+      'tugmasi ham chiqadi.',
+    qator: (r) => ({
+      id: r.id,
+      sarlavha: uz(r.title),
+      tavsif: new Date(r.date).toISOString().slice(0, 10),
+      belgi: r.fileUrl ? 'Fayl bor' : undefined,
+      ochiqmi: r.published,
+    }),
+    maydonlar: [
+      { nom: 'title', yorliq: 'Tadbir nomi', tur: 'kopTilli', talab: true },
+      { nom: 'date', yorliq: 'Sanasi', tur: 'sana', talab: true, yarim: true },
+      {
+        nom: 'summary',
+        yorliq: 'Qisqa mazmuni',
+        tur: 'kopTilliKatta',
+        izoh: 'Ro‘yxatdagi kartochkada chiqadi — 1-2 jumla',
+      },
+      {
+        nom: 'body',
+        yorliq: 'Press-reliz matni',
+        tur: 'kopTilliRoyxat',
+        talab: true,
+        izoh: 'Har bir abzats alohida qatorda yoziladi',
+      },
+      {
+        nom: 'fileUrl',
+        yorliq: 'Press-reliz fayli',
+        tur: 'fayl',
+        izoh: 'PDF yoki Word. Bo‘sh qoldirilsa yuklab olish tugmasi ko‘rinmaydi',
+      },
+      tartib,
+      nashr,
+    ],
+  },
+
   // ============ HUJJATLAR ============
   {
     kalit: 'hujjatlar',

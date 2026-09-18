@@ -23,6 +23,7 @@ export const MENYU: BolimGuruhi[] = [
       { kalit: 'tanlovlar', nom: 'Tanlov va festivallar', ikonka: 'trophy' },
       { kalit: 'afisha', nom: 'Afisha', ikonka: 'calendar-days' },
       { kalit: 'yangiliklar', nom: 'Yangiliklar', ikonka: 'newspaper' },
+      { kalit: 'press', nom: 'Press-relizlar', ikonka: 'file-text' },
       { kalit: 'videolar', nom: 'Videolar', ikonka: 'video' },
       { kalit: 'fotolar', nom: 'Foto galereya', ikonka: 'images' },
     ],
