@@ -21,6 +21,7 @@ import { SectionTitle } from '@/components/shared/section-title';
 import { Reveal } from '@/components/shared/reveal';
 import { Abzatslar } from '@/components/shared/abzatslar';
 import { getFaoliyat, type FaoliyatSahifasi } from '@/server/queries/faoliyat';
+import { getSettings } from '@/server/queries/settings';
 import { pick } from '@/lib/utils';
 
 /** Admin paneldagi "Ikonka" tanlovi — shu ro'yxatdan chizma tanlanadi */
@@ -51,8 +52,15 @@ export async function generateMetadata({
 
 export default async function ActivityPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
-  const faoliyat = await getFaoliyat();
-  return <ActivityContent faoliyat={faoliyat} />;
+  const [faoliyat, sozlamalar] = await Promise.all([getFaoliyat(), getSettings()]);
+
+  // Talent platformasi yopilgan bo'lsa — unga olib boradigan kartochka ham
+  // chiqmaydi, aks holda havola 404 ga olib borardi
+  const bloklar = sozlamalar.talentOpen
+    ? faoliyat.blocks
+    : faoliyat.blocks.filter((b) => b.href !== '/talent');
+
+  return <ActivityContent faoliyat={{ ...faoliyat, blocks: bloklar }} />;
 }
 
 function ActivityContent({ faoliyat }: { faoliyat: FaoliyatSahifasi }) {

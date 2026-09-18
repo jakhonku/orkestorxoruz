@@ -6,6 +6,7 @@ import { getProjectSlugs } from '@/server/queries/projects';
 import { getCompetitionSlugs } from '@/server/queries/competitions';
 import { getNewsSlugs } from '@/server/queries/news';
 import { getInternationalPages } from '@/server/queries/xalqaro';
+import { getSettings } from '@/server/queries/settings';
 
 const staticPaths = [
   '',
@@ -14,7 +15,6 @@ const staticPaths = [
   '/faoliyat',
   '/loyihalar',
   '/tanlovlar',
-  '/talent',
   '/afisha',
   '/media',
   '/xalqaro',
@@ -24,13 +24,15 @@ const staticPaths = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [ensembleSlugs, projectSlugs, competitionSlugs, newsSlugs, xalqaro] = await Promise.all([
-    getEnsembleSlugs(),
-    getProjectSlugs(),
-    getCompetitionSlugs(),
-    getNewsSlugs(),
-    getInternationalPages(),
-  ]);
+  const [ensembleSlugs, projectSlugs, competitionSlugs, newsSlugs, xalqaro, sozlamalar] =
+    await Promise.all([
+      getEnsembleSlugs(),
+      getProjectSlugs(),
+      getCompetitionSlugs(),
+      getNewsSlugs(),
+      getInternationalPages(),
+      getSettings(),
+    ]);
 
   const dynamicPaths = [
     ...ensembleSlugs.map((slug) => `/jamoalar/${slug}`),
@@ -40,7 +42,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...xalqaro.map((p) => `/xalqaro/${p.slug}`),
   ];
 
-  const all = [...staticPaths, ...dynamicPaths];
+  // Yopib qo'yilgan sahifa 404 qaytaradi — sitemapga ham qo'shilmaydi
+  const all = [...staticPaths, ...(sozlamalar.talentOpen ? ['/talent'] : []), ...dynamicPaths];
   const now = new Date();
 
   return all.flatMap((path) =>

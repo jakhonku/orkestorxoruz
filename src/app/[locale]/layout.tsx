@@ -105,6 +105,10 @@ export default async function LocaleLayout({
     label: pick(p.title, locale),
   }));
 
+  // Talent platformasi admin panelda yopilgan bo'lsa — menyuda ham,
+  // footerda ham ko'rinmaydi (sahifasi 404 qaytaradi)
+  const yashirinHavolalar = settings.talentOpen ? [] : ['/talent'];
+
   return (
     <html lang={locale} className={`${playfair.variable} ${manrope.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
@@ -112,11 +116,12 @@ export default async function LocaleLayout({
           <HarakatSozlamalari>
             <Header
               dinamikHavolalar={xalqaroHavolalar}
+              yashirinHavolalar={yashirinHavolalar}
               logoNomi={settings.shortName}
               logoOstidagi={settings.logoSubline}
             />
             <main className="flex-1">{children}</main>
-            <Footer settings={settings} />
+            <Footer settings={settings} yashirinHavolalar={yashirinHavolalar} />
           </HarakatSozlamalari>
         </NextIntlClientProvider>
       </body>

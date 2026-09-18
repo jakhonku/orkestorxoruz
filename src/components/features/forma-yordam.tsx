@@ -35,7 +35,12 @@ export function XatoXabari({ kod }: { kod: XatoKodi | null }) {
   const tc = useTranslations('Common');
   if (!kod) return null;
 
-  const matn = kod === 'limit' ? tc('tooManyRequests') : tc('errorMessage');
+  const matn =
+    kod === 'limit'
+      ? tc('tooManyRequests')
+      : kod === 'yopiq'
+        ? tc('formClosed')
+        : tc('errorMessage');
 
   return (
     <p

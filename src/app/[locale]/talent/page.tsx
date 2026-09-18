@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
 import { UserPlus, ClipboardCheck, Sparkles, Award, Users, GraduationCap, Globe } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
+import { getSettings } from '@/server/queries/settings';
 import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
@@ -12,8 +14,18 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: 'Orchestra and Choir.uz Talent' };
 }
 
-export default function TalentPage({ params }: { params: { locale: Locale } }) {
+/**
+ * Platformani admin panelda vaqtincha yopib qo'yish mumkin
+ * ("Sayt sozlamalari", yoki panelning bosh sahifasidagi tugma).
+ *
+ * Yopilganda sahifa umuman ochilmaydi — 404 qaytadi, menyudan ham,
+ * footer va "Faoliyat" kartochkalaridan ham olib tashlanadi.
+ */
+export default async function TalentPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
+  const sozlamalar = await getSettings();
+  if (!sozlamalar.talentOpen) notFound();
+
   return <TalentContent />;
 }
 

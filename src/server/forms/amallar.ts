@@ -4,6 +4,7 @@ import { headers } from 'next/headers';
 import { z } from 'zod';
 
 import { db } from '@/lib/db';
+import { getSettings } from '@/server/queries/settings';
 import { ensembleTypeToDb, regionToDb } from '@/server/enums';
 import { arizaXabari } from '@/server/xabarnoma/telegram';
 import type { EnsembleType, Region } from '@/types';
@@ -15,7 +16,7 @@ import type { EnsembleType, Region } from '@/types';
  * ko'rsatadi (sayt uch tilli, server esa foydalanuvchi tilini bilmasligi mumkin).
  */
 
-export type XatoKodi = 'tekshiruv' | 'limit' | 'xato';
+export type XatoKodi = 'tekshiruv' | 'limit' | 'xato' | 'yopiq';
 export type FormaNatija = { ok: true } | { ok: false; kod: XatoKodi };
 
 const XATO: FormaNatija = { ok: false, kod: 'xato' };
@@ -300,6 +301,12 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
   const d = t.qiymat;
 
   try {
+    // Platforma admin panelda vaqtincha yopilgan bo'lsa ariza qabul qilinmaydi.
+    // Tekshiruv serverda ham turibdi: forma o'rnida yozuv chiqqani kifoya emas —
+    // so'rovni to'g'ridan-to'g'ri yuborish mumkin.
+    const { talentOpen } = await getSettings();
+    if (!talentOpen) return { ok: false, kod: 'yopiq' };
+
     await db.talentApplication.create({
       data: {
         fullName: d.fullName,

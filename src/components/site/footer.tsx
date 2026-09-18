@@ -15,7 +15,14 @@ const socialIcons = {
 } as const;
 
 /** Kontakt ma'lumotlari va ijtimoiy tarmoqlar bazadagi sozlamalardan keladi */
-export function Footer({ settings }: { settings: SiteSettings }) {
+export function Footer({
+  settings,
+  yashirinHavolalar = [],
+}: {
+  settings: SiteSettings;
+  /** Vaqtincha yopilgan sahifalar — footer ro'yxatidan ham chiqib turadi */
+  yashirinHavolalar?: string[];
+}) {
   const t = useTranslations('Footer');
   const tn = useTranslations('Nav');
   const locale = useLocale();
@@ -50,6 +57,11 @@ export function Footer({ settings }: { settings: SiteSettings }) {
     },
   ];
 
+  const korinadigan = cols.map((col) => ({
+    ...col,
+    links: col.links.filter((l) => !yashirinHavolalar.includes(l.href)),
+  }));
+
   return (
     <footer className="relative overflow-hidden bg-navy text-white">
       <div className="absolute inset-0 bg-gradient-to-b from-navy to-navy-900" />
@@ -76,7 +88,7 @@ export function Footer({ settings }: { settings: SiteSettings }) {
             </ul>
           </div>
 
-          {cols.map((col) => (
+          {korinadigan.map((col) => (
             <div key={col.title}>
               <h4 className="mb-4 text-sm font-semibold uppercase tracking-wider text-gold-300">
                 {col.title}

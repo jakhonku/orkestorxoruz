@@ -20,10 +20,16 @@ type Ichki = { href: string; key?: string; label?: string };
 
 export function Header({
   dinamikHavolalar = [],
+  yashirinHavolalar = [],
   logoNomi,
   logoOstidagi,
 }: {
   dinamikHavolalar?: DinamikHavola[];
+  /**
+   * Menyudan vaqtincha olib turiladigan manzillar — masalan admin panelda
+   * yopib qo'yilgan "/talent". Sahifaning o'zi ham 404 qaytaradi.
+   */
+  yashirinHavolalar?: string[];
   /** "Sayt sozlamalari" dagi qisqa nom va uning ostidagi yozuv */
   logoNomi?: Localized;
   logoOstidagi?: Localized;
@@ -71,10 +77,18 @@ export function Header({
    * qo'shilganlari. Ikkinchisining sarlavhasi bazadan keladi, shuning uchun
    * tarjima kaliti o'rniga tayyor matn bilan yuriladi.
    */
+  const yashirinmi = (href: string) => yashirinHavolalar.includes(href);
+
+  /** Yopib qo'yilgan sahifalar menyuda ham ko'rinmaydi */
+  const menyu = NAV_ITEMS.filter((item) => !yashirinmi(item.href));
+
   const ichkiHavolalar = (item: (typeof NAV_ITEMS)[number]): Ichki[] => {
     const doimiy: Ichki[] = item.children ?? [];
-    if (item.key !== DINAMIK_MENYU_KALITI) return doimiy;
-    return [...doimiy, ...dinamikHavolalar.map((h) => ({ href: h.href, label: h.label }))];
+    const hammasi =
+      item.key === DINAMIK_MENYU_KALITI
+        ? [...doimiy, ...dinamikHavolalar.map((h) => ({ href: h.href, label: h.label }))]
+        : doimiy;
+    return hammasi.filter((h) => !yashirinmi(h.href));
   };
 
   const havolaMatni = (h: Ichki): string => (h.key ? t(h.key) : (h.label ?? ''));
@@ -93,7 +107,7 @@ export function Header({
 
         {/* Desktop nav */}
         <nav className="hidden items-center gap-0 lg:flex">
-          {NAV_ITEMS.map((item) => {
+          {menyu.map((item) => {
             const active =
               item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
             const ichki = ichkiHavolalar(item);
@@ -189,7 +203,7 @@ export function Header({
           >
             {/* Menyu ekranga sig'masa — ichida aylantiriladi (kichik telefonlar) */}
             <nav className="container flex max-h-[calc(100vh-5rem)] flex-col gap-1 overflow-y-auto py-4">
-              {NAV_ITEMS.map((item) => {
+              {menyu.map((item) => {
                 const ichki = ichkiHavolalar(item);
                 return (
                   <div key={item.key}>

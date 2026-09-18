@@ -6,6 +6,8 @@ import { db } from '@/lib/db';
 import { joriySessiya } from '@/server/auth';
 import { BOLIMLAR } from '@/server/admin/registr';
 import { ADMIN_SANOQ } from '@/server/admin/keshlar';
+import { getSettings } from '@/server/queries/settings';
+import { TalentTugmasi } from './_components/talent-tugmasi';
 
 export const metadata = { title: 'Bosh sahifa' };
 
@@ -48,8 +50,9 @@ const bolimSanoqlari = unstable_cache(
 export default async function AdminBoshSahifa() {
   const sessiya = await joriySessiya();
 
-  const [sanoqlar, xabar, jamoaAriza, tanlovAriza, talent, obuna] = await Promise.all([
+  const [sanoqlar, sozlamalar, xabar, jamoaAriza, tanlovAriza, talent, obuna] = await Promise.all([
     bolimSanoqlari(),
+    getSettings(),
     db.contactMessage.count({ where: { status: 'YANGI' } }),
     db.ensembleApplication.count({ where: { status: 'YANGI' } }),
     db.competitionApplication.count({ where: { status: 'YANGI' } }),
@@ -77,6 +80,14 @@ export default async function AdminBoshSahifa() {
           ko‘rinadi.
         </p>
       </div>
+
+      {/* Talent platformasini yopib-ochish */}
+      <section className="mb-8">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          Ariza qabuli
+        </h2>
+        <TalentTugmasi ochiq={sozlamalar.talentOpen} />
+      </section>
 
       {/* Yangi murojaatlar */}
       <section className="mb-8">

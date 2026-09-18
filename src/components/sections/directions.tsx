@@ -17,15 +17,18 @@ const directions: Direction[] = [
   { key: 'education', href: '/talent', icon: GraduationCap },
 ];
 
-export function Directions() {
+export function Directions({ yashirinHavolalar = [] }: { yashirinHavolalar?: string[] }) {
   const t = useTranslations('Home');
+
+  // Admin panelda yopib qo'yilgan sahifaning kartochkasi chiqmaydi
+  const korinadigan = directions.filter((d) => !yashirinHavolalar.includes(d.href));
 
   return (
     <section className="section bg-navy-50/40">
       <div className="container">
         <SectionTitle eyebrow={t('directionsSubtitle')} title={t('directionsTitle')} />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {directions.map((dir, i) => {
+          {korinadigan.map((dir, i) => {
             const Icon = dir.icon;
             return (
               <Reveal key={dir.key} delay={i * 0.08}>

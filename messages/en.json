@@ -47,7 +47,8 @@
     "invalidEmail": "Invalid email address",
     "errorMessage": "Could not send. Please try again in a moment.",
     "tooManyRequests": "Too many attempts. Please wait a little and try again.",
-    "successMessage": "Your message has been received. Thank you!"
+    "successMessage": "Your message has been received. Thank you!",
+    "formClosed": "Applications are temporarily closed."
   },
   "Home": {
     "heroSlogan": "For a national academic music culture",
