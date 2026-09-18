@@ -12,6 +12,8 @@ export interface NewsArticle {
   author: Localized;
   excerpt: Localized;
   body: Localized<string[]>;
+  /** YouTube yoki Instagram havolasi — sahifada pleyer bo'lib ochiladi */
+  video?: string;
   featured?: boolean;
 }
 

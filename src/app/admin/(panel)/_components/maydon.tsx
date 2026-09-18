@@ -15,6 +15,8 @@ import {
 
 import { cn } from '@/lib/utils';
 import { youtubeIdAjrat } from '@/lib/youtube';
+import { instagramAjrat, instagramUlashishmi } from '@/lib/instagram';
+import { videoManbasi } from '@/lib/video';
 import {
   TILLAR,
   boshQiymat,
@@ -160,6 +162,12 @@ function Boshqaruv({
 
     case 'youtube':
       return <YouTubeId qiymat={matn} ozgartir={ozgartir} />;
+
+    case 'instagram':
+      return <InstagramHavola qiymat={matn} ozgartir={ozgartir} />;
+
+    case 'videoHavola':
+      return <VideoHavola qiymat={matn} ozgartir={ozgartir} />;
 
     case 'kopTilli':
     case 'kopTilliKatta':
@@ -375,6 +383,89 @@ function YouTubeId({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: str
           Havoladan ID ajratildi: <span className="font-mono font-medium">{toza}</span>
         </p>
       )}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Instagram havolasi                                                  */
+/* ------------------------------------------------------------------ */
+
+/** Havola tanildimi — shakl ostida darhol ko'rinadigan izoh */
+function HavolaHolati({ qiymat, manba }: { qiymat: string; manba: string | null }) {
+  const matn = qiymat.trim();
+  if (!matn) return null;
+
+  if (manba) {
+    return <p className="mt-1.5 text-xs text-emerald-700">Tanildi: {manba}. Saytda pleyer bo‘lib ochiladi.</p>;
+  }
+
+  if (instagramUlashishmi(matn)) {
+    return (
+      <p className="mt-1.5 text-xs text-red-600">
+        Bu Instagramning «Ulashish» havolasi — ichida post kodi yo‘q. Saqlaganda sayt uni
+        o‘zi ochib to‘g‘ri havolaga aylantirishga urinadi; bo‘lmasa, postni brauzerda
+        ochib, manzil qatoridagi havolani (…/reel/KOD/) nusxalang.
+      </p>
+    );
+  }
+
+  return (
+    <p className="mt-1.5 text-xs text-red-600">
+      Havola tanilmadi. Saqlashda xato chiqadi — to‘liq havolani qo‘ying.
+    </p>
+  );
+}
+
+function InstagramHavola({
+  qiymat,
+  ozgartir,
+}: {
+  qiymat: string;
+  ozgartir: (yangi: string) => void;
+}) {
+  const q = instagramAjrat(qiymat);
+
+  return (
+    <div>
+      <input
+        type="url"
+        value={qiymat}
+        onChange={(e) => ozgartir(e.target.value)}
+        placeholder="https://www.instagram.com/reel/ABC123/"
+        className={INPUT}
+      />
+      <HavolaHolati qiymat={qiymat} manba={q ? `Instagram (${q.tur}/${q.kod})` : null} />
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Video havolasi: YouTube yoki Instagram                              */
+/* ------------------------------------------------------------------ */
+
+function VideoHavola({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
+  const manba = videoManbasi(qiymat);
+
+  return (
+    <div>
+      <input
+        type="url"
+        value={qiymat}
+        onChange={(e) => ozgartir(e.target.value)}
+        placeholder="https://youtu.be/… yoki https://www.instagram.com/reel/…"
+        className={INPUT}
+      />
+      <HavolaHolati
+        qiymat={qiymat}
+        manba={
+          manba
+            ? manba.tur === 'youtube'
+              ? `YouTube (${manba.youtubeId})`
+              : 'Instagram'
+            : null
+        }
+      />
     </div>
   );
 }

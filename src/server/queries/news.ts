@@ -21,6 +21,7 @@ function moslashNews(n: NewsQator): NewsArticle {
     author: loc(n.author),
     excerpt: loc(n.excerpt),
     body: locList(n.body),
+    video: n.videoUrl ?? undefined,
     featured: n.featured,
   };
 }

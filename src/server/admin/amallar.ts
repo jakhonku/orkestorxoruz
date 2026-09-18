@@ -6,6 +6,8 @@ import { db } from '@/lib/db';
 import { bosSlugTanla } from '@/lib/slug';
 import { ADMIN_SANOQ } from './keshlar';
 import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
+import { instagramAjrat, instagramKanonik, instagramUlashishmi } from '@/lib/instagram';
+import { videoHavolaKanonik, videoManbasi } from '@/lib/video';
 import { joriySessiya } from '@/server/auth';
 import { bolimTop } from './registr';
 import { boshQiymat, type Maydon, type Qiymatlar } from './turlar';
@@ -78,6 +80,15 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
     case 'youtube': {
       // To'liq havola qo'yilgan bo'lsa ham bazaga faqat ID yoziladi
       const s = youtubeIdAjrat(String(qiymat ?? ''));
+      return s === '' ? bosh() : s;
+    }
+    case 'instagram': {
+      // Har xil ko'rinishdagi havola bitta ko'rinishga keltiriladi
+      const s = instagramKanonik(String(qiymat ?? ''));
+      return s === '' ? bosh() : s;
+    }
+    case 'videoHavola': {
+      const s = videoHavolaKanonik(String(qiymat ?? ''));
       return s === '' ? bosh() : s;
     }
     default:
@@ -162,6 +173,31 @@ function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | nul
       continue;
     }
 
+    if (m.tur === 'instagram') {
+      const xom = String(qiymatlar[m.nom] ?? '').trim();
+      if (!xom) continue;
+      if (!instagramAjrat(xom)) {
+        return (
+          `"${m.yorliq}" — Instagram havolasi tanilmadi. Postni brauzerda ochib, manzil ` +
+          `qatoridagi havolani nusxalang (masalan https://www.instagram.com/reel/ABC123/).`
+        );
+      }
+      continue;
+    }
+
+    if (m.tur === 'videoHavola') {
+      const xom = String(qiymatlar[m.nom] ?? '').trim();
+      if (!xom) continue;
+      if (!videoManbasi(xom)) {
+        return (
+          `"${m.yorliq}" — havola tanilmadi. YouTube havolasini ` +
+          `(https://www.youtube.com/watch?v=… yoki https://youtu.be/…) yoki Instagram post/reel ` +
+          `havolasini (https://www.instagram.com/reel/…) qo‘ying.`
+        );
+      }
+      continue;
+    }
+
     if (m.tur === 'youtube') {
       const xom = String(qiymatlar[m.nom] ?? '').trim();
       if (!xom) continue;
@@ -185,6 +221,53 @@ function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | nul
   return null;
 }
 
+/**
+ * Instagram ilovasining "Ulashish" havolasi (instagram.com/share/…) ichida post
+ * kodi bo'lmaydi — uni faqat ochib ko'rib bilish mumkin. Saqlashdan oldin shu
+ * yerda bir marta ochib ko'riladi va haqiqiy havola bilan almashtiriladi.
+ *
+ * Ochib bo'lmasa qiymat tegilmaydi — tekshiruv muharrirga tushunarli xato beradi.
+ */
+async function ulashishHavolasiniYech(havola: string): Promise<string | null> {
+  try {
+    const javob = await fetch(havola, {
+      redirect: 'follow',
+      signal: AbortSignal.timeout(7000),
+      headers: {
+        // Oddiy brauzer sifatida so'raladi — aks holda Instagram bo'sh sahifa qaytaradi
+        'user-agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
+        'accept-language': 'en',
+      },
+    });
+
+    // Ko'pincha oxirgi manzilning o'zi yetarli
+    if (instagramAjrat(javob.url)) return javob.url;
+
+    // Bo'lmasa sahifa ichidagi kanonik havola qidiriladi
+    const html = await javob.text();
+    const moslik = html.match(/instagram\.com\\?\/(p|reel|reels|tv)\\?\/([A-Za-z0-9_-]+)/i);
+    if (!moslik) return null;
+    const tur = moslik[1].toLowerCase() === 'reels' ? 'reel' : moslik[1].toLowerCase();
+    return `https://www.instagram.com/${tur}/${moslik[2]}/`;
+  } catch {
+    return null;
+  }
+}
+
+/** Shakldagi "ulashish" havolalarini haqiqiy havolaga almashtiradi */
+async function ulashishHavolalariniTuzat(maydonlar: Maydon[], qiymatlar: Qiymatlar) {
+  for (const m of maydonlar) {
+    if (m.tur !== 'instagram' && m.tur !== 'videoHavola') continue;
+
+    const xom = String(qiymatlar[m.nom] ?? '').trim();
+    if (!xom || !instagramUlashishmi(xom)) continue;
+
+    const yechilgan = await ulashishHavolasiniYech(xom);
+    if (yechilgan) qiymatlar[m.nom] = yechilgan;
+  }
+}
+
 export type Natija = { ok: true; id: number } | { ok: false; xato: string };
 
 // ------------------------------------------------------------------
@@ -203,6 +286,8 @@ export async function yozuvSaqlash(
     if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
 
     const qiymatlar = JSON.parse(malumotJson) as Qiymatlar;
+
+    await ulashishHavolalariniTuzat(bolim.maydonlar, qiymatlar);
 
     const xato = tekshir(bolim.maydonlar, qiymatlar);
     if (xato) return { ok: false, xato };

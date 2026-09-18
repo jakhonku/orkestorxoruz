@@ -30,6 +30,10 @@ export type MaydonTuri =
   | 'video'
   /** YouTube video ID — to'liq havola qo'yilsa ID avtomatik ajratiladi */
   | 'youtube'
+  /** Instagram post/reel havolasi — bir xil ko'rinishga keltiriladi */
+  | 'instagram'
+  /** Bitta maydon: YouTube yoki Instagram havolasi (qaysi biri ekani o'zi aniqlanadi) */
+  | 'videoHavola'
   /** Uch tilli bir qatorli matn */
   | 'kopTilli'
   /** Uch tilli ko'p qatorli matn */

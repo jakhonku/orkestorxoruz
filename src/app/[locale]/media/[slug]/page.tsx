@@ -9,7 +9,9 @@ import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { NewsCard } from '@/components/cards/news-card';
+import { VideoEmbed } from '@/components/features/video-embed';
 import { pick, formatDate } from '@/lib/utils';
+import { videoManbasi } from '@/lib/video';
 import type { NewsArticle } from '@/types';
 import { getNewsBySlug, getNewsSlugs, getRelatedNews } from '@/server/queries/news';
 
@@ -49,6 +51,8 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
   const t = useTranslations('Media');
   const tn = useTranslations('Nav');
 
+  // Admin panelda qo'yilgan havola YouTube nikimi yoki Instagram niki — shu yerda aniqlanadi
+  const video = videoManbasi(article.video ?? '');
 
   return (
     <>
@@ -95,6 +99,22 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
             </div>
           </Reveal>
         </div>
+
+        {/* Video — admin panelda havola qo'yilgan bo'lsa */}
+        {video && (
+          <div className="container max-w-4xl">
+            <Reveal delay={0.15}>
+              {/* Instagram reeli tik turadi — kengligi cheklanadi, aks holda ulkan bo'lib ketadi */}
+              <div className={video.tur === 'instagram' ? 'mx-auto mt-8 max-w-sm' : 'mt-8'}>
+                <VideoEmbed
+                  youtubeId={video.tur === 'youtube' ? video.youtubeId : undefined}
+                  instagramUrl={video.tur === 'instagram' ? video.havola : undefined}
+                  title={pick(article.title, locale)}
+                />
+              </div>
+            </Reveal>
+          </div>
+        )}
 
         <div className="container max-w-3xl py-10">
           <div className="prose-custom space-y-5">

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Instagram, Play } from 'lucide-react';
 
+import { instagramEmbed } from '@/lib/instagram';
+
 /**
  * Video ko'rsatkich — uch manbani biladi:
  *   YouTube ID, Instagram havolasi yoki saytga yuklangan video fayl.
@@ -11,15 +13,6 @@ import { Instagram, Play } from 'lucide-react';
  * Barchasi "fasad" bo'lib ishlaydi: sahifa ochilganda faqat rasm yuklanadi,
  * og'ir iframe yoki video esa foydalanuvchi bosgandan keyin qo'shiladi.
  */
-
-/** Instagram havolasidan o'rnatiladigan (embed) manzil yasaydi */
-export function instagramEmbed(havola: string): string | null {
-  const m = havola.match(/instagram\.com\/(p|reel|reels|tv)\/([A-Za-z0-9_-]+)/);
-  if (!m) return null;
-  // "reels" -> "reel": Instagram embed faqat shu ko'rinishni tushunadi
-  const tur = m[1] === 'reels' ? 'reel' : m[1];
-  return `https://www.instagram.com/${tur}/${m[2]}/embed`;
-}
 
 function Tugma({
   onClick,

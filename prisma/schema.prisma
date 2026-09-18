@@ -349,6 +349,8 @@ model NewsArticle {
   excerpt   Json
   /// {"uz": ["1-abzats", "2-abzats"], "ru": [...], "en": [...]}
   body      Json
+  /// YouTube yoki Instagram havolasi — yangilik sahifasida pleyer bo'lib ochiladi
+  videoUrl  String?      @db.Text
   featured  Boolean      @default(false)
   published Boolean      @default(true)
   createdAt DateTime     @default(now())

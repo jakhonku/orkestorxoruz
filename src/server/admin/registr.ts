@@ -443,6 +443,16 @@ export const BOLIMLAR: Bolim[] = [
         izoh: 'Har bir abzats alohida qatorda yoziladi',
       },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1200×800' },
+      {
+        nom: 'videoUrl',
+        yorliq: 'Video havolasi (YouTube yoki Instagram)',
+        tur: 'videoHavola',
+        izoh:
+          'To‘liq havolani qo‘ying — masalan https://youtu.be/… yoki ' +
+          'https://www.instagram.com/reel/… . Yangilik sahifasida muqova ostida pleyer ' +
+          'bo‘lib chiqadi: bosilganda o‘sha yerda ochiladi, saytdan chiqib ketilmaydi. ' +
+          'Bo‘sh qoldirilsa hech narsa ko‘rinmaydi.',
+      },
       tanlangan,
       nashr,
     ],
@@ -481,9 +491,12 @@ export const BOLIMLAR: Bolim[] = [
       {
         nom: 'instagramUrl',
         yorliq: 'Instagram havolasi',
-        tur: 'havola',
+        tur: 'instagram',
         yarim: true,
-        izoh: 'Masalan: https://www.instagram.com/reel/ABC123/',
+        izoh:
+          'Post yoki reel havolasi — masalan https://www.instagram.com/reel/ABC123/ . ' +
+          'Ilovadagi «Ulashish» havolasi ham bo‘ladi: saqlaganda sayt uni haqiqiy ' +
+          'havolaga aylantiradi. Muqova rasmi qo‘yilsa ro‘yxatda chiroyli ko‘rinadi.',
       },
       {
         nom: 'fileUrl',
