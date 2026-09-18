@@ -113,6 +113,10 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                   'radial-gradient(circle at 20% 20%, rgba(201,162,39,0.25), transparent 40%)',
               }}
             />
+            {/* Birlashma emblemasi — shaffof suv belgisi sifatida */}
+            <div className="pointer-events-none absolute -right-10 top-1/2 hidden h-72 w-72 -translate-y-1/2 opacity-[0.14] md:block lg:right-10 lg:h-80 lg:w-80">
+              <Image src="/logo.png" alt="" fill sizes="320px" className="object-contain" />
+            </div>
             <div className="container relative max-w-3xl pt-28 pb-12 md:pt-36 md:pb-14">
               <Breadcrumbs
                 light

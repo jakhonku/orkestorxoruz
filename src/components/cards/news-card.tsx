@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, ArrowRight, Newspaper } from 'lucide-react';
+import { CalendarDays, ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { pick, formatDate } from '@/lib/utils';
@@ -31,7 +31,8 @@ export function NewsCard({ article }: { article: NewsArticle }) {
         ) : (
           /*
             Muqovasiz yangilik. Bo'sh joy o'rniga saytning o'z uslubidagi
-            fon: to'q ko'k gradient, oltin nur va mayin ikonka.
+            fon: to'q ko'k gradient, oltin nur va o'rtada birlashma emblemasi.
+            Shu tufayli oddiy post ham bir xil, tayyor ko'rinishda chiqadi.
           */
           <span className="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy to-navy-950">
             <span
@@ -41,7 +42,18 @@ export function NewsCard({ article }: { article: NewsArticle }) {
                   'radial-gradient(circle at 25% 20%, rgba(201,162,39,0.35), transparent 55%)',
               }}
             />
-            <Newspaper className="absolute bottom-4 right-4 h-12 w-12 text-white/10" />
+            {/* Emblema — shaffof oq doira ichida, mayin va bosiqroq */}
+            <span className="absolute inset-0 flex items-center justify-center">
+              <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/90 p-2 shadow-soft ring-1 ring-white/30 transition-transform duration-500 group-hover:scale-105">
+                <Image
+                  src="/logo.png"
+                  alt=""
+                  width={64}
+                  height={64}
+                  className="h-full w-full object-contain opacity-90"
+                />
+              </span>
+            </span>
           </span>
         )}
         <Badge variant="default" className="absolute left-4 top-4 bg-white/90">
