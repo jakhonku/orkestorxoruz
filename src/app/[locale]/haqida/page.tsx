@@ -40,6 +40,7 @@ export default async function AboutPage({ params }: { params: { locale: Locale }
       tasks={tasks}
       missionText={settings.missionText}
       missionImage={settings.missionImage}
+      headerImage={settings.aboutHeaderImage}
     />
   );
 }
@@ -50,12 +51,15 @@ function AboutContent({
   tasks,
   missionText,
   missionImage,
+  headerImage,
 }: {
   leaders: Leader[];
   documents: DocumentLink[];
   tasks: Localized[];
   missionText: Localized;
   missionImage: string;
+  /** Banner o'ng tomonidagi rasm — "Sayt sozlamalari" da tanlanadi */
+  headerImage: string;
 }) {
   const t = useTranslations('About');
   const tn = useTranslations('Nav');
@@ -67,6 +71,7 @@ function AboutContent({
         title={t('title')}
         subtitle={t('subtitle')}
         crumbs={[{ label: tn('home'), href: '/' }, { label: t('title') }]}
+        image={headerImage}
       />
 
       {/* Mission */}
