@@ -320,7 +320,10 @@
     "relatedTitle": "Boshqa yangiliklar",
     "pressReleasesTitle": "Press-relizlar",
     "pressReleaseOpen": "To‘liq matni",
-    "pressReleaseDownload": "Press-relizni yuklab olish"
+    "pressReleaseDownload": "Press-relizni yuklab olish",
+    "source_youtube": "Video",
+    "source_instagram": "Instagram post",
+    "source_telegram": "Telegram post"
   },
   "International": {
     "title": "Xalqaro hamkorlik",

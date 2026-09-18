@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Send } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Instagram, Send, Youtube } from 'lucide-react';
 
 import { telegramAjrat } from '@/lib/telegram';
 import type { PostManba } from '@/lib/post';
@@ -13,15 +14,33 @@ import { VideoEmbed } from './video-embed';
  * YouTube va Instagram — odatdagi pleyer (bosilganda o'sha yerda ochiladi),
  * Telegram esa postning o'zi bo'lib chiqadi: matni, rasmi va videosi bilan.
  */
+const IKONKALAR = {
+  youtube: Youtube,
+  instagram: Instagram,
+  telegram: Send,
+} as const;
+
 export function PostEmbed({ manba, title }: { manba: PostManba; title: string }) {
-  if (manba.tur === 'telegram') return <TelegramPost havola={manba.havola} />;
+  const t = useTranslations('Media');
+  const Ikonka = IKONKALAR[manba.tur];
 
   return (
-    <VideoEmbed
-      youtubeId={manba.tur === 'youtube' ? manba.youtubeId : undefined}
-      instagramUrl={manba.tur === 'instagram' ? manba.havola : undefined}
-      title={title}
-    />
+    <figure className="rounded-2xl border border-border bg-navy-50/40 p-3 shadow-soft sm:p-4">
+      <figcaption className="mb-3 flex items-center gap-2 px-1 text-xs font-semibold uppercase tracking-wider text-gold-700">
+        <Ikonka className="h-4 w-4" />
+        {t(`source_${manba.tur}`)}
+      </figcaption>
+
+      {manba.tur === 'telegram' ? (
+        <TelegramPost havola={manba.havola} />
+      ) : (
+        <VideoEmbed
+          youtubeId={manba.tur === 'youtube' ? manba.youtubeId : undefined}
+          instagramUrl={manba.tur === 'instagram' ? manba.havola : undefined}
+          title={title}
+        />
+      )}
+    </figure>
   );
 }
 
@@ -41,6 +60,9 @@ function TelegramPost({ havola }: { havola: string }) {
   const [xato, setXato] = useState(false);
   const post = telegramAjrat(havola);
   const yol = post ? `${post.kanal}/${post.post}` : '';
+  // `?single` — guruhdagi bitta post. Vidjet manzilni o'zi yig'adi, shuning
+  // uchun belgini havolaga emas, alohida `data-single` atributiga beramiz
+  const yolgiz = Boolean(post?.yolgiz);
 
   useEffect(() => {
     const el = joy.current;
@@ -55,6 +77,7 @@ function TelegramPost({ havola }: { havola: string }) {
     skript.setAttribute('data-telegram-post', yol);
     skript.setAttribute('data-width', '100%');
     skript.setAttribute('data-userpic', 'true');
+    if (yolgiz) skript.setAttribute('data-single', '1');
     // Post har doim oq fonda — sayt qorong'i mavzuni ishlatmaydi
     skript.setAttribute('data-dark', '0');
     skript.onerror = () => setXato(true);
@@ -69,7 +92,7 @@ function TelegramPost({ havola }: { havola: string }) {
       window.clearTimeout(kuzatuv);
       el.innerHTML = '';
     };
-  }, [yol]);
+  }, [yol, yolgiz]);
 
   // Havola tanilmasa (masalan yopiq kanal) yoki vidjet yuklanmasa — oddiy havola
   if (!post || xato) {
@@ -89,7 +112,7 @@ function TelegramPost({ havola }: { havola: string }) {
   return (
     <div
       ref={joy}
-      className="min-h-[220px] overflow-hidden rounded-xl [&_iframe]:!m-0 [&_iframe]:bg-white [&_iframe]:[color-scheme:light]"
+      className="min-h-[220px] overflow-hidden rounded-xl bg-white [&_iframe]:!m-0 [&_iframe]:bg-white [&_iframe]:[color-scheme:light]"
     />
   );
 }

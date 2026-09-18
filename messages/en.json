@@ -320,7 +320,10 @@
     "relatedTitle": "More news",
     "pressReleasesTitle": "Press releases",
     "pressReleaseOpen": "Read the full text",
-    "pressReleaseDownload": "Download the press release"
+    "pressReleaseDownload": "Download the press release",
+    "source_youtube": "Video",
+    "source_instagram": "Instagram post",
+    "source_telegram": "Telegram post"
   },
   "International": {
     "title": "International cooperation",

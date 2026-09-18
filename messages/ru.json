@@ -320,7 +320,10 @@
     "relatedTitle": "Другие новости",
     "pressReleasesTitle": "Пресс-релизы",
     "pressReleaseOpen": "Полный текст",
-    "pressReleaseDownload": "Скачать пресс-релиз"
+    "pressReleaseDownload": "Скачать пресс-релиз",
+    "source_youtube": "Видео",
+    "source_instagram": "Пост в Instagram",
+    "source_telegram": "Пост в Telegram"
   },
   "International": {
     "title": "Международное сотрудничество",

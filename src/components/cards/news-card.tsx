@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, ArrowRight } from 'lucide-react';
+import { CalendarDays, ArrowRight, Newspaper } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { pick, formatDate } from '@/lib/utils';
@@ -20,13 +20,30 @@ export function NewsCard({ article }: { article: NewsArticle }) {
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
     >
       <div className="relative aspect-[16/10] overflow-hidden">
-        <Image
-          src={article.cover}
-          alt={pick(article.title, locale)}
-          fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-105"
-        />
+        {article.cover ? (
+          <Image
+            src={article.cover}
+            alt={pick(article.title, locale)}
+            fill
+            sizes="(max-width: 768px) 100vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+        ) : (
+          /*
+            Muqovasiz yangilik. Bo'sh joy o'rniga saytning o'z uslubidagi
+            fon: to'q ko'k gradient, oltin nur va mayin ikonka.
+          */
+          <span className="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy to-navy-950">
+            <span
+              className="absolute inset-0 opacity-70"
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle at 25% 20%, rgba(201,162,39,0.35), transparent 55%)',
+              }}
+            />
+            <Newspaper className="absolute bottom-4 right-4 h-12 w-12 text-white/10" />
+          </span>
+        )}
         <Badge variant="default" className="absolute left-4 top-4 bg-white/90">
           {t(`category_${article.category}`)}
         </Badge>
