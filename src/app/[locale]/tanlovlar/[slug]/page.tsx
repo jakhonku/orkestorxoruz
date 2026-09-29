@@ -5,15 +5,11 @@ import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
 import {
   ArrowRight,
-  CalendarDays,
   Clock,
-  Download,
   FileCheck2,
   Lock,
-  MapPin,
   ScrollText,
   SendHorizontal,
-  Trophy,
   Users,
 } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
@@ -76,7 +72,6 @@ function Detail({ competition, anketa }: { competition: Competition; anketa: Sav
   const locale = useLocale();
   const t = useTranslations('Competitions');
   const tn = useTranslations('Nav');
-  const mukofot = competition.prizeFund ? pick(competition.prizeFund, locale) : '';
 
   return (
     <>
@@ -115,39 +110,7 @@ function Detail({ competition, anketa }: { competition: Competition; anketa: Sav
         </div>
       </section>
 
-      {/* Meta bar + apply */}
-      <section className="border-b border-border bg-white">
-        <div className="container flex flex-col items-start justify-between gap-6 py-6 md:flex-row md:items-center">
-          <div className="flex flex-wrap gap-x-8 gap-y-3">
-            <span className="flex items-center gap-2 text-sm font-medium text-navy-900">
-              <CalendarDays className="h-5 w-5 text-gold" />
-              {pick(competition.date, locale)}
-            </span>
-            <span className="flex items-center gap-2 text-sm font-medium text-navy-900">
-              <MapPin className="h-5 w-5 text-gold" />
-              {pick(competition.location, locale)}
-            </span>
-            {mukofot && (
-              <span className="flex items-center gap-2 text-sm font-medium text-navy-900">
-                <Trophy className="h-5 w-5 text-gold" />
-                <span className="text-muted-foreground">{t('prizeTitle')}:</span>
-                {mukofot}
-              </span>
-            )}
-          </div>
-          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
-            {competition.regulationsFile && (
-              <Button asChild variant="outline" size="lg">
-                <a href={competition.regulationsFile} target="_blank" rel="noreferrer">
-                  <Download className="h-4 w-4" />
-                  {t('regulationsFile')}
-                </a>
-              </Button>
-            )}
-            <ArizaTugmasi slug={competition.slug} status={competition.status} />
-          </div>
-        </div>
-      </section>
+
 
       <section className="section bg-white">
         <div className="container grid gap-12 lg:grid-cols-[1.5fr_1fr]">
