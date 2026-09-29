@@ -1,11 +1,14 @@
 'use client';
 
-import { ArrowDown, ArrowUp, Info, Plus, Trash2 } from 'lucide-react';
+import { ArrowDown, ArrowUp, FileStack, Info, Plus, Trash2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { hujjatliAnketa } from '@/lib/anketa-andozalari';
 import {
   ANKETA_CHEGARASI,
+  FAYL_QABULI,
   SAVOL_TURLARI,
+  type FaylQabuli,
   variantliMi,
   yangiSavol,
   type Savol,
@@ -23,6 +26,14 @@ import { INPUT, KopTilliKiritish, KopTilliRoyxatKiritish } from './maydon';
 
 /** Tez-tez so'raladigan savollar — bir bosishda qo'shiladi */
 const ANDOZALAR: { nom: string; savol: () => Savol }[] = [
+  {
+    nom: '➜ Yangi qadam',
+    savol: () => ({
+      ...yangiSavol(),
+      tur: 'bolim',
+      savol: { uz: '', ru: '', en: '' },
+    }),
+  },
   {
     nom: 'Jamoa nomi',
     savol: () => ({
@@ -89,6 +100,19 @@ const ANDOZALAR: { nom: string; savol: () => Savol }[] = [
     }),
   },
   {
+    nom: 'Rozilik',
+    savol: () => ({
+      ...yangiSavol(),
+      tur: 'rozilik',
+      talab: true,
+      savol: {
+        uz: 'Shaxsiy ma’lumotlarimni qayta ishlashga roziman',
+        ru: 'Я даю согласие на обработку моих персональных данных',
+        en: 'I consent to the processing of my personal data',
+      },
+    }),
+  },
+  {
     nom: 'Repertuar',
     savol: () => ({
       ...yangiSavol(),
@@ -131,14 +155,22 @@ export function AnketaTuzuvchi({
       <p className="flex items-start gap-2 rounded-xl bg-navy-50/60 p-3 text-xs leading-relaxed text-navy-900">
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
         <span>
-          <b>F.I.SH., email va telefon</b> har bir arizada avtomatik so‘raladi. Bu yerga
-          qo‘shimcha savollarni qo‘shing. Anketa bo‘sh qolsa, saytda oddiy ariza shakli chiqadi
-          (jamoa nomi, yo‘nalish, izoh).
+          Ariza saytda <b>qadamma-qadam</b> to‘ldiriladi. 1-qadam — F.I.Sh. (familiya, ism,
+          otasining ismi), 2-qadam — telefon va email: ular avtomatik so‘raladi. Savollarni
+          qadamlarga bo‘lish uchun <b>“➜ Yangi qadam”</b> qo‘shing; birinchi qadamgacha bo‘lgan
+          savollar 1-qadamga tushadi. Rozilik belgilari oxirgi — tasdiqlash qadamida chiqadi.
+          Anketa bo‘sh qolsa, oddiy shakl ishlatiladi (jamoa nomi, yo‘nalish, izoh).
         </span>
       </p>
 
       {savollar.map((s, i) => (
-        <div key={s.id} className="rounded-xl border border-border bg-white p-4">
+        <div
+          key={s.id}
+          className={cn(
+            'rounded-xl border p-4',
+            s.tur === 'bolim' ? 'border-gold/50 bg-gold/5' : 'border-border bg-white',
+          )}
+        >
           <div className="mb-3 flex flex-wrap items-center gap-2">
             <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-navy text-xs font-bold text-gold">
               {i + 1}
@@ -156,7 +188,12 @@ export function AnketaTuzuvchi({
               ))}
             </select>
 
-            <label className="flex cursor-pointer items-center gap-2 text-xs font-medium text-navy">
+            <label
+              className={cn(
+                'flex cursor-pointer items-center gap-2 text-xs font-medium text-navy',
+                s.tur === 'bolim' && 'invisible',
+              )}
+            >
               <input
                 type="checkbox"
                 checked={s.talab}
@@ -190,7 +227,13 @@ export function AnketaTuzuvchi({
           <div className="space-y-3">
             <div>
               <p className="mb-1 text-xs font-medium text-navy">
-                Savol <span className="text-red-500">*</span>
+                {s.tur === 'bolim' ? 'Qadam sarlavhasi' : 'Savol'}{' '}
+                <span className="text-red-500">*</span>
+                {s.tur === 'bolim' && (
+                  <span className="ml-1 font-normal text-muted-foreground">
+                    — ariza sahifasida bundan keyingi savollar alohida qadamda chiqadi
+                  </span>
+                )}
               </p>
               <KopTilliKiritish
                 katta={false}
@@ -198,6 +241,27 @@ export function AnketaTuzuvchi({
                 ozgartir={(v) => yangila(i, { savol: v })}
               />
             </div>
+
+            {s.tur === 'fayl' && (
+              <div>
+                <p className="mb-1 text-xs font-medium text-navy">Qabul qilinadigan fayl</p>
+                <select
+                  value={s.qabul ?? 'hammasi'}
+                  onChange={(e) => yangila(i, { qabul: e.target.value as FaylQabuli })}
+                  className={cn(INPUT, 'h-9')}
+                >
+                  {FAYL_QABULI.map((q) => (
+                    <option key={q.qiymat} value={q.qiymat}>
+                      {q.yorliq}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  15 MB gacha. Fayllar yopiq saqlanadi — ularni faqat panelga kirgan xodimlar
+                  ochadi.
+                </p>
+              </div>
+            )}
 
             {variantliMi(s.tur) && (
               <div>
@@ -216,7 +280,8 @@ export function AnketaTuzuvchi({
 
             <div>
               <p className="mb-1 text-xs font-medium text-navy">
-                Izoh <span className="font-normal text-muted-foreground">(ixtiyoriy)</span>
+                {s.tur === 'bolim' ? 'Qadam tavsifi' : 'Izoh'}{' '}
+                <span className="font-normal text-muted-foreground">(ixtiyoriy)</span>
               </p>
               <KopTilliKiritish
                 katta={false}
@@ -238,6 +303,17 @@ export function AnketaTuzuvchi({
           <Plus className="h-3.5 w-3.5" />
           Savol qo‘shish
         </button>
+
+        {savollar.length === 0 && (
+          <button
+            type="button"
+            onClick={() => ozgartir(hujjatliAnketa())}
+            className="ml-2 inline-flex h-9 items-center gap-1.5 rounded-lg border border-gold/50 bg-gold/10 px-3.5 text-xs font-semibold text-navy transition-colors hover:bg-gold/20"
+          >
+            <FileStack className="h-3.5 w-3.5" />
+            Hujjatlar bilan to‘liq anketa
+          </button>
+        )}
 
         <div className="mt-3 flex flex-wrap items-center gap-1.5">
           <span className="text-xs text-muted-foreground">Tayyor savollar:</span>

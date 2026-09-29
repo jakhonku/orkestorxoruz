@@ -47,7 +47,7 @@ export function tanlovMurojaati(r: TanlovArizaQatori): Murojaat {
     id: r.id,
     tur: 'tanlov',
     sarlavha: r.fullName,
-    qisqa: [tanlovNomi(r), r.ensembleName, r.category, ...javoblar.slice(0, 2).map((j) => javobMatni(j.javob))]
+    qisqa: [tanlovNomi(r), r.ensembleName, r.category, ...javoblar.filter((j) => j.tur !== 'fayl').slice(0, 2).map((j) => javobMatni(j.javob))]
       .filter(Boolean)
       .join(' · '),
     status: r.status,
@@ -62,9 +62,17 @@ export function tanlovMurojaati(r: TanlovArizaQatori): Murojaat {
       ['Yo‘nalish', r.category],
       ['Email', r.email],
       ['Telefon', r.phone],
-      ...javoblar.map((j): [string, string] => [j.savol, javobMatni(j.javob)]),
+      ...javoblar.map((j): [string, string] => [j.savol, j.tur === 'fayl' ? 'Faylni ochish' : javobMatni(j.javob)]),
       ['Til', r.locale.toUpperCase()],
       ['Xabar', r.message],
-    ]),
+    ]).map((q) => {
+      const fayl = javoblar.find((j) => j.tur === 'fayl' && j.savol === q.yorliq);
+      return fayl ? { ...q, havola: arizaFayliHavolasi(String(fayl.javob)) } : q;
+    }),
   };
+}
+
+/** Yopiq bucket'dagi faylni admin orqali ochadigan havola (muddati o'tmaydi) */
+export function arizaFayliHavolasi(yol: string, asos = ''): string {
+  return `${asos}/api/admin/ariza-fayli?yol=${encodeURIComponent(yol)}`;
 }

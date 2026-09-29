@@ -33,3 +33,10 @@ export function xizmatKaliti(): string {
 
 /** Yuklangan fayllar saqlanadigan Storage bucket nomi */
 export const BUCKET = process.env.SUPABASE_STORAGE_BUCKET ?? 'media';
+
+/**
+ * Ishtirokchilar arizaga biriktiradigan fayllar (pasport nusxasi, surat...)
+ * uchun YOPIQ bucket. Fayllar ochiq havola bilan ko'rinmaydi — ularni faqat
+ * admin panelga kirgan xodim vaqtinchalik havola orqali ochadi.
+ */
+export const ARIZA_BUCKET = process.env.SUPABASE_APPLICATIONS_BUCKET ?? 'arizalar';

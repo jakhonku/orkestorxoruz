@@ -7,7 +7,13 @@ import { db } from '@/lib/db';
 import { getSettings } from '@/server/queries/settings';
 import { ensembleTypeToDb, regionToDb } from '@/server/enums';
 import { arizaXabari } from '@/server/xabarnoma/pochta';
-import { anketaniOqi, javobMatni, javoblarniTekshir, type Javob } from '@/lib/anketa';
+import {
+  anketaniOqi,
+  arizaPapkasi,
+  javobMatni,
+  javoblarniTekshir,
+  type Javob,
+} from '@/lib/anketa';
 import type { EnsembleType, Region } from '@/types';
 
 /**
@@ -281,7 +287,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
       // variant raqamlari, havola va son ko'rinishi — hammasi serverda ham
       const anketa = anketaniOqi(tanlov.formFields);
       if (anketa.length > 0) {
-        const tekshiruv = javoblarniTekshir(anketa, d.javoblar ?? {});
+        const tekshiruv = javoblarniTekshir(anketa, d.javoblar ?? {}, arizaPapkasi(d.competitionId));
         if (!tekshiruv.ok) return TEKSHIRUV;
         javoblar = tekshiruv.javoblar;
       }
@@ -307,7 +313,11 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
       { yorliq: 'Yo‘nalish', qiymat: d.category },
       { yorliq: 'Telefon', qiymat: d.phone },
       { yorliq: 'Email', qiymat: d.email },
-      ...javoblar.map((j) => ({ yorliq: j.savol, qiymat: javobMatni(j.javob) })),
+      // Fayllar yopiq bucket'da — xatga yo'li emas, "yuklangan" belgisi tushadi
+      ...javoblar.map((j) => ({
+        yorliq: j.savol,
+        qiymat: j.tur === 'fayl' ? '📎 fayl yuklangan (admin panelda)' : javobMatni(j.javob),
+      })),
       { yorliq: 'Izoh', qiymat: d.message },
     ]);
 

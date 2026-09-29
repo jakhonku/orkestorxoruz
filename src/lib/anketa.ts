@@ -28,7 +28,19 @@ export type SavolTuri =
   /** Variantlardan bittasini belgilash (radio) */
   | 'variant'
   /** Variantlardan bir nechtasini belgilash (checkbox) */
-  | 'belgilar';
+  | 'belgilar'
+  /** Fayl yuklash (surat, pasport nusxasi...) — yopiq bucket'ga tushadi */
+  | 'fayl'
+  /** Bitta belgi: "roziman" (masalan shaxsiy ma'lumotlarni qayta ishlashga) */
+  | 'rozilik'
+  /**
+   * Savol emas — ariza sahifasida yangi QADAM boshlanadi. `savol` — qadam
+   * sarlavhasi, `izoh` — uning ostidagi qisqa tushuntirish.
+   */
+  | 'bolim';
+
+/** `fayl` savolida qabul qilinadigan fayllar */
+export type FaylQabuli = 'rasm' | 'pdf' | 'hammasi';
 
 export type Savol = {
   /** O'zgarmas kalit — javoblar shu bo'yicha bog'lanadi */
@@ -40,10 +52,15 @@ export type Savol = {
   talab: boolean;
   /** `tanlov`, `variant`, `belgilar` uchun — har bir tilda bir xil tartibda */
   variantlar: TillarRoyxat;
+  /** `fayl` uchun: qanday fayl qabul qilinadi */
+  qabul: FaylQabuli;
 };
 
-/** Bazaga yoziladigan bitta javob. Savol matni ham saqlanadi (o'zbekcha). */
-export type Javob = { id: string; savol: string; javob: string | string[] };
+/**
+ * Bazaga yoziladigan bitta javob. Savol matni ham saqlanadi (o'zbekcha).
+ * `fayl` savolida javob — yopiq bucket'dagi fayl yo'li, `tur` shuni bildiradi.
+ */
+export type Javob = { id: string; savol: string; javob: string | string[]; tur?: 'fayl' };
 
 export const SAVOL_TURLARI: { qiymat: SavolTuri; yorliq: string }[] = [
   { qiymat: 'matn', yorliq: 'Qisqa matn' },
@@ -54,7 +71,51 @@ export const SAVOL_TURLARI: { qiymat: SavolTuri; yorliq: string }[] = [
   { qiymat: 'tanlov', yorliq: 'Ro‘yxatdan tanlash' },
   { qiymat: 'variant', yorliq: 'Bitta variant' },
   { qiymat: 'belgilar', yorliq: 'Bir nechta variant' },
+  { qiymat: 'fayl', yorliq: 'Fayl yuklash (surat, hujjat)' },
+  { qiymat: 'rozilik', yorliq: 'Rozilik belgisi' },
+  { qiymat: 'bolim', yorliq: '➜ Yangi qadam (sarlavha)' },
 ];
+
+export const FAYL_QABULI: { qiymat: FaylQabuli; yorliq: string }[] = [
+  { qiymat: 'rasm', yorliq: 'Faqat rasm (JPG, PNG, WEBP)' },
+  { qiymat: 'pdf', yorliq: 'Faqat PDF' },
+  { qiymat: 'hammasi', yorliq: 'Rasm yoki hujjat (JPG, PNG, WEBP, PDF, Word)' },
+];
+
+/** Qabul turi -> ruxsat etilgan MIME turlari va kengaytmalar */
+export const FAYL_TURLARI: Record<FaylQabuli, Record<string, string>> = {
+  rasm: { 'image/jpeg': '.jpg', 'image/png': '.png', 'image/webp': '.webp' },
+  pdf: { 'application/pdf': '.pdf' },
+  hammasi: {
+    'image/jpeg': '.jpg',
+    'image/png': '.png',
+    'image/webp': '.webp',
+    'application/pdf': '.pdf',
+    'application/msword': '.doc',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document': '.docx',
+  },
+};
+
+/** Ishtirokchi yuklaydigan bitta faylning eng katta hajmi */
+export const ARIZA_FAYL_CHEGARASI = 15 * 1024 * 1024;
+
+/** Brauzer fayl turini aytmasa — kengaytmadan aniqlanadi */
+export function arizaFaylTuri(nom: string, tur?: string | null): string {
+  const berilgan = (tur ?? '').toLowerCase().split(';')[0].trim();
+  if (berilgan && berilgan in FAYL_TURLARI.hammasi) return berilgan;
+  const k = nom.toLowerCase().split('.').pop() ?? '';
+  const topilgan = Object.entries(FAYL_TURLARI.hammasi).find(
+    ([, kengaytma]) => kengaytma === `.${k}` || (k === 'jpeg' && kengaytma === '.jpg'),
+  );
+  return topilgan?.[0] ?? berilgan;
+}
+
+/** Tanlov fayllari papkasi: shu tanlovga tegishli bo'lmagan yo'l qabul qilinmaydi */
+export function arizaPapkasi(tanlovId: number): string {
+  return `tanlov-${tanlovId}/`;
+}
+
+const FAYL_YOLI = /^tanlov-\d+\/\d{4}-\d{2}\/[a-z0-9-]+\.(jpg|png|webp|pdf|doc|docx)$/;
 
 const TURLAR = new Set<SavolTuri>(SAVOL_TURLARI.map((t) => t.qiymat));
 
@@ -74,6 +135,7 @@ export function yangiSavol(): Savol {
     izoh: { uz: '', ru: '', en: '' },
     talab: false,
     variantlar: { uz: [], ru: [], en: [] },
+    qabul: 'hammasi',
   };
 }
 
@@ -121,6 +183,7 @@ export function anketaniOqi(xom: unknown): Savol[] {
       izoh: tillar(s.izoh),
       talab: Boolean(s.talab),
       variantlar: variantliMi(tur) ? tillarRoyxat(s.variantlar) : { uz: [], ru: [], en: [] },
+      qabul: s.qabul === 'rasm' || s.qabul === 'pdf' ? s.qabul : 'hammasi',
     });
   }
   return natija;
@@ -160,11 +223,40 @@ export function variantlarTilda(s: Savol, locale: string): string[] {
 export function javoblarniTekshir(
   savollar: Savol[],
   xom: Record<string, unknown>,
+  /** Fayl yo'llari shu papkadan bo'lishi shart (`arizaPapkasi`) */
+  faylPapkasi = '',
 ): { ok: true; javoblar: Javob[] } | { ok: false; savolId: string } {
   const javoblar: Javob[] = [];
 
   for (const s of savollar) {
     const v = xom[s.id];
+
+    if (s.tur === 'bolim') continue;
+
+    if (s.tur === 'rozilik') {
+      const rozi = v === true || v === 'ha';
+      if (s.talab && !rozi) return { ok: false, savolId: s.id };
+      if (rozi) javoblar.push({ id: s.id, savol: s.savol.uz, javob: 'Ha' });
+      continue;
+    }
+
+    if (s.tur === 'fayl') {
+      const yol = typeof v === 'string' ? v.trim() : '';
+      if (!yol) {
+        if (s.talab) return { ok: false, savolId: s.id };
+        continue;
+      }
+      const kengaytma = yol.slice(yol.lastIndexOf('.'));
+      if (
+        !FAYL_YOLI.test(yol) ||
+        !yol.startsWith(faylPapkasi) ||
+        !Object.values(FAYL_TURLARI[s.qabul]).includes(kengaytma)
+      ) {
+        return { ok: false, savolId: s.id };
+      }
+      javoblar.push({ id: s.id, savol: s.savol.uz, javob: yol, tur: 'fayl' });
+      continue;
+    }
 
     if (s.tur === 'belgilar') {
       const raqamlar = (Array.isArray(v) ? v : [])
@@ -225,9 +317,38 @@ export function javoblarniOqi(xom: unknown): Javob[] {
       id: String(x.id ?? ''),
       savol: String(x.savol ?? ''),
       javob: Array.isArray(x.javob) ? x.javob.map(String) : String(x.javob ?? ''),
+      ...(x.tur === 'fayl' ? { tur: 'fayl' as const } : {}),
     }));
 }
 
 export function javobMatni(j: Javob['javob']): string {
   return Array.isArray(j) ? j.join(', ') : j;
+}
+
+/**
+ * Ariza sahifasidagi qadamlar uchun anketani bo'laklaydi.
+ *
+ *   boshi     — birinchi "bolim" gacha bo'lgan savollar (ishtirokchi qadamiga qo'shiladi)
+ *   bolimlar  — har bir "bolim" va undan keyingi savollar (alohida qadam)
+ *   roziliklar — rozilik belgilari: qayerda turganidan qat'i nazar oxirgi,
+ *                tasdiqlash qadamida so'raladi
+ */
+export function qadamlargaBol(anketa: Savol[]): {
+  boshi: Savol[];
+  bolimlar: { sarlavha: Savol; savollar: Savol[] }[];
+  roziliklar: Savol[];
+} {
+  const boshi: Savol[] = [];
+  const bolimlar: { sarlavha: Savol; savollar: Savol[] }[] = [];
+  const roziliklar: Savol[] = [];
+
+  for (const s of anketa) {
+    if (s.tur === 'rozilik') roziliklar.push(s);
+    else if (s.tur === 'bolim') bolimlar.push({ sarlavha: s, savollar: [] });
+    else if (bolimlar.length) bolimlar[bolimlar.length - 1].savollar.push(s);
+    else boshi.push(s);
+  }
+
+  // Ichi bo'sh qadam ko'rsatilmaydi
+  return { boshi, bolimlar: bolimlar.filter((b) => b.savollar.length > 0), roziliklar };
 }

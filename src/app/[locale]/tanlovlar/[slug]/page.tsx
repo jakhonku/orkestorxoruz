@@ -3,14 +3,27 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, Download, MapPin, ScrollText, Trophy, Users } from 'lucide-react';
+import {
+  ArrowRight,
+  CalendarDays,
+  Clock,
+  Download,
+  FileCheck2,
+  Lock,
+  MapPin,
+  ScrollText,
+  SendHorizontal,
+  Trophy,
+  Users,
+} from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
-import { ApplyModal } from '@/components/features/apply-modal';
-import { pick, flagEmoji } from '@/lib/utils';
-import { anketaniOqi, type Savol } from '@/lib/anketa';
+import { Button } from '@/components/ui/button';
+import { Link } from '@/i18n/navigation';
+import { cn, pick, flagEmoji } from '@/lib/utils';
+import { anketaniOqi, qadamlargaBol, tilda, type Savol } from '@/lib/anketa';
 import type { Competition } from '@/types';
 import {
   getCompetitionBySlug,
@@ -56,24 +69,10 @@ export default async function CompetitionDetailPage({
   // Ariza qaysi tanlovga tegishli ekanini bilish uchun bazadagi id kerak
   const meta = await getCompetitionMeta(params.slug);
 
-  return (
-    <Detail
-      competition={competition}
-      competitionId={meta?.id}
-      anketa={anketaniOqi(meta?.formFields)}
-    />
-  );
+  return <Detail competition={competition} anketa={anketaniOqi(meta?.formFields)} />;
 }
 
-function Detail({
-  competition,
-  competitionId,
-  anketa,
-}: {
-  competition: Competition;
-  competitionId?: number;
-  anketa: Savol[];
-}) {
+function Detail({ competition, anketa }: { competition: Competition; anketa: Savol[] }) {
   const locale = useLocale();
   const t = useTranslations('Competitions');
   const tn = useTranslations('Nav');
@@ -136,7 +135,17 @@ function Detail({
               </span>
             )}
           </div>
-          <ApplyModal status={competition.status} competitionId={competitionId} anketa={anketa} />
+          <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+            {competition.regulationsFile && (
+              <Button asChild variant="outline" size="lg">
+                <a href={competition.regulationsFile} target="_blank" rel="noreferrer">
+                  <Download className="h-4 w-4" />
+                  {t('regulationsFile')}
+                </a>
+              </Button>
+            )}
+            <ArizaTugmasi slug={competition.slug} status={competition.status} />
+          </div>
         </div>
       </section>
 
@@ -153,17 +162,6 @@ function Detail({
               <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
                 {pick(competition.regulations, locale)}
               </p>
-              {competition.regulationsFile && (
-                <a
-                  href={competition.regulationsFile}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl border border-border bg-white px-5 py-3 text-sm font-semibold text-navy shadow-soft transition-colors hover:border-gold hover:bg-gold/5"
-                >
-                  <Download className="h-4 w-4 text-gold" />
-                  {t('regulationsFile')}
-                </a>
-              )}
             </Reveal>
 
             {/* Timeline */}
@@ -198,32 +196,133 @@ function Detail({
             </Reveal>
           </div>
 
-          {/* Jury */}
-          <Reveal delay={0.15}>
-            <div className="rounded-2xl border border-border bg-navy-50/50 p-6">
-              <h2 className="flex items-center gap-2 font-serif text-xl font-semibold text-navy">
-                <Users className="h-5 w-5 text-gold" />
-                {t('juryTitle')}
-              </h2>
-              <ul className="mt-5 space-y-4">
-                {competition.jury.map((member, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="mt-0.5 text-xl leading-none">
-                      {flagEmoji(memberFlag(member.country))}
-                    </span>
-                    <div>
-                      <p className="font-medium text-navy">{pick(member.name, locale)}</p>
-                      <p className="text-xs text-muted-foreground">{pick(member.title, locale)}</p>
-                      <p className="text-xs text-gold-700">{pick(member.country, locale)}</p>
-                    </div>
+          <div className="space-y-6 lg:sticky lg:top-28 lg:self-start">
+            <Ishtirok competition={competition} anketa={anketa} />
+
+            {/* Jury */}
+            {competition.jury.length > 0 && (
+              <Reveal delay={0.15}>
+                <div className="rounded-2xl border border-border bg-navy-50/50 p-6">
+                  <h2 className="flex items-center gap-2 font-serif text-xl font-semibold text-navy">
+                    <Users className="h-5 w-5 text-gold" />
+                    {t('juryTitle')}
+                  </h2>
+                  <ul className="mt-5 space-y-4">
+                    {competition.jury.map((member, i) => (
+                      <li key={i} className="flex items-start gap-3">
+                        <span className="mt-0.5 text-xl leading-none">
+                          {flagEmoji(memberFlag(member.country))}
+                        </span>
+                        <div>
+                          <p className="font-medium text-navy">{pick(member.name, locale)}</p>
+                          <p className="text-xs text-muted-foreground">{pick(member.title, locale)}</p>
+                          <p className="text-xs text-gold-700">{pick(member.country, locale)}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Telefonda ariza tugmasi doim ko'rinib tursin */}
+      {competition.status === 'ochiq' && <div className="h-20 lg:hidden" aria-hidden="true" />}
+      {competition.status === 'ochiq' && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white/95 p-3 backdrop-blur-md lg:hidden">
+          <ArizaTugmasi slug={competition.slug} status={competition.status} toliq />
+        </div>
+      )}
+    </>
+  );
+}
+
+/**
+ * Ariza tugmasi — holatga qarab:
+ *   ochiq     → ariza sahifasiga havola
+ *   tez-kunda → "Ariza qabuli tez kunda" (bosilmaydi)
+ *   yopiq     → "Ariza qabuli yopilgan" (bosilmaydi)
+ */
+function ArizaTugmasi({
+  slug,
+  status,
+  toliq,
+}: {
+  slug: string;
+  status: CompetitionStatus;
+  /** Butun kenglikda */
+  toliq?: boolean;
+}) {
+  const t = useTranslations('Competitions');
+
+  if (status !== 'ochiq') {
+    return (
+      <span
+        className={cn(
+          'inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border bg-navy-50/60 px-7 text-sm font-semibold text-muted-foreground',
+          toliq && 'w-full',
+        )}
+      >
+        {status === 'tez-kunda' ? <Clock className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
+        {status === 'tez-kunda' ? t('btnSoon') : t('btnClosed')}
+      </span>
+    );
+  }
+
+  return (
+    <Button asChild variant="gold" size="lg" className={cn('group', toliq && 'w-full')}>
+      <Link href={`/tanlovlar/${slug}/ariza`}>
+        <SendHorizontal className="h-4 w-4 transition-transform duration-200 group-hover:-rotate-12" />
+        {t('applyButton')}
+        <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
+      </Link>
+    </Button>
+  );
+}
+
+/** "Ishtirok etish" kartasi: necha qadam, nimalarni tayyorlash kerak va ariza tugmasi */
+function Ishtirok({ competition, anketa }: { competition: Competition; anketa: Savol[] }) {
+  const locale = useLocale();
+  const t = useTranslations('Competitions');
+
+  const { bolimlar } = qadamlargaBol(anketa);
+  // Ishtirokchi + aloqa + anketa bo'limlari (yoki oddiy shakl) + tasdiqlash
+  const qadamlar = 2 + (anketa.length > 0 ? bolimlar.length : 1) + 1;
+  const tayyorlash = anketa.filter((s) => s.tur === 'fayl' || s.tur === 'matnKatta');
+
+  return (
+    <Reveal delay={0.1}>
+      <div className="overflow-hidden rounded-2xl border border-gold/30 bg-white shadow-soft">
+        <div className="bg-navy-950 px-6 py-5">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
+            {t('steps', { n: qadamlar })}
+          </p>
+          <h2 className="mt-1 font-serif text-xl font-semibold text-white">{t('participateTitle')}</h2>
+          <p className="mt-1 text-sm text-white/70">{t('participateText')}</p>
+        </div>
+
+        <div className="space-y-5 p-6">
+          {tayyorlash.length > 0 && (
+            <div>
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                {t('prepareTitle')}
+              </p>
+              <ul className="space-y-2.5">
+                {tayyorlash.map((s) => (
+                  <li key={s.id} className="flex items-start gap-2.5 text-sm text-navy-900">
+                    <FileCheck2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
+                    {tilda(s.savol, locale)}
                   </li>
                 ))}
               </ul>
             </div>
-          </Reveal>
+          )}
+          <ArizaTugmasi slug={competition.slug} status={competition.status} toliq />
         </div>
-      </section>
-    </>
+      </div>
+    </Reveal>
   );
 }
 

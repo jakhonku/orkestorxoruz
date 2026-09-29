@@ -1,11 +1,17 @@
 import Link from 'next/link';
+import { headers } from 'next/headers';
 import { ExternalLink, FileEdit, ListChecks } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { db } from '@/lib/db';
 import { anketaniOqi, javobMatni, javoblarniOqi } from '@/lib/anketa';
 import { sahifaRuxsati } from '@/server/admin/huquq';
-import { sana, tanlovMurojaati, tanlovNomi } from '@/server/admin/tanlov-arizalari';
+import {
+  arizaFayliHavolasi,
+  sana,
+  tanlovMurojaati,
+  tanlovNomi,
+} from '@/server/admin/tanlov-arizalari';
 import { MurojaatlarRoyxati } from '../arizalar/_components/murojaatlar-royxati';
 import { ExcelTugmasi } from './excel-tugmasi';
 
@@ -92,8 +98,17 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
     'Ichki eslatma',
   ];
 
+  // Excel'dagi fayl havolalari to'liq manzil bo'lishi kerak
+  const h = headers();
+  const asos = `${h.get('x-forwarded-proto') ?? 'https'}://${h.get('host') ?? ''}`;
+
   const jadval = arizalar.map((a, i) => {
-    const javob = new Map(javoblarniOqi(a.answers).map((j) => [j.id, javobMatni(j.javob)]));
+    const javob = new Map(
+      javoblarniOqi(a.answers).map((j) => [
+        j.id,
+        j.tur === 'fayl' ? arizaFayliHavolasi(String(j.javob), asos) : javobMatni(j.javob),
+      ]),
+    );
     return [
       String(arizalar.length - i),
       sana(a.createdAt),

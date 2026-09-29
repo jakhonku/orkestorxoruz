@@ -22,7 +22,8 @@ export type Murojaat = {
   eslatma: string | null;
   email: string | null;
   telefon: string | null;
-  tafsilotlar: { yorliq: string; qiymat: string }[];
+  /** `havola` bo'lsa qiymat bosiladigan havola bo'lib chiqadi (arizaga biriktirilgan fayl) */
+  tafsilotlar: { yorliq: string; qiymat: string; havola?: string }[];
 };
 
 const TURLAR: { kalit: MurojaatTuri | 'hammasi'; nom: string }[] = [
@@ -189,7 +190,20 @@ export function MurojaatlarRoyxati({
                           <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                             {t.yorliq}
                           </dt>
-                          <dd className="whitespace-pre-wrap text-sm text-navy-900">{t.qiymat}</dd>
+                          <dd className="whitespace-pre-wrap text-sm text-navy-900">
+                            {t.havola ? (
+                              <a
+                                href={t.havola}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1 font-medium text-navy underline decoration-gold/60 underline-offset-2 hover:text-gold-700"
+                              >
+                                📎 {t.qiymat}
+                              </a>
+                            ) : (
+                              t.qiymat
+                            )}
+                          </dd>
                         </div>
                       ))}
                     </dl>
