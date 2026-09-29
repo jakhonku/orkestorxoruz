@@ -35,7 +35,7 @@ export function Footer({
         { label: tn('ensembles'), href: '/jamoalar' },
         { label: tn('international'), href: '/xalqaro' },
         { label: tn('internationalProjects'), href: '/xalqaro/loyihalar' },
-        { label: tn('experts'), href: '/ekspertlar' },
+        { label: tn('experts'), href: '/haqida#ekspertlar' },
       ],
     },
     {

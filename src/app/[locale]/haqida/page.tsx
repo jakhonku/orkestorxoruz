@@ -8,8 +8,9 @@ import { PageHeader } from '@/components/shared/page-header';
 import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
 import { Rahbariyat } from '@/components/features/rahbariyat';
-import type { DocumentLink, Leader, Localized } from '@/types';
-import { getDocuments, getLeaders } from '@/server/queries/experts';
+import { Ekspertlar } from '@/components/features/ekspertlar';
+import type { DocumentLink, Expert, Leader, Localized } from '@/types';
+import { getDocuments, getLeaders, getExperts } from '@/server/queries/experts';
 import { getAboutTasks } from '@/server/queries/home';
 import { getSettings } from '@/server/queries/settings';
 import { pick } from '@/lib/utils';
@@ -26,11 +27,12 @@ export async function generateMetadata({
 export default async function AboutPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
 
-  const [leaders, documents, tasks, settings] = await Promise.all([
+  const [leaders, documents, tasks, settings, experts] = await Promise.all([
     getLeaders(),
     getDocuments(),
     getAboutTasks(),
     getSettings(),
+    getExperts(),
   ]);
 
   return (
@@ -38,6 +40,7 @@ export default async function AboutPage({ params }: { params: { locale: Locale }
       leaders={leaders}
       documents={documents}
       tasks={tasks}
+      experts={experts}
       missionText={settings.missionText}
       missionImage={settings.missionImage}
       headerImage={settings.aboutHeaderImage}
@@ -49,6 +52,7 @@ function AboutContent({
   leaders,
   documents,
   tasks,
+  experts,
   missionText,
   missionImage,
   headerImage,
@@ -56,12 +60,14 @@ function AboutContent({
   leaders: Leader[];
   documents: DocumentLink[];
   tasks: Localized[];
+  experts: Expert[];
   missionText: Localized;
   missionImage: string;
   /** Banner o'ng tomonidagi rasm — "Sayt sozlamalari" da tanlanadi */
   headerImage: string;
 }) {
   const t = useTranslations('About');
+  const te = useTranslations('Experts');
   const tn = useTranslations('Nav');
   const locale = useLocale();
 
@@ -131,8 +137,16 @@ function AboutContent({
         </div>
       </section>
 
+      {/* Experts / Xorijiy ekspertlar */}
+      <section id="ekspertlar" className="section bg-navy-50/40">
+        <div className="container">
+          <SectionTitle title={te('title')} subtitle={te('subtitle')} />
+          <Ekspertlar experts={experts} />
+        </div>
+      </section>
+
       {/* Documents */}
-      <section className="section bg-navy-50/40">
+      <section className="section bg-white">
         <div className="container max-w-3xl">
           <SectionTitle title={t('documentsTitle')} align="left" />
           <div className="space-y-3">

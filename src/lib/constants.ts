@@ -82,7 +82,14 @@ export type NavItem = {
 
 export const NAV_ITEMS: NavItem[] = [
   { key: 'home', href: '/' },
-  { key: 'about', href: '/haqida' },
+  {
+    key: 'about',
+    href: '/haqida',
+    children: [
+      { key: 'about', href: '/haqida' },
+      { key: 'experts', href: '/haqida#ekspertlar' },
+    ],
+  },
   { key: 'ensembles', href: '/jamoalar' },
   {
     key: 'activity',
@@ -100,7 +107,7 @@ export const NAV_ITEMS: NavItem[] = [
     href: '/xalqaro',
     children: [
       { key: 'internationalProjects', href: '/xalqaro/loyihalar' },
-      { key: 'experts', href: '/ekspertlar' },
+      { key: 'experts', href: '/haqida#ekspertlar' },
     ],
   },
   { key: 'afisha', href: '/afisha' },
