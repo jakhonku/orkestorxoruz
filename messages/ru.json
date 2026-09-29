@@ -257,7 +257,10 @@
     "form_email": "Email",
     "form_phone": "Телефон",
     "form_category": "Направление",
-    "form_message": "Дополнительная информация"
+    "form_message": "Дополнительная информация",
+    "form_choose": "Выберите",
+    "form_invalid": "Неверное значение",
+    "form_invalidUrl": "Ссылка должна начинаться с https://"
   },
   "Talent": {
     "title": "Orchestra and Choir.uz Talent",

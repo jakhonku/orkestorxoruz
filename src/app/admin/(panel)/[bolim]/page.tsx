@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { royxatOlish } from '@/server/admin/amallar';
 import { bolimTop } from '@/server/admin/registr';
+import { sahifaRuxsati } from '@/server/admin/huquq';
 import { Royxat } from '../_components/royxat';
 
 type Props = { params: { bolim: string } };
@@ -15,6 +16,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function BolimRoyxatiSahifasi({ params }: Props) {
   const bolim = bolimTop(params.bolim);
   if (!bolim) notFound();
+  await sahifaRuxsati(bolim.kalit);
 
   const qatorlar = await royxatOlish(bolim.kalit);
 

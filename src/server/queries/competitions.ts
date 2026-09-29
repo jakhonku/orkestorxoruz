@@ -54,7 +54,7 @@ export const getCompetitionBySlug = cache(async (slug: string): Promise<Competit
 export const getCompetitionMeta = cache(async (slug: string) => {
   return db.competition.findFirst({
     where: { slug, published: true },
-    select: { id: true, status: true, applicationEmail: true },
+    select: { id: true, status: true, applicationEmail: true, formFields: true },
   });
 });
 

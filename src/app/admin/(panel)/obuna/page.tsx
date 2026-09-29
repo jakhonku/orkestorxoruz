@@ -1,9 +1,11 @@
 import { db } from '@/lib/db';
+import { sahifaRuxsati } from '@/server/admin/huquq';
 import { Obunachilar } from './obunachilar';
 
 export const metadata = { title: 'Obunachilar' };
 
 export default async function ObunaSahifasi() {
+  await sahifaRuxsati('obuna');
   const royxat = await db.subscriber.findMany({ orderBy: { createdAt: 'desc' }, take: 1000 });
 
   return (

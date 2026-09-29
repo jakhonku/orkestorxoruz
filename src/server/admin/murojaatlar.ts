@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/db';
-import { joriySessiya } from '@/server/auth';
+import { bolimRuxsati } from './huquq';
 import type { SubmissionStatus } from '@/generated/prisma/enums';
 
 /**
@@ -33,9 +33,12 @@ function delegat(tur: MurojaatTuri): Delegat {
   return d;
 }
 
-async function ruxsat() {
-  const s = await joriySessiya();
-  if (!s) throw new Error('Ruxsat yo‘q. Qaytadan kiring.');
+/**
+ * Tanlov arizalari o'z bo'limidan ham boshqariladi — tanlov admini faqat
+ * ularga tega oladi, boshqa murojaatlarga emas.
+ */
+async function ruxsat(tur: MurojaatTuri | 'obuna') {
+  await bolimRuxsati(tur === 'obuna' ? 'obuna' : tur === 'tanlov' ? 'tanlov-arizalari' : 'arizalar');
 }
 
 export type Natija = { ok: true } | { ok: false; xato: string };
@@ -51,7 +54,7 @@ export async function holatOzgartirish(
   holat: SubmissionStatus,
 ): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat(tur);
     await delegat(tur).update({ where: { id }, data: { status: holat } });
     revalidatePath('/admin', 'layout');
     return { ok: true };
@@ -67,7 +70,7 @@ export async function eslatmaSaqlash(
   eslatma: string,
 ): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat(tur);
     const matn = eslatma.trim();
     await delegat(tur).update({ where: { id }, data: { adminNote: matn === '' ? null : matn } });
     return { ok: true };
@@ -78,7 +81,7 @@ export async function eslatmaSaqlash(
 
 export async function murojaatOchirish(tur: MurojaatTuri, id: number): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat(tur);
     await delegat(tur).delete({ where: { id } });
     revalidatePath('/admin', 'layout');
     return { ok: true };
@@ -90,7 +93,7 @@ export async function murojaatOchirish(tur: MurojaatTuri, id: number): Promise<N
 /** Obunachini faol / nofaol qilish */
 export async function obunaAlmashtirish(id: number): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat('obuna');
     const joriy = await db.subscriber.findUnique({ where: { id }, select: { active: true } });
     if (!joriy) return { ok: false, xato: 'Obunachi topilmadi.' };
     await db.subscriber.update({ where: { id }, data: { active: !joriy.active } });
@@ -102,7 +105,7 @@ export async function obunaAlmashtirish(id: number): Promise<Natija> {
 
 export async function obunaOchirish(id: number): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat('obuna');
     await db.subscriber.delete({ where: { id } });
     return { ok: true };
   } catch (e) {

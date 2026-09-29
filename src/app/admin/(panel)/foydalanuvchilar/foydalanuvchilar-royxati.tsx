@@ -2,9 +2,10 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, Check, KeyRound, Plus, Shield, Trash2, X } from 'lucide-react';
+import { AlertCircle, Check, KeyRound, Plus, Shield, Trash2, Trophy, X } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
+import { ROLLAR, type Rol } from '../_lib/bolimlar';
 import {
   faollikAlmashtirish,
   foydalanuvchiOchirish,
@@ -17,7 +18,7 @@ export type Foydalanuvchi = {
   id: number;
   email: string;
   name: string;
-  admin: boolean;
+  rol: Rol;
   faol: boolean;
   oxirgiKirish: string | null;
 };
@@ -58,8 +59,13 @@ export function FoydalanuvchilarRoyxati({
         <div>
           <h1 className="font-serif text-2xl font-semibold text-navy">Foydalanuvchilar</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            <b className="font-semibold text-navy">Administrator</b> — hamma narsani boshqaradi,{' '}
-            <b className="font-semibold text-navy">muharrir</b> — faqat kontentni tahrirlaydi.
+            {ROLLAR.map((r, i) => (
+              <span key={r.qiymat}>
+                {i > 0 && ', '}
+                <b className="font-semibold text-navy">{r.nom}</b> — {r.izoh}
+              </span>
+            ))}
+            .
           </p>
         </div>
 
@@ -113,8 +119,11 @@ export function FoydalanuvchilarRoyxati({
           <div>
             <label className="mb-1.5 block text-sm font-medium text-navy">Roli</label>
             <select name="role" defaultValue="MUHARRIR" className={INPUT}>
-              <option value="MUHARRIR">Muharrir</option>
-              <option value="ADMIN">Administrator</option>
+              {ROLLAR.map((r) => (
+                <option key={r.qiymat} value={r.qiymat}>
+                  {r.nom}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -141,10 +150,16 @@ export function FoydalanuvchilarRoyxati({
               <div className="min-w-0 flex-1">
                 <p className="flex items-center gap-2 truncate text-sm font-semibold text-navy">
                   {f.name}
-                  {f.admin && (
+                  {f.rol === 'ADMIN' && (
                     <span className="inline-flex items-center gap-1 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-navy-900">
                       <Shield className="h-3 w-3" />
                       Admin
+                    </span>
+                  )}
+                  {f.rol === 'TANLOV' && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-blue-700">
+                      <Trophy className="h-3 w-3" />
+                      Tanlov admini
                     </span>
                   )}
                   {f.id === meniId && (
@@ -176,14 +191,19 @@ export function FoydalanuvchilarRoyxati({
 
                 {f.id !== meniId && (
                   <>
-                    <button
-                      type="button"
+                    <select
+                      value={f.rol}
                       disabled={kutilmoqda}
-                      onClick={() => amal(() => rolniOzgartirish(f.id, !f.admin))}
-                      className="h-8 rounded-lg border border-border px-2.5 text-xs font-medium text-navy transition-colors hover:border-gold/50 disabled:opacity-60"
+                      onChange={(e) => amal(() => rolniOzgartirish(f.id, e.target.value))}
+                      title="Roli"
+                      className="h-8 rounded-lg border border-border bg-white px-2 text-xs font-medium text-navy transition-colors hover:border-gold/50 disabled:opacity-60"
                     >
-                      {f.admin ? 'Muharrir qilish' : 'Admin qilish'}
-                    </button>
+                      {ROLLAR.map((r) => (
+                        <option key={r.qiymat} value={r.qiymat}>
+                          {r.nom}
+                        </option>
+                      ))}
+                    </select>
 
                     <button
                       type="button"

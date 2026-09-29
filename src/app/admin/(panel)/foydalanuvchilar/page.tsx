@@ -20,7 +20,7 @@ export default async function FoydalanuvchilarSahifasi() {
         id: f.id,
         email: f.email,
         name: f.name,
-        admin: f.role === 'ADMIN',
+        rol: f.role,
         faol: f.active,
         oxirgiKirish: f.lastLoginAt ? f.lastLoginAt.toISOString().slice(0, 10) : null,
       }))}

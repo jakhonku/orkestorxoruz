@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   BarChart3,
   CalendarDays,
+  ClipboardList,
   ExternalLink,
   FileText,
   FolderKanban,
@@ -33,7 +34,7 @@ import {
 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { MENYU } from '../_lib/bolimlar';
+import { MENYU, ROLLAR, type Rol } from '../_lib/bolimlar';
 import { chiqish } from '../../actions';
 
 const IKONKALAR: Record<string, LucideIcon> = {
@@ -58,23 +59,29 @@ const IKONKALAR: Record<string, LucideIcon> = {
   type: Type,
   'layout-dashboard': LayoutDashboard,
   'user-search': UserSearch,
+  'clipboard-list': ClipboardList,
 };
 
 export function YonMenyu({
   foydalanuvchi,
-  adminMi,
-  yangiArizalar,
+  rol,
+  belgilar,
 }: {
   foydalanuvchi: { name: string; email: string };
-  adminMi: boolean;
-  yangiArizalar: number;
+  rol: Rol;
+  /** Bo'lim kaliti -> yangi (ko'rilmagan) yozuvlar soni */
+  belgilar: Record<string, number>;
 }) {
   const pathname = usePathname();
   const [ochiq, setOchiq] = useState(false);
 
+  // Tanlov admini faqat o'z bo'limlarini ko'radi; server ham shuni tekshiradi
+  const tanlovAdmini = rol === 'TANLOV';
   const guruhlar = MENYU.map((g) => ({
     ...g,
-    bolimlar: g.bolimlar.filter((b) => !b.faqatAdmin || adminMi),
+    bolimlar: g.bolimlar.filter((b) =>
+      tanlovAdmini ? b.tanlovRoli : !b.faqatAdmin || rol === 'ADMIN',
+    ),
   })).filter((g) => g.bolimlar.length > 0);
 
   return (
@@ -107,7 +114,9 @@ export function YonMenyu({
             <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-gold">
               Orkestr va Xor
             </p>
-            <p className="font-serif text-lg font-semibold text-navy">Boshqaruv paneli</p>
+            <p className="font-serif text-lg font-semibold text-navy">
+              {tanlovAdmini ? 'Tanlov paneli' : 'Boshqaruv paneli'}
+            </p>
           </Link>
           <button
             onClick={() => setOchiq(false)}
@@ -120,14 +129,16 @@ export function YonMenyu({
 
         {/* Menyu */}
         <nav className="flex-1 overflow-y-auto px-3 py-4">
-          <Havola
-            href="/admin"
-            faol={pathname === '/admin'}
-            ikonka={LayoutDashboard}
-            onClick={() => setOchiq(false)}
-          >
-            Bosh sahifa
-          </Havola>
+          {!tanlovAdmini && (
+            <Havola
+              href="/admin"
+              faol={pathname === '/admin'}
+              ikonka={LayoutDashboard}
+              onClick={() => setOchiq(false)}
+            >
+              Bosh sahifa
+            </Havola>
+          )}
 
           {guruhlar.map((guruh) => (
             <div key={guruh.nom} className="mt-5">
@@ -142,7 +153,7 @@ export function YonMenyu({
                     href={href}
                     faol={pathname === href || pathname.startsWith(href + '/')}
                     ikonka={IKONKALAR[b.ikonka] ?? FileText}
-                    belgi={b.kalit === 'arizalar' && yangiArizalar > 0 ? yangiArizalar : undefined}
+                    belgi={belgilar[b.kalit] ? belgilar[b.kalit] : undefined}
                     onClick={() => setOchiq(false)}
                   >
                     {b.nom}
@@ -168,6 +179,9 @@ export function YonMenyu({
           <div className="rounded-xl bg-navy-50/60 p-3">
             <p className="truncate text-sm font-medium text-navy">{foydalanuvchi.name}</p>
             <p className="truncate text-xs text-muted-foreground">{foydalanuvchi.email}</p>
+            <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold-700">
+              {ROLLAR.find((r) => r.qiymat === rol)?.nom}
+            </p>
             <form action={chiqish} className="mt-2">
               <button
                 type="submit"

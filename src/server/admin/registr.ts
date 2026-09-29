@@ -362,6 +362,12 @@ export const BOLIMLAR: Bolim[] = [
           { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm' },
         ],
       },
+      {
+        nom: 'formFields',
+        yorliq: 'Ariza anketasi',
+        tur: 'anketa',
+        izoh: 'Saytdagi "Ariza topshirish" oynasida shu savollar chiqadi. Tushgan arizalar — "Tanlov arizalari" bo‘limida.',
+      },
       tartib,
       nashr,
     ],

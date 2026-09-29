@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { db } from '@/lib/db';
 import { joriySessiya } from '@/server/auth';
+import { bolimgaRuxsatmi } from './huquq';
 import type { Maydon, Qiymatlar } from './turlar';
 import { SOZLAMA_TOPLAMLARI } from './sozlama-maydonlari';
 
@@ -47,6 +48,7 @@ export async function sozlamalarSaqlash(
   try {
     const sessiya = await joriySessiya();
     if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+    if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
 
     // Maydonlar ta'rifi faqat serverdan olinadi — mijoz yuborgan kalitgina
     // ishonchli deb qabul qilinadi.
@@ -117,6 +119,7 @@ export async function talentHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNat
   try {
     const sessiya = await joriySessiya();
     if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+    if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
 
     await db.setting.upsert({
       where: { key: TALENT_KALITI },

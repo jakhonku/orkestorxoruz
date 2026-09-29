@@ -1,5 +1,7 @@
 import { db } from '@/lib/db';
 import { VILOYATLAR } from '@/server/admin/registr';
+import { sahifaRuxsati } from '@/server/admin/huquq';
+import { qatorlar, sana, tanlovMurojaati } from '@/server/admin/tanlov-arizalari';
 import { MurojaatlarRoyxati, type Murojaat } from './_components/murojaatlar-royxati';
 
 export const metadata = { title: 'Arizalar va xabarlar' };
@@ -15,19 +17,9 @@ const JAMOA_TURI: Record<string, string> = {
   ANSAMBL: 'Ansambl',
 };
 
-function sana(d: Date): string {
-  const p = (n: number) => String(n).padStart(2, '0');
-  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
-}
-
-/** Bo'sh maydonlar tafsilotlar ro'yxatiga tushmaydi */
-function qatorlar(juftlar: [string, string | number | null | undefined][]) {
-  return juftlar
-    .filter(([, q]) => q !== null && q !== undefined && String(q).trim() !== '')
-    .map(([yorliq, qiymat]) => ({ yorliq, qiymat: String(qiymat) }));
-}
-
 export default async function ArizalarSahifasi() {
+  await sahifaRuxsati('arizalar');
+
   const [aloqa, jamoa, tanlov, talent] = await Promise.all([
     db.contactMessage.findMany({ orderBy: { createdAt: 'desc' }, take: CHEGARA }),
     db.ensembleApplication.findMany({ orderBy: { createdAt: 'desc' }, take: CHEGARA }),
@@ -84,33 +76,7 @@ export default async function ArizalarSahifasi() {
       ]),
     })),
 
-    ...tanlov.map((r) => ({
-      id: r.id,
-      tur: 'tanlov' as const,
-      sarlavha: r.fullName,
-      qisqa: [
-        (r.competition?.title as { uz?: string } | null)?.uz,
-        r.ensembleName,
-        r.category,
-      ]
-        .filter(Boolean)
-        .join(' · '),
-      status: r.status,
-      sana: sana(r.createdAt),
-      eslatma: r.adminNote,
-      email: r.email,
-      telefon: r.phone,
-      tafsilotlar: qatorlar([
-        ['Ishtirokchi', r.fullName],
-        ['Tanlov', (r.competition?.title as { uz?: string } | null)?.uz],
-        ['Jamoa', r.ensembleName],
-        ['Yo‘nalish', r.category],
-        ['Email', r.email],
-        ['Telefon', r.phone],
-        ['Til', r.locale.toUpperCase()],
-        ['Xabar', r.message],
-      ]),
-    })),
+    ...tanlov.map(tanlovMurojaati),
 
     ...talent.map((r) => ({
       id: r.id,

@@ -95,6 +95,8 @@ enum SubmissionStatus {
 enum AdminRole {
   ADMIN
   MUHARRIR
+  /// Faqat tanlov va festivallarni hamda ularning arizalarini boshqaradi
+  TANLOV
 }
 
 // ============================================================
@@ -264,6 +266,8 @@ model Competition {
   regulationsFileUrl String?           @db.Text
   applicationEmail   String?           @db.VarChar(160)
   prizeFund          Json?
+  /// Ariza anketasi — admin o'zi tuzadigan savollar ro'yxati (src/lib/anketa.ts)
+  formFields         Json?
   published          Boolean           @default(true)
   sortOrder          Int               @default(0)
   createdAt          DateTime          @default(now())
@@ -594,6 +598,9 @@ model CompetitionApplication {
   phone         String           @db.VarChar(40)
   category      String?          @db.VarChar(120)
   message       String?          @db.Text
+  /// Anketa savollariga javoblar: [{ id, savol, javob }] — savol matni ham
+  /// saqlanadi, anketa keyin o'zgarsa ham eski ariza tushunarli qoladi
+  answers       Json?
   locale        String           @db.VarChar(5)
   status        SubmissionStatus @default(YANGI)
   adminNote     String?          @db.Text

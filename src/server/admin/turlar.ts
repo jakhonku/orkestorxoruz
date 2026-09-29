@@ -41,7 +41,9 @@ export type MaydonTuri =
   /** Uch tilli ro'yxat (har bir band alohida qator) */
   | 'kopTilliRoyxat'
   /** Takrorlanuvchi qatorlar (a'zolar, repertuar, galereya...) */
-  | 'qatorlar';
+  | 'qatorlar'
+  /** Ariza anketasi quruvchisi — savollar ro'yxati (src/lib/anketa.ts) */
+  | 'anketa';
 
 export type Maydon = {
   nom: string;
@@ -128,6 +130,7 @@ export function boshQiymat(m: Maydon): unknown {
     case 'kopTilliRoyxat':
       return boshKopTilliRoyxat();
     case 'qatorlar':
+    case 'anketa':
       return [];
     case 'belgi':
       return false;
@@ -153,7 +156,7 @@ export function qiymatBoshmi(m: Maydon, qiymat: unknown): boolean {
     const v = qiymat as Record<string, unknown[]> | null;
     return !TILLAR.some((t) => (v?.[t.kalit] ?? []).some((x) => String(x ?? '').trim() !== ''));
   }
-  if (m.tur === 'qatorlar') return ((qiymat as unknown[]) ?? []).length === 0;
+  if (m.tur === 'qatorlar' || m.tur === 'anketa') return ((qiymat as unknown[]) ?? []).length === 0;
   if (m.tur === 'raqam') return qiymat === null || qiymat === undefined || qiymat === '';
   if (m.tur === 'belgi') return !qiymat;
   return String(qiymat ?? '').trim() === '';

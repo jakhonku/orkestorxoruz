@@ -27,6 +27,7 @@ import {
   type Maydon,
 } from '@/server/admin/turlar';
 import { ExcelYuklash } from './excel-import';
+import { AnketaTuzuvchi } from './anketa-tuzuvchi';
 import { faylYukla } from '../_lib/yuklash';
 
 export const INPUT =
@@ -195,6 +196,9 @@ function Boshqaruv({
         />
       );
 
+    case 'anketa':
+      return <AnketaTuzuvchi qiymat={qiymat} ozgartir={ozgartir} />;
+
     case 'qatorlar':
       return (
         <Qatorlar
@@ -276,7 +280,7 @@ function TarjimaEslatmasi({ nusxala }: { nusxala: () => void }) {
   );
 }
 
-function KopTilliKiritish({
+export function KopTilliKiritish({
   qiymat,
   ozgartir,
   katta,
@@ -313,7 +317,7 @@ function KopTilliKiritish({
   );
 }
 
-function KopTilliRoyxatKiritish({
+export function KopTilliRoyxatKiritish({
   qiymat,
   ozgartir,
 }: {

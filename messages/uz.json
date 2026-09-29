@@ -257,7 +257,10 @@
     "form_email": "Email",
     "form_phone": "Telefon",
     "form_category": "Yo‘nalish",
-    "form_message": "Qo‘shimcha ma’lumot"
+    "form_message": "Qo‘shimcha ma’lumot",
+    "form_choose": "Tanlang",
+    "form_invalid": "Qiymat noto‘g‘ri",
+    "form_invalidUrl": "Havola https:// bilan boshlanishi kerak"
   },
   "Talent": {
     "title": "Orchestra and Choir.uz Talent",

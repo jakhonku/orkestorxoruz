@@ -7,6 +7,7 @@ import { db } from '@/lib/db';
 import { getSettings } from '@/server/queries/settings';
 import { ensembleTypeToDb, regionToDb } from '@/server/enums';
 import { arizaXabari } from '@/server/xabarnoma/pochta';
+import { anketaniOqi, javobMatni, javoblarniTekshir, type Javob } from '@/lib/anketa';
 import type { EnsembleType, Region } from '@/types';
 
 /**
@@ -251,6 +252,10 @@ const tanlovSxemasi = z.object({
   phone: matn(5, 40),
   category: ixtiyoriy(120),
   message: ixtiyoriy(3000),
+  /** Admin tuzgan anketaga javoblar — to'liq tekshiruv anketa o'qilgandan keyin */
+  javoblar: z
+    .record(z.string().max(40), z.union([z.string().max(5000), z.array(z.string().max(10)).max(50)]))
+    .optional(),
   locale: til,
   tuzoq,
 });
@@ -262,13 +267,24 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
   const d = t.qiymat;
 
   try {
+    let javoblar: Javob[] = [];
+
     // Ariza faqat "ochiq" tanlovga qabul qilinadi
     if (d.competitionId) {
       const tanlov = await db.competition.findUnique({
         where: { id: d.competitionId },
-        select: { status: true, published: true },
+        select: { status: true, published: true, formFields: true },
       });
       if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return TEKSHIRUV;
+
+      // Anketa bo'lsa javoblar unga solishtiriladi: majburiy savollar,
+      // variant raqamlari, havola va son ko'rinishi — hammasi serverda ham
+      const anketa = anketaniOqi(tanlov.formFields);
+      if (anketa.length > 0) {
+        const tekshiruv = javoblarniTekshir(anketa, d.javoblar ?? {});
+        if (!tekshiruv.ok) return TEKSHIRUV;
+        javoblar = tekshiruv.javoblar;
+      }
     }
 
     await db.competitionApplication.create({
@@ -280,6 +296,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
         phone: d.phone,
         category: yoNull(d.category),
         message: yoNull(d.message),
+        answers: javoblar.length > 0 ? (javoblar as never) : undefined,
         locale: d.locale,
       },
     });
@@ -290,6 +307,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
       { yorliq: 'Yo‘nalish', qiymat: d.category },
       { yorliq: 'Telefon', qiymat: d.phone },
       { yorliq: 'Email', qiymat: d.email },
+      ...javoblar.map((j) => ({ yorliq: j.savol, qiymat: javobMatni(j.javob) })),
       { yorliq: 'Izoh', qiymat: d.message },
     ]);
 

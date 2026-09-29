@@ -40,7 +40,14 @@ const HOLATLAR: { qiymat: string; nom: string; rang: string }[] = [
   { qiymat: 'RAD_ETILDI', nom: 'Rad etildi', rang: 'bg-red-50 text-red-700' },
 ];
 
-export function MurojaatlarRoyxati({ murojaatlar }: { murojaatlar: Murojaat[] }) {
+export function MurojaatlarRoyxati({
+  murojaatlar,
+  turlarsiz,
+}: {
+  murojaatlar: Murojaat[];
+  /** Tur tugmalari ko'rsatilmaydi — ro'yxatda bitta tur bo'lganda (tanlov arizalari) */
+  turlarsiz?: boolean;
+}) {
   const router = useRouter();
   const [tur, setTur] = useState<MurojaatTuri | 'hammasi'>('hammasi');
   const [faqatYangi, setFaqatYangi] = useState(false);
@@ -81,7 +88,7 @@ export function MurojaatlarRoyxati({ murojaatlar }: { murojaatlar: Murojaat[] })
     <div>
       {/* Turlar */}
       <div className="mb-4 flex flex-wrap gap-1.5">
-        {TURLAR.map((t) => {
+        {!turlarsiz && TURLAR.map((t) => {
           const yangi = yangiSoni(t.kalit);
           return (
             <button
@@ -177,8 +184,8 @@ export function MurojaatlarRoyxati({ murojaatlar }: { murojaatlar: Murojaat[] })
                 {yoyilgan && (
                   <div className="border-t border-border bg-navy-50/20 px-4 py-4">
                     <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
-                      {m.tafsilotlar.map((t) => (
-                        <div key={t.yorliq} className={t.qiymat.length > 90 ? 'sm:col-span-2' : ''}>
+                      {m.tafsilotlar.map((t, i) => (
+                        <div key={`${t.yorliq}-${i}`} className={t.qiymat.length > 90 ? 'sm:col-span-2' : ''}>
                           <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                             {t.yorliq}
                           </dt>

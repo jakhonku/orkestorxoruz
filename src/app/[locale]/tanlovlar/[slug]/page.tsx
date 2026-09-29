@@ -10,6 +10,7 @@ import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { ApplyModal } from '@/components/features/apply-modal';
 import { pick, flagEmoji } from '@/lib/utils';
+import { anketaniOqi, type Savol } from '@/lib/anketa';
 import type { Competition } from '@/types';
 import {
   getCompetitionBySlug,
@@ -55,15 +56,23 @@ export default async function CompetitionDetailPage({
   // Ariza qaysi tanlovga tegishli ekanini bilish uchun bazadagi id kerak
   const meta = await getCompetitionMeta(params.slug);
 
-  return <Detail competition={competition} competitionId={meta?.id} />;
+  return (
+    <Detail
+      competition={competition}
+      competitionId={meta?.id}
+      anketa={anketaniOqi(meta?.formFields)}
+    />
+  );
 }
 
 function Detail({
   competition,
   competitionId,
+  anketa,
 }: {
   competition: Competition;
   competitionId?: number;
+  anketa: Savol[];
 }) {
   const locale = useLocale();
   const t = useTranslations('Competitions');
@@ -127,7 +136,7 @@ function Detail({
               </span>
             )}
           </div>
-          <ApplyModal status={competition.status} competitionId={competitionId} />
+          <ApplyModal status={competition.status} competitionId={competitionId} anketa={anketa} />
         </div>
       </section>
 

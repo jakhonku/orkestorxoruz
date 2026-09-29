@@ -152,10 +152,16 @@ serverda `ILIKE` bilan bajariladi.
 Interfeys faqat o'zbek tilida, sayt qismidan mustaqil (`src/app/admin/`).
 Kirish — `/admin/kirish`: parolni **Supabase Auth** tekshiradi, sessiya
 Supabase cookie'sida saqlanadi va `src/middleware.ts` uni yangilab turadi.
-Rol (`ADMIN` / `MUHARRIR`) va faollik esa `admin_users` jadvalida —
+Rol (`ADMIN` / `MUHARRIR` / `TANLOV`) va faollik esa `admin_users` jadvalida —
 Supabase'da hisobi bo'lsa ham, jadvalda faol qaydi yo'q odam panelga kira olmaydi.
 Foydalanuvchi qo'shish/o'chirish va parol almashtirish Auth Admin API orqali
 bajariladi (`src/server/admin/foydalanuvchilar.ts`).
+
+`TANLOV` roli — "tanlov admini": panelda faqat "Tanlov va festivallar" va
+"Tanlov arizalari" bo'limlarini ko'radi. Ruxsat sahifalarda ham, server
+amallarida ham tekshiriladi (`src/server/admin/huquq.ts`). Har bir tanlovning
+ariza anketasini admin o'zi tuzadi (`competitions.formFields`, tuzilmasi —
+`src/lib/anketa.ts`), javoblar `competition_applications.answers` ga yoziladi.
 
 **Bo'limlar bitta joyda tavsiflanadi** — `src/server/admin/registr.ts`. Har bir
 bo'lim uchun model nomi, maydonlar ro'yxati va ro'yxatdagi qator ko'rinishi

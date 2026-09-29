@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 
 import { yozuvOlish } from '@/server/admin/amallar';
 import { bolimTop } from '@/server/admin/registr';
+import { sahifaRuxsati } from '@/server/admin/huquq';
 import type { Qiymatlar } from '@/server/admin/turlar';
 import { Shakl } from '../../_components/shakl';
 
@@ -20,6 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function TahrirlashSahifasi({ params }: Props) {
   const bolim = bolimTop(params.bolim);
   if (!bolim) notFound();
+  await sahifaRuxsati(bolim.kalit);
 
   const yangiMi = params.id === 'yangi';
   const id = yangiMi ? null : Number(params.id);

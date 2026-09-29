@@ -9,7 +9,8 @@ import { youtubeIdAjrat, youtubeIdTogrimi } from '@/lib/youtube';
 import { instagramAjrat, instagramKanonik, instagramUlashishmi } from '@/lib/instagram';
 import { postHavolaKanonik, postManbasi } from '@/lib/post';
 import { telegramYopiqmi } from '@/lib/telegram';
-import { joriySessiya } from '@/server/auth';
+import { bolimRuxsati } from './huquq';
+import { anketaXatosi, anketaniOqi } from '@/lib/anketa';
 import { bolimTop } from './registr';
 import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from './turlar';
 import { qatorlarTekshir, qatorlarniTozala } from './qatorlar';
@@ -36,10 +37,9 @@ function delegat(model: string): Delegat {
   return d;
 }
 
-async function ruxsat() {
-  const s = await joriySessiya();
-  if (!s) throw new Error('Ruxsat yo‘q. Qaytadan kiring.');
-  return s;
+/** Kirganmi va shu bo'limga ruxsati bormi (tanlov admini faqat o'z bo'limiga) */
+async function ruxsat(bolimKaliti: string) {
+  return bolimRuxsati(bolimKaliti);
 }
 
 /** Saytdagi barcha sahifalarni yangilaydi — o'zgarish darhol ko'rinadi */
@@ -92,6 +92,9 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       const s = postHavolaKanonik(String(qiymat ?? ''));
       return s === '' ? bosh() : s;
     }
+    case 'anketa':
+      // Mijozdan kelgan anketa qayta tozalanadi — bazaga faqat ma'lum tuzilma tushadi
+      return anketaniOqi(qiymat);
     default:
       // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga o'zgarishsiz tushadi.
       // Qiymat umuman kelmasa bo'sh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
@@ -130,6 +133,12 @@ function slugManbaMatni(qiymat: unknown): string {
 /** Majburiy maydonlarni tekshiradi */
 function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
   for (const m of maydonlar) {
+    if (m.tur === 'anketa') {
+      const xato = anketaXatosi(anketaniOqi(qiymatlar[m.nom]));
+      if (xato) return xato;
+      continue;
+    }
+
     // Ba'zi maydonlar shartli majburiy — masalan yangilikda havola qo'yilgan
     // bo'lsa sarlavha va matn talab qilinmaydi
     if (!talabMi(m, qiymatlar, maydonlar)) continue;
@@ -308,7 +317,7 @@ export async function yozuvSaqlash(
   malumotJson: string,
 ): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat(bolimKaliti);
 
     const bolim = bolimTop(bolimKaliti);
     if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
@@ -418,7 +427,7 @@ export async function yozuvSaqlash(
 
 export async function yozuvOchirish(bolimKaliti: string, id: number): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat(bolimKaliti);
 
     const bolim = bolimTop(bolimKaliti);
     if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
@@ -437,7 +446,7 @@ export async function yozuvOchirish(bolimKaliti: string, id: number): Promise<Na
 
 export async function nashrAlmashtirish(bolimKaliti: string, id: number): Promise<Natija> {
   try {
-    await ruxsat();
+    await ruxsat(bolimKaliti);
 
     const bolim = bolimTop(bolimKaliti);
     if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
@@ -459,7 +468,7 @@ export async function nashrAlmashtirish(bolimKaliti: string, id: number): Promis
 // ------------------------------------------------------------------
 
 export async function royxatOlish(bolimKaliti: string) {
-  await ruxsat();
+  await ruxsat(bolimKaliti);
   const bolim = bolimTop(bolimKaliti);
   if (!bolim) return [];
 
@@ -470,7 +479,7 @@ export async function royxatOlish(bolimKaliti: string) {
 }
 
 export async function yozuvOlish(bolimKaliti: string, id: number) {
-  await ruxsat();
+  await ruxsat(bolimKaliti);
   const bolim = bolimTop(bolimKaliti);
   if (!bolim) return null;
 

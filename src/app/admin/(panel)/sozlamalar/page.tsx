@@ -1,11 +1,13 @@
 import { SOZLAMA_MAYDONLARI } from '@/server/admin/sozlama-maydonlari';
 import { getSettings } from '@/server/queries/settings';
+import { sahifaRuxsati } from '@/server/admin/huquq';
 import type { Qiymatlar } from '@/server/admin/turlar';
 import { SozlamalarShakli } from './sozlamalar-shakli';
 
 export const metadata = { title: 'Sayt sozlamalari' };
 
 export default async function SozlamalarSahifasi() {
+  await sahifaRuxsati('sozlamalar');
   const s = await getSettings();
 
   const boshlangich: Qiymatlar = {

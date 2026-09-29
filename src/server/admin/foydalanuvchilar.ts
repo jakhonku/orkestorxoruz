@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { db } from '@/lib/db';
 import { supabaseAdmin } from '@/lib/supabase/admin';
 import { joriySessiya } from '@/server/auth';
+import type { AdminRole } from '@/generated/prisma/enums';
 
 /**
  * Admin foydalanuvchilarni boshqarish. Faqat ADMIN roliga ruxsat beriladi —
@@ -18,6 +19,11 @@ import { joriySessiya } from '@/server/auth';
 export type Natija = { ok: true } | { ok: false; xato: string };
 
 const ENG_QISQA_PAROL = 8;
+
+/** Mijozdan kelgan rol nomini tekshiradi — noma'lumi muharrirga tushadi */
+function rolTanla(x: unknown): AdminRole {
+  return x === 'ADMIN' || x === 'TANLOV' ? x : 'MUHARRIR';
+}
 
 async function adminSessiya() {
   const s = await joriySessiya();
@@ -49,7 +55,7 @@ export async function foydalanuvchiQoshish(formData: FormData): Promise<Natija> 
     const email = String(formData.get('email') ?? '').trim().toLowerCase();
     const name = String(formData.get('name') ?? '').trim();
     const parol = String(formData.get('parol') ?? '');
-    const role = String(formData.get('role') ?? 'MUHARRIR') === 'ADMIN' ? 'ADMIN' : 'MUHARRIR';
+    const role = rolTanla(String(formData.get('role') ?? ''));
 
     if (!email.includes('@')) return { ok: false, xato: 'Email noto‘g‘ri.' };
     if (!name) return { ok: false, xato: 'Ism to‘ldirilishi shart.' };
@@ -143,14 +149,14 @@ export async function faollikAlmashtirish(id: number): Promise<Natija> {
   }
 }
 
-export async function rolniOzgartirish(id: number, admin: boolean): Promise<Natija> {
+export async function rolniOzgartirish(id: number, rol: string): Promise<Natija> {
   try {
     const sessiya = await adminSessiya();
     if (sessiya.userId === id) {
       return { ok: false, xato: 'O‘z rolingizni o‘zgartira olmaysiz.' };
     }
 
-    await db.adminUser.update({ where: { id }, data: { role: admin ? 'ADMIN' : 'MUHARRIR' } });
+    await db.adminUser.update({ where: { id }, data: { role: rolTanla(rol) } });
     revalidatePath('/admin/foydalanuvchilar');
     return { ok: true };
   } catch (e) {

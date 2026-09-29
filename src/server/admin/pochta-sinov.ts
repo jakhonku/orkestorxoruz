@@ -1,6 +1,7 @@
 'use server';
 
 import { joriySessiya } from '@/server/auth';
+import { bolimgaRuxsatmi } from './huquq';
 import { pochtaYubor } from '@/server/xabarnoma/pochta';
 import { getSettings } from '@/server/queries/settings';
 
@@ -16,6 +17,7 @@ export type SinovNatija = { ok: true } | { ok: false; xato: string };
 export async function pochtaSinov(): Promise<SinovNatija> {
   const sessiya = await joriySessiya();
   if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+  if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
 
   if (!(process.env.SMTP_USER ?? '').trim() || !(process.env.SMTP_PASS ?? '').trim()) {
     return {

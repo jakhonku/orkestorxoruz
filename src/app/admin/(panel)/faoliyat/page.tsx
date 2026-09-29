@@ -1,11 +1,13 @@
 import { FAOLIYAT_MAYDONLARI } from '@/server/admin/sozlama-maydonlari';
 import { getFaoliyat } from '@/server/queries/faoliyat';
+import { sahifaRuxsati } from '@/server/admin/huquq';
 import type { Qiymatlar } from '@/server/admin/turlar';
 import { SozlamalarShakli } from '../sozlamalar/sozlamalar-shakli';
 
 export const metadata = { title: 'Faoliyat sahifasi' };
 
 export default async function FaoliyatSahifasi() {
+  await sahifaRuxsati('faoliyat');
   const f = await getFaoliyat();
 
   const boshlangich: Qiymatlar = {

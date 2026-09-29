@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 import { unstable_cache } from 'next/cache';
 import { ArrowRight, Inbox, Mail, Music4, Users2 } from 'lucide-react';
 
@@ -49,6 +50,8 @@ const bolimSanoqlari = unstable_cache(
 
 export default async function AdminBoshSahifa() {
   const sessiya = await joriySessiya();
+  // Tanlov adminining bosh sahifasi — o'z arizalari
+  if (sessiya?.role === 'TANLOV') redirect('/admin/tanlov-arizalari');
 
   const [sanoqlar, sozlamalar, xabar, jamoaAriza, tanlovAriza, talent, obuna] = await Promise.all([
     bolimSanoqlari(),
