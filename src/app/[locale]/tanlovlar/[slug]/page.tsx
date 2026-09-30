@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import type { Locale } from '@/i18n/routing';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
+import { BoyMatn } from '@/components/shared/boy-matn';
 import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -123,9 +124,7 @@ function Detail({ competition, anketa }: { competition: Competition; anketa: Sav
                 {t('regulationsTitle')}
               </h2>
               <div className="mt-3 h-1 w-16 rounded-full bg-gold" />
-              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-                {pick(competition.regulations, locale)}
-              </p>
+              <BoyMatn matn={pick(competition.regulations, locale)} className="mt-6" />
             </Reveal>
 
             {/* Timeline */}

@@ -89,9 +89,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        // Brend shrifti: Tactic Sans Extended Bold Italic. Fayl `public/fonts/` ga qo'yilsa u ishlaydi,
-        // aks holda unga eng yaqin bepul shrift (Unbounded).
-        serif: ['"Tactic Sans Exd"', 'var(--font-brand)', 'system-ui', 'sans-serif'],
+        serif: ['var(--font-playfair)', 'Georgia', 'serif'],
+        brand: ['"Tactic Sans Exd"', 'var(--font-brand)', 'system-ui', 'sans-serif'],
         sans: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
       },
       borderRadius: {

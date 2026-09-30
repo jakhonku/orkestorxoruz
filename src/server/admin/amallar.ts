@@ -11,6 +11,7 @@ import { postHavolaKanonik, postManbasi } from '@/lib/post';
 import { telegramYopiqmi } from '@/lib/telegram';
 import { bolimRuxsati } from './huquq';
 import { anketaXatosi, anketaniOqi } from '@/lib/anketa';
+import { boyMatnOddiy, boyMatnniTozala } from '@/lib/boy-matn';
 import { bolimTop } from './registr';
 import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from './turlar';
 import { qatorlarTekshir, qatorlarniTozala } from './qatorlar';
@@ -96,6 +97,16 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       // Mijozdan kelgan anketa qayta tozalanadi — bazaga faqat ma'lum tuzilma tushadi
       return anketaniOqi(qiymat);
     default:
+      if (m.boy && qiymat && typeof qiymat === 'object') {
+        // Boyitilgan matn: faqat ruxsat etilgan teglar qoladi
+        const q = qiymat as Record<string, unknown>;
+        return Object.fromEntries(
+          ['uz', 'ru', 'en'].map((t) => {
+            const h = boyMatnniTozala(String(q[t] ?? ''));
+            return [t, boyMatnOddiy(h) ? h : ''];
+          })
+        );
+      }
       // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga o'zgarishsiz tushadi.
       // Qiymat umuman kelmasa bo'sh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
       return qiymat ?? boshQiymat(m);
@@ -145,7 +156,7 @@ function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
     const v = qiymatlar[m.nom];
 
     if (m.tur === 'kopTilli' || m.tur === 'kopTilliKatta') {
-      const uz = (v as { uz?: string })?.uz?.trim();
+      const uz = boyMatnOddiy((v as { uz?: string })?.uz ?? '');
       if (!uz) return `"${m.yorliq}" — o‘zbekcha matn to‘ldirilishi shart.`;
       continue;
     }

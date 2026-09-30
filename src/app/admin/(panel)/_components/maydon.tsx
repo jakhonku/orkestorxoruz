@@ -27,6 +27,7 @@ import {
   type Maydon,
 } from '@/server/admin/turlar';
 import { ExcelYuklash } from './excel-import';
+import { BoyTahrirlagich } from './boy-tahrirlagich';
 import { AnketaTuzuvchi } from './anketa-tuzuvchi';
 import { faylYukla } from '../_lib/yuklash';
 
@@ -183,6 +184,7 @@ function Boshqaruv({
       return (
         <KopTilliKiritish
           katta={maydon.tur === 'kopTilliKatta'}
+          boy={maydon.boy}
           qiymat={(qiymat as KopTilli) ?? { uz: '', ru: '', en: '' }}
           ozgartir={ozgartir}
         />
@@ -284,10 +286,12 @@ export function KopTilliKiritish({
   qiymat,
   ozgartir,
   katta,
+  boy,
 }: {
   qiymat: KopTilli;
   ozgartir: (yangi: KopTilli) => void;
   katta: boolean;
+  boy?: boolean;
 }) {
   const [til, setTil] = useState<'uz' | 'ru' | 'en'>('uz');
   const joriy = qiymat?.[til] ?? '';
@@ -305,7 +309,9 @@ export function KopTilliKiritish({
           en: Boolean(qiymat?.en?.trim()),
         }}
       />
-      {katta ? (
+      {boy ? (
+        <BoyTahrirlagich key={til} qiymat={joriy} ozgartir={yoz} />
+      ) : katta ? (
         <textarea value={joriy} onChange={(e) => yoz(e.target.value)} className={TEXTAREA} />
       ) : (
         <input value={joriy} onChange={(e) => yoz(e.target.value)} className={INPUT} />

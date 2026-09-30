@@ -1,15 +1,14 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { cookies } from 'next/headers';
-import { Unbounded, Manrope } from 'next/font/google';
+import { Playfair_Display, Manrope } from 'next/font/google';
 
 import { ADMIN_TIL_KUKISI, adminTilOl } from '@/lib/admin-tarjima';
 import { AdminTarjimon } from './_tarjima/tarjimon';
 
-const brand = Unbounded({
-  subsets: ['latin', 'latin-ext', 'cyrillic'],
-  weight: ['500', '600', '700'],
-  variable: '--font-brand',
+const playfair = Playfair_Display({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
@@ -32,7 +31,7 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
   const til = adminTilOl(cookies().get(ADMIN_TIL_KUKISI)?.value);
 
   return (
-    <html lang={til} data-til={til} className={`${brand.variable} ${manrope.variable}`}>
+    <html lang={til} data-til={til} className={`${playfair.variable} ${manrope.variable}`}>
       <head>
         {til === 'ru' && (
           // Tarjima tayyor bo'lguncha sahifa yashirin — o'zbekcha matn "yaltirab" qolmasin.

@@ -329,7 +329,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'date', yorliq: "O'tkazilish sanasi", tur: 'kopTilli', talab: true, izoh: 'Masalan: 2027-yil 15–21-mart' },
       { nom: 'location', yorliq: "O'tkaziladigan joy", tur: 'kopTilli', talab: true },
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
-      { nom: 'regulations', yorliq: 'Nizom matni', tur: 'kopTilliKatta', talab: true },
+      { nom: 'regulations', yorliq: 'Nizom matni', tur: 'kopTilliKatta', talab: true, boy: true },
       { nom: 'regulationsFileUrl', yorliq: 'Nizom fayli', tur: 'fayl' },
       {
         nom: 'applicationEmail',

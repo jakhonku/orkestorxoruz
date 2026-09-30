@@ -88,6 +88,11 @@ export type Maydon = {
    * yuklanadigan qatorlarga mos emas).
    */
   excel?: boolean;
+  /**
+   * `kopTilliKatta` uchun: oddiy maydon o'rniga qalin, qiya, ro'yxat tugmalari
+   * bor tahrirlagich chiqadi. Qiymat tozalangan HTML sifatida saqlanadi.
+   */
+  boy?: boolean;
 };
 
 /** Uch tilli qiymat */

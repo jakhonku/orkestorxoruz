@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server';
-import { Unbounded, Manrope } from 'next/font/google';
+import { Playfair_Display, Unbounded, Manrope } from 'next/font/google';
 import { routing, type Locale } from '@/i18n/routing';
 import { SITE } from '@/lib/constants';
 import { pick } from '@/lib/utils';
@@ -13,11 +13,17 @@ import { HarakatSozlamalari } from '@/components/shared/harakat-sozlamalari';
 import { getSettings } from '@/server/queries/settings';
 import { getInternationalPages } from '@/server/queries/xalqaro';
 
-/** Brend shriftiga (Tactic Sans Extended Bold Italic) eng yaqin bepul shrift: kengaytirilgan, qalin */
+/** Faqat logotip yozuvi uchun: kengaytirilgan, qalin, qiya shrift */
 const brand = Unbounded({
   subsets: ['latin', 'latin-ext', 'cyrillic'],
   weight: ['500', '600', '700'],
   variable: '--font-brand',
+  display: 'swap',
+});
+
+const playfair = Playfair_Display({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--font-playfair',
   display: 'swap',
 });
 
@@ -112,7 +118,7 @@ export default async function LocaleLayout({
   const yashirinHavolalar = settings.talentOpen ? [] : ['/talent'];
 
   return (
-    <html lang={locale} className={`${brand.variable} ${manrope.variable}`}>
+    <html lang={locale} className={`${playfair.variable} ${brand.variable} ${manrope.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <NextIntlClientProvider messages={messages}>
           <HarakatSozlamalari>

@@ -43,7 +43,7 @@ export function Logo({
       <span className="hidden flex-col leading-none sm:flex">
         <span
           className={cn(
-            'font-serif text-[17px] font-bold uppercase leading-tight tracking-normal md:text-xl',
+            'font-brand text-[15px] font-medium italic uppercase leading-tight tracking-normal md:text-lg',
             light ? 'text-white' : 'text-navy'
           )}
         >
@@ -52,7 +52,7 @@ export function Logo({
         {subline && (
           <span
             className={cn(
-              'mt-1.5 font-serif text-[11px] font-medium normal-case tracking-wide md:text-xs',
+              'mt-1.5 font-brand text-[10px] font-medium italic normal-case tracking-wide md:text-[11px]',
               light ? 'text-gold' : 'text-muted-foreground'
             )}
           >
