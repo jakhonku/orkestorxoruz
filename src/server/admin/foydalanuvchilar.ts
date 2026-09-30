@@ -122,6 +122,10 @@ export async function parolniOzgartirish(id: number, parol: string): Promise<Nat
     });
     if (error) return { ok: false, xato: error.message };
 
+    // Supabase parol o'zgarganda eski sessiyalarni o'zi yopmaydi — shu foydalanuvchining
+    // barcha kirgan qurilmalari chiqarib yuboriladi (refresh tokenlar sessiya bilan birga o'chadi)
+    await db.$executeRaw`DELETE FROM auth.sessions WHERE user_id = ${authUserId}::uuid`;
+
     if (!qayd.authUserId) {
       await db.adminUser.update({ where: { id }, data: { authUserId } });
     }

@@ -11,7 +11,9 @@
   font-family: 'Tactic Sans Exd';
   src: local('TacticSansExd-BldIt'), local('Tactic Sans Exd Bold Italic'),
     url('/fonts/TacticSansExd-BldIt.woff2') format('woff2'),
-    url('/fonts/TacticSansExd-BldIt.otf') format('opentype');
+    url('/fonts/TacticSansExd-BldIt.woff') format('woff'),
+    url('/fonts/TacticSansExd-BldIt.otf') format('opentype'),
+    url('/fonts/TacticSansExd-BldIt.ttf') format('truetype');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;

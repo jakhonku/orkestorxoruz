@@ -37,9 +37,13 @@ const XATO: FormaNatija = { ok: false, kod: 'xato' };
  * Alohida funksiya: xat ketmasa ham ariza qabul qilingan hisoblanadi.
  * Nosozlik faqat jurnalga yoziladi — Vercel'dagi "Logs" bo'limida ko'rinadi.
  */
-async function xabarBer(sarlavha: string, qatorlar: Parameters<typeof arizaXabari>[1]) {
+async function xabarBer(
+  sarlavha: string,
+  qatorlar: Parameters<typeof arizaXabari>[1],
+  kimgaOzi?: string | null,
+) {
   try {
-    await arizaXabari(sarlavha, qatorlar);
+    await arizaXabari(sarlavha, qatorlar, kimgaOzi);
   } catch (e) {
     console.error('Xabarnoma xatosi:', e instanceof Error ? e.message : e);
   }
@@ -278,14 +282,16 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
 
   try {
     let javoblar: Javob[] = [];
+    let tanlovEmaili: string | null = null;
 
     // Ariza faqat "ochiq" tanlovga qabul qilinadi
     if (d.competitionId) {
       const tanlov = await db.competition.findUnique({
         where: { id: d.competitionId },
-        select: { status: true, published: true, formFields: true },
+        select: { status: true, published: true, formFields: true, applicationEmail: true },
       });
       if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return TEKSHIRUV;
+      tanlovEmaili = tanlov.applicationEmail;
 
       // Anketa bo'lsa javoblar unga solishtiriladi: majburiy savollar,
       // variant raqamlari, havola va son ko'rinishi — hammasi serverda ham
@@ -337,7 +343,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
         qiymat: j.tur === 'fayl' ? '📎 fayl yuklangan (admin panelda)' : javobMatni(j.javob),
       })),
       { yorliq: 'Izoh', qiymat: d.message },
-    ]);
+    ], tanlovEmaili);
 
     return { ok: true };
   } catch (e) {

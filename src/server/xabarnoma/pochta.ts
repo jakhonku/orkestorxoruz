@@ -58,14 +58,17 @@ function transport(): Transporter | null {
  * Qabul qiluvchilar: avval admin paneldagi sozlama, u bo'sh bo'lsa
  * xat yuborayotgan pochtaning o'zi.
  */
-async function qabulQiluvchilar(): Promise<string[]> {
-  let xom = '';
+async function qabulQiluvchilar(oziniki?: string | null): Promise<string[]> {
+  // Masalan tanlovning o'z emaili — u bor bo'lsa umumiy sozlama o'rniga shu ishlatiladi
+  let xom = String(oziniki ?? '').trim();
 
-  try {
-    const qator = await db.setting.findUnique({ where: { key: 'notifyEmail' } });
-    xom = String(qator?.value ?? '').trim();
-  } catch {
-    // Baza javob bermadi — pastdagi zaxiraga tushamiz
+  if (!xom) {
+    try {
+      const qator = await db.setting.findUnique({ where: { key: 'notifyEmail' } });
+      xom = String(qator?.value ?? '').trim();
+    } catch {
+      // Baza javob bermadi — pastdagi zaxiraga tushamiz
+    }
   }
 
   if (!xom) xom = sozlamalar().user;
@@ -86,12 +89,16 @@ export function arizalarHavolasi(): string {
  * Xatni yuboradi. Hech qachon xato tashlamaydi — natijani `boolean`
  * qilib qaytaradi.
  */
-export async function pochtaYubor(sarlavha: string, qatorlar: Qator[]): Promise<boolean> {
+export async function pochtaYubor(
+  sarlavha: string,
+  qatorlar: Qator[],
+  kimgaOzi?: string | null,
+): Promise<boolean> {
   try {
     const yuboruvchi = transport();
     if (!yuboruvchi) return false;
 
-    const kimga = await qabulQiluvchilar();
+    const kimga = await qabulQiluvchilar(kimgaOzi);
     if (kimga.length === 0) return false;
 
     const havola = arizalarHavolasi();
@@ -112,6 +119,10 @@ export async function pochtaYubor(sarlavha: string, qatorlar: Qator[]): Promise<
 }
 
 /** Ariza haqidagi xabarni tayyorlab yuboradi */
-export async function arizaXabari(sarlavha: string, qatorlar: Qator[]): Promise<boolean> {
-  return pochtaYubor(sarlavha, qatorlar);
+export async function arizaXabari(
+  sarlavha: string,
+  qatorlar: Qator[],
+  kimgaOzi?: string | null,
+): Promise<boolean> {
+  return pochtaYubor(sarlavha, qatorlar, kimgaOzi);
 }
