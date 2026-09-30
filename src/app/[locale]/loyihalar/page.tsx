@@ -8,6 +8,7 @@ import { Link } from '@/i18n/navigation';
 import { PageHeader } from '@/components/shared/page-header';
 import { SectionTitle } from '@/components/shared/section-title';
 import { EmptyState } from '@/components/shared/empty-state';
+import { BolimNavigatsiya } from '@/components/shared/bolim-navigatsiya';
 import { Reveal } from '@/components/shared/reveal';
 import { ProjectCard } from '@/components/cards/project-card';
 import { CompetitionCard } from '@/components/cards/competition-card';
@@ -64,22 +65,10 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
       />
 
       {/* Bo'limlarga tez o'tish */}
-      <nav className="border-b border-border bg-white">
-        <div className="container no-scrollbar flex gap-2 overflow-x-auto py-4">
-          {bolimlar.map((b) => (
-            <a
-              key={b.id}
-              href={`#${b.id}`}
-              className="shrink-0 rounded-full border border-border bg-white px-4 py-2 text-sm font-semibold text-navy transition-colors hover:border-gold/60 hover:bg-gold/10"
-            >
-              {b.nom}
-            </a>
-          ))}
-        </div>
-      </nav>
+      <BolimNavigatsiya bolimlar={bolimlar} />
 
       {/* 1. Respublika loyihalari */}
-      <section id="respublika" className="section scroll-mt-20 bg-white">
+      <section id="respublika" className="section scroll-mt-36 bg-white">
         <div className="container">
           <SectionTitle title={t('sectionRepublic')} subtitle={t('subRepublic')} />
           {respublika.length === 0 ? (
@@ -97,7 +86,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
       </section>
 
       {/* 2. Xalqaro */}
-      <section id="xalqaro" className="section scroll-mt-20 bg-navy-50/40">
+      <section id="xalqaro" className="section scroll-mt-36 bg-navy-50/40">
         <div className="container">
           <SectionTitle title={t('sectionInternational')} subtitle={t('subInternational')} />
 
@@ -142,7 +131,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
       </section>
 
       {/* 3. Festival va ko'rik-tanlovlar */}
-      <section id="tanlovlar" className="section scroll-mt-20 bg-white">
+      <section id="tanlovlar" className="section scroll-mt-36 bg-white">
         <div className="container">
           <SectionTitle title={t('sectionCompetitions')} subtitle={t('subCompetitions')} />
           {tanlovlar.length === 0 ? (

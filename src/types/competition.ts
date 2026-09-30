@@ -29,6 +29,11 @@ export interface Competition {
   regulationsFile?: string;
   /** Mukofot jamg'armasi */
   prizeFund?: Localized;
+  /** "Ishtirok etish" kartasi: bo'sh maydonlar uchun standart matn ishlatiladi */
+  participateTitle?: Localized;
+  participateText?: Localized;
+  prepareTitle?: Localized;
+  prepareList?: Localized<string[]>;
   timeline: TimelineStage[];
   jury: JuryMember[];
 }

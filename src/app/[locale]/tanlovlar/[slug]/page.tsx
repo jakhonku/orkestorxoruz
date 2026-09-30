@@ -253,7 +253,14 @@ function Ishtirok({ competition, anketa }: { competition: Competition; anketa: S
   const { bolimlar } = qadamlargaBol(anketa);
   // Ishtirokchi + aloqa + anketa bo'limlari (yoki oddiy shakl) + tasdiqlash
   const qadamlar = 2 + (anketa.length > 0 ? bolimlar.length : 1) + 1;
-  const tayyorlash = anketa.filter((s) => s.tur === 'fayl' || s.tur === 'matnKatta');
+  const avtoRoyxat = anketa
+    .filter((s) => s.tur === 'fayl' || s.tur === 'matnKatta')
+    .map((s) => tilda(s.savol, locale));
+  // Admin paneldan kiritilgan matn bo'lsa shu, bo'lmasa standart
+  const ozi = (v?: { uz: string; ru: string; en: string }, standart = '') =>
+    (v && pick(v, locale).trim()) || standart;
+  const qoshimcha = competition.prepareList ? pick(competition.prepareList, locale) : [];
+  const tayyorlash = qoshimcha.filter((x) => x.trim()).length > 0 ? qoshimcha : avtoRoyxat;
 
   return (
     <Reveal delay={0.1}>
@@ -262,21 +269,21 @@ function Ishtirok({ competition, anketa }: { competition: Competition; anketa: S
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold">
             {t('steps', { n: qadamlar })}
           </p>
-          <h2 className="mt-1 font-serif text-xl font-semibold text-white">{t('participateTitle')}</h2>
-          <p className="mt-1 text-sm text-white/70">{t('participateText')}</p>
+          <h2 className="mt-1 font-serif text-xl font-semibold text-white">{ozi(competition.participateTitle, t('participateTitle'))}</h2>
+          <p className="mt-1 text-sm text-white/70">{ozi(competition.participateText, t('participateText'))}</p>
         </div>
 
         <div className="space-y-5 p-6">
           {tayyorlash.length > 0 && (
             <div>
               <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                {t('prepareTitle')}
+                {ozi(competition.prepareTitle, t('prepareTitle'))}
               </p>
               <ul className="space-y-2.5">
-                {tayyorlash.map((s) => (
-                  <li key={s.id} className="flex items-start gap-2.5 text-sm text-navy-900">
+                {tayyorlash.map((s, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-navy-900">
                     <FileCheck2 className="mt-0.5 h-4 w-4 shrink-0 text-gold" />
-                    {tilda(s.savol, locale)}
+                    {s}
                   </li>
                 ))}
               </ul>

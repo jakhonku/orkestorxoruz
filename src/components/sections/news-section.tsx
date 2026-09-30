@@ -2,16 +2,13 @@ import { useTranslations } from 'next-intl';
 import { ArrowRight } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { Reveal } from '@/components/shared/reveal';
+import { EmptyState } from '@/components/shared/empty-state';
 import { NewsCard } from '@/components/cards/news-card';
 import type { NewsArticle } from '@/types';
 
 export function NewsSection({ articles }: { articles: NewsArticle[] }) {
   const t = useTranslations('Home');
   const tc = useTranslations('Common');
-
-  // Yangilik bo'lmasa — bo'sh blok o'rniga bo'lim umuman ko'rsatilmaydi
-  if (articles.length === 0) return null;
-
 
   return (
     <section className="section bg-navy-50/40">
@@ -34,13 +31,18 @@ export function NewsSection({ articles }: { articles: NewsArticle[] }) {
           </Link>
         </div>
 
-        <div className="grid gap-6 md:grid-cols-3">
-          {articles.map((article, i) => (
-            <Reveal key={article.slug} delay={i * 0.1}>
-              <NewsCard article={article} />
-            </Reveal>
-          ))}
-        </div>
+        {articles.length === 0 ? (
+          // Bo'lim yashirinmaydi — yangilik qo'shilguncha xabar chiqadi
+          <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
+        ) : (
+          <div className="grid gap-6 md:grid-cols-3">
+            {articles.map((article, i) => (
+              <Reveal key={article.slug} delay={i * 0.1}>
+                <NewsCard article={article} />
+              </Reveal>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -268,6 +268,11 @@ model Competition {
   prizeFund          Json?
   /// Ariza anketasi — admin o'zi tuzadigan savollar ro'yxati (src/lib/anketa.ts)
   formFields         Json?
+  /// "Ishtirok etish" kartasi matnlari — bo'sh bo'lsa saytdagi standart matn chiqadi
+  participateTitle   Json?
+  participateText    Json?
+  prepareTitle       Json?
+  prepareList        Json?
   published          Boolean           @default(true)
   sortOrder          Int               @default(0)
   createdAt          DateTime          @default(now())
