@@ -5,9 +5,11 @@ import nodemailer, { type Transporter } from 'nodemailer';
 import { db } from '@/lib/db';
 import { SITE } from '@/lib/constants';
 import { xabarHtml, xabarMatni, type Qator } from './matn';
+import { telegramYubor } from './telegram';
 
 /**
- * Yangi ariza kelganda pochtaga xabar yuboradi (Gmail SMTP).
+ * Yangi ariza kelganda pochtaga xabar yuboradi (Gmail SMTP). Telegram bot ham ulangan
+ * bo'lsa (`telegram.ts`), xabar u yerga ham boradi.
  *
  * Ikkita sozlama kerak:
  *   SMTP_USER / SMTP_PASS — muhit o'zgaruvchilari: Gmail manzili va Google
@@ -124,5 +126,10 @@ export async function arizaXabari(
   qatorlar: Qator[],
   kimgaOzi?: string | null,
 ): Promise<boolean> {
-  return pochtaYubor(sarlavha, qatorlar, kimgaOzi);
+  // Ikkala kanal bir-biriga bog'liq emas: biri ishlamasa ikkinchisi baribir yuboradi
+  const [pochta, telegram] = await Promise.all([
+    pochtaYubor(sarlavha, qatorlar, kimgaOzi),
+    telegramYubor(sarlavha, qatorlar),
+  ]);
+  return pochta || telegram;
 }
