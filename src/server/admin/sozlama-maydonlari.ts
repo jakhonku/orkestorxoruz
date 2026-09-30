@@ -78,7 +78,7 @@ export const SOZLAMA_MAYDONLARI: Maydon[] = [
     tur: 'belgi',
     izoh:
       'Belgi olib tashlansa «Talent» sahifasi saytda umuman ko‘rinmaydi: menyudan, ' +
-      'footerdan, bosh sahifadagi yo‘nalishlardan va «Faoliyat» kartochkalaridan ' +
+      'footerdan va bosh sahifadagi yo‘nalishlardan ' +
       'chiqib ketadi, manzili to‘g‘ridan-to‘g‘ri terilsa ham sahifa topilmadi deb ' +
       'javob beradi va ariza qabul qilinmaydi. Oldin kelgan arizalar joyida qoladi. ' +
       'Shu tugma admin panelning bosh sahifasida ham bor — bir bosishda yopib-ochiladi.',

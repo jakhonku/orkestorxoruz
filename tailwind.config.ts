@@ -18,32 +18,49 @@ const config: Config = {
     extend: {
       colors: {
         // Brand palette
+        // Brend ranglari (PDF "Orkestr va Xor" — logotip qo'llanmasi)
+        // Chuqur ko'k — asosiy: #05203A (CMYK 95/69/27/67)
         navy: {
-          DEFAULT: '#0B3C7D',
-          50: '#eef4fb',
-          100: '#d5e3f4',
-          200: '#adc8e9',
-          300: '#7ba6da',
-          400: '#4a7fc4',
-          500: '#2b60a6',
-          600: '#1c4a87',
-          700: '#0B3C7D',
-          800: '#0a2f61',
-          900: '#082445',
-          950: '#05162b',
+          DEFAULT: '#05203A',
+          50: '#edf2f8',
+          100: '#d6e2ef',
+          200: '#b1c8df',
+          300: '#7ea1c6',
+          400: '#4a7baa',
+          500: '#1f5588',
+          600: '#123e6a',
+          700: '#0a2d50',
+          800: '#05203a',
+          900: '#03162a',
+          950: '#020c17',
         },
+        // Oltin: #D7B56D
         gold: {
-          DEFAULT: '#C9A227',
-          50: '#faf6e9',
-          100: '#f3e9c6',
-          200: '#e8d38c',
-          300: '#dcbc55',
-          400: '#d0a938',
-          500: '#C9A227',
-          600: '#a5821f',
-          700: '#7f631c',
-          800: '#6a521e',
-          900: '#5a461e',
+          DEFAULT: '#D7B56D',
+          50: '#fbf7ec',
+          100: '#f5ebd2',
+          200: '#ebd8a8',
+          300: '#e1c688',
+          400: '#dbbb78',
+          500: '#d7b56d',
+          600: '#b8954d',
+          700: '#8f7238',
+          800: '#6f5830',
+          900: '#594729',
+        },
+        // Zumrad: #09523E
+        emerald: {
+          DEFAULT: '#09523E',
+          50: '#eaf5f0',
+          100: '#cfe8de',
+          200: '#a2d1bf',
+          300: '#6db19a',
+          400: '#3a8c72',
+          500: '#1a6e56',
+          600: '#0f5f49',
+          700: '#09523e',
+          800: '#074231',
+          900: '#053225',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -72,7 +89,9 @@ const config: Config = {
         },
       },
       fontFamily: {
-        serif: ['var(--font-playfair)', 'Georgia', 'serif'],
+        // Brend shrifti: Tactic Sans Extended Bold Italic. Fayl `public/fonts/` ga qo'yilsa u ishlaydi,
+        // aks holda unga eng yaqin bepul shrift (Unbounded).
+        serif: ['"Tactic Sans Exd"', 'var(--font-brand)', 'system-ui', 'sans-serif'],
         sans: ['var(--font-manrope)', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
@@ -81,9 +100,9 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       boxShadow: {
-        soft: '0 10px 40px -12px rgba(11, 60, 125, 0.18)',
-        'soft-lg': '0 24px 60px -20px rgba(11, 60, 125, 0.28)',
-        gold: '0 10px 30px -10px rgba(201, 162, 39, 0.4)',
+        soft: '0 10px 40px -12px rgba(5, 32, 58, 0.18)',
+        'soft-lg': '0 24px 60px -20px rgba(5, 32, 58, 0.28)',
+        gold: '0 10px 30px -10px rgba(215, 181, 109, 0.4)',
       },
       keyframes: {
         'fade-in-up': {

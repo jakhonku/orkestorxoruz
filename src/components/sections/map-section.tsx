@@ -28,7 +28,7 @@ export function MapSection({ settings }: { settings: SiteSettings }) {
       <div
         aria-hidden
         className="pointer-events-none absolute -top-40 right-1/4 h-[500px] w-[500px] rounded-full opacity-[0.06]"
-        style={{ background: 'radial-gradient(circle, #0B3C7D 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, #05203A 0%, transparent 70%)' }}
       />
 
       <div className="container relative">
@@ -46,7 +46,7 @@ export function MapSection({ settings }: { settings: SiteSettings }) {
               <div
                 aria-hidden
                 className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full opacity-25"
-                style={{ background: 'radial-gradient(circle, #C9A227 0%, transparent 70%)' }}
+                style={{ background: 'radial-gradient(circle, #D7B56D 0%, transparent 70%)' }}
               />
 
               <div>

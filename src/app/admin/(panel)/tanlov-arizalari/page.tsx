@@ -4,7 +4,8 @@ import { ExternalLink, FileEdit, ListChecks } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { db } from '@/lib/db';
-import { anketaniOqi, javobMatni, javoblarniOqi } from '@/lib/anketa';
+import { javobMatni, javoblarniOqi } from '@/lib/anketa';
+import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import { sahifaRuxsati } from '@/server/admin/huquq';
 import {
   arizaFayliHavolasi,
@@ -74,7 +75,7 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
 
   // Excel ustunlari: avval joriy anketa savollari, keyin anketadan keyinroq
   // olib tashlangan savollarga berilgan javoblar (eski arizalarda qolgan)
-  const anketa = tanlangan ? anketaniOqi(tanlangan.formFields) : [];
+  const anketa = tanlangan ? tanlovAnketasi(tanlangan.formFields) : [];
   const ustunlar = new Map<string, string>(anketa.map((s) => [s.id, s.savol.uz]));
   for (const a of arizalar) {
     for (const j of javoblarniOqi(a.answers)) {

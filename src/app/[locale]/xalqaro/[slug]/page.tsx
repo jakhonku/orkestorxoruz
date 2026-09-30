@@ -61,7 +61,7 @@ function Detail({ sahifa }: { sahifa: InternationalPage }) {
         subtitle={pick(sahifa.summary, locale)}
         crumbs={[
           { label: tn('home'), href: '/' },
-          { label: tn('international'), href: '/xalqaro' },
+          { label: tn('international'), href: '/loyihalar#xalqaro' },
           { label: sarlavha },
         ]}
       />

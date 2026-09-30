@@ -12,7 +12,7 @@ interface Direction {
 
 const directions: Direction[] = [
   { key: 'projects', href: '/loyihalar', icon: FolderKanban },
-  { key: 'competitions', href: '/tanlovlar', icon: Trophy },
+  { key: 'competitions', href: '/loyihalar#tanlovlar', icon: Trophy },
   { key: 'media', href: '/media', icon: Radio },
   { key: 'education', href: '/talent', icon: GraduationCap },
 ];

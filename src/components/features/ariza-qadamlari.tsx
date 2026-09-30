@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowLeft, ArrowRight, Check, Paperclip, PencilLine, SendHorizontal } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, Download, Loader2, Paperclip, PencilLine, SendHorizontal } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Link } from '@/i18n/navigation';
@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { qadamlargaBol, tilda, variantlarTilda, type Savol } from '@/lib/anketa';
-import { tanlovArizasi, type XatoKodi } from '@/server/forms/amallar';
+import { malumotnomaOldindan, tanlovArizasi, type XatoKodi } from '@/server/forms/amallar';
 import { Tuzoq, XatoXabari } from './forma-yordam';
 import { AnketaSavoli, KATTA, Maydon, type JavobQiymati } from './anketa-savoli';
 
@@ -31,7 +31,7 @@ const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const havolaRe = /^https?:\/\/\S+$/i;
 const sonRe = /^-?\d+([.,]\d+)?$/;
 
-type Shaxs = { familiya: string; ism: string; otasi: string };
+type Shaxs = { fio: string };
 type Aloqa = { phone: string; email: string };
 type Oddiy = { ensemble: string; category: string; message: string };
 type Javoblar = Record<string, JavobQiymati>;
@@ -74,7 +74,7 @@ export function ArizaQadamlari({
   const tk = useTranslations('Competitions');
   const locale = useLocale();
 
-  const [shaxs, setShaxs] = useState<Shaxs>({ familiya: '', ism: '', otasi: '' });
+  const [shaxs, setShaxs] = useState<Shaxs>({ fio: '' });
   const [aloqa, setAloqa] = useState<Aloqa>({ phone: '', email: '' });
   const [oddiy, setOddiy] = useState<Oddiy>({ ensemble: '', category: '', message: '' });
   const [javoblar, setJavoblar] = useState<Javoblar>({});
@@ -132,7 +132,7 @@ export function ArizaQadamlari({
       const xom = sessionStorage.getItem(qoralamaKaliti);
       if (xom) {
         const q = JSON.parse(xom) as Partial<Qoralama>;
-        if (q.shaxs) setShaxs(q.shaxs);
+        if (typeof q.shaxs?.fio === 'string') setShaxs({ fio: q.shaxs.fio });
         if (q.aloqa) setAloqa(q.aloqa);
         if (q.oddiy) setOddiy(q.oddiy);
         if (q.javoblar) setJavoblar(q.javoblar);
@@ -170,13 +170,12 @@ export function ArizaQadamlari({
   function qadamXatolari(q: Qadam): Record<string, string> {
     const x: Record<string, string> = {};
     if (q.tur === 'shaxs') {
-      if (shaxs.familiya.trim().length < 2) x.familiya = tc('required');
-      if (shaxs.ism.trim().length < 2) x.ism = tc('required');
+      if (shaxs.fio.trim().length < 2) x.fio = tc('required');
     }
     if (q.tur === 'aloqa') {
       if (aloqa.phone.replace(/\D/g, '').length < 7) x.phone = tc('required');
-      if (!aloqa.email.trim()) x.email = tc('required');
-      else if (!emailRe.test(aloqa.email.trim())) x.email = tc('invalidEmail');
+      // Elektron pochta majburiy emas — yozilgan bo'lsa to'g'riligi tekshiriladi
+      if (aloqa.email.trim() && !emailRe.test(aloqa.email.trim())) x.email = tc('invalidEmail');
     }
     for (const s of q.savollar) {
       const xato = savolXatosi(s);
@@ -252,7 +251,7 @@ export function ArizaQadamlari({
     boshla(async () => {
       const natija = await tanlovArizasi({
         competitionId: tanlovId,
-        fullName: [shaxs.familiya, shaxs.ism, shaxs.otasi].map((x) => x.trim()).filter(Boolean).join(' '),
+        fullName: shaxs.fio.trim(),
         ensembleName: oddiy.ensemble,
         email: aloqa.email.trim(),
         phone: aloqa.phone.trim(),
@@ -344,47 +343,20 @@ export function ArizaQadamlari({
       >
         <div className="space-y-6">
           {joriy.tur === 'shaxs' && (
-            <>
-              <div className="grid gap-6 sm:grid-cols-2">
-                <div data-maydon="familiya">
-                  <Maydon label={t('lastName')} required error={xatolar.familiya}>
-                    <Input
-                      className={KATTA}
-                      autoComplete="family-name"
-                      placeholder={t('lastNamePh')}
-                      value={shaxs.familiya}
-                      onChange={(e) => {
-                        setShaxs((s) => ({ ...s, familiya: e.target.value }));
-                        xatoTozala('familiya');
-                      }}
-                    />
-                  </Maydon>
-                </div>
-                <div data-maydon="ism">
-                  <Maydon label={t('firstName')} required error={xatolar.ism}>
-                    <Input
-                      className={KATTA}
-                      autoComplete="given-name"
-                      placeholder={t('firstNamePh')}
-                      value={shaxs.ism}
-                      onChange={(e) => {
-                        setShaxs((s) => ({ ...s, ism: e.target.value }));
-                        xatoTozala('ism');
-                      }}
-                    />
-                  </Maydon>
-                </div>
-              </div>
-              <Maydon label={t('middleName')} ixtiyoriy={t('optional')}>
+            <div data-maydon="fio">
+              <Maydon label={t('fullName')} required error={xatolar.fio}>
                 <Input
                   className={KATTA}
-                  autoComplete="additional-name"
-                  placeholder={t('middleNamePh')}
-                  value={shaxs.otasi}
-                  onChange={(e) => setShaxs((s) => ({ ...s, otasi: e.target.value }))}
+                  autoComplete="name"
+                  placeholder={t('fullNamePh')}
+                  value={shaxs.fio}
+                  onChange={(e) => {
+                    setShaxs({ fio: e.target.value });
+                    xatoTozala('fio');
+                  }}
                 />
               </Maydon>
-            </>
+            </div>
           )}
 
           {joriy.tur === 'aloqa' && (
@@ -405,7 +377,7 @@ export function ArizaQadamlari({
                 </Maydon>
               </div>
               <div data-maydon="email">
-                <Maydon label={t('email')} required error={xatolar.email}>
+                <Maydon label={t('email')} ixtiyoriy={t('optional')} error={xatolar.email}>
                   <Input
                     className={KATTA}
                     type="email"
@@ -447,6 +419,15 @@ export function ArizaQadamlari({
                 />
               </Maydon>
             </>
+          )}
+
+          {joriy.tur === 'tasdiq' && anketaBor && (
+            <MalumotnomaPdf
+              tanlovId={tanlovId}
+              fullName={shaxs.fio.trim()}
+              anketa={anketa}
+              javoblar={javoblar}
+            />
           )}
 
           {joriy.tur === 'tasdiq' && (
@@ -572,11 +553,11 @@ function Korib({
         if (q.tur === 'shaxs') {
           qatorlar.push([
             t('fullName'),
-            [shaxs.familiya, shaxs.ism, shaxs.otasi].filter((x) => x.trim()).join(' '),
+            shaxs.fio.trim(),
           ]);
         }
         if (q.tur === 'aloqa') {
-          qatorlar.push([t('phone'), aloqa.phone], [t('email'), aloqa.email]);
+          qatorlar.push([t('phone'), aloqa.phone], [t('email'), aloqa.email.trim() || t('empty')]);
         }
         if (q.tur === 'oddiy') {
           qatorlar.push(
@@ -614,5 +595,96 @@ function Korib({
         );
       })}
     </div>
+  );
+}
+
+/**
+ * Tasdiqlash qadamida ishtirokchi Ma'lumotnomani PDF ko'rinishida ko'radi va
+ * yuklab oladi. Yuborilganda aynan shu hujjat arizaga biriktiriladi.
+ */
+function MalumotnomaPdf({
+  tanlovId,
+  fullName,
+  anketa,
+  javoblar,
+}: {
+  tanlovId: number;
+  fullName: string;
+  anketa: Savol[];
+  javoblar: Javoblar;
+}) {
+  const t = useTranslations('Ariza');
+  const [holat, setHolat] = useState<'yuklanmoqda' | 'tayyor' | 'xato'>('yuklanmoqda');
+  const [url, setUrl] = useState<string | null>(null);
+  const [urinish, setUrinish] = useState(0);
+
+  useEffect(() => {
+    let bekor = false;
+    let yaratilgan: string | null = null;
+    setHolat('yuklanmoqda');
+
+    const tayyor: Javoblar = {};
+    for (const s of anketa) {
+      const v = javoblar[s.id];
+      if (v === undefined || bosh(s, v)) continue;
+      tayyor[s.id] = v;
+    }
+
+    malumotnomaOldindan({ competitionId: tanlovId, fullName, javoblar: tayyor })
+      .then((r) => {
+        if (bekor) return;
+        if (!r.ok) return setHolat('xato');
+        const bayt = Uint8Array.from(atob(r.pdf), (c) => c.charCodeAt(0));
+        yaratilgan = URL.createObjectURL(new Blob([bayt], { type: 'application/pdf' }));
+        setUrl(yaratilgan);
+        setHolat('tayyor');
+      })
+      .catch(() => !bekor && setHolat('xato'));
+
+    return () => {
+      bekor = true;
+      if (yaratilgan) URL.revokeObjectURL(yaratilgan);
+    };
+    // Faqat qadam ochilganda yoki "Qayta urinish" bosilganda
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urinish]);
+
+  return (
+    <section className="rounded-2xl border border-gold/40 bg-gold/5 p-5">
+      <h3 className="font-serif text-lg font-semibold text-navy-900">{t('pdfTitle')}</h3>
+      <p className="mt-1 text-sm text-muted-foreground">{t('pdfText')}</p>
+
+      {holat === 'yuklanmoqda' && (
+        <p className="mt-4 flex items-center gap-2 text-sm text-navy">
+          <Loader2 className="h-4 w-4 animate-spin" />
+          {t('pdfLoading')}
+        </p>
+      )}
+
+      {holat === 'xato' && (
+        <div className="mt-4 flex flex-wrap items-center gap-3">
+          <p className="text-sm font-medium text-red-600">{t('pdfError')}</p>
+          <Button type="button" variant="outline" size="sm" onClick={() => setUrinish((n) => n + 1)}>
+            {t('pdfRetry')}
+          </Button>
+        </div>
+      )}
+
+      {holat === 'tayyor' && url && (
+        <>
+          <iframe
+            src={`${url}#toolbar=0&navpanes=0`}
+            title={t('pdfTitle')}
+            className="mt-4 h-[560px] w-full rounded-xl border border-border bg-white"
+          />
+          <Button asChild variant="gold" size="lg" className="mt-4">
+            <a href={url} download={`malumotnoma-${(fullName || 'ariza').replace(/\s+/g, '-')}.pdf`}>
+              <Download className="h-4 w-4" />
+              {t('pdfDownload')}
+            </a>
+          </Button>
+        </>
+      )}
+    </section>
   );
 }

@@ -2,23 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Brend shrifti — Tactic Sans Extended Bold Italic (Miller Type Foundry, pullik).
+ * Litsenziyali fayl `public/fonts/tactic-sans-exd-bold-italic.woff2` ga qo'yilsa,
+ * sayt avtomatik shuni ishlatadi. Fayl bo'lmasa — `--font-brand` (Unbounded).
+ */
+@font-face {
+  font-family: 'Tactic Sans Exd';
+  src: local('Tactic Sans Exd Bold Italic'), local('TacticSansExd-BldIt'),
+    url('/fonts/tactic-sans-exd-bold-italic.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 215 40% 15%;
+    --foreground: 210 70% 13%;
     --card: 0 0% 100%;
-    --card-foreground: 215 40% 15%;
-    --primary: 212 82% 27%; /* navy #0B3C7D */
+    --card-foreground: 210 70% 13%;
+    --primary: 209 84% 13%; /* chuqur ko'k #05203A */
     --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96%;
-    --secondary-foreground: 212 82% 27%;
+    --secondary-foreground: 209 84% 13%;
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
-    --accent: 43 68% 47%; /* gold #C9A227 */
-    --accent-foreground: 0 0% 100%;
+    --accent: 40 58% 66%; /* oltin #D7B56D */
+    --accent-foreground: 209 84% 13%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 212 82% 27%;
+    --ring: 209 84% 13%;
     --radius: 0.75rem;
   }
 
@@ -35,6 +49,16 @@
     html {
       scroll-behavior: smooth;
     }
+  }
+
+  /* Sarlavhalar brend uslubida: kengaytirilgan, qalin, qiya */
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-serif {
+    font-style: italic;
+    letter-spacing: -0.015em;
   }
 
   body {

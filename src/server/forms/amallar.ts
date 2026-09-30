@@ -6,15 +6,18 @@ import { z } from 'zod';
 import { db } from '@/lib/db';
 import { getSettings } from '@/server/queries/settings';
 import { ensembleTypeToDb, regionToDb } from '@/server/enums';
+import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import { arizaXabari } from '@/server/xabarnoma/pochta';
+import { faylSaqla } from '@/server/ariza-fayllari';
+import { malumotnomaPdf } from '@/server/malumotnoma-pdf';
 import {
-  anketaniOqi,
   arizaPapkasi,
   javobMatni,
   javoblarniTekshir,
   type Javob,
 } from '@/lib/anketa';
 import type { EnsembleType, Region } from '@/types';
+import { randomBytes } from 'node:crypto';
 
 /**
  * Saytdagi formalar bazaga shu yerdan yoziladi.
@@ -254,7 +257,8 @@ const tanlovSxemasi = z.object({
   competitionId: z.number().int().positive().optional().nullable(),
   fullName: matn(2, 160),
   ensembleName: ixtiyoriy(200),
-  email,
+  // Elektron pochta majburiy emas: bo'sh bo'lsa ham bo'ladi (bazada bo'sh matn bo'lib yoziladi)
+  email: z.union([z.literal(''), email]).optional().default(''),
   phone: matn(5, 40),
   category: ixtiyoriy(120),
   message: ixtiyoriy(3000),
@@ -285,11 +289,25 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
 
       // Anketa bo'lsa javoblar unga solishtiriladi: majburiy savollar,
       // variant raqamlari, havola va son ko'rinishi — hammasi serverda ham
-      const anketa = anketaniOqi(tanlov.formFields);
+      const anketa = tanlovAnketasi(tanlov.formFields);
       if (anketa.length > 0) {
         const tekshiruv = javoblarniTekshir(anketa, d.javoblar ?? {}, arizaPapkasi(d.competitionId));
         if (!tekshiruv.ok) return TEKSHIRUV;
         javoblar = tekshiruv.javoblar;
+
+        // Ma'lumotnoma PDF'i arizaga biriktiriladi — admin panelda fayl bo'lib ko'rinadi.
+        // PDF chiqmasa ham ariza yo'qolmasin: xato jurnalga yoziladi.
+        try {
+          const bayt = await malumotnomaPdf({ fullName: d.fullName, savollar: anketa, javoblar });
+          const yol = `${arizaPapkasi(d.competitionId)}${new Date().toISOString().slice(0, 7)}/malumotnoma-${randomBytes(6).toString('hex')}.pdf`;
+          await faylSaqla(yol, bayt, 'application/pdf');
+          javoblar = [
+            { id: 'malumotnoma', savol: 'Ma’lumotnoma (PDF)', javob: yol, tur: 'fayl' },
+            ...javoblar,
+          ];
+        } catch (e) {
+          xatoniYoz('malumotnoma', e);
+        }
       }
     }
 
@@ -325,6 +343,49 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
   } catch (e) {
     xatoniYoz('tanlovArizasi', e);
     return XATO;
+  }
+}
+
+/**
+ * Oxirgi qadamda ishtirokchi Ma'lumotnomani PDF ko'rinishida ko'radi va yuklab oladi.
+ * Javoblar arizadagi kabi tekshiriladi, faqat bazaga hech narsa yozilmaydi.
+ */
+export async function malumotnomaOldindan(
+  malumot: unknown,
+): Promise<{ ok: true; pdf: string } | { ok: false }> {
+  const sxema = z.object({
+    competitionId: z.number().int().positive(),
+    fullName: matn(2, 160),
+    javoblar: z.record(
+      z.string().max(40),
+      z.union([z.string().max(5000), z.array(z.string().max(10)).max(50)]),
+    ),
+  });
+  const p = sxema.safeParse(malumot);
+  if (!p.success) return { ok: false };
+  const d = p.data;
+
+  try {
+    const tanlov = await db.competition.findUnique({
+      where: { id: d.competitionId },
+      select: { status: true, published: true, formFields: true },
+    });
+    if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return { ok: false };
+
+    // Rozilik belgisi ma'lumotnomaga kirmaydi va bu qadamda hali belgilanmagan bo'lishi mumkin
+    const anketa = tanlovAnketasi(tanlov.formFields).filter((s) => s.tur !== 'rozilik');
+    const tekshiruv = javoblarniTekshir(anketa, d.javoblar, arizaPapkasi(d.competitionId));
+    if (!tekshiruv.ok) return { ok: false };
+
+    const bayt = await malumotnomaPdf({
+      fullName: d.fullName,
+      savollar: anketa,
+      javoblar: tekshiruv.javoblar,
+    });
+    return { ok: true, pdf: Buffer.from(bayt).toString('base64') };
+  } catch (e) {
+    xatoniYoz('malumotnomaOldindan', e);
+    return { ok: false };
   }
 }
 

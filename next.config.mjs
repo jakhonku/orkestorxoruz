@@ -38,6 +38,8 @@ const nextConfig = {
   },
 
   experimental: {
+    // Ma'lumotnoma PDF uchun shriftlar fayl sifatida o'qiladi — deploy'ga qo'shilsin
+    outputFileTracingIncludes: { '/**': ['./src/server/shriftlar/**'] },
     /**
      * Brauzerdagi "router keshi" — Next sahifalar orasida yurganda ilgari
      * olingan sahifani qayta ishlatadi.

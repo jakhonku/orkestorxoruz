@@ -8,7 +8,7 @@ import { Link } from '@/i18n/navigation';
 import { Breadcrumbs } from '@/components/shared/breadcrumbs';
 import { Button } from '@/components/ui/button';
 import { ArizaQadamlari } from '@/components/features/ariza-qadamlari';
-import { anketaniOqi } from '@/lib/anketa';
+import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import { pick } from '@/lib/utils';
 import { getCompetitionBySlug, getCompetitionMeta } from '@/server/queries/competitions';
 
@@ -58,7 +58,7 @@ export default async function ArizaSahifasi({ params }: Props) {
             light
             crumbs={[
               { label: tn('home'), href: '/' },
-              { label: tn('competitions'), href: '/tanlovlar' },
+              { label: tn('competitions'), href: '/loyihalar#tanlovlar' },
               { label: nomi, href: `/tanlovlar/${params.slug}` },
               { label: tk('applyTitle') },
             ]}
@@ -78,7 +78,7 @@ export default async function ArizaSahifasi({ params }: Props) {
             <ArizaQadamlari
               tanlovId={meta.id}
               slug={params.slug}
-              anketa={anketaniOqi(meta.formFields)}
+              anketa={tanlovAnketasi(meta.formFields)}
             />
           ) : (
             <div className="rounded-3xl border border-border bg-white px-6 py-14 text-center shadow-soft sm:px-12">

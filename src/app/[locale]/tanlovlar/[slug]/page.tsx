@@ -19,7 +19,8 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Link } from '@/i18n/navigation';
 import { cn, pick, flagEmoji } from '@/lib/utils';
-import { anketaniOqi, qadamlargaBol, tilda, type Savol } from '@/lib/anketa';
+import { qadamlargaBol, tilda, type Savol } from '@/lib/anketa';
+import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import type { Competition } from '@/types';
 import {
   getCompetitionBySlug,
@@ -65,7 +66,7 @@ export default async function CompetitionDetailPage({
   // Ariza qaysi tanlovga tegishli ekanini bilish uchun bazadagi id kerak
   const meta = await getCompetitionMeta(params.slug);
 
-  return <Detail competition={competition} anketa={anketaniOqi(meta?.formFields)} />;
+  return <Detail competition={competition} anketa={tanlovAnketasi(meta?.formFields)} />;
 }
 
 function Detail({ competition, anketa }: { competition: Competition; anketa: Savol[] }) {
@@ -92,7 +93,7 @@ function Detail({ competition, anketa }: { competition: Competition; anketa: Sav
             light
             crumbs={[
               { label: tn('home'), href: '/' },
-              { label: tn('competitions'), href: '/tanlovlar' },
+              { label: tn('competitions'), href: '/loyihalar#tanlovlar' },
               { label: pick(competition.title, locale) },
             ]}
           />

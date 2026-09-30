@@ -6,10 +6,10 @@ import { db } from '@/lib/db';
 import {
   ARIZA_FAYL_CHEGARASI,
   FAYL_TURLARI,
-  anketaniOqi,
   arizaFaylTuri,
   arizaPapkasi,
 } from '@/lib/anketa';
+import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import { xavfsizNom } from '@/lib/yuklash';
 import { yuklashImzosi } from '@/server/ariza-fayllari';
 
@@ -80,7 +80,7 @@ export async function POST(request: Request) {
   });
   if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return rad('closed', 403);
 
-  const savol = anketaniOqi(tanlov.formFields).find((s) => s.id === savolId && s.tur === 'fayl');
+  const savol = tanlovAnketasi(tanlov.formFields).find((s) => s.id === savolId && s.tur === 'fayl');
   if (!savol) return rad('bad-request', 400);
 
   const tur = arizaFaylTuri(nom, soraq.tur);

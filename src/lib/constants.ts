@@ -30,7 +30,7 @@ export const SITE = {
   } as Localized,
   /** Logotip yonidagi nom ostidagi mayda yozuv */
   logoSubline: {
-    uz: 'Ijodiy birlashma',
+    uz: 'ijodiy birlashmasi',
     ru: 'Творческое объединение',
     en: 'Creative Union',
   } as Localized,
@@ -92,28 +92,24 @@ export const NAV_ITEMS: NavItem[] = [
   },
   { key: 'ensembles', href: '/jamoalar' },
   {
-    key: 'activity',
-    href: '/faoliyat',
+    // Faoliyat, Xalqaro va Tanlov/festivallar bitta "Loyihalar" sahifasiga birlashtirildi
+    key: 'projects',
+    href: '/loyihalar',
     children: [
-      { key: 'projects', href: '/loyihalar' },
-      { key: 'competitions', href: '/tanlovlar' },
-      { key: 'talent', href: '/talent' },
+      { key: 'projectsRepublic', href: '/loyihalar#respublika' },
+      { key: 'international', href: '/loyihalar#xalqaro' },
+      { key: 'competitions', href: '/loyihalar#tanlovlar' },
     ],
   },
-  {
-    // Ichki sahifalari admin paneldan qo'shiladi — ular bu ro'yxatga
-    // `Header` ichida, bazadan olingan holda ulanadi.
-    key: 'international',
-    href: '/xalqaro',
-    children: [
-      { key: 'internationalProjects', href: '/xalqaro/loyihalar' },
-      { key: 'experts', href: '/haqida#ekspertlar' },
-    ],
-  },
+  { key: 'talent', href: '/talent' },
   { key: 'afisha', href: '/afisha' },
   { key: 'news', href: '/media', children: [{ key: 'media', href: '/media' }] },
   { key: 'contact', href: '/aloqa' },
 ];
 
-/** Admin paneldan qo'shilgan sahifalar shu bo'limning ro'yxatiga ulanadi */
-export const DINAMIK_MENYU_KALITI = 'international';
+/**
+ * Admin paneldan qo'shilgan xalqaro sahifalar endi menyuda emas — ular
+ * "Loyihalar" sahifasining Xalqaro bo'limida kartochka bo'lib chiqadi.
+ * Kalit hech qaysi menyu bandiga mos kelmaydi.
+ */
+export const DINAMIK_MENYU_KALITI = 'xalqaro-sahifalar';

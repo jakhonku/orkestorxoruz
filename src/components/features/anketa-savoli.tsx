@@ -1,6 +1,8 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { CalendarDays } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
@@ -223,52 +225,48 @@ export function AnketaSavoli({
 }
 
 /**
- * Sana: kun / oy / yil — uchta ro'yxat. Brauzerning sana oynasidan qulayroq,
- * ayniqsa tug'ilgan yilni o'nlab yil orqaga varaqlash kerak bo'lganda.
- * Qiymat YYYY-MM-DD ko'rinishida, faqat uchalasi tanlanganda yoziladi.
+ * Sana: bitta maydon, "KK.OO.YYYY". Raqam yozilganda nuqtalar o'zi qo'yiladi,
+ * telefonda raqamli klaviatura ochiladi — tug'ilgan yilni ro'yxatdan
+ * qidirib o'tirish shart emas. Qiymat YYYY-MM-DD ko'rinishida saqlanadi;
+ * chala yozilgan sana "2001--" kabi qoladi va tekshiruvda xato beradi.
  */
 function SanaTanlash({ qiymat, ozgartir }: { qiymat: string; ozgartir: (v: string) => void }) {
   const t = useTranslations('Ariza');
-  // Chala tanlov ham eslab qolinadi: "2001--" kabi
-  const [y = '', m = '', d = ''] = qiymat.split('-');
 
-  // Oy nomlari tarjima faylidan: brauzerlarning ko'pi o'zbekcha oylarni
-  // bilmaydi ("M01" chiqaradi) va server bilan mos kelmay qoladi
-  const oylar = t.raw('months') as string[];
+  const korsat = (raqamlar: string) =>
+    [raqamlar.slice(0, 2), raqamlar.slice(2, 4), raqamlar.slice(4, 8)].filter(Boolean).join('.');
 
-  const bugun = new Date().getFullYear();
-  const yillar = Array.from({ length: 106 }, (_, i) => bugun + 5 - i);
-  const kunlar = Array.from({ length: 31 }, (_, i) => i + 1);
+  // Saqlangan qiymatdan (qoralama) ko'rinish tiklanadi
+  const boshlang = () => {
+    const [y = '', m = '', d = ''] = qiymat.split('-');
+    return korsat(`${d}${m}${y}`.replace(/\D/g, ''));
+  };
+  const [matn, setMatn] = useState(boshlang);
 
-  const yoz = (yy: string, mm: string, dd: string) => ozgartir(`${yy}-${mm}-${dd}`);
-  const p = (n: number) => String(n).padStart(2, '0');
+  const yoz = (xom: string) => {
+    let r = xom.replace(/\D/g, '').slice(0, 8);
+    const kun = r.slice(0, 2);
+    const oy = r.slice(2, 4);
+    // Kun 31 dan, oy 12 dan oshmasin
+    if (kun.length === 2 && (Number(kun) < 1 || Number(kun) > 31)) r = `${kun.slice(0, 1)}${r.slice(2)}`;
+    if (oy.length === 2 && (Number(oy) < 1 || Number(oy) > 12)) r = `${r.slice(0, 3)}${r.slice(4)}`;
+    setMatn(korsat(r));
+    ozgartir(r ? `${r.slice(4, 8)}-${r.slice(2, 4)}-${r.slice(0, 2)}` : '');
+  };
 
   return (
-    <div className="grid grid-cols-3 gap-3">
-      <Select value={d} className={KATTA} aria-label={t('day')} onChange={(e) => yoz(y, m, e.target.value)}>
-        <option value="">{t('day')}</option>
-        {kunlar.map((k) => (
-          <option key={k} value={p(k)}>
-            {k}
-          </option>
-        ))}
-      </Select>
-      <Select value={m} className={KATTA} aria-label={t('month')} onChange={(e) => yoz(y, e.target.value, d)}>
-        <option value="">{t('month')}</option>
-        {oylar.map((nom, i) => (
-          <option key={i} value={p(i + 1)}>
-            {nom}
-          </option>
-        ))}
-      </Select>
-      <Select value={y} className={KATTA} aria-label={t('year')} onChange={(e) => yoz(e.target.value, m, d)}>
-        <option value="">{t('year')}</option>
-        {yillar.map((yil) => (
-          <option key={yil} value={String(yil)}>
-            {yil}
-          </option>
-        ))}
-      </Select>
+    <div className="relative">
+      <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-navy/50" />
+      <Input
+        value={matn}
+        inputMode="numeric"
+        autoComplete="bday"
+        maxLength={10}
+        placeholder={t('datePh')}
+        aria-label={t('datePh')}
+        className={cn(KATTA, 'pl-12 tracking-wider')}
+        onChange={(e) => yoz(e.target.value)}
+      />
     </div>
   );
 }

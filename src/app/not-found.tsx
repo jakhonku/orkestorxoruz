@@ -13,12 +13,12 @@ export default function GlobalNotFound() {
           justifyContent: 'center',
           fontFamily: 'system-ui, sans-serif',
           textAlign: 'center',
-          color: '#0B3C7D',
+          color: '#05203A',
         }}
       >
         <h1 style={{ fontSize: '4rem', margin: 0 }}>404</h1>
         <p style={{ color: '#64748b' }}>Sahifa topilmadi · Страница не найдена · Page not found</p>
-        <Link href="/uz" style={{ marginTop: '1.5rem', color: '#C9A227', fontWeight: 600 }}>
+        <Link href="/uz" style={{ marginTop: '1.5rem', color: '#D7B56D', fontWeight: 600 }}>
           → Bosh sahifa
         </Link>
       </body>

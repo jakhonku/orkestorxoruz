@@ -33,17 +33,15 @@ export function Footer({
       links: [
         { label: tn('about'), href: '/haqida' },
         { label: tn('ensembles'), href: '/jamoalar' },
-        { label: tn('international'), href: '/xalqaro' },
-        { label: tn('internationalProjects'), href: '/xalqaro/loyihalar' },
         { label: tn('experts'), href: '/haqida#ekspertlar' },
       ],
     },
     {
       title: t('activityTitle'),
       links: [
-        { label: tn('activity'), href: '/faoliyat' },
         { label: tn('projects'), href: '/loyihalar' },
-        { label: tn('competitions'), href: '/tanlovlar' },
+        { label: tn('international'), href: '/loyihalar#xalqaro' },
+        { label: tn('competitions'), href: '/loyihalar#tanlovlar' },
         { label: tn('talent'), href: '/talent' },
       ],
     },

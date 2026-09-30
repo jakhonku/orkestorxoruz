@@ -1,4 +1,4 @@
-import { yangiSavol, type Savol } from './anketa';
+import { anketaniOqi, yangiSavol, type Savol } from './anketa';
 
 /**
  * Tayyor anketalar — admin panelda bir bosishda qo'yiladi, keyin xohlagancha
@@ -18,11 +18,50 @@ export function hujjatliAnketa(): Savol[] {
   return [
     // 1-qadamga (F.I.Sh. yoniga) tushadi
     s({
+      id: 'tugilganSana',
       tur: 'sana',
       talab: true,
-      savol: { uz: 'Tug‘ilgan sana', ru: 'Дата рождения', en: 'Date of birth' },
+      savol: {
+        uz: 'Tug‘ilgan yili (kun/oy/yil)',
+        ru: 'Дата рождения (день/месяц/год)',
+        en: 'Date of birth (day/month/year)',
+      },
     }),
     s({
+      id: 'tugilganJoyi',
+      tur: 'matn',
+      talab: true,
+      savol: { uz: 'Tug‘ilgan joyi', ru: 'Место рождения', en: 'Place of birth' },
+    }),
+    s({
+      id: 'millati',
+      tur: 'matn',
+      talab: true,
+      savol: { uz: 'Millati', ru: 'Национальность', en: 'Nationality' },
+    }),
+    s({
+      id: 'malumoti',
+      tur: 'matn',
+      talab: true,
+      savol: { uz: 'Ma’lumoti', ru: 'Образование', en: 'Education' },
+    }),
+    s({
+      id: 'mutaxassislik',
+      tur: 'matn',
+      talab: true,
+      savol: {
+        uz: 'Ma’lumoti bo‘yicha mutaxassisligi',
+        ru: 'Специальность по образованию',
+        en: 'Specialty by education',
+      },
+    }),
+    s({
+      id: 'mukofotlar',
+      tur: 'matnKatta',
+      savol: { uz: 'Davlat mukofotlari', ru: 'Государственные награды', en: 'State awards' },
+    }),
+    s({
+      id: 'bolimHujjat',
       tur: 'bolim',
       savol: { uz: 'Hujjatlar va suratlar', ru: 'Документы и фотографии', en: 'Documents and photos' },
       izoh: {
@@ -32,6 +71,7 @@ export function hujjatliAnketa(): Savol[] {
       },
     }),
     s({
+      id: 'surat',
       tur: 'fayl',
       qabul: 'rasm',
       talab: true,
@@ -43,6 +83,7 @@ export function hujjatliAnketa(): Savol[] {
       },
     }),
     s({
+      id: 'foto',
       tur: 'fayl',
       qabul: 'rasm',
       talab: true,
@@ -58,6 +99,7 @@ export function hujjatliAnketa(): Savol[] {
       },
     }),
     s({
+      id: 'pasport',
       tur: 'fayl',
       qabul: 'hammasi',
       talab: true,
@@ -73,6 +115,7 @@ export function hujjatliAnketa(): Savol[] {
       },
     }),
     s({
+      id: 'bolimBio',
       tur: 'bolim',
       savol: {
         uz: 'Tarjimai hol va repertuar',
@@ -86,29 +129,23 @@ export function hujjatliAnketa(): Savol[] {
       },
     }),
     s({
+      id: 'biografiya',
       tur: 'matnKatta',
       talab: true,
-      savol: { uz: 'Qisqacha tarjimai hol', ru: 'Краткая биография', en: 'Short biography' },
+      savol: { uz: 'Biografiya', ru: 'Биография', en: 'Biography' },
     }),
     s({
-      tur: 'matn',
+      id: 'asar',
+      tur: 'matnKatta',
       talab: true,
       savol: {
-        uz: 'I tur: asar muallifi',
-        ru: 'I тур: автор произведения',
-        en: 'Round I: composer / author',
+        uz: 'I turda ijro etiladigan asar va muallif haqida ma’lumot',
+        ru: 'Информация о произведении и его авторе, исполняемом в I туре',
+        en: 'Information about the work and its author performed in Round I',
       },
     }),
     s({
-      tur: 'matn',
-      talab: true,
-      savol: {
-        uz: 'I tur: ijro etiladigan asar nomi',
-        ru: 'I тур: название исполняемого произведения',
-        en: 'Round I: title of the work performed',
-      },
-    }),
-    s({
+      id: 'rozilik',
       tur: 'rozilik',
       talab: true,
       savol: {
@@ -118,4 +155,13 @@ export function hujjatliAnketa(): Savol[] {
       },
     }),
   ];
+}
+
+/**
+ * Tanlovning haqiqiy anketasi: admin o'zi tuzgan bo'lsa — o'sha, bo'sh bo'lsa —
+ * tayyor andoza (id'lari doim bir xil, shuning uchun sayt va server mos keladi).
+ */
+export function tanlovAnketasi(xom: unknown): Savol[] {
+  const saqlangan = anketaniOqi(xom);
+  return saqlangan.length ? saqlangan : hujjatliAnketa();
 }

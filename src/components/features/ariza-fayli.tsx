@@ -172,17 +172,24 @@ export function ArizaFayli({
           )}
         >
           {holat.tur === 'yuklanmoqda' ? (
-            <Loader2 className="h-4 w-4 shrink-0 animate-spin text-navy" />
+            <Loader2 className="h-5 w-5 shrink-0 animate-spin text-navy" />
           ) : (
             <Paperclip className="h-4 w-4 shrink-0 text-gold" />
           )}
           <span className="min-w-0 flex-1">
             <span className="block truncate font-medium text-navy">
-              {holat.tur === 'yuklanmoqda'
-                ? `${holat.nom} — ${holat.foiz}%`
-                : t('form_fileChoose')}
+              {holat.tur === 'yuklanmoqda' ? t('form_fileUploading') : t('form_fileChoose')}
             </span>
-            <span className="block text-xs text-muted-foreground">{t(`form_fileTypes_${qabul}`)}</span>
+            {holat.tur === 'yuklanmoqda' ? (
+              <>
+                <span className="block truncate text-xs text-muted-foreground">{holat.nom}</span>
+                <span className="mt-2 block h-1.5 overflow-hidden rounded-full bg-navy-50" aria-hidden="true">
+                  <span className="block h-full w-full animate-pulse rounded-full bg-gold" />
+                </span>
+              </>
+            ) : (
+              <span className="block text-xs text-muted-foreground">{t(`form_fileTypes_${qabul}`)}</span>
+            )}
           </span>
         </button>
       )}

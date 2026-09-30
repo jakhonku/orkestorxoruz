@@ -53,3 +53,19 @@ export async function korishHavolasi(yol: string, soniya = 300): Promise<string 
     .createSignedUrl(yol, soniya);
   return data?.signedUrl ?? null;
 }
+
+/** Serverda tayyorlangan faylni (masalan Ma'lumotnoma PDF) yopiq bucket'ga saqlaydi */
+export async function faylSaqla(yol: string, bayt: Uint8Array, tur: string): Promise<void> {
+  await bucketniTayyorla();
+  const { error } = await supabaseAdmin()
+    .storage.from(ARIZA_BUCKET)
+    .upload(yol, bayt, { contentType: tur, upsert: false });
+  if (error) throw new Error(error.message);
+}
+
+/** Yopiq bucket'dagi faylni o'qiydi; topilmasa null */
+export async function faylOqi(yol: string): Promise<Uint8Array | null> {
+  const { data, error } = await supabaseAdmin().storage.from(ARIZA_BUCKET).download(yol);
+  if (error || !data) return null;
+  return new Uint8Array(await data.arrayBuffer());
+}

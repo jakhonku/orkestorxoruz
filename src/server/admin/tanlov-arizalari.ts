@@ -62,12 +62,19 @@ export function tanlovMurojaati(r: TanlovArizaQatori): Murojaat {
       ['Yo‘nalish', r.category],
       ['Email', r.email],
       ['Telefon', r.phone],
-      ...javoblar.map((j): [string, string] => [j.savol, j.tur === 'fayl' ? 'Faylni ochish' : javobMatni(j.javob)]),
+      ...javoblar.map((j): [string, string] => [j.savol, j.tur === 'fayl' ? 'Faylni ochish' : sanaKorinishi(javobMatni(j.javob))]),
       ['Til', r.locale.toUpperCase()],
       ['Xabar', r.message],
     ]).map((q) => {
       const fayl = javoblar.find((j) => j.tur === 'fayl' && j.savol === q.yorliq);
-      return fayl ? { ...q, havola: arizaFayliHavolasi(String(fayl.javob)) } : q;
+      if (!fayl) return q;
+      const yol = String(fayl.javob);
+      return {
+        ...q,
+        havola: arizaFayliHavolasi(yol),
+        // Rasm bo'lsa admin panelda o'zi ko'rinadi (PDF va hujjatlar — havola bo'lib qoladi)
+        rasm: /\.(jpe?g|png|webp)$/i.test(yol),
+      };
     }),
   };
 }
@@ -75,4 +82,9 @@ export function tanlovMurojaati(r: TanlovArizaQatori): Murojaat {
 /** Yopiq bucket'dagi faylni admin orqali ochadigan havola (muddati o'tmaydi) */
 export function arizaFayliHavolasi(yol: string, asos = ''): string {
   return `${asos}/api/admin/ariza-fayli?yol=${encodeURIComponent(yol)}`;
+}
+
+/** Sana javoblari (2002-01-30) jadvalda 30.01.2002 ko'rinishida chiqadi */
+function sanaKorinishi(m: string): string {
+  return /^\d{4}-\d{2}-\d{2}$/.test(m) ? m.split('-').reverse().join('.') : m;
 }

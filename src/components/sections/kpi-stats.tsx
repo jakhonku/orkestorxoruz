@@ -45,12 +45,12 @@ export function KpiStats({ stats }: { stats: KpiStat[] }) {
       <div
         aria-hidden
         className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[420px] -translate-x-1/2 rounded-full opacity-[0.06]"
-        style={{ background: 'radial-gradient(circle, #0B3C7D 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, #05203A 0%, transparent 70%)' }}
       />
       <div
         aria-hidden
         className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 translate-x-1/3 translate-y-1/3 rounded-full opacity-[0.07]"
-        style={{ background: 'radial-gradient(circle, #C9A227 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, #D7B56D 0%, transparent 70%)' }}
       />
 
       <div className="container relative">
@@ -72,7 +72,7 @@ export function KpiStats({ stats }: { stats: KpiStat[] }) {
                     style={{
                       background: isGold
                         ? 'radial-gradient(ellipse at 50% 0%, rgba(201,162,39,0.08) 0%, transparent 65%)'
-                        : 'radial-gradient(ellipse at 50% 0%, rgba(11,60,125,0.07) 0%, transparent 65%)',
+                        : 'radial-gradient(ellipse at 50% 0%, rgba(5,32,58,0.07) 0%, transparent 65%)',
                     }}
                   />
 

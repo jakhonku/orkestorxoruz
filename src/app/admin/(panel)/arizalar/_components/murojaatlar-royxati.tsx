@@ -23,7 +23,7 @@ export type Murojaat = {
   email: string | null;
   telefon: string | null;
   /** `havola` bo'lsa qiymat bosiladigan havola bo'lib chiqadi (arizaga biriktirilgan fayl) */
-  tafsilotlar: { yorliq: string; qiymat: string; havola?: string }[];
+  tafsilotlar: { yorliq: string; qiymat: string; havola?: string; rasm?: boolean }[];
 };
 
 const TURLAR: { kalit: MurojaatTuri | 'hammasi'; nom: string }[] = [
@@ -184,14 +184,38 @@ export function MurojaatlarRoyxati({
 
                 {yoyilgan && (
                   <div className="border-t border-border bg-navy-50/20 px-4 py-4">
-                    <dl className="grid gap-x-6 gap-y-2 sm:grid-cols-2">
-                      {m.tafsilotlar.map((t, i) => (
-                        <div key={`${t.yorliq}-${i}`} className={t.qiymat.length > 90 ? 'sm:col-span-2' : ''}>
-                          <dt className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                            {t.yorliq}
-                          </dt>
-                          <dd className="whitespace-pre-wrap text-sm text-navy-900">
-                            {t.havola ? (
+                    <div className="overflow-x-auto">
+                      <table className="w-full min-w-[520px] border-collapse text-sm">
+                        <tbody>
+                          {m.tafsilotlar.map((t, i) => (
+                            <tr key={`${t.yorliq}-${i}`}>
+                              <th
+                                scope="row"
+                                className="w-[34%] border border-border bg-navy-50/70 px-3 py-2 text-left align-top text-xs font-semibold text-navy-900"
+                              >
+                                {t.yorliq}
+                              </th>
+                              <td className="whitespace-pre-wrap break-words border border-border bg-white px-3 py-2 align-top text-navy-900">
+                            {t.havola && t.rasm ? (
+                              <a
+                                href={t.havola}
+                                target="_blank"
+                                rel="noreferrer"
+                                title="Katta ko‘rish uchun bosing"
+                                className="group inline-block"
+                              >
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={t.havola}
+                                  alt={t.yorliq}
+                                  loading="lazy"
+                                  className="h-40 w-[7.5rem] rounded-lg border border-border bg-navy-50 object-cover shadow-sm transition-shadow group-hover:shadow-md"
+                                />
+                                <span className="mt-1 block text-xs font-medium text-navy underline decoration-gold/60 underline-offset-2">
+                                  Katta ochish
+                                </span>
+                              </a>
+                            ) : t.havola ? (
                               <a
                                 href={t.havola}
                                 target="_blank"
@@ -203,10 +227,13 @@ export function MurojaatlarRoyxati({
                             ) : (
                               t.qiymat
                             )}
-                          </dd>
-                        </div>
-                      ))}
-                    </dl>
+                          
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
 
                     {/* Bog'lanish */}
                     <div className="mt-4 flex flex-wrap items-center gap-2">

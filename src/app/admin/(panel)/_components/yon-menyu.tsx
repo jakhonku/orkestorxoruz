@@ -36,6 +36,7 @@ import {
 import { cn } from '@/lib/utils';
 import { MENYU, ROLLAR, type Rol } from '../_lib/bolimlar';
 import { chiqish } from '../../actions';
+import { TilTugmasi } from '../../_tarjima/til-tugmasi';
 
 const IKONKALAR: Record<string, LucideIcon> = {
   users: Users,
@@ -182,6 +183,7 @@ export function YonMenyu({
             <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-wider text-gold-700">
               {ROLLAR.find((r) => r.qiymat === rol)?.nom}
             </p>
+            <TilTugmasi className="mt-2 w-full [&>button]:flex-1" />
             <form action={chiqish} className="mt-2">
               <button
                 type="submit"

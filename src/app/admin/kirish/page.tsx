@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { joriySessiya } from '@/server/auth';
 import { KirishFormasi } from './kirish-formasi';
+import { TilTugmasi } from '../_tarjima/til-tugmasi';
 
 export const metadata: Metadata = {
   title: 'Kirish — Boshqaruv paneli',
@@ -14,6 +15,9 @@ export default async function KirishSahifasi() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-navy-50/40 p-4">
+      <div className="absolute right-4 top-4">
+        <TilTugmasi />
+      </div>
       <div className="w-full max-w-sm">
         <div className="mb-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold">
