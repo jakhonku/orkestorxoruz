@@ -45,7 +45,10 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
       */}
       {settings.showKpi && stats.length > 0 && <KpiStats stats={stats} />}
       <UpcomingEvents events={events} />
-      <Directions yashirinHavolalar={settings.talentOpen ? [] : ['/talent']} />
+      <Directions yashirinHavolalar={[
+          ...(settings.talentOpen ? [] : ['/talent']),
+          ...(settings.tanlovOpen ? [] : ['/loyihalar#tanlovlar']),
+        ]} />
       <NewsSection articles={articles} />
       {partners.length > 0 && <Partners partners={partners} />}
       <MapSection settings={settings} />

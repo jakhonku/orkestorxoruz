@@ -280,6 +280,7 @@ model Competition {
 
   timeline     CompetitionStage[]
   jury         JuryMember[]
+  documents    CompetitionDocument[]
   applications CompetitionApplication[]
 
   @@index([kind])
@@ -300,6 +301,20 @@ model CompetitionStage {
 
   @@index([competitionId, sortOrder])
   @@map("competition_timeline")
+}
+
+/// Har bir tanlov/festivalning o'z tayyor hujjatlari (nizom, ariza namunasi, shartnoma...)
+model CompetitionDocument {
+  id            Int     @id @default(autoincrement())
+  competitionId Int
+  title         Json
+  fileUrl       String  @db.Text
+  sortOrder     Int     @default(0)
+
+  competition Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+
+  @@index([competitionId, sortOrder])
+  @@map("competition_documents")
 }
 
 model JuryMember {

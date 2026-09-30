@@ -115,7 +115,10 @@ export default async function LocaleLayout({
 
   // Talent platformasi admin panelda yopilgan bo'lsa — menyuda ham,
   // footerda ham ko'rinmaydi (sahifasi 404 qaytaradi)
-  const yashirinHavolalar = settings.talentOpen ? [] : ['/talent'];
+  const yashirinHavolalar = [
+    ...(settings.talentOpen ? [] : ['/talent']),
+    ...(settings.tanlovOpen ? [] : ['/loyihalar#tanlovlar']),
+  ];
 
   return (
     <html lang={locale} className={`${playfair.variable} ${brand.variable} ${manrope.variable}`}>

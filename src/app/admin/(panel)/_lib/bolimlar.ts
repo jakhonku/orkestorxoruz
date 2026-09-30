@@ -38,6 +38,12 @@ export const MENYU: BolimGuruhi[] = [
     bolimlar: [
       { kalit: 'tanlovlar', nom: 'Tanlov va festivallar', ikonka: 'trophy', tanlovRoli: true },
       {
+        kalit: 'tanlov-sozlamalari',
+        nom: 'Tanlov sozlamalari',
+        ikonka: 'settings',
+        tanlovRoli: true,
+      },
+      {
         kalit: 'tanlov-arizalari',
         nom: 'Tanlov arizalari',
         ikonka: 'clipboard-list',

@@ -89,7 +89,10 @@ export default async function AdminBoshSahifa() {
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           Ariza qabuli
         </h2>
-        <TalentTugmasi ochiq={sozlamalar.talentOpen} />
+        <div className="space-y-3">
+          <TalentTugmasi ochiq={sozlamalar.talentOpen} />
+          <TalentTugmasi tur="tanlov" ochiq={sozlamalar.tanlovOpen} />
+        </div>
       </section>
 
       {/* Yangi murojaatlar */}

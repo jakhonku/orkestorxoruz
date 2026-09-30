@@ -35,6 +35,22 @@ export type SiteSettings = {
    * Yopiq bo'lsa sahifa 404 qaytaradi va menyudan chiqib turadi.
    */
   talentOpen: boolean;
+  /**
+   * Tanlov va festivallar ochiqmi (admin panelda vaqtincha yopiladi).
+   * Yopiq bo'lsa tanlov sahifalari 404 qaytaradi, menyudan chiqib turadi va ariza qabul qilinmaydi.
+   */
+  tanlovOpen: boolean;
+  /**
+   * "Ishtirok etish" kartasining umumiy shabloni — tanlovning o'zida matn kiritilmagan
+   * bo'lsa shu ishlatiladi. Bo'sh qolsa saytdagi standart matn chiqadi.
+   */
+  ishtirok: {
+    steps: Localized;
+    title: Localized;
+    text: Localized;
+    prepareTitle: Localized;
+    prepareList: Localized<string[]>;
+  };
   /** Yangi ariza kelganda xat boradigan pochta manzil(lar)i */
   notifyEmail: string;
   mapCoords: { lat: number; lng: number };
@@ -83,6 +99,14 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
         : Boolean(s.showEnsembleRepertoire),
     // Kalit hali bazada bo'lmasa — platforma ochiq deb hisoblanadi
     talentOpen: s.talentOpen === undefined || s.talentOpen === null ? true : Boolean(s.talentOpen),
+    tanlovOpen: s.tanlovOpen === undefined || s.tanlovOpen === null ? true : Boolean(s.tanlovOpen),
+    ishtirok: {
+      steps: olish('ishtirokQadamlar', { uz: '', ru: '', en: '' }),
+      title: olish('ishtirokSarlavha', { uz: '', ru: '', en: '' }),
+      text: olish('ishtirokMatn', { uz: '', ru: '', en: '' }),
+      prepareTitle: olish('tayyorlashSarlavha', { uz: '', ru: '', en: '' }),
+      prepareList: olish('tayyorlashRoyxat', { uz: [], ru: [], en: [] }),
+    },
     notifyEmail: olish('notifyEmail', process.env.SMTP_USER ?? ''),
     mapCoords: olish('mapCoords', { lat: 41.311081, lng: 69.279737 }),
     socials: olish('socials', SOCIALS),

@@ -2,9 +2,9 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, GraduationCap, Loader2, Lock, LockOpen } from 'lucide-react';
+import { AlertCircle, GraduationCap, Loader2, Lock, LockOpen, Trophy } from 'lucide-react';
 
-import { talentHolatiniOzgartir } from '@/server/admin/sozlamalar';
+import { talentHolatiniOzgartir, tanlovHolatiniOzgartir } from '@/server/admin/sozlamalar';
 
 /**
  * Talent platformasini yopib-ochadigan tugma (admin bosh sahifasi).
@@ -14,7 +14,17 @@ import { talentHolatiniOzgartir } from '@/server/admin/sozlamalar';
  * manzili terilsa ham 404 qaytadi va ariza qabul qilinmaydi. Oldin kelgan
  * arizalar joyida qoladi.
  */
-export function TalentTugmasi({ ochiq }: { ochiq: boolean }) {
+export function TalentTugmasi({
+  ochiq,
+  tur = 'talent',
+}: {
+  ochiq: boolean;
+  /** Qaysi bo'lim yopiladi: Talent platformasi yoki Tanlov va festivallar */
+  tur?: 'talent' | 'tanlov';
+}) {
+  const tanlovmi = tur === 'tanlov';
+  const nom = tanlovmi ? 'Tanlov va festivallar' : 'Talent platformasi';
+  const Ikon = tanlovmi ? Trophy : GraduationCap;
   const router = useRouter();
   const [ochiqmi, setOchiqmi] = useState(ochiq);
   const [xato, setXato] = useState<string | null>(null);
@@ -24,7 +34,7 @@ export function TalentTugmasi({ ochiq }: { ochiq: boolean }) {
     setXato(null);
     const yangi = !ochiqmi;
     boshla(async () => {
-      const natija = await talentHolatiniOzgartir(yangi);
+      const natija = await (tanlovmi ? tanlovHolatiniOzgartir : talentHolatiniOzgartir)(yangi);
       if (!natija.ok) {
         setXato(natija.xato);
         return;
@@ -45,19 +55,19 @@ export function TalentTugmasi({ ochiq }: { ochiq: boolean }) {
                 : 'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600'
             }
           >
-            <GraduationCap className="h-5 w-5" />
+            <Ikon className="h-5 w-5" />
           </span>
           <div>
             <p className="text-sm font-semibold text-navy">
-              Talent platformasi:{' '}
+              {nom}:{' '}
               <span className={ochiqmi ? 'text-emerald-600' : 'text-red-600'}>
                 {ochiqmi ? 'saytda ko‘rinmoqda' : 'saytda yopiq'}
               </span>
             </p>
             <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
               {ochiqmi
-                ? 'Sahifa saytda va menyuda ko‘rinib turibdi — yangi arizalar qabul qilinmoqda.'
-                : 'Sahifa saytda ham, menyuda ham ko‘rinmayapti — yangi ariza qabul qilinmayapti.'}{' '}
+                ? 'Bo‘lim saytda va menyuda ko‘rinib turibdi — yangi arizalar qabul qilinmoqda.'
+                : 'Bo‘lim saytda ham, menyuda ham ko‘rinmayapti — yangi ariza qabul qilinmayapti.'}{' '}
               Kelib bo‘lgan arizalar «Arizalar va xabarlar» da turaveradi.
             </p>
           </div>

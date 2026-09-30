@@ -195,6 +195,57 @@ export const FAOLIYAT_MAYDONLARI: Maydon[] = [
 ];
 
 /**
+ * Tanlov va festivallar: ochish/yopish va "Ishtirok etish" kartasining umumiy shabloni.
+ * Tanlovning o'zida shu matnlar kiritilgan bo'lsa, o'shanisi ishlatiladi.
+ */
+export const TANLOV_MAYDONLARI: Maydon[] = [
+  {
+    nom: 'tanlovOpen',
+    yorliq: 'Tanlov va festivallar saytda ochiq',
+    tur: 'belgi',
+    izoh:
+      'Belgi olib tashlansa tanlov va festivallar saytda ko‘rinmaydi: menyudan, footerdan, ' +
+      '«Loyihalar» sahifasidan va bosh sahifadan chiqib ketadi, ichiga kirib bo‘lmaydi va ariza ' +
+      'qabul qilinmaydi. Oldin kelgan arizalar joyida qoladi. Shu tugma admin panelning bosh ' +
+      'sahifasida ham bor.',
+  },
+  {
+    nom: 'ishtirokQadamlar',
+    yorliq: '«5 qadam» yozuvi',
+    tur: 'kopTilli',
+    izoh:
+      'Karta tepasidagi kichik yozuv. Qadamlar soni o‘zi hisoblanadi — uni {n} deb yozing, ' +
+      'masalan: «{n} QADAM». Bo‘sh qolsa standart yozuv chiqadi.',
+  },
+  {
+    nom: 'ishtirokSarlavha',
+    yorliq: 'Karta sarlavhasi',
+    tur: 'kopTilli',
+    izoh: 'Bo‘sh qolsa — «Ishtirok etish»',
+  },
+  {
+    nom: 'ishtirokMatn',
+    yorliq: 'Karta izohi',
+    tur: 'kopTilli',
+    izoh: 'Bo‘sh qolsa — «Ariza onlayn, bir necha qadamda topshiriladi.»',
+  },
+  {
+    nom: 'tayyorlashSarlavha',
+    yorliq: '«Oldindan tayyorlab qo‘ying» sarlavhasi',
+    tur: 'kopTilli',
+    izoh: 'Bo‘sh qolsa — «Oldindan tayyorlab qo‘ying»',
+  },
+  {
+    nom: 'tayyorlashRoyxat',
+    yorliq: 'Oldindan tayyorlab qo‘yish kerak bo‘lgan narsalar',
+    tur: 'kopTilliRoyxat',
+    izoh:
+      'Har bir band — alohida qatorda. Bo‘sh qolsa ro‘yxat har bir tanlov anketasidagi fayl va ' +
+      'katta matn savollaridan o‘zi olinadi. Alohida tanlovning o‘z ro‘yxati bo‘lsa, o‘sha ishlatiladi.',
+  },
+];
+
+/**
  * Kalit/qiymat shakllarining ro'yxati.
  *
  * Saqlash amali maydonlarni shu yerdan oladi — mijozdan kelgan ta'rifga
@@ -203,6 +254,7 @@ export const FAOLIYAT_MAYDONLARI: Maydon[] = [
 export const SOZLAMA_TOPLAMLARI = {
   sayt: SOZLAMA_MAYDONLARI,
   faoliyat: FAOLIYAT_MAYDONLARI,
+  tanlov: TANLOV_MAYDONLARI,
 } as const;
 
 export type SozlamaToplami = keyof typeof SOZLAMA_TOPLAMLARI;

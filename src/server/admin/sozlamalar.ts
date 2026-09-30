@@ -18,6 +18,8 @@ import { SOZLAMA_TOPLAMLARI } from './sozlama-maydonlari';
 
 /** Talent platformasi ochiqmi — `settings` jadvalidagi kalit */
 const TALENT_KALITI = 'talentOpen';
+/** Tanlov va festivallar ochiqmi */
+const TANLOV_KALITI = 'tanlovOpen';
 
 /** `mapCoords` bazada bitta obyekt, shaklda esa ikki maydon */
 const KOORDINATA_KALITI = 'mapCoords';
@@ -48,7 +50,9 @@ export async function sozlamalarSaqlash(
   try {
     const sessiya = await joriySessiya();
     if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
-    if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
+    // Tanlov shabloni tanlov adminiga ham ochiq, qolgan shakllar — umumiy sozlamalar
+    const ruxsatKaliti = toplam === 'tanlov' ? 'tanlov-sozlamalari' : 'sozlamalar';
+    if (!bolimgaRuxsatmi(sessiya, ruxsatKaliti)) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
 
     // Maydonlar ta'rifi faqat serverdan olinadi — mijoz yuborgan kalitgina
     // ishonchli deb qabul qilinadi.
@@ -124,6 +128,28 @@ export async function talentHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNat
     await db.setting.upsert({
       where: { key: TALENT_KALITI },
       create: { key: TALENT_KALITI, value: ochiq as never },
+      update: { value: ochiq as never },
+    });
+
+    revalidatePath('/', 'layout');
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, xato: e instanceof Error ? e.message : String(e) };
+  }
+}
+
+/** Tanlov va festivallarni bir bosishda yopish/ochish (talent tugmasi kabi) */
+export async function tanlovHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNatija> {
+  try {
+    const sessiya = await joriySessiya();
+    if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+    if (!bolimgaRuxsatmi(sessiya, 'tanlov-sozlamalari')) {
+      return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
+    }
+
+    await db.setting.upsert({
+      where: { key: TANLOV_KALITI },
+      create: { key: TANLOV_KALITI, value: ochiq as never },
       update: { value: ochiq as never },
     });
 

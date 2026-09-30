@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { ArizaQadamlari } from '@/components/features/ariza-qadamlari';
 import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import { pick } from '@/lib/utils';
+import { getSettings } from '@/server/queries/settings';
 import { getCompetitionBySlug, getCompetitionMeta } from '@/server/queries/competitions';
 
 type Props = { params: { locale: Locale; slug: string } };
@@ -28,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 /** Tanlovga ariza — qadamma-qadam to'ldiriladigan alohida sahifa */
 export default async function ArizaSahifasi({ params }: Props) {
   setRequestLocale(params.locale);
+  if (!(await getSettings()).tanlovOpen) notFound();
 
   const [competition, meta] = await Promise.all([
     getCompetitionBySlug(params.slug),

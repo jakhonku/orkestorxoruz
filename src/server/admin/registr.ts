@@ -291,7 +291,7 @@ export const BOLIMLAR: Bolim[] = [
     birlik: 'tanlov',
     model: 'competition',
     slugManbasi: 'title',
-    bogliqlar: { timeline: 'timeline', jury: 'jury' },
+    bogliqlar: { timeline: 'timeline', jury: 'jury', documents: 'documents' },
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
       id: r.id,
@@ -360,6 +360,18 @@ export const BOLIMLAR: Bolim[] = [
           { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli' },
           { nom: 'title', yorliq: 'Lavozimi', tur: 'kopTilli' },
           { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm' },
+        ],
+      },
+      {
+        nom: 'documents',
+        yorliq: 'Tayyor hujjatlar',
+        tur: 'qatorlar',
+        izoh:
+          'Shu tanlov uchun yuklab olinadigan hujjatlar: nizom, ariza namunasi, shartnoma va h.k. ' +
+          '«Qator qo‘shish» bilan istalgancha qo‘shing — har bir tanlovning hujjatlari alohida.',
+        maydonlar: [
+          { nom: 'title', yorliq: 'Hujjat nomi', tur: 'kopTilli', talab: true },
+          { nom: 'fileUrl', yorliq: 'Fayl', tur: 'fayl', talab: true },
         ],
       },
       {

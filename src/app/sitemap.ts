@@ -40,7 +40,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Yopib qo'yilgan sahifa 404 qaytaradi — sitemapga ham qo'shilmaydi
-  const all = [...staticPaths, ...(sozlamalar.talentOpen ? ['/talent'] : []), ...dynamicPaths];
+  const all = [...staticPaths, ...(sozlamalar.talentOpen ? ['/talent'] : []), ...dynamicPaths.filter((p) => sozlamalar.tanlovOpen || !p.startsWith('/tanlovlar/'))];
   const now = new Date();
 
   return all.flatMap((path) =>

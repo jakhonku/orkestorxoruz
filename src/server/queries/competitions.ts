@@ -10,6 +10,7 @@ import { loc, locList, locOpt } from '@/server/map';
 const toliq = {
   timeline: { orderBy: { sortOrder: 'asc' } },
   jury: { orderBy: { sortOrder: 'asc' } },
+  documents: { orderBy: { sortOrder: 'asc' } },
 } as const;
 
 type Qator = CompetitionGetPayload<{ include: typeof toliq }>;
@@ -31,6 +32,7 @@ function moslash(c: Qator): Competition {
     participateText: locOpt(c.participateText),
     prepareTitle: locOpt(c.prepareTitle),
     prepareList: c.prepareList == null ? undefined : locList(c.prepareList),
+    documents: c.documents.map((d) => ({ title: loc(d.title), file: d.fileUrl })),
     timeline: c.timeline.map((s) => ({
       date: loc(s.date),
       title: loc(s.title),

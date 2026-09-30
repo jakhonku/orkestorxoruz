@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
-import { ArrowRight, Globe2, UserSearch } from 'lucide-react';
+import { ArrowRight, Globe2 } from 'lucide-react';
 
 import type { Locale } from '@/i18n/routing';
 import { Link } from '@/i18n/navigation';
@@ -14,6 +14,7 @@ import { ProjectCard } from '@/components/cards/project-card';
 import { CompetitionCard } from '@/components/cards/competition-card';
 import { getProjects } from '@/server/queries/projects';
 import { getCompetitions } from '@/server/queries/competitions';
+import { getSettings } from '@/server/queries/settings';
 import { getInternationalPages } from '@/server/queries/xalqaro';
 import { pick } from '@/lib/utils';
 
@@ -29,20 +30,20 @@ export async function generateMetadata({
 /**
  * Loyihalar — bitta sahifada ketma-ket uch bo'lim:
  *   1. Respublika loyihalari
- *   2. Xalqaro loyihalar va hamkorlik (xalqaro sahifalar, ekspertlar)
+ *   2. Xalqaro loyihalar va hamkorlik (xalqaro sahifalar)
  *   3. Festival va ko'rik-tanlovlar
  * Ilgari "Faoliyat", "Xalqaro" va "Tanlov va festivallar" alohida sahifalar edi.
  */
 export default async function ProjectsPage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
 
-  const [loyihalar, tanlovlar, xalqaroSahifalar, t, tn, te, ti, tc] = await Promise.all([
+  const [loyihalar, tanlovlar, xalqaroSahifalar, sozlamalar, t, tn, ti, tc] = await Promise.all([
     getProjects(),
     getCompetitions(),
     getInternationalPages(),
+    getSettings(),
     getTranslations({ locale: params.locale, namespace: 'Projects' }),
     getTranslations({ locale: params.locale, namespace: 'Nav' }),
-    getTranslations({ locale: params.locale, namespace: 'Experts' }),
     getTranslations({ locale: params.locale, namespace: 'International' }),
     getTranslations({ locale: params.locale, namespace: 'Common' }),
   ]);
@@ -53,7 +54,8 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
   const bolimlar = [
     { id: 'respublika', nom: t('sectionRepublic') },
     { id: 'xalqaro', nom: t('sectionInternational') },
-    { id: 'tanlovlar', nom: t('sectionCompetitions') },
+    // Tanlovlar vaqtincha yopilgan bo'lsa bo'lim ham, unga o'tish tugmasi ham chiqmaydi
+    ...(sozlamalar.tanlovOpen ? [{ id: 'tanlovlar', nom: t('sectionCompetitions') }] : []),
   ];
 
   return (
@@ -100,22 +102,14 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
             </div>
           )}
 
-          {/* Xalqaro sahifalar (admin paneldan qo'shiladi) va ekspertlar */}
+          {/* Xalqaro sahifalar (admin paneldan qo'shiladi) */}
           <div className={xalqaro.length > 0 ? 'mt-12' : ''}>
             {xalqaro.length === 0 && xalqaroSahifalar.length === 0 && (
               <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
             )}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              <Reveal>
-                <XalqaroKarta
-                  href="/ekspertlar"
-                  sarlavha={te('title')}
-                  matn={ti('expertsCard')}
-                  ikonka={<UserSearch className="h-14 w-14 text-gold/80" strokeWidth={1.4} />}
-                />
-              </Reveal>
               {xalqaroSahifalar.map((p, i) => (
-                <Reveal key={p.slug} delay={(i + 1) * 0.08}>
+                <Reveal key={p.slug} delay={(i % 3) * 0.08}>
                   <XalqaroKarta
                     href={`/xalqaro/${p.slug}`}
                     sarlavha={pick(p.title, params.locale)}
@@ -130,23 +124,27 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
         </div>
       </section>
 
-      {/* 3. Festival va ko'rik-tanlovlar */}
-      <section id="tanlovlar" className="section scroll-mt-36 bg-white">
-        <div className="container">
-          <SectionTitle title={t('sectionCompetitions')} subtitle={t('subCompetitions')} />
-          {tanlovlar.length === 0 ? (
-            <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
-          ) : (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {tanlovlar.map((c, i) => (
-                <Reveal key={c.slug} delay={(i % 3) * 0.08}>
-                  <CompetitionCard competition={c} />
-                </Reveal>
-              ))}
-            </div>
-          )}
-        </div>
-      </section>
+      {sozlamalar.tanlovOpen && (
+        <>
+        {/* 3. Festival va ko'rik-tanlovlar */}
+        <section id="tanlovlar" className="section scroll-mt-36 bg-white">
+          <div className="container">
+            <SectionTitle title={t('sectionCompetitions')} subtitle={t('subCompetitions')} />
+            {tanlovlar.length === 0 ? (
+              <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
+            ) : (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {tanlovlar.map((c, i) => (
+                  <Reveal key={c.slug} delay={(i % 3) * 0.08}>
+                    <CompetitionCard competition={c} />
+                  </Reveal>
+                ))}
+              </div>
+            )}
+          </div>
+        </section>
+        </>
+      )}
     </>
   );
 }

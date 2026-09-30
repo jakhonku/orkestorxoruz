@@ -281,6 +281,9 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
   const d = t.qiymat;
 
   try {
+    // Tanlovlar admin tomonidan vaqtincha yopilgan bo'lsa ariza qabul qilinmaydi
+    if (!(await getSettings()).tanlovOpen) return { ok: false, kod: 'yopiq' };
+
     let javoblar: Javob[] = [];
     let tanlovEmaili: string | null = null;
 
@@ -369,6 +372,7 @@ export async function malumotnomaOldindan(
   });
   const p = sxema.safeParse(malumot);
   if (!p.success) return { ok: false };
+  if (!(await getSettings()).tanlovOpen) return { ok: false };
   const d = p.data;
 
   try {

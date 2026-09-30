@@ -34,6 +34,8 @@ export interface Competition {
   participateText?: Localized;
   prepareTitle?: Localized;
   prepareList?: Localized<string[]>;
+  /** Shu tanlovning tayyor hujjatlari (yuklab olinadi) */
+  documents?: { title: Localized; file: string }[];
   timeline: TimelineStage[];
   jury: JuryMember[];
 }
