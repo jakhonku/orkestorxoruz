@@ -7,16 +7,16 @@ export const dynamic = 'force-dynamic';
 
 type Natija = { label: string; href: string; group: string };
 
-/** Bazadan qaytadigan qator — sarlavha hech bir tilda bo'lmasa NULL bo'lishi mumkin */
+/** Bazadan qaytadigan qator — sarlavha hech bir tilda boʻlmasa NULL boʻlishi mumkin */
 type Qator = { slug: string; label: string | null };
 
 /**
- * Sayt bo'ylab qidiruv.
+ * Sayt boʻylab qidiruv.
  *
- * Jamoalar, loyihalar, tadbirlar va yangiliklar sarlavhasi bo'yicha qidiradi.
+ * Jamoalar, loyihalar, tadbirlar va yangiliklar sarlavhasi boʻyicha qidiradi.
  * Qidiruv uchala tilda ham bajariladi (katta-kichik harf farqlanmaydi) —
- * sarlavha faqat o'zbekcha to'ldirilgan bo'lsa ham yozuv inglizcha/ruscha
- * sahifada topiladi. Ko'rsatiladigan matn: joriy til, bo'sh bo'lsa zaxirasi.
+ * sarlavha faqat oʻzbekcha toʻldirilgan boʻlsa ham yozuv inglizcha/ruscha
+ * sahifada topiladi. Koʻrsatiladigan matn: joriy til, boʻsh boʻlsa zaxirasi.
  *
  * GET /api/search?q=orkestr&locale=uz
  */
@@ -25,7 +25,7 @@ export async function GET(request: Request) {
   const q = (searchParams.get('q') ?? '').trim();
   const localeParam = searchParams.get('locale') ?? routing.defaultLocale;
 
-  // Til kaliti to'g'ridan-to'g'ri SQL ga tushadi — faqat ruxsat etilganlari
+  // Til kaliti toʻgʻridan-toʻgʻri SQL ga tushadi — faqat ruxsat etilganlari
   const locale = (routing.locales as readonly string[]).includes(localeParam)
     ? localeParam
     : routing.defaultLocale;
@@ -81,7 +81,7 @@ export async function GET(request: Request) {
     ...events.map((r) => ({ label: r.label, href: '/afisha', group: 'afisha' })),
     ...news.map((r) => ({ label: r.label, href: `/media/${r.slug}`, group: 'media' })),
   ]
-    // Hech bir tilda sarlavhasi yo'q yozuv ro'yxatda ko'rsatilmaydi
+    // Hech bir tilda sarlavhasi yoʻq yozuv roʻyxatda koʻrsatilmaydi
     .filter((r): r is Natija => Boolean(r.label))
     .slice(0, 8);
 

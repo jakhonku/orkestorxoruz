@@ -10,14 +10,14 @@ import type { XatoKodi } from '@/server/forms/amallar';
  */
 
 /**
- * Robotlarga qo'yilgan tuzoq. Odam bu maydonni ko'rmaydi va to'ldirmaydi;
- * to'ldirilgan bo'lsa, server arizani yozmaydi (lekin xato ham ko'rsatmaydi).
+ * Robotlarga qoʻyilgan tuzoq. Odam bu maydonni koʻrmaydi va toʻldirmaydi;
+ * toʻldirilgan boʻlsa, server arizani yozmaydi (lekin xato ham koʻrsatmaydi).
  */
 export function Tuzoq({ qiymat, ozgartir }: { qiymat: string; ozgartir: (v: string) => void }) {
   return (
     <div className="absolute left-[-9999px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
       <label>
-        Ushbu maydonni bo‘sh qoldiring
+        Ushbu maydonni boʻsh qoldiring
         <input
           type="text"
           tabIndex={-1}

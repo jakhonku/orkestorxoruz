@@ -48,9 +48,9 @@ export default async function EnsembleProfilePage({
   if (!ensemble) notFound();
 
   /**
-   * "Tarkib" va "Repertuar" bloklari admin panelda yopib qo'yilishi mumkin
-   * ("Sayt sozlamalari"). Ma'lumot hali yig'ilmagan bo'lsa — sahifada
-   * bo'sh ro'yxat turmaydi. Blok yopilmagan bo'lsa ham, bo'sh jamoada
+   * "Tarkib" va "Repertuar" bloklari admin panelda yopib qoʻyilishi mumkin
+   * ("Sayt sozlamalari"). Maʼlumot hali yigʻilmagan boʻlsa — sahifada
+   * boʻsh roʻyxat turmaydi. Blok yopilmagan boʻlsa ham, boʻsh jamoada
    * chizilmaydi.
    */
   return (

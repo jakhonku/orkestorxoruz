@@ -23,8 +23,8 @@ interface LightboxProps {
 export function Lightbox({ images, index, onClose, onNavigate }: LightboxProps) {
   const open = index !== null;
 
-  // Qulf faqat ochilish/yopilishga bog'liq — suratdan suratga o'tganda
-  // sahifa orqa fonida scroll qayta-qayta yoqilib-o'chmaydi
+  // Qulf faqat ochilish/yopilishga bogʻliq — suratdan suratga oʻtganda
+  // sahifa orqa fonida scroll qayta-qayta yoqilib-oʻchmaydi
   useSahifaQulfi(open);
 
   useEffect(() => {

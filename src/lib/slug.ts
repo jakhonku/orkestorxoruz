@@ -1,9 +1,9 @@
 /**
  * Sarlavhadan manzil qismini (slug) yasash.
  *
- * Admin panelda slug maydoni yo'q — u sarlavhadan avtomatik yasaladi.
- * Kirill va ruscha harflar lotinga o'giriladi, chunki manzilda faqat
- * lotin harflari, raqam va chiziqcha bo'lishi mumkin.
+ * Admin panelda slug maydoni yoʻq — u sarlavhadan avtomatik yasaladi.
+ * Kirill va ruscha harflar lotinga oʻgiriladi, chunki manzilda faqat
+ * lotin harflari, raqam va chiziqcha boʻlishi mumkin.
  */
 
 const HARFLAR: Record<string, string> = {
@@ -13,10 +13,10 @@ const HARFLAR: Record<string, string> = {
   ш: 'sh', щ: 'sch', ъ: '', ы: 'i', ь: '', э: 'e', ю: 'yu', я: 'ya',
   ə: 'a', ç: 'ch', ğ: 'g', ı: 'i', ö: 'o', ş: 'sh', ü: 'u',
   á: 'a', à: 'a', â: 'a', ä: 'a', é: 'e', è: 'e', ê: 'e', í: 'i', ó: 'o', ô: 'o',
-  ú: 'u', ñ: 'n', ß: 'ss', '‘': '', '’': '', "'": '', '`': '',
+  ú: 'u', ñ: 'n', ß: 'ss', '‘': '', '’': '', 'ʻ': '', 'ʼ': '', "'": '', '`': '',
 };
 
-/** Matnni manzilga yaroqli ko'rinishga keltiradi: "Buxoro yoshlar xori" -> "buxoro-yoshlar-xori" */
+/** Matnni manzilga yaroqli koʻrinishga keltiradi: "Buxoro yoshlar xori" -> "buxoro-yoshlar-xori" */
 export function slugYasa(matn: string, uzunlik = 120): string {
   const lotin = matn
     .toLowerCase()
@@ -33,10 +33,10 @@ export function slugYasa(matn: string, uzunlik = 120): string {
 }
 
 /**
- * Band bo'lmagan manzil qismini tanlaydi.
+ * Band boʻlmagan manzil qismini tanlaydi.
  *
- * Bir xil nomli ikkita yozuv bo‘lishi mumkin (masalan ikki xil yildagi
- * "Bahor navolari"), shuning uchun band nom oxiriga raqam qo‘shiladi:
+ * Bir xil nomli ikkita yozuv boʻlishi mumkin (masalan ikki xil yildagi
+ * "Bahor navolari"), shuning uchun band nom oxiriga raqam qoʻshiladi:
  * bahor-navolari, bahor-navolari-2, bahor-navolari-3 …
  */
 export function bosSlugTanla(manba: string, band: Iterable<string>): string {

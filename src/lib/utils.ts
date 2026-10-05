@@ -10,9 +10,9 @@ export function cn(...inputs: ClassValue[]) {
 /**
  * Har bir til uchun zaxira tartibi.
  *
- * Admin panelda yozuv ko'pincha avval o'zbekcha to'ldiriladi, tarjimalar esa
- * keyinroq qo'shiladi. Shu sababli tanlangan tildagi matn bo'sh bo'lsa,
- * sahifada bo'sh joy qolmasligi uchun keyingi tildagi matn ko'rsatiladi.
+ * Admin panelda yozuv koʻpincha avval oʻzbekcha toʻldiriladi, tarjimalar esa
+ * keyinroq qoʻshiladi. Shu sababli tanlangan tildagi matn boʻsh boʻlsa,
+ * sahifada boʻsh joy qolmasligi uchun keyingi tildagi matn koʻrsatiladi.
  */
 const ZAXIRA_TARTIBI: Record<Locale, Locale[]> = {
   uz: ['uz', 'ru', 'en'],
@@ -20,7 +20,7 @@ const ZAXIRA_TARTIBI: Record<Locale, Locale[]> = {
   en: ['en', 'uz', 'ru'],
 };
 
-/** Matn ham, ro'yxat ham bo'sh sanaladi — ikkalasi ham zaxiraga o'tadi */
+/** Matn ham, roʻyxat ham boʻsh sanaladi — ikkalasi ham zaxiraga oʻtadi */
 function boshmi(qiymat: unknown): boolean {
   if (qiymat === null || qiymat === undefined) return true;
   if (typeof qiymat === 'string') return qiymat.trim() === '';
@@ -32,7 +32,7 @@ function boshmi(qiymat: unknown): boolean {
 
 /**
  * Localized qiymatdan joriy tildagisini oladi.
- * Tanlangan tilda matn bo'lmasa — zaxira tartibi bo'yicha to'ldirilgani.
+ * Tanlangan tilda matn boʻlmasa — zaxira tartibi boʻyicha toʻldirilgani.
  */
 export function pick<T>(value: Localized<T>, locale: string): T {
   const tartib = ZAXIRA_TARTIBI[locale as Locale] ?? ZAXIRA_TARTIBI.uz;
@@ -43,7 +43,7 @@ export function pick<T>(value: Localized<T>, locale: string): T {
     if (!boshmi(qiymat)) return qiymat;
   }
 
-  // Hamma til bo'sh — tanlangan tildagi (bo'sh) qiymat qaytariladi
+  // Hamma til boʻsh — tanlangan tildagi (boʻsh) qiymat qaytariladi
   return manba[tartib[0]] ?? manba.uz;
 }
 

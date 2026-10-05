@@ -84,13 +84,13 @@
     "dir_education": "Education",
     "dir_education_desc": "Professional development and education programmes",
     "strategy": {
-      "badge": "National Program",
+      "badge": "National Programme",
       "hint": "Swipe left or right",
       "prev": "Previous",
       "next": "Next",
       "slides": [
         {
-          "tag": "National Program",
+          "tag": "National Programme",
           "title": "“Symphony of Uzbekistan”",
           "text": "Systematic development of orchestral and choral art, growing youth interest in classical music, and bringing the best ensembles to the international stage.",
           "points": [

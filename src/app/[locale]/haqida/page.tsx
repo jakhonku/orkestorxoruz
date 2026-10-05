@@ -63,7 +63,7 @@ function AboutContent({
   experts: Expert[];
   missionText: Localized;
   missionImage: string;
-  /** Banner o'ng tomonidagi rasm — "Sayt sozlamalari" da tanlanadi */
+  /** Banner oʻng tomonidagi rasm — "Sayt sozlamalari" da tanlanadi */
   headerImage: string;
 }) {
   const t = useTranslations('About');

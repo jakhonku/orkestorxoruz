@@ -7,11 +7,11 @@ import { Instagram, Play } from 'lucide-react';
 import { instagramEmbed } from '@/lib/instagram';
 
 /**
- * Video ko'rsatkich — uch manbani biladi:
+ * Video koʻrsatkich — uch manbani biladi:
  *   YouTube ID, Instagram havolasi yoki saytga yuklangan video fayl.
  *
- * Barchasi "fasad" bo'lib ishlaydi: sahifa ochilganda faqat rasm yuklanadi,
- * og'ir iframe yoki video esa foydalanuvchi bosgandan keyin qo'shiladi.
+ * Barchasi "fasad" boʻlib ishlaydi: sahifa ochilganda faqat rasm yuklanadi,
+ * ogʻir iframe yoki video esa foydalanuvchi bosgandan keyin qoʻshiladi.
  */
 
 function Tugma({
@@ -95,7 +95,7 @@ export function VideoEmbed({
   if (instagramUrl) {
     const embed = instagramEmbed(instagramUrl);
 
-    // Havola tanilmasa — oddiy havola ko'rinishida beriladi
+    // Havola tanilmasa — oddiy havola koʻrinishida beriladi
     if (!embed) {
       return (
         <a
@@ -105,7 +105,7 @@ export function VideoEmbed({
           className="flex aspect-video items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-navy-800 to-navy-950 text-white transition-opacity hover:opacity-90"
         >
           <Instagram className="h-6 w-6" />
-          <span className="text-sm font-medium">Instagram’da ochish</span>
+          <span className="text-sm font-medium">Instagramʼda ochish</span>
         </a>
       );
     }

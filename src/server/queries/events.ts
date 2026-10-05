@@ -40,7 +40,7 @@ export const getEventBySlug = cache(async (slug: string): Promise<ConcertEvent |
 
 /**
  * Bosh sahifadagi "Yaqin tadbirlar" — bugundan keyingi konsertlar.
- * Yaqin tadbir qolmasa, oxirgi tadbirlar ko'rsatiladi (blok bo'sh qolmasligi uchun).
+ * Yaqin tadbir qolmasa, oxirgi tadbirlar koʻrsatiladi (blok boʻsh qolmasligi uchun).
  */
 export const getUpcomingEvents = cache(async (limit = 3): Promise<ConcertEvent[]> => {
   const bugun = new Date();

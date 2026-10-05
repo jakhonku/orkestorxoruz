@@ -19,12 +19,12 @@ import { INPUT, KopTilliKiritish, KopTilliRoyxatKiritish } from './maydon';
 /**
  * Tanlov arizasi anketasini tuzish.
  *
- * Admin savollarni o'zi qo'shadi: turini tanlaydi, uch tilda yozadi,
- * majburiy yoki yo'qligini belgilaydi. Saytdagi ariza oynasi shu ro'yxatdan
- * quriladi. F.I.SH., email va telefon doim so'raladi — ular bu yerda yo'q.
+ * Admin savollarni oʻzi qoʻshadi: turini tanlaydi, uch tilda yozadi,
+ * majburiy yoki yoʻqligini belgilaydi. Saytdagi ariza oynasi shu roʻyxatdan
+ * quriladi. F.I.SH., email va telefon doim soʻraladi — ular bu yerda yoʻq.
  */
 
-/** Tez-tez so'raladigan savollar — bir bosishda qo'shiladi */
+/** Tez-tez soʻraladigan savollar — bir bosishda qoʻshiladi */
 const ANDOZALAR: { nom: string; savol: () => Savol }[] = [
   {
     nom: '➜ Yangi qadam',
@@ -50,8 +50,8 @@ const ANDOZALAR: { nom: string; savol: () => Savol }[] = [
       savol: { uz: 'Viloyat', ru: 'Регион', en: 'Region' },
       variantlar: {
         uz: [
-          'Toshkent shahri', 'Toshkent viloyati', 'Andijon', 'Buxoro', 'Farg‘ona', 'Jizzax',
-          'Xorazm', 'Namangan', 'Navoiy', 'Qashqadaryo', 'Qoraqalpog‘iston', 'Samarqand',
+          'Toshkent shahri', 'Toshkent viloyati', 'Andijon', 'Buxoro', 'Fargʻona', 'Jizzax',
+          'Xorazm', 'Namangan', 'Navoiy', 'Qashqadaryo', 'Qoraqalpogʻiston', 'Samarqand',
           'Sirdaryo', 'Surxondaryo',
         ],
         ru: [
@@ -106,7 +106,7 @@ const ANDOZALAR: { nom: string; savol: () => Savol }[] = [
       tur: 'rozilik',
       talab: true,
       savol: {
-        uz: 'Shaxsiy ma’lumotlarimni qayta ishlashga roziman',
+        uz: 'Shaxsiy maʼlumotlarimni qayta ishlashga roziman',
         ru: 'Я даю согласие на обработку моих персональных данных',
         en: 'I consent to the processing of my personal data',
       },
@@ -129,8 +129,8 @@ export function AnketaTuzuvchi({
   qiymat: unknown;
   ozgartir: (yangi: unknown) => void;
 }) {
-  // Bu yerda tozalanmaydi: variantlar maydonida yangi (hali bo'sh) qator
-  // yozilayotgan bo'ladi, tozalash uni darhol o'chirib yuborardi. Anketa
+  // Bu yerda tozalanmaydi: variantlar maydonida yangi (hali boʻsh) qator
+  // yozilayotgan boʻladi, tozalash uni darhol oʻchirib yuborardi. Anketa
   // saqlanayotganda serverda tozalanadi (`anketaniOqi`).
   const savollar = Array.isArray(qiymat) ? (qiymat as Savol[]) : [];
   const toldi = savollar.length >= ANKETA_CHEGARASI;
@@ -155,11 +155,11 @@ export function AnketaTuzuvchi({
       <p className="flex items-start gap-2 rounded-xl bg-navy-50/60 p-3 text-xs leading-relaxed text-navy-900">
         <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
         <span>
-          Ariza saytda <b>qadamma-qadam</b> to‘ldiriladi. 1-qadam — F.I.Sh. (familiya, ism,
-          otasining ismi), 2-qadam — telefon va email: ular avtomatik so‘raladi. Savollarni
-          qadamlarga bo‘lish uchun <b>“➜ Yangi qadam”</b> qo‘shing; birinchi qadamgacha bo‘lgan
+          Ariza saytda <b>qadamma-qadam</b> toʻldiriladi. 1-qadam — F.I.Sh. (familiya, ism,
+          otasining ismi), 2-qadam — telefon va email: ular avtomatik soʻraladi. Savollarni
+          qadamlarga boʻlish uchun <b>“➜ Yangi qadam”</b> qoʻshing; birinchi qadamgacha boʻlgan
           savollar 1-qadamga tushadi. Rozilik belgilari oxirgi — tasdiqlash qadamida chiqadi.
-          Anketa bo‘sh qolsa, oddiy shakl ishlatiladi (jamoa nomi, yo‘nalish, izoh).
+          Anketa boʻsh qolsa, oddiy shakl ishlatiladi (jamoa nomi, yoʻnalish, izoh).
         </span>
       </p>
 
@@ -215,7 +215,7 @@ export function AnketaTuzuvchi({
                 <ArrowDown className="h-4 w-4" />
               </TugmaIkonka>
               <TugmaIkonka
-                nom="O‘chirish"
+                nom="Oʻchirish"
                 xavfli
                 onClick={() => ozgartir(savollar.filter((_, j) => j !== i))}
               >
@@ -301,7 +301,7 @@ export function AnketaTuzuvchi({
           className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-navy px-3.5 text-xs font-semibold text-white transition-colors hover:bg-navy-900 disabled:opacity-50"
         >
           <Plus className="h-3.5 w-3.5" />
-          Savol qo‘shish
+          Savol qoʻshish
         </button>
 
         {savollar.length === 0 && (
@@ -311,7 +311,7 @@ export function AnketaTuzuvchi({
             className="ml-2 inline-flex h-9 items-center gap-1.5 rounded-lg border border-gold/50 bg-gold/10 px-3.5 text-xs font-semibold text-navy transition-colors hover:bg-gold/20"
           >
             <FileStack className="h-3.5 w-3.5" />
-            Hujjatlar bilan to‘liq anketa
+            Hujjatlar bilan toʻliq anketa
           </button>
         )}
 

@@ -1,11 +1,11 @@
 /**
- * Supabase muhit o'zgaruvchilari — bitta joyda o'qiladi va tekshiriladi.
+ * Supabase muhit oʻzgaruvchilari — bitta joyda oʻqiladi va tekshiriladi.
  *
- * Vercel'da bu qiymatlar loyiha sozlamalaridagi "Environment Variables"
- * bo'limiga qo'yiladi (Production, Preview va Development uchun).
+ * Vercelʼda bu qiymatlar loyiha sozlamalaridagi "Environment Variables"
+ * boʻlimiga qoʻyiladi (Production, Preview va Development uchun).
  */
 
-/** Brauzerga ham ochiq bo'ladigan qiymatlar (Supabase'da bu xavfsiz) */
+/** Brauzerga ham ochiq boʻladigan qiymatlar (Supabaseʼda bu xavfsiz) */
 export function ochiqSozlama(): { url: string; kalit: string } {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const kalit =
@@ -14,7 +14,7 @@ export function ochiqSozlama(): { url: string; kalit: string } {
   if (!url || !kalit) {
     throw new Error(
       'NEXT_PUBLIC_SUPABASE_URL yoki NEXT_PUBLIC_SUPABASE_ANON_KEY topilmadi. ' +
-        'Muhit o‘zgaruvchilarini tekshiring (.env yoki Vercel sozlamalari).',
+        'Muhit oʻzgaruvchilarini tekshiring (.env yoki Vercel sozlamalari).',
     );
   }
   return { url, kalit };
@@ -36,7 +36,7 @@ export const BUCKET = process.env.SUPABASE_STORAGE_BUCKET ?? 'media';
 
 /**
  * Ishtirokchilar arizaga biriktiradigan fayllar (pasport nusxasi, surat...)
- * uchun YOPIQ bucket. Fayllar ochiq havola bilan ko'rinmaydi — ularni faqat
+ * uchun YOPIQ bucket. Fayllar ochiq havola bilan koʻrinmaydi — ularni faqat
  * admin panelga kirgan xodim vaqtinchalik havola orqali ochadi.
  */
 export const ARIZA_BUCKET = process.env.SUPABASE_APPLICATIONS_BUCKET ?? 'arizalar';

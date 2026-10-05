@@ -14,10 +14,10 @@ import type { Expert } from '@/types';
 import { pick, flagEmoji } from '@/lib/utils';
 
 /**
- * Ekspertlar ro'yxati va "batafsil" oynasi.
+ * Ekspertlar roʻyxati va "batafsil" oynasi.
  *
- * Kartochkada biografiya uch qator bilan cheklangan — to'liq matn, barcha
- * mutaxassislik yo'nalishlari va hamkorlik shakli kartochka bosilganda
+ * Kartochkada biografiya uch qator bilan cheklangan — toʻliq matn, barcha
+ * mutaxassislik yoʻnalishlari va hamkorlik shakli kartochka bosilganda
  * ochiladi.
  */
 export function Ekspertlar({ experts }: { experts: Expert[] }) {

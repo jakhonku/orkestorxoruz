@@ -51,13 +51,13 @@ export function MaydonKiritish({
   qiymat: unknown;
   ozgartir: (yangi: unknown) => void;
   /**
-   * Maydon shu topshiriqda majburiymi. Berilmasa — maydon ta'rifidagi
-   * qiymat olinadi. Shartli maydonlar uchun shakl o'zi hisoblab uzatadi.
+   * Maydon shu topshiriqda majburiymi. Berilmasa — maydon taʼrifidagi
+   * qiymat olinadi. Shartli maydonlar uchun shakl oʻzi hisoblab uzatadi.
    */
   talab?: boolean;
 }) {
   const majburiy = talab ?? Boolean(maydon.talab);
-  // "Ha / Yo'q" maydoni — yorliq yonida turadi
+  // "Ha / Yoʻq" maydoni — yorliq yonida turadi
   if (maydon.tur === 'belgi') {
     return (
       <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-white px-4 py-3">
@@ -262,21 +262,21 @@ function TilTugmalari({
 }
 
 /**
- * Tarjima bo'sh qolganda ko'rsatiladigan eslatma.
+ * Tarjima boʻsh qolganda koʻrsatiladigan eslatma.
  *
- * Saytda bo'sh tarjima o'rniga o'zbekcha matn chiqadi (`pick`), lekin
- * muharrir buni bilib turishi va bir bosishda nusxa ko'chira olishi kerak.
+ * Saytda boʻsh tarjima oʻrniga oʻzbekcha matn chiqadi (`pick`), lekin
+ * muharrir buni bilib turishi va bir bosishda nusxa koʻchira olishi kerak.
  */
 function TarjimaEslatmasi({ nusxala }: { nusxala: () => void }) {
   return (
     <p className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-amber-700">
-      <span>Bo‘sh — saytda o‘zbekcha matn ko‘rsatiladi.</span>
+      <span>Boʻsh — saytda oʻzbekcha matn koʻrsatiladi.</span>
       <button
         type="button"
         onClick={nusxala}
         className="rounded-md bg-amber-100 px-2 py-0.5 font-semibold text-amber-800 transition-colors hover:bg-amber-200"
       >
-        O‘zbekchadan nusxalash
+        Oʻzbekchadan nusxalash
       </button>
     </p>
   );
@@ -373,8 +373,8 @@ export function KopTilliRoyxatKiritish({
 /* ------------------------------------------------------------------ */
 
 /**
- * To'liq havola qo'yilsa ham ID ni o'zi ajratib oladi — bazadagi ustun
- * qisqa ID uchun mo'ljallangan, uzun havola saqlanmaydi.
+ * Toʻliq havola qoʻyilsa ham ID ni oʻzi ajratib oladi — bazadagi ustun
+ * qisqa ID uchun moʻljallangan, uzun havola saqlanmaydi.
  */
 function YouTubeId({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) => void }) {
   const toza = youtubeIdAjrat(qiymat);
@@ -393,7 +393,7 @@ function YouTubeId({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: str
             ozgartir(youtubeIdAjrat(matn));
           }
         }}
-        placeholder="jNQXAC9IVRw yoki to‘liq havola"
+        placeholder="jNQXAC9IVRw yoki toʻliq havola"
         className={cn(INPUT, 'font-mono')}
       />
       {havolaQoyilgan && (
@@ -409,20 +409,20 @@ function YouTubeId({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: str
 /* Instagram havolasi                                                  */
 /* ------------------------------------------------------------------ */
 
-/** Havola tanildimi — shakl ostida darhol ko'rinadigan izoh */
+/** Havola tanildimi — shakl ostida darhol koʻrinadigan izoh */
 function HavolaHolati({ qiymat, manba }: { qiymat: string; manba: string | null }) {
   const matn = qiymat.trim();
   if (!matn) return null;
 
   if (manba) {
-    return <p className="mt-1.5 text-xs text-emerald-700">Tanildi: {manba}. Saytda pleyer bo‘lib ochiladi.</p>;
+    return <p className="mt-1.5 text-xs text-emerald-700">Tanildi: {manba}. Saytda pleyer boʻlib ochiladi.</p>;
   }
 
   if (telegramYopiqmi(matn)) {
     return (
       <p className="mt-1.5 text-xs text-red-600">
-        Bu yopiq kanal posti — uni saytga o‘rnatib bo‘lmaydi. Ochiq kanaldagi postning
-        havolasini qo‘ying (https://t.me/kanal/123).
+        Bu yopiq kanal posti — uni saytga oʻrnatib boʻlmaydi. Ochiq kanaldagi postning
+        havolasini qoʻying (https://t.me/kanal/123).
       </p>
     );
   }
@@ -430,8 +430,8 @@ function HavolaHolati({ qiymat, manba }: { qiymat: string; manba: string | null 
   if (instagramUlashishmi(matn)) {
     return (
       <p className="mt-1.5 text-xs text-red-600">
-        Bu Instagramning «Ulashish» havolasi — ichida post kodi yo‘q. Saqlaganda sayt uni
-        o‘zi ochib to‘g‘ri havolaga aylantirishga urinadi; bo‘lmasa, postni brauzerda
+        Bu Instagramning «Ulashish» havolasi — ichida post kodi yoʻq. Saqlaganda sayt uni
+        oʻzi ochib toʻgʻri havolaga aylantirishga urinadi; boʻlmasa, postni brauzerda
         ochib, manzil qatoridagi havolani (…/reel/KOD/) nusxalang.
       </p>
     );
@@ -439,7 +439,7 @@ function HavolaHolati({ qiymat, manba }: { qiymat: string; manba: string | null 
 
   return (
     <p className="mt-1.5 text-xs text-red-600">
-      Havola tanilmadi. Saqlashda xato chiqadi — to‘liq havolani qo‘ying.
+      Havola tanilmadi. Saqlashda xato chiqadi — toʻliq havolani qoʻying.
     </p>
   );
 }
@@ -534,7 +534,7 @@ function useYuklash(papka: string, tayyor: (url: string) => void) {
     try {
       tayyor(await faylYukla(fayl, papka, setFoiz));
     } catch (e) {
-      setXato(e instanceof Error ? e.message : 'Yuklab bo‘lmadi.');
+      setXato(e instanceof Error ? e.message : 'Yuklab boʻlmadi.');
     } finally {
       setYuklanmoqda(false);
     }
@@ -576,7 +576,7 @@ function Rasm({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) 
             </>
           ) : (
             <span className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
-              rasm yo‘q
+              rasm yoʻq
             </span>
           )}
         </div>
@@ -595,7 +595,7 @@ function Rasm({ qiymat, ozgartir }: { qiymat: string; ozgartir: (yangi: string) 
               onClick={() => setHavolaKorinsin((v) => !v)}
               className="font-medium text-navy underline-offset-2 hover:underline"
             >
-              {havolaKorinsin ? 'havolani yashirish' : 'yoki havola qo‘yish'}
+              {havolaKorinsin ? 'havolani yashirish' : 'yoki havola qoʻyish'}
             </button>
           </p>
 
@@ -641,7 +641,7 @@ function faylNomi(url: string): string {
   }
 }
 
-/** Fayl turiga qarab: qaysi fayllar tanlanadi va qanday izoh ko'rsatiladi */
+/** Fayl turiga qarab: qaysi fayllar tanlanadi va qanday izoh koʻrsatiladi */
 const FAYL_TURLARI = {
   hujjat: {
     accept: '.pdf,.doc,.docx,.xls,.xlsx,application/pdf',
@@ -696,7 +696,7 @@ function Fayl({
         <input
           value={qiymat}
           onChange={(e) => ozgartir(e.target.value)}
-          placeholder="Fayl yuklang yoki tashqi havola qo‘ying"
+          placeholder="Fayl yuklang yoki tashqi havola qoʻying"
           className={cn(INPUT, 'font-mono text-xs')}
         />
       )}
@@ -747,13 +747,13 @@ function Qatorlar({
   const ichki = maydon.maydonlar ?? [];
 
   /**
-   * Qatorni yangilash — ro'yxatning eng oxirgi holatidan hisoblanadi.
+   * Qatorni yangilash — roʻyxatning eng oxirgi holatidan hisoblanadi.
    *
-   * Rasm yuklash bir necha soniya davom etadi. Tugaganda o'sha paytdagi
-   * ro'yxat bilan ishlansa, ikkita rasmni ketma-ket yuklaganda keyingisining
-   * natijasi oldingisini o'chirib yuborardi — galereyaga qo'yilgan rasm
-   * yo'qolib qolardi. Shu sababli yangi qiymat emas, YANGILASH FUNKSIYASI
-   * uzatiladi: u ishlaganda ro'yxat allaqachon yangilangan bo'ladi.
+   * Rasm yuklash bir necha soniya davom etadi. Tugaganda oʻsha paytdagi
+   * roʻyxat bilan ishlansa, ikkita rasmni ketma-ket yuklaganda keyingisining
+   * natijasi oldingisini oʻchirib yuborardi — galereyaga qoʻyilgan rasm
+   * yoʻqolib qolardi. Shu sababli yangi qiymat emas, YANGILASH FUNKSIYASI
+   * uzatiladi: u ishlaganda roʻyxat allaqachon yangilangan boʻladi.
    */
   const yangilash = (i: number, nom: string, v: unknown) =>
     ozgartir((eski) => eski.map((q, j) => (i === j ? { ...q, [nom]: v } : q)));
@@ -770,7 +770,7 @@ function Qatorlar({
     <div className="space-y-2.5">
       {qatorlar.length === 0 && (
         <p className="rounded-lg border border-dashed border-border px-3 py-4 text-center text-xs text-muted-foreground">
-          Hozircha bo‘sh
+          Hozircha boʻsh
         </p>
       )}
 
@@ -802,7 +802,7 @@ function Qatorlar({
               <button
                 type="button"
                 onClick={() => ozgartir((eski) => eski.filter((_, j) => j !== i))}
-                title="O‘chirish"
+                title="Oʻchirish"
                 className="rounded p-1 text-muted-foreground transition-colors hover:bg-white hover:text-red-600"
               >
                 <Trash2 className="h-3.5 w-3.5" />
@@ -830,7 +830,7 @@ function Qatorlar({
         className="inline-flex items-center gap-1.5 rounded-lg border border-dashed border-navy/25 px-3 py-2 text-xs font-semibold text-navy transition-colors hover:border-gold hover:bg-gold/5"
       >
         <Plus className="h-3.5 w-3.5" />
-        Qator qo‘shish
+        Qator qoʻshish
       </button>
 
       {maydon.excel && (

@@ -21,6 +21,7 @@ function moslash(c: Qator): Competition {
     title: loc(c.title),
     kind: competitionKindFromDb[c.kind],
     status: competitionStatusFromDb[c.status],
+    detailOpen: c.status !== 'TEZ_KUNDA' || c.detailOpen,
     cover: c.coverUrl ?? '',
     date: loc(c.date),
     location: loc(c.location),
@@ -67,7 +68,7 @@ export const getCompetitionMeta = cache(async (slug: string) => {
 export async function getCompetitionSlugs(): Promise<string[]> {
   const rows = await db.competition.findMany({
     where: { published: true },
-    select: { slug: true },
+    select: { slug: true, status: true, detailOpen: true },
   });
-  return rows.map((r) => r.slug);
+  return rows.filter((r) => r.status !== 'TEZ_KUNDA' || r.detailOpen).map((r) => r.slug);
 }

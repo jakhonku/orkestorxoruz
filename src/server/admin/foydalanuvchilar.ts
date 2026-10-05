@@ -13,21 +13,21 @@ import type { AdminRole } from '@/generated/prisma/enums';
  *
  * Hisob ikki joyda yashaydi:
  *   Supabase Auth — email va parol (parol bazada saqlanmaydi)
- *   `admin_users` — ism, rol, faollik; `authUserId` orqali bog'lanadi
+ *   `admin_users` — ism, rol, faollik; `authUserId` orqali bogʻlanadi
  */
 
 export type Natija = { ok: true } | { ok: false; xato: string };
 
 const ENG_QISQA_PAROL = 8;
 
-/** Mijozdan kelgan rol nomini tekshiradi — noma'lumi muharrirga tushadi */
+/** Mijozdan kelgan rol nomini tekshiradi — nomaʼlumi muharrirga tushadi */
 function rolTanla(x: unknown): AdminRole {
   return x === 'ADMIN' || x === 'TANLOV' ? x : 'MUHARRIR';
 }
 
 async function adminSessiya() {
   const s = await joriySessiya();
-  if (!s) throw new Error('Ruxsat yo‘q. Qaytadan kiring.');
+  if (!s) throw new Error('Ruxsat yoʻq. Qaytadan kiring.');
   if (s.role !== 'ADMIN') throw new Error('Bu amal faqat administrator uchun.');
   return s;
 }
@@ -35,12 +35,12 @@ async function adminSessiya() {
 function xatoBilan(e: unknown): Natija {
   const xabar = e instanceof Error ? e.message : String(e);
   if (xabar.includes('Unique constraint')) {
-    return { ok: false, xato: 'Bu email allaqachon ro‘yxatdan o‘tgan.' };
+    return { ok: false, xato: 'Bu email allaqachon roʻyxatdan oʻtgan.' };
   }
   return { ok: false, xato: xabar };
 }
 
-/** Supabase Auth'dagi hisobni email bo'yicha topadi (bog'lanmagan eski qaydlar uchun) */
+/** Supabase Authʼdagi hisobni email boʻyicha topadi (bogʻlanmagan eski qaydlar uchun) */
 async function authIdTopish(email: string): Promise<string | null> {
   const { data, error } = await supabaseAdmin().auth.admin.listUsers({ page: 1, perPage: 1000 });
   if (error) return null;
@@ -57,17 +57,17 @@ export async function foydalanuvchiQoshish(formData: FormData): Promise<Natija> 
     const parol = String(formData.get('parol') ?? '');
     const role = rolTanla(String(formData.get('role') ?? ''));
 
-    if (!email.includes('@')) return { ok: false, xato: 'Email noto‘g‘ri.' };
-    if (!name) return { ok: false, xato: 'Ism to‘ldirilishi shart.' };
+    if (!email.includes('@')) return { ok: false, xato: 'Email notoʻgʻri.' };
+    if (!name) return { ok: false, xato: 'Ism toʻldirilishi shart.' };
     if (parol.length < ENG_QISQA_PAROL) {
-      return { ok: false, xato: `Parol kamida ${ENG_QISQA_PAROL} ta belgidan iborat bo‘lsin.` };
+      return { ok: false, xato: `Parol kamida ${ENG_QISQA_PAROL} ta belgidan iborat boʻlsin.` };
     }
 
     const bor = await db.adminUser.findUnique({ where: { email }, select: { id: true } });
-    if (bor) return { ok: false, xato: 'Bu email allaqachon ro‘yxatdan o‘tgan.' };
+    if (bor) return { ok: false, xato: 'Bu email allaqachon roʻyxatdan oʻtgan.' };
 
-    // Supabase'da hisob ochiladi. Email tasdiqlash so'ralmaydi — hisobni
-    // administrator o'zi yaratayapti va parolni foydalanuvchiga beradi.
+    // Supabaseʼda hisob ochiladi. Email tasdiqlash soʻralmaydi — hisobni
+    // administrator oʻzi yaratayapti va parolni foydalanuvchiga beradi.
     const supabase = supabaseAdmin();
     const { data, error } = await supabase.auth.admin.createUser({
       email,
@@ -75,7 +75,7 @@ export async function foydalanuvchiQoshish(formData: FormData): Promise<Natija> 
       email_confirm: true,
     });
 
-    // Supabase'da shu email bilan hisob allaqachon bo'lsa — mavjudiga bog'lanamiz
+    // Supabaseʼda shu email bilan hisob allaqachon boʻlsa — mavjudiga bogʻlanamiz
     let authUserId = data?.user?.id ?? null;
     if (error) {
       authUserId = await authIdTopish(email);
@@ -86,8 +86,8 @@ export async function foydalanuvchiQoshish(formData: FormData): Promise<Natija> 
     try {
       await db.adminUser.create({ data: { email, name, role, authUserId } });
     } catch (e) {
-      // Bazaga yozib bo'lmadi — Supabase'da ochilgan hisob ham olib tashlanadi,
-      // aks holda hech kimga tegishli bo'lmagan hisob qolib ketadi
+      // Bazaga yozib boʻlmadi — Supabaseʼda ochilgan hisob ham olib tashlanadi,
+      // aks holda hech kimga tegishli boʻlmagan hisob qolib ketadi
       if (!error && authUserId) await supabase.auth.admin.deleteUser(authUserId);
       throw e;
     }
@@ -103,7 +103,7 @@ export async function parolniOzgartirish(id: number, parol: string): Promise<Nat
   try {
     await adminSessiya();
     if (parol.length < ENG_QISQA_PAROL) {
-      return { ok: false, xato: `Parol kamida ${ENG_QISQA_PAROL} ta belgidan iborat bo‘lsin.` };
+      return { ok: false, xato: `Parol kamida ${ENG_QISQA_PAROL} ta belgidan iborat boʻlsin.` };
     }
 
     const qayd = await db.adminUser.findUnique({
@@ -114,7 +114,7 @@ export async function parolniOzgartirish(id: number, parol: string): Promise<Nat
 
     const authUserId = qayd.authUserId ?? (await authIdTopish(qayd.email));
     if (!authUserId) {
-      return { ok: false, xato: 'Supabase Auth’da bu hisob topilmadi.' };
+      return { ok: false, xato: 'Supabase Authʼda bu hisob topilmadi.' };
     }
 
     const { error } = await supabaseAdmin().auth.admin.updateUserById(authUserId, {
@@ -122,8 +122,8 @@ export async function parolniOzgartirish(id: number, parol: string): Promise<Nat
     });
     if (error) return { ok: false, xato: error.message };
 
-    // Supabase parol o'zgarganda eski sessiyalarni o'zi yopmaydi — shu foydalanuvchining
-    // barcha kirgan qurilmalari chiqarib yuboriladi (refresh tokenlar sessiya bilan birga o'chadi)
+    // Supabase parol oʻzgarganda eski sessiyalarni oʻzi yopmaydi — shu foydalanuvchining
+    // barcha kirgan qurilmalari chiqarib yuboriladi (refresh tokenlar sessiya bilan birga oʻchadi)
     await db.$executeRaw`DELETE FROM auth.sessions WHERE user_id = ${authUserId}::uuid`;
 
     if (!qayd.authUserId) {
@@ -139,7 +139,7 @@ export async function faollikAlmashtirish(id: number): Promise<Natija> {
   try {
     const sessiya = await adminSessiya();
     if (sessiya.userId === id) {
-      return { ok: false, xato: 'O‘z hisobingizni bloklay olmaysiz.' };
+      return { ok: false, xato: 'Oʻz hisobingizni bloklay olmaysiz.' };
     }
 
     const joriy = await db.adminUser.findUnique({ where: { id }, select: { active: true } });
@@ -157,7 +157,7 @@ export async function rolniOzgartirish(id: number, rol: string): Promise<Natija>
   try {
     const sessiya = await adminSessiya();
     if (sessiya.userId === id) {
-      return { ok: false, xato: 'O‘z rolingizni o‘zgartira olmaysiz.' };
+      return { ok: false, xato: 'Oʻz rolingizni oʻzgartira olmaysiz.' };
     }
 
     await db.adminUser.update({ where: { id }, data: { role: rolTanla(rol) } });
@@ -172,7 +172,7 @@ export async function foydalanuvchiOchirish(id: number): Promise<Natija> {
   try {
     const sessiya = await adminSessiya();
     if (sessiya.userId === id) {
-      return { ok: false, xato: 'O‘z hisobingizni o‘chira olmaysiz.' };
+      return { ok: false, xato: 'Oʻz hisobingizni oʻchira olmaysiz.' };
     }
 
     const adminlar = await db.adminUser.count({ where: { role: 'ADMIN', active: true } });
@@ -187,7 +187,7 @@ export async function foydalanuvchiOchirish(id: number): Promise<Natija> {
 
     await db.adminUser.delete({ where: { id } });
 
-    // Supabase'dagi hisob ham o'chiriladi — aks holda kirish imkoni qolib ketadi
+    // Supabaseʼdagi hisob ham oʻchiriladi — aks holda kirish imkoni qolib ketadi
     const authUserId = ochiriladigan.authUserId ?? (await authIdTopish(ochiriladigan.email));
     if (authUserId) {
       await supabaseAdmin().auth.admin.deleteUser(authUserId);

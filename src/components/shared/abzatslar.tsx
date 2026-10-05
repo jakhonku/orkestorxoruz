@@ -1,10 +1,10 @@
 import { cn } from '@/lib/utils';
 
 /**
- * Admin paneldan kelgan uzun matnni abzatslarga bo'lib chiqaradi.
+ * Admin paneldan kelgan uzun matnni abzatslarga boʻlib chiqaradi.
  *
- * Muharrir shaklda oddiy qilib yozadi — bo'sh qator yangi abzatsni boshlaydi.
- * Matn bo'sh bo'lsa hech narsa chizilmaydi, sahifada bo'sh joy qolmaydi.
+ * Muharrir shaklda oddiy qilib yozadi — boʻsh qator yangi abzatsni boshlaydi.
+ * Matn boʻsh boʻlsa hech narsa chizilmaydi, sahifada boʻsh joy qolmaydi.
  */
 export function Abzatslar({ matn, className }: { matn: string; className?: string }) {
   const bandlar = matn

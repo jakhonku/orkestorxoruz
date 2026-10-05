@@ -39,8 +39,8 @@ export default async function SozlamalarSahifasi() {
       <div className="mb-5">
         <h1 className="font-serif text-2xl font-semibold text-navy">Sayt sozlamalari</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Kontakt ma’lumotlari, shior va ijtimoiy tarmoq havolalari. Bular saytning barcha
-          sahifalarida — sarlavha, footer va «Aloqa» bo‘limida ishlatiladi.
+          Kontakt maʼlumotlari, shior va ijtimoiy tarmoq havolalari. Bular saytning barcha
+          sahifalarida — sarlavha, footer va «Aloqa» boʻlimida ishlatiladi.
         </p>
       </div>
 

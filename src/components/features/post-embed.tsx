@@ -11,8 +11,8 @@ import { VideoEmbed } from './video-embed';
 /**
  * Yangilik matni yonidagi ijtimoiy tarmoq posti.
  *
- * YouTube va Instagram — odatdagi pleyer (bosilganda o'sha yerda ochiladi),
- * Telegram esa postning o'zi bo'lib chiqadi: matni, rasmi va videosi bilan.
+ * YouTube va Instagram — odatdagi pleyer (bosilganda oʻsha yerda ochiladi),
+ * Telegram esa postning oʻzi boʻlib chiqadi: matni, rasmi va videosi bilan.
  */
 const IKONKALAR = {
   youtube: Youtube,
@@ -44,14 +44,14 @@ export function PostEmbed({ manba, title }: { manba: PostManba; title: string })
   );
 }
 
-/** Telegram vidjeti yuklanmasa shuncha kutib, o'rniga havola ko'rsatiladi */
+/** Telegram vidjeti yuklanmasa shuncha kutib, oʻrniga havola koʻrsatiladi */
 const KUTISH_MS = 6000;
 
 /**
- * Telegram posti rasmiy vidjet skripti orqali qo'yiladi.
+ * Telegram posti rasmiy vidjet skripti orqali qoʻyiladi.
  *
- * Postni oddiy <iframe> bilan ham ko'rsatish mumkin, lekin balandligini
- * o'sha skript boshqaradi: ramka bilan Telegram o'zaro xabarlashadi va post
+ * Postni oddiy <iframe> bilan ham koʻrsatish mumkin, lekin balandligini
+ * oʻsha skript boshqaradi: ramka bilan Telegram oʻzaro xabarlashadi va post
  * (rasm, video, matn) yuklangan sari balandlik yangilanadi. Skriptsiz post
  * kesilib qolardi.
  */
@@ -60,7 +60,7 @@ function TelegramPost({ havola }: { havola: string }) {
   const [xato, setXato] = useState(false);
   const post = telegramAjrat(havola);
   const yol = post ? `${post.kanal}/${post.post}` : '';
-  // `?single` — guruhdagi bitta post. Vidjet manzilni o'zi yig'adi, shuning
+  // `?single` — guruhdagi bitta post. Vidjet manzilni oʻzi yigʻadi, shuning
   // uchun belgini havolaga emas, alohida `data-single` atributiga beramiz
   const yolgiz = Boolean(post?.yolgiz);
 
@@ -78,12 +78,12 @@ function TelegramPost({ havola }: { havola: string }) {
     skript.setAttribute('data-width', '100%');
     skript.setAttribute('data-userpic', 'true');
     if (yolgiz) skript.setAttribute('data-single', '1');
-    // Post har doim oq fonda — sayt qorong'i mavzuni ishlatmaydi
+    // Post har doim oq fonda — sayt qorongʻi mavzuni ishlatmaydi
     skript.setAttribute('data-dark', '0');
     skript.onerror = () => setXato(true);
     el.appendChild(skript);
 
-    // Skript bloklangan bo'lsa (masalan reklama filtri) ramka paydo bo'lmaydi
+    // Skript bloklangan boʻlsa (masalan reklama filtri) ramka paydo boʻlmaydi
     const kuzatuv = window.setTimeout(() => {
       if (!el.querySelector('iframe')) setXato(true);
     }, KUTISH_MS);

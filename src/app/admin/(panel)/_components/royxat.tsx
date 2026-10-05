@@ -66,7 +66,7 @@ export function Royxat({
         <div>
           <h1 className="font-serif text-2xl font-semibold text-navy">{nom}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {izoh ?? `Jami ${qatorlar.length} ta · saytda ko‘rinadi: ${nashrEtilgan} ta`}
+            {izoh ?? `Jami ${qatorlar.length} ta · saytda koʻrinadi: ${nashrEtilgan} ta`}
           </p>
         </div>
 
@@ -95,7 +95,7 @@ export function Royxat({
           <input
             value={qidiruv}
             onChange={(e) => setQidiruv(e.target.value)}
-            placeholder="Ro‘yxatdan qidirish..."
+            placeholder="Roʻyxatdan qidirish..."
             className="h-11 w-full rounded-xl border border-input bg-white pl-10 pr-4 text-sm focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/15"
           />
         </div>
@@ -106,8 +106,8 @@ export function Royxat({
         <div className="rounded-2xl border border-dashed border-border bg-white px-6 py-14 text-center">
           <p className="text-sm text-muted-foreground">
             {qatorlar.length === 0
-              ? `Hozircha birorta ${birlik} qo‘shilmagan.`
-              : 'Qidiruv bo‘yicha hech narsa topilmadi.'}
+              ? `Hozircha birorta ${birlik} qoʻshilmagan.`
+              : 'Qidiruv boʻyicha hech narsa topilmadi.'}
           </p>
           {qatorlar.length === 0 && qoshishMumkin && (
             <Link
@@ -115,7 +115,7 @@ export function Royxat({
               className="mt-4 inline-flex h-10 items-center gap-2 rounded-xl bg-navy px-4 text-sm font-semibold text-white"
             >
               <Plus className="h-4 w-4" />
-              Birinchisini qo‘shish
+              Birinchisini qoʻshish
             </Link>
           )}
         </div>
@@ -163,7 +163,7 @@ export function Royxat({
                     disabled={kutilmoqda}
                     className="h-8 rounded-lg bg-red-600 px-2.5 text-xs font-semibold text-white disabled:opacity-60"
                   >
-                    O‘chirilsin
+                    Oʻchirilsin
                   </button>
                   <button
                     type="button"
@@ -179,7 +179,7 @@ export function Royxat({
                     type="button"
                     onClick={() => nashrni(r.id)}
                     disabled={kutilmoqda}
-                    title={r.ochiqmi === false ? 'Saytda ko‘rsatish' : 'Qoralamaga olish'}
+                    title={r.ochiqmi === false ? 'Saytda koʻrsatish' : 'Qoralamaga olish'}
                     className={cn(
                       'flex h-8 w-8 items-center justify-center rounded-lg transition-colors disabled:opacity-50',
                       r.ochiqmi === false
@@ -205,7 +205,7 @@ export function Royxat({
                   <button
                     type="button"
                     onClick={() => setOchiriladigan(r.id)}
-                    title="O‘chirish"
+                    title="Oʻchirish"
                     className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600"
                   >
                     <Trash2 className="h-4 w-4" />

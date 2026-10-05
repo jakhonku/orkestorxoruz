@@ -27,7 +27,7 @@ export default async function ContactPage({ params }: { params: { locale: Locale
   return <ContactContent settings={settings} />;
 }
 
-/** Kontakt ma'lumotlari va xarita nuqtasi bazadagi sozlamalardan olinadi */
+/** Kontakt maʼlumotlari va xarita nuqtasi bazadagi sozlamalardan olinadi */
 function ContactContent({ settings }: { settings: SiteSettings }) {
   const t = useTranslations('Contact');
   const tn = useTranslations('Nav');

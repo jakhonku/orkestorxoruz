@@ -52,11 +52,11 @@ export function Hero({ slides }: { slides: Slide[] }) {
   );
 
   /**
-   * Boshqa varaqqa o'tilganda slayder to'xtaydi.
+   * Boshqa varaqqa oʻtilganda slayder toʻxtaydi.
    *
-   * Aks holda ko'rinmayotgan sahifada ham har 6 soniyada rasm almashib,
-   * brauzer uni qayta chizib turardi — varaqqa qaytilganda to'planib qolgan
-   * ish bir yo'la bajarilib, seziladigan to'xtalish berardi.
+   * Aks holda koʻrinmayotgan sahifada ham har 6 soniyada rasm almashib,
+   * brauzer uni qayta chizib turardi — varaqqa qaytilganda toʻplanib qolgan
+   * ish bir yoʻla bajarilib, seziladigan toʻxtalish berardi.
    */
   const [korinmayapti, setKorinmayapti] = useState(false);
   useEffect(() => {
@@ -94,7 +94,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
   }, [go]);
 
   const slide = slides[index];
-  /** Keyingi slayd surati — almashishdan oldin yuklab qo'yiladi */
+  /** Keyingi slayd surati — almashishdan oldin yuklab qoʻyiladi */
   const keyingiRasm = count > 1 ? slides[(index + 1) % count].image || '/hero.png' : null;
 
   // Tor ekranda matn chetdan chiqib ketmasligi uchun siljish masofasi kichikroq
@@ -112,7 +112,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
        * md dan boshlab: rasm butun ekran foni, matn uning ustida (avvalgidek).
        *
        * Sabab: hero suratlari gorizontal (1.5–2.2), telefon ekrani esa tik.
-       * To'liq fon qilinsa `object-cover` rasmning tor o'rta bo'lagini kesib
+       * Toʻliq fon qilinsa `object-cover` rasmning tor oʻrta boʻlagini kesib
        * oladi — kompozitsiya buziladi va matn suratning band joyiga tushadi.
        */
       className="relative flex min-h-[100svh] flex-col overflow-hidden bg-navy-900 md:block md:min-h-screen md:min-h-[100dvh]"
@@ -142,10 +142,10 @@ export function Hero({ slides }: { slides: Slide[] }) {
         </AnimatePresence>
 
         {/*
-          Keyingi slayd surati ko'rinmas holda oldindan yuklanadi.
-          Ilgari har bir almashishda rasm o'sha zahoti yuklanib, dekodlanardi —
-          bu bir lahzalik to'xtalish berardi (ayniqsa Retina ekranlarda, chunki
-          u yerda surat ikki barobar kattaroq o'lchamda olinadi).
+          Keyingi slayd surati koʻrinmas holda oldindan yuklanadi.
+          Ilgari har bir almashishda rasm oʻsha zahoti yuklanib, dekodlanardi —
+          bu bir lahzalik toʻxtalish berardi (ayniqsa Retina ekranlarda, chunki
+          u yerda surat ikki barobar kattaroq oʻlchamda olinadi).
         */}
         {keyingiRasm && (
           <Image
@@ -163,7 +163,7 @@ export function Hero({ slides }: { slides: Slide[] }) {
         <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/20 to-navy-900/45 md:hidden" />
       </div>
 
-      {/* Katta ekran uchun qatlamlar — matn chapda o'qiladigan bo'lib turishi uchun */}
+      {/* Katta ekran uchun qatlamlar — matn chapda oʻqiladigan boʻlib turishi uchun */}
       <div className="absolute inset-0 hidden bg-gradient-to-r from-navy-900/90 via-navy-900/55 to-navy-900/25 md:block" />
       <div className="absolute inset-0 hidden bg-gradient-to-t from-navy-900/60 via-transparent to-navy-900/20 md:block" />
       {/* gold glow accent */}

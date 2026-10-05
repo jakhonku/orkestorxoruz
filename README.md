@@ -1,11 +1,11 @@
 # "Orkestr va Xor" ijodiy birlashmasi — veb-sayt (frontend)
 
-O‘zbekistonda orkestr va xor san’atini rivojlantiruvchi davlat ijodiy tashkiloti uchun
-ko‘p tilli (uz / ru / en) sayt. Kontent **Supabase Postgres** bazasida saqlanadi va
-Prisma orqali o‘qiladi — batafsil: [BAZA.md](./BAZA.md).
+Oʻzbekistonda orkestr va xor sanʼatini rivojlantiruvchi davlat ijodiy tashkiloti uchun
+koʻp tilli (uz / ru / en) sayt. Kontent **Supabase Postgres** bazasida saqlanadi va
+Prisma orqali oʻqiladi — batafsil: [BAZA.md](./BAZA.md).
 
 Sayt **Vercel**'da ishlaydi, backend **Supabase**'da (baza, admin kirish, fayllar) —
-ishga tushirish yo‘riqnomasi: **[VERCEL.md](./VERCEL.md)**.
+ishga tushirish yoʻriqnomasi: **[VERCEL.md](./VERCEL.md)**.
 
 ---
 
@@ -17,33 +17,33 @@ ishga tushirish yo‘riqnomasi: **[VERCEL.md](./VERCEL.md)**.
 | Uslublar | **Tailwind CSS** + shadcn/ui uslubidagi komponentlar |
 | Animatsiya | **framer-motion** (yumshoq fade-in / scroll animatsiyalari) |
 | Ikonkalar | **lucide-react** |
-| Ko‘p tillilik | **next-intl** (URL prefiks: `/uz`, `/ru`, `/en`) |
+| Koʻp tillilik | **next-intl** (URL prefiks: `/uz`, `/ru`, `/en`) |
 | Shriftlar | **Playfair Display** (sarlavha, serif) + **Manrope** (matn) |
-| Ma’lumotlar bazasi | **Supabase Postgres** + **Prisma 7** |
+| Maʼlumotlar bazasi | **Supabase Postgres** + **Prisma 7** |
 | Admin kirish | **Supabase Auth** (email + parol) |
 | Fayl saqlash | **Supabase Storage** (`media` bucket) |
 | Deploy | **Vercel** — [VERCEL.md](./VERCEL.md) |
 
-Brend ranglari: to‘q ko‘k `#0B3C7D`, oltin `#C9A227`, oq.
+Brend ranglari: toʻq koʻk `#0B3C7D`, oltin `#C9A227`, oq.
 
 ---
 
-## O‘rnatish va ishga tushirish
+## Oʻrnatish va ishga tushirish
 
 Avval Supabase loyihasi ochilishi kerak — [VERCEL.md](./VERCEL.md) dagi 1–4 qadamlar.
 
 ```bash
-# 1. Bog‘liqliklarni o‘rnatish
+# 1. Bogʻliqliklarni oʻrnatish
 npm install
 
-# 2. Muhit o‘zgaruvchilari (Supabase manzillari va kalitlari)
+# 2. Muhit oʻzgaruvchilari (Supabase manzillari va kalitlari)
 cp .env.example .env
 
 # 3. Bazani tayyorlash (birinchi marta)
 npm run db:deploy    # jadvallarni yaratadi
-npm run db:seed      # boshlang‘ich kontent + admin hisobi
+npm run db:seed      # boshlangʻich kontent + admin hisobi
 
-# 4. Development server (http://localhost:3000 → /uz ga yo‘naltiradi)
+# 4. Development server (http://localhost:3000 → /uz ga yoʻnaltiradi)
 npm run dev
 
 # 5. Production build
@@ -58,11 +58,11 @@ npm run lint
 
 ### Chiqarish
 
-Sayt Vercel'da ishlaydi — GitHub'ga `push` qilinganda avtomatik deploy bo‘ladi.
-Bosqichma-bosqich yo‘riqnoma: **[VERCEL.md](./VERCEL.md)**.
+Sayt Vercelʼda ishlaydi — GitHubʼga `push` qilinganda avtomatik deploy boʻladi.
+Bosqichma-bosqich yoʻriqnoma: **[VERCEL.md](./VERCEL.md)**.
 
-Kelajakda o‘z serveriga (VDS) ko‘chirish kerak bo‘lsa — [DEPLOY.md](./DEPLOY.md)
-va `deploy/` papkasidagi konfiguratsiyalar saqlab qo‘yilgan.
+Kelajakda oʻz serveriga (VDS) koʻchirish kerak boʻlsa — [DEPLOY.md](./DEPLOY.md)
+va `deploy/` papkasidagi konfiguratsiyalar saqlab qoʻyilgan.
 
 ---
 
@@ -95,24 +95,24 @@ src/
     cards/                    # EnsembleCard, ProjectCard, EventCard, ...
     shared/                   # Reveal, SectionTitle, PageHeader, Modal, Lightbox, ...
     features/                 # Interaktiv bloklar (filtr, tab, forma, galereya)
-  data/                       # boshlang‘ich ma’lumot (faqat seed uchun manba)
-  types/                      # barcha TypeScript interface'lar
+  data/                       # boshlangʻich maʼlumot (faqat seed uchun manba)
+  types/                      # barcha TypeScript interfaceʼlar
   lib/                        # utils, constants, images, db, supabase/
   i18n/                       # routing, request, navigation (next-intl)
-  middleware.ts               # locale yo‘naltirish + /admin sessiyasi
+  middleware.ts               # locale yoʻnaltirish + /admin sessiyasi
 messages/                     # uz.json, ru.json, en.json (UI matnlari)
 ```
 
 ---
 
-## Ko‘p tillilik qanday ishlaydi
+## Koʻp tillilik qanday ishlaydi
 
 Ikki qatlam mavjud:
 
 1. **UI matnlari** — `messages/{uz,ru,en}.json` (tugmalar, sarlavhalar, forma yorliqlari).
    Komponentlarda `useTranslations('Namespace')` orqali olinadi.
-2. **Kontent ma’lumotlari** — `src/data/*` fayllarda har bir maydon `Localized<T>`
-   ko‘rinishida saqlanadi:
+2. **Kontent maʼlumotlari** — `src/data/*` fayllarda har bir maydon `Localized<T>`
+   koʻrinishida saqlanadi:
 
    ```ts
    type Localized<T = string> = { uz: T; ru: T; en: T };
@@ -120,7 +120,7 @@ Ikki qatlam mavjud:
 
    Sahifada `pick(value, locale)` yordamchisi joriy tildagi qiymatni tanlaydi.
 
-Til almashganda URL prefiksi o‘zgaradi (`/uz/...` → `/ru/...`), sahifa saqlanadi.
+Til almashganda URL prefiksi oʻzgaradi (`/uz/...` → `/ru/...`), sahifa saqlanadi.
 
 ---
 
@@ -131,8 +131,8 @@ sifatida qolgan. Batafsil: [BAZA.md](./BAZA.md).
 
 | Qatlam | Qayerda |
 |--------|---------|
-| So'rovlar | `src/server/queries/*` — Prisma orqali Supabase Postgres |
-| Saytdagi formalar | `src/server/forms/amallar.ts` — server amallari, to'g'ridan-to'g'ri bazaga yozadi |
+| Soʻrovlar | `src/server/queries/*` — Prisma orqali Supabase Postgres |
+| Saytdagi formalar | `src/server/forms/amallar.ts` — server amallari, toʻgʻridan-toʻgʻri bazaga yozadi |
 | Admin panel | `src/app/admin/` — kirish Supabase Auth, rol `admin_users` jadvalida |
 | Fayl yuklash | `POST /api/admin/yuklash` — Supabase Storage (`media` bucket) |
 | Supabase klientlari | `src/lib/supabase/` — `server.ts` (sessiya), `admin.ts` (xizmat kaliti) |
@@ -148,11 +148,11 @@ joriy tildagi qiymatni tanlaydi.
 
 ## Rasmlar
 
-Demo’da barcha rasmlar `src/lib/images.ts` orqali markazlashtirilgan va hozircha
-`picsum.photos` placeholder’laridan foydalanadi (hech qachon buzilmaydi).
-Real orkestr/konsert/xor rasmlariga o‘tish uchun `img('seed')` chaqiruvlarini
+Demoʻda barcha rasmlar `src/lib/images.ts` orqali markazlashtirilgan va hozircha
+`picsum.photos` placeholderʼlaridan foydalanadi (hech qachon buzilmaydi).
+Real orkestr/konsert/xor rasmlariga oʻtish uchun `img('seed')` chaqiruvlarini
 haqiqiy URL yoki CDN manzillari bilan almashtiring. Yangi hostni
-`next.config.mjs` → `images.remotePatterns` ga qo‘shishни unutmang.
+`next.config.mjs` → `images.remotePatterns` ga qoʻshishni unutmang.
 
 ---
 

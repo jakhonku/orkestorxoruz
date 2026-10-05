@@ -13,16 +13,16 @@ import {
  *
  * Uch qadam:
  *   1. Server bir martalik imzolangan manzil beradi (turi va hajmi tekshiriladi)
- *   2. Fayl brauzerdan to'g'ridan-to'g'ri Supabase Storage'ga ketadi — jarayon
- *      foizi ko'rinib turadi
- *   3. Yuklangani ro'yxatga qayd qilinadi
+ *   2. Fayl brauzerdan toʻgʻridan-toʻgʻri Supabase Storageʼga ketadi — jarayon
+ *      foizi koʻrinib turadi
+ *   3. Yuklangani roʻyxatga qayd qilinadi
  *
- * Xatolar o'zbekcha va tushunarli qilib qaytariladi.
+ * Xatolar oʻzbekcha va tushunarli qilib qaytariladi.
  */
 
 type Imzo = { imzoUrl: string; yol: string; url: string; tur: string };
 
-/** Javobni JSON qilib o'qiydi; server HTML qaytarsa ham tushunarli xato beradi */
+/** Javobni JSON qilib oʻqiydi; server HTML qaytarsa ham tushunarli xato beradi */
 async function javobniOq(javob: Response): Promise<Record<string, unknown>> {
   const matn = await javob.text();
   try {
@@ -32,7 +32,7 @@ async function javobniOq(javob: Response): Promise<Record<string, unknown>> {
   }
 }
 
-/** Faylni Storage'ga qo'yadi va jarayon foizini xabar qilib turadi */
+/** Faylni Storageʼga qoʻyadi va jarayon foizini xabar qilib turadi */
 function storagegaQoy(imzoUrl: string, fayl: File, jarayon?: (foiz: number) => void) {
   return new Promise<void>((bajarildi, xato) => {
     const sorov = new XMLHttpRequest();
@@ -47,14 +47,14 @@ function storagegaQoy(imzoUrl: string, fayl: File, jarayon?: (foiz: number) => v
       if (sorov.status === 413) {
         return xato(new Error('Fayl juda katta — Storage qabul qilmadi (chegara 50 MB).'));
       }
-      xato(new Error(`Yuklab bo‘lmadi (${sorov.status}). Qaytadan urinib ko‘ring.`));
+      xato(new Error(`Yuklab boʻlmadi (${sorov.status}). Qaytadan urinib koʻring.`));
     };
 
     sorov.onerror = () =>
-      xato(new Error('Internet uzildi. Aloqani tekshirib, qaytadan urinib ko‘ring.'));
-    sorov.onabort = () => xato(new Error('Yuklash to‘xtatildi.'));
+      xato(new Error('Internet uzildi. Aloqani tekshirib, qaytadan urinib koʻring.'));
+    sorov.onabort = () => xato(new Error('Yuklash toʻxtatildi.'));
 
-    // Supabase imzolangan manzil faylni shu ko'rinishda kutadi
+    // Supabase imzolangan manzil faylni shu koʻrinishda kutadi
     const forma = new FormData();
     forma.append('cacheControl', '3600');
     forma.append('', fayl);
@@ -70,10 +70,10 @@ export async function faylYukla(
   const tur = faylTuri(fayl.name, fayl.type);
   const tavsif = RUXSAT_ETILGAN[tur];
 
-  // Brauzerda darhol tekshiramiz — noto'g'ri fayl umuman yuborilmaydi
+  // Brauzerda darhol tekshiramiz — notoʻgʻri fayl umuman yuborilmaydi
   if (!tavsif) throw new Error(turXatosi(fayl.name, tur));
   if (fayl.size > CHEGARA[tavsif.guruh]) throw new Error(hajmXatosi(tavsif.guruh, fayl.size));
-  if (fayl.size === 0) throw new Error('Fayl bo‘sh ko‘rinadi. Boshqa faylni tanlang.');
+  if (fayl.size === 0) throw new Error('Fayl boʻsh koʻrinadi. Boshqa faylni tanlang.');
 
   jarayon?.(0);
 
@@ -90,20 +90,20 @@ export async function faylYukla(
         ? natija.xato
         : javob.status === 401
           ? 'Sessiya tugagan. Sahifani yangilab, qaytadan kiring.'
-          : 'Yuklashni boshlab bo‘lmadi. Qaytadan urinib ko‘ring.';
+          : 'Yuklashni boshlab boʻlmadi. Qaytadan urinib koʻring.';
     throw new Error(xabar);
   }
 
   const imzo = natija as unknown as Imzo;
 
-  // Brauzer fayl turini aytmagan bo'lsa (.mov bilan shunday bo'ladi) —
-  // to'g'ri turini o'zimiz qo'yamiz, aks holda video saytda ochilmaydi
+  // Brauzer fayl turini aytmagan boʻlsa (.mov bilan shunday boʻladi) —
+  // toʻgʻri turini oʻzimiz qoʻyamiz, aks holda video saytda ochilmaydi
   const yuboriladigan =
     fayl.type === imzo.tur ? fayl : new File([fayl], fayl.name, { type: imzo.tur });
 
   await storagegaQoy(imzo.imzoUrl, yuboriladigan, jarayon);
 
-  // Ro'yxatga qayd — yozilmasa ham yuklash muvaffaqiyatli hisoblanadi
+  // Roʻyxatga qayd — yozilmasa ham yuklash muvaffaqiyatli hisoblanadi
   void fetch('/api/admin/yuklash/qayd', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

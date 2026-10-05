@@ -18,7 +18,7 @@ import { ExcelTugmasi } from './excel-tugmasi';
 
 export const metadata = { title: 'Tanlov arizalari' };
 
-/** Bitta sahifada ko'rsatiladigan eng ko'p ariza */
+/** Bitta sahifada koʻrsatiladigan eng koʻp ariza */
 const CHEGARA = 1000;
 
 const HOLAT: Record<string, { nom: string; rang: string }> = {
@@ -29,7 +29,7 @@ const HOLAT: Record<string, { nom: string; rang: string }> = {
 
 const ARIZA_HOLATI: Record<string, string> = {
   YANGI: 'Yangi',
-  KORIB_CHIQILMOQDA: 'Ko‘rib chiqilmoqda',
+  KORIB_CHIQILMOQDA: 'Koʻrib chiqilmoqda',
   JAVOB_BERILDI: 'Javob berildi',
   RAD_ETILDI: 'Rad etildi',
 };
@@ -37,10 +37,10 @@ const ARIZA_HOLATI: Record<string, string> = {
 type Props = { searchParams: { tanlov?: string } };
 
 /**
- * Tanlov va festivallarga tushgan arizalar — tanlov bo'yicha alohida.
+ * Tanlov va festivallarga tushgan arizalar — tanlov boʻyicha alohida.
  *
- * Tanlov admini uchun asosiy sahifa. Har bir tanlovning arizalari o'z
- * anketasidagi javoblar bilan ko'rinadi va Excel faylga yuklab olinadi.
+ * Tanlov admini uchun asosiy sahifa. Har bir tanlovning arizalari oʻz
+ * anketasidagi javoblar bilan koʻrinadi va Excel faylga yuklab olinadi.
  */
 export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
   await sahifaRuxsati('tanlov-arizalari');
@@ -92,14 +92,14 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
     'Email',
     'Telefon',
     'Jamoa',
-    'Yo‘nalish',
+    'Yoʻnalish',
     ...ustunlar.values(),
-    'Qo‘shimcha ma’lumot',
+    'Qoʻshimcha maʼlumot',
     'Til',
     'Ichki eslatma',
   ];
 
-  // Excel'dagi fayl havolalari to'liq manzil bo'lishi kerak
+  // Excelʼdagi fayl havolalari toʻliq manzil boʻlishi kerak
   const h = headers();
   const asos = `${h.get('x-forwarded-proto') ?? 'https'}://${h.get('host') ?? ''}`;
 
@@ -138,7 +138,7 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
           <h1 className="font-serif text-2xl font-semibold text-navy">Tanlov arizalari</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             Tanlov va festivallarga saytdan tushgan arizalar. Tanlovni tanlang — uning anketasi
-            bo‘yicha javoblar ko‘rinadi.
+            boʻyicha javoblar koʻrinadi.
           </p>
         </div>
         <ExcelTugmasi sarlavhalar={sarlavhalar} qatorlar={jadval} faylNomi={faylNomi} />
@@ -192,7 +192,7 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
               className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-white px-3 text-xs font-medium text-navy transition-colors hover:border-gold/50"
             >
               <ExternalLink className="h-3.5 w-3.5" />
-              Saytda ko‘rish
+              Saytda koʻrish
             </a>
           </div>
         </div>
@@ -200,7 +200,7 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
 
       {arizalar.length >= CHEGARA && (
         <p className="mb-3 text-xs text-amber-700">
-          Eng so‘nggi {CHEGARA} ta ariza ko‘rsatilmoqda.
+          Eng soʻnggi {CHEGARA} ta ariza koʻrsatilmoqda.
         </p>
       )}
 

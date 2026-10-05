@@ -20,8 +20,8 @@ export const news: NewsArticle[] = [
     },
     body: {
       uz: [
-        'Kecha poytaxtda yangi konsert mavsumining tantanali ochilishi bo‘lib o‘tdi. Dasturda milliy bastakorlar asarlari va jahon klassikasi namunalari yangradi.',
-        'Konsertda mamlakatning yetakchi solistlari ishtirok etdi. Tashkilotchilar mavsum davomida o‘nlab yangi loyihalarni amalga oshirishni rejalashtirmoqda.',
+        'Kecha poytaxtda yangi konsert mavsumining tantanali ochilishi boʻlib oʻtdi. Dasturda milliy bastakorlar asarlari va jahon klassikasi namunalari yangradi.',
+        'Konsertda mamlakatning yetakchi solistlari ishtirok etdi. Tashkilotchilar mavsum davomida oʻnlab yangi loyihalarni amalga oshirishni rejalashtirmoqda.',
       ],
       ru: [
         'Вчера в столице состоялось торжественное открытие нового концертного сезона. В программе прозвучали произведения национальных композиторов и образцы мировой классики.',
@@ -44,16 +44,16 @@ export const news: NewsArticle[] = [
     category: 'yangilik',
     cover: img('news-juilliard', 1200, 800),
     date: '2026-08-22',
-    author: { uz: 'Xalqaro bo‘lim', ru: 'Международный отдел', en: 'International department' },
+    author: { uz: 'Xalqaro boʻlim', ru: 'Международный отдел', en: 'International department' },
     excerpt: {
-      uz: 'Yosh musiqachilar uchun malaka oshirish dasturi yo‘lga qo‘yiladi.',
+      uz: 'Yosh musiqachilar uchun malaka oshirish dasturi yoʻlga qoʻyiladi.',
       ru: 'Будет запущена программа повышения квалификации для молодых музыкантов.',
       en: 'A professional development programme for young musicians will be launched.',
     },
     body: {
       uz: [
-        'Hujjatga ko‘ra, iste’dodli o‘zbek musiqachilari jahonning nufuzli ta’lim maskanida malaka oshirish imkoniyatiga ega bo‘ladi.',
-        'Dastur master-klasslar, amaliyot va o‘zaro gastrollarni o‘z ichiga oladi.',
+        'Hujjatga koʻra, isteʼdodli oʻzbek musiqachilari jahonning nufuzli taʼlim maskanida malaka oshirish imkoniyatiga ega boʻladi.',
+        'Dastur master-klasslar, amaliyot va oʻzaro gastrollarni oʻz ichiga oladi.',
       ],
       ru: [
         'Согласно документу, талантливые узбекские музыканты получат возможность повысить квалификацию в престижном учебном заведении мира.',
@@ -69,7 +69,7 @@ export const news: NewsArticle[] = [
   {
     slug: 'musiqa-poyezdi-yakunlandi',
     title: {
-      uz: '"Musiqa poyezdi" loyihasi muvaffaqiyatli yakunlandi',
+      uz: '“Musiqa poyezdi” loyihasi muvaffaqiyatli yakunlandi',
       ru: 'Проект «Музыкальный поезд» успешно завершён',
       en: 'The “Music Train” project concluded successfully',
     },
@@ -78,13 +78,13 @@ export const news: NewsArticle[] = [
     date: '2026-06-30',
     author: { uz: 'Matbuot xizmati', ru: 'Пресс-служба', en: 'Press office' },
     excerpt: {
-      uz: 'Besh shaharda bo‘lib o‘tgan konsertlarni 12 mingdan ortiq tomoshabin tomosha qildi.',
+      uz: 'Besh shaharda boʻlib oʻtgan konsertlarni 12 mingdan ortiq tomoshabin tomosha qildi.',
       ru: 'Концерты в пяти городах посетили более 12 тысяч зрителей.',
       en: 'Concerts in five cities were attended by more than 12,000 spectators.',
     },
     body: {
       uz: [
-        'Loyiha doirasida akademik musiqa mamlakatning turli hududlariga yetib bordi. Har bir shaharda ochiq konsertlar va ma’rifiy uchrashuvlar tashkil etildi.',
+        'Loyiha doirasida akademik musiqa mamlakatning turli hududlariga yetib bordi. Har bir shaharda ochiq konsertlar va maʼrifiy uchrashuvlar tashkil etildi.',
         'Tashkilotchilar loyihani kelgusi yilda ham davom ettirishni maqsad qilgan.',
       ],
       ru: [
@@ -107,7 +107,7 @@ export const news: NewsArticle[] = [
     category: 'elon',
     cover: img('news-competition', 1200, 800),
     date: '2026-07-01',
-    author: { uz: 'Tashkiliy qo‘mita', ru: 'Оргкомитет', en: 'Organising committee' },
+    author: { uz: 'Tashkiliy qoʻmita', ru: 'Оргкомитет', en: 'Organising committee' },
     excerpt: {
       uz: 'Dilbar Abduraxmonova nomidagi respublika tanlovida 35 yoshgacha dirijyorlar ishtirok etishi mumkin.',
       ru: 'В республиканском конкурсе имени Дильбар Абдурахмановой могут участвовать дирижёры до 35 лет.',
@@ -136,7 +136,7 @@ export const news: NewsArticle[] = [
       en: 'Ensembles from more than 15 countries will visit Tashkent.',
     },
     body: {
-      uz: ['Forum dasturi konsertlar, konferensiya va hamkorlik uchrashuvlaridan iborat bo‘ladi.'],
+      uz: ['Forum dasturi konsertlar, konferensiya va hamkorlik uchrashuvlaridan iborat boʻladi.'],
       ru: ['Программа форума будет включать концерты, конференцию и встречи по сотрудничеству.'],
       en: ['The forum programme will include concerts, a conference and partnership meetings.'],
     },
@@ -153,9 +153,9 @@ export const news: NewsArticle[] = [
     date: '2026-08-15',
     author: { uz: 'Matbuot xizmati', ru: 'Пресс-служба', en: 'Press office' },
     excerpt: {
-      uz: 'Jurnalistlar mavsum tadbirlarini yoritish uchun akkreditatsiyadan o‘tishi mumkin.',
+      uz: 'Jurnalistlar mavsum tadbirlarini yoritish uchun akkreditatsiyadan oʻtishi mumkin.',
       ru: 'Журналисты могут пройти аккредитацию для освещения событий сезона.',
-      en: 'Journalists may accredit to cover the season’s events.',
+      en: 'Journalists can apply for accreditation to cover the season’s events.',
     },
     body: {
       uz: ['Akkreditatsiya uchun matbuot xizmatiga murojaat qiling. Foto va matnli materiallar press-kitda mavjud.'],
@@ -167,11 +167,11 @@ export const news: NewsArticle[] = [
 
 export const mediaVideos: MediaVideo[] = [
   { id: 'v1', title: { uz: 'Mavsum ochilishi — reportaj', ru: 'Открытие сезона — репортаж', en: 'Season opening — report' }, youtubeId: 'jNQXAC9IVRw', date: '2026-09-06' },
-  { id: 'v2', title: { uz: 'Ashrafiy — "Amir Temur" simfoniyasi', ru: 'Ашрафи — симфония «Амир Темур»', en: 'Ashrafiy — “Amir Temur” Symphony' }, youtubeId: 'ScMzIvxBSi4', date: '2026-05-12' },
+  { id: 'v2', title: { uz: 'Ashrafiy — “Amir Temur” simfoniyasi', ru: 'Ашрафи — симфония «Амир Темур»', en: 'Ashrafiy — “Amir Temur” Symphony' }, youtubeId: 'ScMzIvxBSi4', date: '2026-05-12' },
   { id: 'v3', title: { uz: 'Akademik xor — a cappella', ru: 'Академический хор — a cappella', en: 'Academic choir — a cappella' }, youtubeId: 'aqz-KE-bpKQ', date: '2026-04-20' },
-  { id: 'v4', title: { uz: '"Musiqa poyezdi" — film', ru: '«Музыкальный поезд» — фильм', en: '“Music Train” — film' }, youtubeId: 'kxL4mSEQmvo', date: '2026-06-30' },
+  { id: 'v4', title: { uz: '“Musiqa poyezdi” — film', ru: '«Музыкальный поезд» — фильм', en: '“Music Train” — film' }, youtubeId: 'kxL4mSEQmvo', date: '2026-06-30' },
   { id: 'v5', title: { uz: 'Yosh dirijyorlar — master-klass', ru: 'Молодые дирижёры — мастер-класс', en: 'Young conductors — master class' }, youtubeId: 'M7lc1UVf-VE', date: '2026-03-15' },
-  { id: 'v6', title: { uz: '"Turon" orkestri — konsert', ru: 'Оркестр «Турон» — концерт', en: '“Turon” orchestra — concert' }, youtubeId: 'e-ORhEE9VVg', date: '2026-02-10' },
+  { id: 'v6', title: { uz: '“Turon” orkestri — konsert', ru: 'Оркестр «Турон» — концерт', en: '“Turon” orchestra — concert' }, youtubeId: 'e-ORhEE9VVg', date: '2026-02-10' },
 ];
 
 export const mediaPhotos: MediaPhoto[] = [
@@ -180,7 +180,7 @@ export const mediaPhotos: MediaPhoto[] = [
   { id: 'p3', src: img('gal-3', 900, 900), caption: { uz: 'Dirijyor', ru: 'Дирижёр', en: 'Conductor' }, ratio: 'square' },
   { id: 'p4', src: img('gal-4', 1100, 800), caption: { uz: 'Xor chiqishi', ru: 'Выступление хора', en: 'Choir performance' }, ratio: 'landscape' },
   { id: 'p5', src: img('gal-5', 800, 1100), caption: { uz: 'Solist', ru: 'Солист', en: 'Soloist' }, ratio: 'portrait' },
-  { id: 'p6', src: img('gal-6', 900, 900), caption: { uz: 'Milliy cholg‘ular', ru: 'Национальные инструменты', en: 'National instruments' }, ratio: 'square' },
+  { id: 'p6', src: img('gal-6', 900, 900), caption: { uz: 'Milliy cholgʻular', ru: 'Национальные инструменты', en: 'National instruments' }, ratio: 'square' },
   { id: 'p7', src: img('gal-7', 1100, 800), caption: { uz: 'Ochiq konsert', ru: 'Открытый концерт', en: 'Open-air concert' }, ratio: 'landscape' },
   { id: 'p8', src: img('gal-8', 800, 1100), caption: { uz: 'Repetitsiya', ru: 'Репетиция', en: 'Rehearsal' }, ratio: 'portrait' },
   { id: 'p9', src: img('gal-9', 900, 900), caption: { uz: 'Gastrol', ru: 'Гастроли', en: 'Tour' }, ratio: 'square' },

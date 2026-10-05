@@ -21,8 +21,8 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
 
   const [results, setResults] = useState<Result[]>([]);
 
-  // Qidiruv serverda bajariladi — butun ma'lumot brauzerga yuklanmaydi.
-  // 250 ms kutiladi, har harfda so'rov yuborilmasligi uchun.
+  // Qidiruv serverda bajariladi — butun maʼlumot brauzerga yuklanmaydi.
+  // 250 ms kutiladi, har harfda soʻrov yuborilmasligi uchun.
   useEffect(() => {
     const q = query.trim();
     if (q.length < 2) {
@@ -41,7 +41,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
         const data = (await res.json()) as { results: Result[] };
         setResults(data.results);
       } catch {
-        // so'rov bekor qilindi yoki tarmoq xatosi — natija o'zgarmaydi
+        // soʻrov bekor qilindi yoki tarmoq xatosi — natija oʻzgarmaydi
       }
     }, 250);
 

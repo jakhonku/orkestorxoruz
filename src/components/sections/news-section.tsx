@@ -32,7 +32,7 @@ export function NewsSection({ articles }: { articles: NewsArticle[] }) {
         </div>
 
         {articles.length === 0 ? (
-          // Bo'lim yashirinmaydi — yangilik qo'shilguncha xabar chiqadi
+          // Boʻlim yashirinmaydi — yangilik qoʻshilguncha xabar chiqadi
           <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
         ) : (
           <div className="grid gap-6 md:grid-cols-3">

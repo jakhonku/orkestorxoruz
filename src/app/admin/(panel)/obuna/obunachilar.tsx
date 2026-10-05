@@ -39,7 +39,7 @@ export function Obunachilar({ obunachilar }: { obunachilar: Obunachi[] }) {
       setNusxalandi(true);
       setTimeout(() => setNusxalandi(false), 2000);
     } catch {
-      setXato('Nusxalab bo‘lmadi — brauzer ruxsat bermadi.');
+      setXato('Nusxalab boʻlmadi — brauzer ruxsat bermadi.');
     }
   }
 
@@ -87,7 +87,7 @@ export function Obunachilar({ obunachilar }: { obunachilar: Obunachi[] }) {
           <input
             value={qidiruv}
             onChange={(e) => setQidiruv(e.target.value)}
-            placeholder="Email bo‘yicha qidirish..."
+            placeholder="Email boʻyicha qidirish..."
             className="h-11 w-full rounded-xl border border-input bg-white pl-10 pr-4 text-sm focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/15"
           />
         </div>
@@ -95,7 +95,7 @@ export function Obunachilar({ obunachilar }: { obunachilar: Obunachi[] }) {
 
       {korinadigan.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-white px-6 py-14 text-center text-sm text-muted-foreground">
-          {obunachilar.length === 0 ? 'Hozircha obunachi yo‘q.' : 'Hech narsa topilmadi.'}
+          {obunachilar.length === 0 ? 'Hozircha obunachi yoʻq.' : 'Hech narsa topilmadi.'}
         </div>
       ) : (
         <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white">
@@ -122,14 +122,14 @@ export function Obunachilar({ obunachilar }: { obunachilar: Obunachi[] }) {
                     : 'border-emerald-200 text-emerald-700 hover:bg-emerald-50',
                 )}
               >
-                {o.faol ? 'Obunani to‘xtatish' : 'Qayta faollashtirish'}
+                {o.faol ? 'Obunani toʻxtatish' : 'Qayta faollashtirish'}
               </button>
 
               <button
                 type="button"
                 disabled={kutilmoqda}
                 onClick={() => amal(() => obunaOchirish(o.id))}
-                title="O‘chirish"
+                title="Oʻchirish"
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
               >
                 <Trash2 className="h-4 w-4" />

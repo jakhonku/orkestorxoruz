@@ -1,22 +1,22 @@
 import type { Maydon, RoyxatQatori } from './turlar';
 
 /**
- * Barcha admin bo'limlarining tavsifi.
+ * Barcha admin boʻlimlarining tavsifi.
  *
- * Bitta bo'lim qo'shish uchun shu yerga yangi yozuv yozish kifoya —
- * ro'yxat sahifasi, tahrirlash shakli va saqlash amallari avtomatik ishlaydi.
+ * Bitta boʻlim qoʻshish uchun shu yerga yangi yozuv yozish kifoya —
+ * roʻyxat sahifasi, tahrirlash shakli va saqlash amallari avtomatik ishlaydi.
  */
 export type Bolim = {
   /** Manzildagi qism: /admin/<kalit> */
   kalit: string;
   nom: string;
-  /** Birlikda — "Yangi jamoa qo'shish" kabi sarlavhalar uchun */
+  /** Birlikda — "Yangi jamoa qoʻshish" kabi sarlavhalar uchun */
   birlik: string;
   /** Prisma modeli nomi (db.<model>) */
   model: string;
   /**
    * Saytdagi manzil (slug) shu maydondan avtomatik yasaladi.
-   * Admin panelda alohida maydon yo‘q — muharrir manzil haqida o‘ylamaydi.
+   * Admin panelda alohida maydon yoʻq — muharrir manzil haqida oʻylamaydi.
    */
   slugManbasi?: string;
   /**
@@ -26,13 +26,13 @@ export type Bolim = {
    */
   bandSluglar?: string[];
   maydonlar: Maydon[];
-  /** Ro'yxatdagi qatorni yasaydi */
+  /** Roʻyxatdagi qatorni yasaydi */
   qator: (row: Record<string, any>) => RoyxatQatori;
-  /** Ichki jadvallar: shakl maydoni nomi -> Prisma bog'lanish nomi */
+  /** Ichki jadvallar: shakl maydoni nomi -> Prisma bogʻlanish nomi */
   bogliqlar?: Record<string, string>;
-  /** Ro'yxat tartibi */
+  /** Roʻyxat tartibi */
   saralash?: Record<string, 'asc' | 'desc'>[];
-  /** Yangi yozuv qo'shish mumkinmi */
+  /** Yangi yozuv qoʻshish mumkinmi */
   qoshishMumkin?: boolean;
   izoh?: string;
 };
@@ -41,9 +41,9 @@ export type Bolim = {
 
 const nashr: Maydon = {
   nom: 'published',
-  yorliq: 'Saytda ko‘rinsin',
+  yorliq: 'Saytda koʻrinsin',
   tur: 'belgi',
-  izoh: 'Belgilanmagan bo‘lsa — qoralama, saytda chiqmaydi',
+  izoh: 'Belgilanmagan boʻlsa — qoralama, saytda chiqmaydi',
 };
 
 const tartib: Maydon = {
@@ -58,7 +58,7 @@ const tartib: Maydon = {
 
 const tanlangan: Maydon = {
   nom: 'featured',
-  yorliq: 'Bosh sahifada ko‘rsatilsin',
+  yorliq: 'Bosh sahifada koʻrsatilsin',
   tur: 'belgi',
   yarim: true,
 };
@@ -79,7 +79,7 @@ export const VILOYATLAR = [
   { qiymat: 'SAMARQAND', yorliq: 'Samarqand' },
   { qiymat: 'BUXORO', yorliq: 'Buxoro' },
   { qiymat: 'XORAZM', yorliq: 'Xorazm' },
-  { qiymat: 'FARGONA', yorliq: "Farg'ona" },
+  { qiymat: 'FARGONA', yorliq: "Fargʻona" },
   { qiymat: 'ANDIJON', yorliq: 'Andijon' },
   { qiymat: 'NAMANGAN', yorliq: 'Namangan' },
   { qiymat: 'QASHQADARYO', yorliq: 'Qashqadaryo' },
@@ -87,12 +87,12 @@ export const VILOYATLAR = [
   { qiymat: 'NAVOIY', yorliq: 'Navoiy' },
   { qiymat: 'JIZZAX', yorliq: 'Jizzax' },
   { qiymat: 'SIRDARYO', yorliq: 'Sirdaryo' },
-  { qiymat: 'QORAQALPOGISTON', yorliq: "Qoraqalpog'iston" },
+  { qiymat: 'QORAQALPOGISTON', yorliq: "Qoraqalpogʻiston" },
 ];
 
 const uz = (v: unknown): string => (v as { uz?: string })?.uz ?? '';
 
-// ---------- bo'limlar ----------
+// ---------- boʻlimlar ----------
 
 export const BOLIMLAR: Bolim[] = [
   // ============ JAMOALAR ============
@@ -112,7 +112,7 @@ export const BOLIMLAR: Bolim[] = [
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.name),
-      tavsif: `${uz(r.conductor)} · ${r.memberCount ?? '—'} a'zo`,
+      tavsif: `${uz(r.conductor)} · ${r.memberCount ?? '—'} aʼzo`,
       belgi: { ORKESTR: 'Orkestr', XOR: 'Xor', ANSAMBL: 'Ansambl' }[r.type as string],
       ochiqmi: r.published,
       rasm: r.bannerUrl,
@@ -134,7 +134,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'region', yorliq: 'Viloyat', tur: 'tanlov', talab: true, yarim: true, variantlar: VILOYATLAR },
       { nom: 'city', yorliq: 'Shahar / tuman', tur: 'kopTilli', talab: true },
       { nom: 'conductor', yorliq: 'Bosh dirijyor / rahbar', tur: 'kopTilli', talab: true },
-      { nom: 'memberCount', yorliq: "A'zolar soni", tur: 'raqam', yarim: true },
+      { nom: 'memberCount', yorliq: "Aʼzolar soni", tur: 'raqam', yarim: true },
       { nom: 'foundedYear', yorliq: 'Tashkil etilgan yil', tur: 'raqam', yarim: true, qoshimcha: true },
       { nom: 'phone', yorliq: 'Telefon', tur: 'matn', yarim: true, uzunlik: 40, qoshimcha: true },
       { nom: 'email', yorliq: 'Email', tur: 'matn', yarim: true, uzunlik: 160, qoshimcha: true },
@@ -153,7 +153,7 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Tarkib',
         tur: 'qatorlar',
         excel: true,
-        izoh: "Bittalab kiritish yoki Excel jadvalni butunlay yuklash — a'zolar soni ko'p bo'lsa ikkinchisi qulay",
+        izoh: "Bittalab kiritish yoki Excel jadvalni butunlay yuklash — aʼzolar soni koʻp boʻlsa ikkinchisi qulay",
         maydonlar: [
           { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
           { nom: 'role', yorliq: 'Lavozimi', tur: 'kopTilli' },
@@ -175,7 +175,7 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Videolar',
         tur: 'qatorlar',
         izoh:
-          'Har bir qatorda ikkitadan BITTASINI to‘ldiring: YouTube havolasi yoki ' +
+          'Har bir qatorda ikkitadan BITTASINI toʻldiring: YouTube havolasi yoki ' +
           'Instagram post/reel havolasi.',
         maydonlar: [
           {
@@ -184,7 +184,7 @@ export const BOLIMLAR: Bolim[] = [
             tur: 'youtube',
             yarim: true,
             uzunlik: 40,
-            izoh: 'To‘liq havolani ham qo‘yish mumkin — ID o‘zi ajratiladi',
+            izoh: 'Toʻliq havolani ham qoʻyish mumkin — ID oʻzi ajratiladi',
           },
           {
             nom: 'instagramUrl',
@@ -199,8 +199,8 @@ export const BOLIMLAR: Bolim[] = [
             yorliq: 'Muqova rasmi',
             tur: 'rasm',
             izoh:
-              'Instagram videosi uchun. Bo‘sh bo‘lsa Instagram belgisi chiqadi. ' +
-              'YouTube o‘z rasmini oladi',
+              'Instagram videosi uchun. Boʻsh boʻlsa Instagram belgisi chiqadi. ' +
+              'YouTube oʻz rasmini oladi',
           },
         ],
       },
@@ -231,7 +231,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'title', yorliq: 'Loyiha nomi', tur: 'kopTilli', talab: true },
       {
         nom: 'scope',
-        yorliq: "Ko'lami",
+        yorliq: "Koʻlami",
         tur: 'tanlov',
         talab: true,
         yarim: true,
@@ -252,9 +252,9 @@ export const BOLIMLAR: Bolim[] = [
         ],
       },
       { nom: 'period', yorliq: 'Muddati', tur: 'kopTilli', talab: true, izoh: 'Masalan: 2026-yil, oktyabr' },
-      { nom: 'location', yorliq: "O'tkaziladigan joy", tur: 'kopTilli', talab: true },
+      { nom: 'location', yorliq: "Oʻtkaziladigan joy", tur: 'kopTilli', talab: true },
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
-      { nom: 'description', yorliq: "To'liq tavsif", tur: 'kopTilliKatta', talab: true },
+      { nom: 'description', yorliq: "Toʻliq tavsif", tur: 'kopTilliKatta', talab: true },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1600×900' },
       {
         nom: 'results',
@@ -273,10 +273,10 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Loyiha sayti',
         tur: 'havola',
         izoh:
-          'Loyihaning o‘z sayti yoki rasmiy sahifasi — masalan https://example.org. ' +
-          'Ayniqsa xalqaro loyihalar uchun. To‘ldirilsa, loyihaning «Batafsil» ' +
-          'sahifasida «Loyiha saytiga o‘tish» tugmasi chiqadi va yangi oynada ' +
-          'o‘sha saytni ochadi. Bo‘sh qoldirilsa tugma ko‘rinmaydi.',
+          'Loyihaning oʻz sayti yoki rasmiy sahifasi — masalan https://example.org. ' +
+          'Ayniqsa xalqaro loyihalar uchun. Toʻldirilsa, loyihaning «Batafsil» ' +
+          'sahifasida «Loyiha saytiga oʻtish» tugmasi chiqadi va yangi oynada ' +
+          'oʻsha saytni ochadi. Boʻsh qoldirilsa tugma koʻrinmaydi.',
       },
       tanlangan,
       tartib,
@@ -326,8 +326,14 @@ export const BOLIMLAR: Bolim[] = [
           { qiymat: 'TEZ_KUNDA', yorliq: 'Tez kunda' },
         ],
       },
-      { nom: 'date', yorliq: "O'tkazilish sanasi", tur: 'kopTilli', talab: true, izoh: 'Masalan: 2027-yil 15–21-mart' },
-      { nom: 'location', yorliq: "O'tkaziladigan joy", tur: 'kopTilli', talab: true },
+      {
+        nom: 'detailOpen',
+        yorliq: 'Tez kunda boʻlsa ham batafsil sahifa ochiq boʻlsin',
+        tur: 'belgi',
+        izoh: 'Faqat «Tez kunda» holatida ishlaydi. Belgilanmasa, tanlov roʻyxatda koʻrinadi, lekin ustiga bosib boʻlmaydi. Ariza ochiq yoki yopiq boʻlsa, sahifa doim ochiq.',
+      },
+      { nom: 'date', yorliq: "Oʻtkazilish sanasi", tur: 'kopTilli', talab: true, izoh: 'Masalan: 2027-yil 15–21-mart' },
+      { nom: 'location', yorliq: "Oʻtkaziladigan joy", tur: 'kopTilli', talab: true },
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
       { nom: 'regulations', yorliq: 'Nizom matni', tur: 'kopTilliKatta', talab: true, boy: true },
       { nom: 'regulationsFileUrl', yorliq: 'Nizom fayli', tur: 'fayl' },
@@ -340,7 +346,7 @@ export const BOLIMLAR: Bolim[] = [
         qoshimcha: true,
       },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm' },
-      { nom: 'prizeFund', yorliq: "Mukofot jamg'armasi", tur: 'kopTilli', qoshimcha: true },
+      { nom: 'prizeFund', yorliq: "Mukofot jamgʻarmasi", tur: 'kopTilli', qoshimcha: true },
       {
         nom: 'timeline',
         yorliq: 'Muddatlar jadvali',
@@ -353,7 +359,7 @@ export const BOLIMLAR: Bolim[] = [
       },
       {
         nom: 'jury',
-        yorliq: "Hakamlar hay'ati",
+        yorliq: "Hakamlar hayʼati",
         tur: 'qatorlar',
         maydonlar: [
           { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
@@ -368,7 +374,7 @@ export const BOLIMLAR: Bolim[] = [
         tur: 'qatorlar',
         izoh:
           'Shu tanlov uchun yuklab olinadigan hujjatlar: nizom, ariza namunasi, shartnoma va h.k. ' +
-          '«Qator qo‘shish» bilan istalgancha qo‘shing — har bir tanlovning hujjatlari alohida.',
+          '«Qator qoʻshish» bilan istalgancha qoʻshing — har bir tanlovning hujjatlari alohida.',
         maydonlar: [
           { nom: 'title', yorliq: 'Hujjat nomi', tur: 'kopTilli', talab: true },
           { nom: 'fileUrl', yorliq: 'Fayl', tur: 'fayl', talab: true },
@@ -378,34 +384,34 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'formFields',
         yorliq: 'Ariza anketasi',
         tur: 'anketa',
-        izoh: 'Saytdagi "Ariza topshirish" oynasida shu savollar chiqadi. Tushgan arizalar — "Tanlov arizalari" bo‘limida.',
+        izoh: 'Saytdagi "Ariza topshirish" oynasida shu savollar chiqadi. Tushgan arizalar — "Tanlov arizalari" boʻlimida.',
       },
       {
         nom: 'participateTitle',
         yorliq: 'Ishtirok kartasi: sarlavha',
         tur: 'kopTilli',
-        izoh: 'Bo‘sh qolsa — "Ishtirok etish"',
+        izoh: 'Boʻsh qolsa — "Ishtirok etish"',
         qoshimcha: true,
       },
       {
         nom: 'participateText',
         yorliq: 'Ishtirok kartasi: qisqa izoh',
         tur: 'kopTilli',
-        izoh: 'Bo‘sh qolsa — "Ariza onlayn, bir necha qadamda topshiriladi."',
+        izoh: 'Boʻsh qolsa — "Ariza onlayn, bir necha qadamda topshiriladi."',
         qoshimcha: true,
       },
       {
         nom: 'prepareTitle',
-        yorliq: 'Ishtirok kartasi: ro‘yxat sarlavhasi',
+        yorliq: 'Ishtirok kartasi: roʻyxat sarlavhasi',
         tur: 'kopTilli',
-        izoh: 'Bo‘sh qolsa — "Oldindan tayyorlab qo‘ying"',
+        izoh: 'Boʻsh qolsa — "Oldindan tayyorlab qoʻying"',
         qoshimcha: true,
       },
       {
         nom: 'prepareList',
-        yorliq: 'Ishtirok kartasi: tayyorlash kerak bo‘lgan narsalar',
+        yorliq: 'Ishtirok kartasi: tayyorlash kerak boʻlgan narsalar',
         tur: 'kopTilliRoyxat',
-        izoh: 'Har bir band — alohida qatorda. Bo‘sh qolsa — anketadagi fayl va katta matn savollaridan avtomatik olinadi.',
+        izoh: 'Har bir band — alohida qatorda. Boʻsh qolsa — anketadagi fayl va katta matn savollaridan avtomatik olinadi.',
         qoshimcha: true,
       },
       tartib,
@@ -450,7 +456,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'time', yorliq: 'Boshlanish vaqti', tur: 'vaqt', talab: true, yarim: true },
       { nom: 'venue', yorliq: 'Zal / muassasa', tur: 'kopTilli', talab: true },
       { nom: 'city', yorliq: 'Shahar', tur: 'kopTilli', talab: true },
-      { nom: 'price', yorliq: 'Chipta narxi', tur: 'kopTilli', izoh: 'Masalan: 70 000 so‘mdan' },
+      { nom: 'price', yorliq: 'Chipta narxi', tur: 'kopTilli', izoh: 'Masalan: 70 000 soʻmdan' },
       { nom: 'ticketUrl', yorliq: 'Chipta havolasi', tur: 'havola' },
       { nom: 'shortDescription', yorliq: 'Qisqa tavsif', tur: 'kopTilliKatta', talab: true },
       { nom: 'performerNote', yorliq: 'Ijrochi jamoa', tur: 'kopTilli', qoshimcha: true },
@@ -477,7 +483,7 @@ export const BOLIMLAR: Bolim[] = [
       id: r.id,
       sarlavha: uz(r.title),
       tavsif: new Date(r.date).toISOString().slice(0, 10),
-      belgi: { YANGILIK: 'Yangilik', MATBUOT: 'Matbuot', ELON: "E'lon" }[r.category as string],
+      belgi: { YANGILIK: 'Yangilik', MATBUOT: 'Matbuot', ELON: "Eʼlon" }[r.category as string],
       ochiqmi: r.published,
       rasm: r.coverUrl,
     }),
@@ -489,8 +495,8 @@ export const BOLIMLAR: Bolim[] = [
         talab: true,
         ixtiyoriyAgar: 'videoUrl',
         izoh:
-          'Pastda post havolasi qo‘yilsa, sarlavha shart emas — saytda postning ' +
-          'o‘zi ko‘rinadi. Yozib qo‘ysangiz, ro‘yxatda va sahifada shu sarlavha chiqadi.',
+          'Pastda post havolasi qoʻyilsa, sarlavha shart emas — saytda postning ' +
+          'oʻzi koʻrinadi. Yozib qoʻysangiz, roʻyxatda va sahifada shu sarlavha chiqadi.',
       },
       {
         nom: 'category',
@@ -501,7 +507,7 @@ export const BOLIMLAR: Bolim[] = [
         variantlar: [
           { qiymat: 'YANGILIK', yorliq: 'Yangilik' },
           { qiymat: 'MATBUOT', yorliq: 'Matbuot' },
-          { qiymat: 'ELON', yorliq: "E'lon" },
+          { qiymat: 'ELON', yorliq: "Eʼlon" },
         ],
       },
       { nom: 'date', yorliq: 'Sanasi', tur: 'sana', talab: true, yarim: true },
@@ -512,17 +518,17 @@ export const BOLIMLAR: Bolim[] = [
         tur: 'kopTilliKatta',
         talab: true,
         ixtiyoriyAgar: 'videoUrl',
-        izoh: 'Ro‘yxatdagi kartochkada chiqadi. Post havolasi qo‘yilsa — shart emas',
+        izoh: 'Roʻyxatdagi kartochkada chiqadi. Post havolasi qoʻyilsa — shart emas',
       },
       {
         nom: 'body',
-        yorliq: "To'liq matn",
+        yorliq: "Toʻliq matn",
         tur: 'kopTilliRoyxat',
         talab: true,
         ixtiyoriyAgar: 'videoUrl',
         izoh:
-          'Har bir abzats alohida qatorda yoziladi. Post havolasi qo‘yilsa shart ' +
-          'emas — matnni postning o‘zi ko‘rsatadi',
+          'Har bir abzats alohida qatorda yoziladi. Post havolasi qoʻyilsa shart ' +
+          'emas — matnni postning oʻzi koʻrsatadi',
       },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1200×800' },
       {
@@ -530,11 +536,11 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Video yoki post havolasi (YouTube, Instagram, Telegram)',
         tur: 'postHavola',
         izoh:
-          'To‘liq havolani qo‘ying — masalan https://youtu.be/… , ' +
+          'Toʻliq havolani qoʻying — masalan https://youtu.be/… , ' +
           'https://www.instagram.com/reel/… yoki https://t.me/kanal/123 . ' +
-          'Yangilik sahifasida muqova ostida chiqadi: YouTube va Instagram pleyer bo‘lib ' +
-          'o‘sha yerda ochiladi, Telegram posti esa matni va rasmi bilan to‘liq ko‘rinadi. ' +
-          'Bo‘sh qoldirilsa hech narsa ko‘rinmaydi.',
+          'Yangilik sahifasida muqova ostida chiqadi: YouTube va Instagram pleyer boʻlib ' +
+          'oʻsha yerda ochiladi, Telegram posti esa matni va rasmi bilan toʻliq koʻrinadi. ' +
+          'Boʻsh qoldirilsa hech narsa koʻrinmaydi.',
       },
       tanlangan,
       nashr,
@@ -549,8 +555,8 @@ export const BOLIMLAR: Bolim[] = [
     model: 'mediaVideo',
     saralash: [{ sortOrder: 'asc' }, { date: 'desc' }],
     izoh:
-      'Uchta usuldan BITTASINI to‘ldiring: YouTube ID, Instagram havolasi yoki ' +
-      'video faylni yuklash. Instagram va yuklangan video uchun muqova rasmini ham qo‘ying.',
+      'Uchta usuldan BITTASINI toʻldiring: YouTube ID, Instagram havolasi yoki ' +
+      'video faylni yuklash. Instagram va yuklangan video uchun muqova rasmini ham qoʻying.',
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.title),
@@ -569,7 +575,7 @@ export const BOLIMLAR: Bolim[] = [
         tur: 'youtube',
         yarim: true,
         uzunlik: 40,
-        izoh: 'To‘liq havolani qo‘ysangiz ham bo‘ladi — ID o‘zi ajratiladi',
+        izoh: 'Toʻliq havolani qoʻysangiz ham boʻladi — ID oʻzi ajratiladi',
       },
       {
         nom: 'instagramUrl',
@@ -578,20 +584,20 @@ export const BOLIMLAR: Bolim[] = [
         yarim: true,
         izoh:
           'Post yoki reel havolasi — masalan https://www.instagram.com/reel/ABC123/ . ' +
-          'Ilovadagi «Ulashish» havolasi ham bo‘ladi: saqlaganda sayt uni haqiqiy ' +
-          'havolaga aylantiradi. Muqova rasmi qo‘yilsa ro‘yxatda chiroyli ko‘rinadi.',
+          'Ilovadagi «Ulashish» havolasi ham boʻladi: saqlaganda sayt uni haqiqiy ' +
+          'havolaga aylantiradi. Muqova rasmi qoʻyilsa roʻyxatda chiroyli koʻrinadi.',
       },
       {
         nom: 'fileUrl',
         yorliq: 'Video fayl',
         tur: 'video',
-        izoh: 'YouTube ham, Instagram ham bo‘lmasa — videoni shu yerdan yuklang',
+        izoh: 'YouTube ham, Instagram ham boʻlmasa — videoni shu yerdan yuklang',
       },
       {
         nom: 'coverUrl',
         yorliq: 'Muqova rasmi',
         tur: 'rasm',
-        izoh: 'Instagram va yuklangan video uchun. YouTube o‘z rasmini oladi',
+        izoh: 'Instagram va yuklangan video uchun. YouTube oʻz rasmini oladi',
       },
       { nom: 'date', yorliq: 'Sanasi', tur: 'sana', talab: true, yarim: true },
       tartib,
@@ -618,7 +624,7 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'caption', yorliq: 'Izoh', tur: 'kopTilli' },
       {
         nom: 'ratio',
-        yorliq: "Yo'nalishi",
+        yorliq: "Yoʻnalishi",
         tur: 'tanlov',
         yarim: true,
         variantlar: [
@@ -652,17 +658,17 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm', izoh: 'Vertikal, 600×800' },
       {
         nom: 'bio',
-        yorliq: "Qisqacha ma'lumot",
+        yorliq: "Qisqacha maʼlumot",
         tur: 'kopTilliKatta',
         izoh: 'Kartochkada chiqadi — 2–3 qator',
       },
       {
         nom: 'fullBio',
-        yorliq: "Batafsil ma'lumot",
+        yorliq: "Batafsil maʼlumot",
         tur: 'kopTilliKatta',
         izoh:
           'Rahbar ustiga bosilganda ochiladigan oynada chiqadi: tarjimai hol, ' +
-          'mehnat faoliyati, yutuqlar. Bo‘sh qator yangi abzatsni boshlaydi',
+          'mehnat faoliyati, yutuqlar. Boʻsh qator yangi abzatsni boshlaydi',
       },
       { nom: 'honorific', yorliq: 'Unvon / daraja', tur: 'kopTilli', qoshimcha: true },
       { nom: 'receptionDay', yorliq: 'Qabul kunlari', tur: 'kopTilli', qoshimcha: true },
@@ -702,9 +708,9 @@ export const BOLIMLAR: Bolim[] = [
       { nom: 'bio', yorliq: 'Biografiyasi', tur: 'kopTilliKatta', talab: true },
       {
         nom: 'specialties',
-        yorliq: "Mutaxassislik yo'nalishlari",
+        yorliq: "Mutaxassislik yoʻnalishlari",
         tur: 'kopTilliRoyxat',
-        izoh: 'Har bir yo‘nalish alohida qatorda',
+        izoh: 'Har bir yoʻnalish alohida qatorda',
       },
       { nom: 'cooperation', yorliq: 'Hamkorlik shakli', tur: 'kopTilli', qoshimcha: true },
       tartib,
@@ -720,9 +726,9 @@ export const BOLIMLAR: Bolim[] = [
     model: 'pressRelease',
     saralash: [{ sortOrder: 'asc' }, { date: 'desc' }],
     izoh:
-      'Saytdagi «Media → Matbuot uchun» bo‘limida chiqadi. Har bir yozuv bitta ' +
+      'Saytdagi «Media → Matbuot uchun» boʻlimida chiqadi. Har bir yozuv bitta ' +
       'tadbirga tegishli: tadbir nomi, sanasi va press-reliz matni. Kartochka ' +
-      'bosilganda to‘liq matn oynada ochiladi, fayl yuklangan bo‘lsa yuklab olish ' +
+      'bosilganda toʻliq matn oynada ochiladi, fayl yuklangan boʻlsa yuklab olish ' +
       'tugmasi ham chiqadi.',
     qator: (r) => ({
       id: r.id,
@@ -738,7 +744,7 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'summary',
         yorliq: 'Qisqa mazmuni',
         tur: 'kopTilliKatta',
-        izoh: 'Ro‘yxatdagi kartochkada chiqadi — 1-2 jumla',
+        izoh: 'Roʻyxatdagi kartochkada chiqadi — 1-2 jumla',
       },
       {
         nom: 'body',
@@ -751,7 +757,7 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'fileUrl',
         yorliq: 'Press-reliz fayli',
         tur: 'fayl',
-        izoh: 'PDF yoki Word. Bo‘sh qoldirilsa yuklab olish tugmasi ko‘rinmaydi',
+        izoh: 'PDF yoki Word. Boʻsh qoldirilsa yuklab olish tugmasi koʻrinmaydi',
       },
       tartib,
       nashr,
@@ -791,7 +797,7 @@ export const BOLIMLAR: Bolim[] = [
     birlik: 'vazifa',
     model: 'aboutTask',
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
-    izoh: '"Birlashma haqida" sahifasida raqamlangan kartochkalar bo‘lib chiqadi.',
+    izoh: '"Birlashma haqida" sahifasida raqamlangan kartochkalar boʻlib chiqadi.',
     qator: (r) => ({ id: r.id, sarlavha: uz(r.text), ochiqmi: r.published }),
     maydonlar: [
       { nom: 'text', yorliq: 'Vazifa matni', tur: 'kopTilli', talab: true },
@@ -816,7 +822,7 @@ export const BOLIMLAR: Bolim[] = [
       rasm: r.imageUrl,
     }),
     maydonlar: [
-      { nom: 'tag', yorliq: 'Yorliq', tur: 'kopTilli', talab: true, izoh: 'Masalan: I yo‘nalish' },
+      { nom: 'tag', yorliq: 'Yorliq', tur: 'kopTilli', talab: true, izoh: 'Masalan: I yoʻnalish' },
       { nom: 'title', yorliq: 'Sarlavha', tur: 'kopTilli', talab: true },
       { nom: 'text', yorliq: 'Matn', tur: 'kopTilliKatta', talab: true },
       {
@@ -835,7 +841,7 @@ export const BOLIMLAR: Bolim[] = [
   {
     kalit: 'kpi',
     nom: 'Raqamlar (KPI)',
-    birlik: "ko'rsatkich",
+    birlik: "koʻrsatkich",
     model: 'kpiStat',
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     izoh: 'Bosh sahifada animatsiya bilan sanaladigan raqamlar.',
@@ -846,7 +852,7 @@ export const BOLIMLAR: Bolim[] = [
     }),
     maydonlar: [
       { nom: 'value', yorliq: 'Raqam', tur: 'raqam', talab: true, yarim: true },
-      { nom: 'suffix', yorliq: 'Qo‘shimcha belgi', tur: 'matn', yarim: true, bosh: '', uzunlik: 8, izoh: 'Masalan: +' },
+      { nom: 'suffix', yorliq: 'Qoʻshimcha belgi', tur: 'matn', yarim: true, bosh: '', uzunlik: 8, izoh: 'Masalan: +' },
       { nom: 'label', yorliq: 'Nomi', tur: 'kopTilli', talab: true },
       {
         nom: 'icon',
@@ -860,7 +866,7 @@ export const BOLIMLAR: Bolim[] = [
           { qiymat: 'landmark', yorliq: 'Bino' },
           { qiymat: 'trophy', yorliq: 'Kubok' },
           { qiymat: 'radio', yorliq: 'Radio' },
-          { qiymat: 'graduation-cap', yorliq: 'Ta’lim' },
+          { qiymat: 'graduation-cap', yorliq: 'Taʼlim' },
         ],
       },
       tartib,
@@ -884,7 +890,7 @@ export const BOLIMLAR: Bolim[] = [
     }),
     maydonlar: [
       { nom: 'name', yorliq: 'Nomi', tur: 'matn', talab: true, uzunlik: 160 },
-      { nom: 'logoText', yorliq: 'Logotip matni', tur: 'matn', talab: true, yarim: true, uzunlik: 60, izoh: 'Rasm bo‘lmasa shu matn chiqadi' },
+      { nom: 'logoText', yorliq: 'Logotip matni', tur: 'matn', talab: true, yarim: true, uzunlik: 60, izoh: 'Rasm boʻlmasa shu matn chiqadi' },
       { nom: 'country', yorliq: 'Davlati', tur: 'kopTilli', talab: true },
       { nom: 'logoUrl', yorliq: 'Logotip', tur: 'rasm', izoh: 'PNG, shaffof fon' },
       { nom: 'url', yorliq: 'Rasmiy sayti', tur: 'havola', yarim: true, qoshimcha: true },
@@ -912,8 +918,8 @@ export const BOLIMLAR: Bolim[] = [
     bogliqlar: { links: 'links' },
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     izoh:
-      'Menyudagi «Xalqaro» ro‘yxatiga va /xalqaro sahifasiga avtomatik chiqadi. ' +
-      'Yangi sahifa qo‘shish uchun kod o‘zgartirish shart emas.',
+      'Menyudagi «Xalqaro» roʻyxatiga va /xalqaro sahifasiga avtomatik chiqadi. ' +
+      'Yangi sahifa qoʻshish uchun kod oʻzgartirish shart emas.',
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.title),
@@ -928,13 +934,13 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Qisqa tavsif',
         tur: 'kopTilliKatta',
         talab: true,
-        izoh: 'Bannerda sarlavha ostida va /xalqaro ro‘yxatidagi kartochkada chiqadi',
+        izoh: 'Bannerda sarlavha ostida va /xalqaro roʻyxatidagi kartochkada chiqadi',
       },
       {
         nom: 'body',
         yorliq: 'Asosiy matn',
         tur: 'kopTilliKatta',
-        izoh: 'Bo‘sh qator yangi abzatsni boshlaydi',
+        izoh: 'Boʻsh qator yangi abzatsni boshlaydi',
       },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm', izoh: 'Gorizontal, 1600×900' },
       {
@@ -942,7 +948,7 @@ export const BOLIMLAR: Bolim[] = [
         yorliq: 'Foydali havolalar',
         tur: 'qatorlar',
         excel: true,
-        izoh: 'Sahifa oxirida ro‘yxat bo‘lib chiqadi — hamkor tashkilotlar, hujjatlar va h.k.',
+        izoh: 'Sahifa oxirida roʻyxat boʻlib chiqadi — hamkor tashkilotlar, hujjatlar va h.k.',
         maydonlar: [
           { nom: 'label', yorliq: 'Havola nomi', tur: 'kopTilli', talab: true },
           { nom: 'url', yorliq: 'Manzil', tur: 'havola', talab: true },
@@ -963,10 +969,10 @@ export const BOLIMLAR: Bolim[] = [
     saralash: [{ grp: 'asc' }, { sortOrder: 'asc' }],
     izoh:
       'Saytdagi tayyor yozuvlar: tugmalar, sarlavhalar va izohlar. ' +
-      'Kulrang yozuv — matnning kodadagi kaliti, u qaysi sahifada chiqishini ko‘rsatadi. ' +
-      'Maydon bo‘sh qoldirilsa, saytda standart matn ko‘rinadi. ' +
+      'Kulrang yozuv — matnning koddagi kaliti, u qaysi sahifada chiqishini koʻrsatadi. ' +
+      'Maydon boʻsh qoldirilsa, saytda standart matn koʻrinadi. ' +
       'Kontent (yangiliklar, jamoalar, hujjatlar...), missiya matni va kontakt ' +
-      'ma’lumotlari bu yerda emas — o‘z bo‘limlarida tahrirlanadi.',
+      'maʼlumotlari bu yerda emas — oʻz boʻlimlarida tahrirlanadi.',
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.value) || r.key,
@@ -978,7 +984,7 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'value',
         yorliq: 'Matn',
         tur: 'kopTilliKatta',
-        izoh: 'Uch tilda ham to‘ldiring — bo‘sh til uchun standart matn ishlatiladi',
+        izoh: 'Uch tilda ham toʻldiring — boʻsh til uchun standart matn ishlatiladi',
       },
     ],
   },

@@ -1,11 +1,11 @@
 import { ADMIN_RU, ADMIN_RU_QOSHIMCHA } from './admin-ru';
 
 /**
- * Admin panel interfeysi ikki tilli: o'zbekcha (asosiy) va ruscha.
+ * Admin panel interfeysi ikki tilli: oʻzbekcha (asosiy) va ruscha.
  *
- * Matnlar kodda o'zbekcha yoziladi; ruscha til tanlansa, brauzerda ekrandagi
- * matn shu lug'at (`admin-ru.ts`) bo'yicha almashtiriladi. Lug'atda yo'q matn
- * o'zbekcha qoladi — hech narsa buzilmaydi.
+ * Matnlar kodda oʻzbekcha yoziladi; ruscha til tanlansa, brauzerda ekrandagi
+ * matn shu lugʻat (`admin-ru.ts`) boʻyicha almashtiriladi. Lugʻatda yoʻq matn
+ * oʻzbekcha qoladi — hech narsa buzilmaydi.
  */
 
 export const ADMIN_TIL_KUKISI = 'admin-til';
@@ -15,8 +15,12 @@ export function adminTilOl(qiymat: string | undefined | null): AdminTil {
   return qiymat === 'ru' ? 'ru' : 'uz';
 }
 
-/** Kalit ham, ekrandagi matn ham bir xil ko'rinishga keltiriladi: ketma-ket bo'shliqlar bitta */
-const tekisla = (s: string) => s.replace(/\s+/g, ' ').trim();
+/** Kalit ham, ekrandagi matn ham bir xil koʻrinishga keltiriladi: ketma-ket boʻshliqlar bitta, har xil apostroflar bir xil */
+const tekisla = (s: string) =>
+  s
+    .replace(/[‘’ʻʼ`´]/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
 
 const TOCHIQ = new Map<string, string>();
 const NAMUNALAR: { re: RegExp; ru: string }[] = [];
@@ -39,7 +43,7 @@ function lugatniYig() {
   NAMUNALAR.sort((a, b) => b.re.source.length - a.re.source.length);
 }
 
-/** Matn lug'atda bo'lsa — ruscha, bo'lmasa `null` */
+/** Matn lugʻatda boʻlsa — ruscha, boʻlmasa `null` */
 function ruschasi(kalit: string): string | null {
   lugatniYig();
   const aniq = TOCHIQ.get(kalit);
@@ -48,7 +52,7 @@ function ruschasi(kalit: string): string | null {
     const m = re.exec(kalit);
     if (!m) continue;
     let i = 1;
-    // O'zgaruvchan qism ham lug'atda (yoki namunada) bo'lsa tarjima qilinadi: "jamoa" -> "коллектив"
+    // Oʻzgaruvchan qism ham lugʻatda (yoki namunada) boʻlsa tarjima qilinadi: "jamoa" -> "коллектив"
     return ru.replace(/\{\}/g, () => {
       const q = m[i++] ?? '';
       return ruschasi(tekisla(q)) ?? q;
@@ -57,7 +61,7 @@ function ruschasi(kalit: string): string | null {
   return null;
 }
 
-/** Atrofdagi bo'shliqlar saqlanadi: React matnni bo'laklab chiqarishi mumkin (" ta ") */
+/** Atrofdagi boʻshliqlar saqlanadi: React matnni boʻlaklab chiqarishi mumkin (" ta ") */
 export function tarjimaQil(matn: string): string {
   const kalit = tekisla(matn);
   if (!kalit) return matn;

@@ -17,12 +17,12 @@ import { yuklashImzosi } from '@/server/ariza-fayllari';
  * Ishtirokchi arizaga fayl biriktiradi (surat, pasport nusxasi...).
  *
  * Kirish talab qilinmaydi — lekin imzo faqat quyidagi shartlarda beriladi:
- *   - tanlov e'lon qilingan va arizalar OCHIQ
+ *   - tanlov eʼlon qilingan va arizalar OCHIQ
  *   - anketada shu id li `fayl` savoli bor va fayl turi unga mos
- *   - hajm chegaradan oshmaydi, bitta IP dan so'rovlar soni cheklangan
+ *   - hajm chegaradan oshmaydi, bitta IP dan soʻrovlar soni cheklangan
  *
- * Fayl brauzerdan to'g'ridan-to'g'ri YOPIQ bucket'ga yuklanadi. Javob sifatida
- * faqat fayl yo'li qaytadi; ochiq havola yo'q.
+ * Fayl brauzerdan toʻgʻridan-toʻgʻri YOPIQ bucketʼga yuklanadi. Javob sifatida
+ * faqat fayl yoʻli qaytadi; ochiq havola yoʻq.
  */
 
 export const runtime = 'nodejs';

@@ -15,7 +15,7 @@ export interface ConcertEvent {
   ticketUrl?: string;
   price?: Localized;
   shortDescription: Localized;
-  /** Ijrochi jamoa / solist — admin panelda to'ldiriladi */
+  /** Ijrochi jamoa / solist — admin panelda toʻldiriladi */
   performerNote?: Localized;
   featured?: boolean;
 }

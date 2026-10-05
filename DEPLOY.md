@@ -1,16 +1,16 @@
 # Serverga chiqarish (Ahost VDS)
 
-> **Diqqat.** Hozir sayt **Vercel + Supabase**'da ishlaydi — joriy yo'riqnoma
-> [VERCEL.md](./VERCEL.md) da. Bu fayl keyinchalik o'z serveringizga
-> (VDS) ko'chirish kerak bo'lsa qo'l keladi.
+> **Diqqat.** Hozir sayt **Vercel + Supabase**'da ishlaydi — joriy yoʻriqnoma
+> [VERCEL.md](./VERCEL.md) da. Bu fayl keyinchalik oʻz serveringizga
+> (VDS) koʻchirish kerak boʻlsa qoʻl keladi.
 >
-> VDS'ga o'tishda quyidagilar qo'shimcha ish talab qiladi:
-> - baza — Supabase o'rniga serverdagi PostgreSQL (`DATABASE_URL` almashadi)
-> - admin kirish — Supabase Auth'ga ulanish saqlanib qoladi yoki o'z tizimingizga
+> VDSʼga oʻtishda quyidagilar qoʻshimcha ish talab qiladi:
+> - baza — Supabase oʻrniga serverdagi PostgreSQL (`DATABASE_URL` almashadi)
+> - admin kirish — Supabase Authʼga ulanish saqlanib qoladi yoki oʻz tizimingizga
 >   qaytariladi
-> - yuklangan fayllar — Supabase Storage'da qolaveradi (VDS diskiga ko'chirish shart emas)
+> - yuklangan fayllar — Supabase Storageʼda qolaveradi (VDS diskiga koʻchirish shart emas)
 
-«Orkestr va Xor» saytini VDS'ga o'rnatish yo'riqnomasi. Ubuntu 22.04 / 24.04 uchun
+«Orkestr va Xor» saytini VDSʼga oʻrnatish yoʻriqnomasi. Ubuntu 22.04 / 24.04 uchun
 yozilgan; boshqa distributivda buyruqlar ozgina farq qilishi mumkin.
 
 Barcha buyruqlar serverda, SSH orqali bajariladi.
@@ -21,12 +21,12 @@ Barcha buyruqlar serverda, SSH orqali bajariladi.
 
 | Talab | Izoh |
 |---|---|
-| Ubuntu 22.04 yoki 24.04 | boshqa distributiv ham bo'ladi |
-| 2 GB RAM | 1 GB bo'lsa — svop fayl qo'shiladi (1-qadamga qarang) |
+| Ubuntu 22.04 yoki 24.04 | boshqa distributiv ham boʻladi |
+| 2 GB RAM | 1 GB boʻlsa — svop fayl qoʻshiladi (1-qadamga qarang) |
 | 10 GB disk | ilova ~1 GB, qolgani baza, rasm va zaxira uchun |
 | Node.js 20+ | |
 | PostgreSQL 17+ | 17 dan pastda `C.UTF-8` lokali ishlamaydi |
-| Domen | DNS `A` yozuvi server IP siga yo'naltirilgan bo'lsin |
+| Domen | DNS `A` yozuvi server IP siga yoʻnaltirilgan boʻlsin |
 
 ---
 
@@ -41,7 +41,7 @@ adduser orkestr
 usermod -aG sudo orkestr
 ```
 
-Vaqt mintaqasi (admin paneldagi sana va vaqt to'g'ri chiqishi uchun):
+Vaqt mintaqasi (admin paneldagi sana va vaqt toʻgʻri chiqishi uchun):
 
 ```bash
 timedatectl set-timezone Asia/Tashkent
@@ -55,8 +55,8 @@ ufw allow 'Nginx Full'
 ufw enable
 ```
 
-**RAM 2 GB dan kam bo'lsa** svop qo'shing — aks holda `npm run build` xotira
-yetmay to'xtaydi:
+**RAM 2 GB dan kam boʻlsa** svop qoʻshing — aks holda `npm run build` xotira
+yetmay toʻxtaydi:
 
 ```bash
 fallocate -l 2G /swapfile
@@ -66,7 +66,7 @@ swapon /swapfile
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
 ```
 
-Endi `orkestr` foydalanuvchisiga o'ting: `su - orkestr`
+Endi `orkestr` foydalanuvchisiga oʻting: `su - orkestr`
 
 ---
 
@@ -82,7 +82,7 @@ node -v    # v20.x.x chiqishi kerak
 
 ## 3-qadam. PostgreSQL
 
-Ubuntu omborida eski versiya bo'lishi mumkin, shuning uchun PostgreSQL'ning
+Ubuntu omborida eski versiya boʻlishi mumkin, shuning uchun PostgreSQLʼning
 rasmiy ombori ulanadi:
 
 ```bash
@@ -97,8 +97,8 @@ sudo apt update
 sudo apt install -y postgresql-17
 ```
 
-> 18-versiya ham bo'ladi (`postgresql-18`) — mahalliy ishlab chiqishda o'sha
-> ishlatiladi. 17 dan pastini o'rnatmang.
+> 18-versiya ham boʻladi (`postgresql-18`) — mahalliy ishlab chiqishda oʻsha
+> ishlatiladi. 17 dan pastini oʻrnatmang.
 
 ### Baza va foydalanuvchi
 
@@ -119,7 +119,7 @@ CREATE DATABASE orkestrvaxor
 \q
 ```
 
-> ⚠️ **`ENCODING` va `BUILTIN_LOCALE` ni o'zgartirmang.** Ularsiz o'zbekcha
+> ⚠️ **`ENCODING` va `BUILTIN_LOCALE` ni oʻzgartirmang.** Ularsiz oʻzbekcha
 > `o'`, `g'` harflari buziladi va kirillcha qidiruv katta/kichik harfni
 > farqlamay ishlamay qoladi. Batafsil: [BAZA.md](./BAZA.md).
 
@@ -141,7 +141,7 @@ git clone https://github.com/jakhonku/orkestorxoruz.git orkestrvaxor
 cd orkestrvaxor
 ```
 
-### `.env` faylini to'ldirish
+### `.env` faylini toʻldirish
 
 ```bash
 cp .env.example .env
@@ -160,7 +160,7 @@ NEXT_PUBLIC_SITE_URL="https://orkestrvaxor.uz"
 ```
 
 `AUTH_SECRET` uchun yangi tasodifiy qiymat yarating (mahalliy qiymatni
-**ko'chirmang**):
+**koʻchirmang**):
 
 ```bash
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
@@ -172,24 +172,24 @@ Faylni himoyalang:
 chmod 600 .env
 ```
 
-### O'rnatish va bazani tayyorlash
+### Oʻrnatish va bazani tayyorlash
 
 ```bash
 npm ci
-npx prisma generate      # Prisma klienti Git'ga tushmaydi — har safar yaratiladi
+npx prisma generate      # Prisma klienti Gitʼga tushmaydi — har safar yaratiladi
 npx prisma migrate deploy
 ```
 
-Endi bazani to'ldirish. **Bir marta**, birinchi o'rnatishda:
+Endi bazani toʻldirish. **Bir marta**, birinchi oʻrnatishda:
 
 ```bash
 npm run db:seed
 ```
 
-> ⚠️ **`db:seed` bazadagi butun kontentni o'chirib, namunaviy ma'lumot yozadi.**
+> ⚠️ **`db:seed` bazadagi butun kontentni oʻchirib, namunaviy maʼlumot yozadi.**
 > Sayt ishga tushib, admin paneldan haqiqiy kontent kiritilgandan keyin uni
 > **hech qachon qayta ishlatmang**. Yangilash uchun `deploy/yangilash.sh`
-> ishlatiladi — u seed'ni chaqirmaydi.
+> ishlatiladi — u seedʼni chaqirmaydi.
 
 Seed admin foydalanuvchini ham yaratadi (`.env` dagi `ADMIN_EMAIL` /
 `ADMIN_PASSWORD` bilan).
@@ -200,8 +200,8 @@ Seed admin foydalanuvchini ham yaratadi (`.env` dagi `ADMIN_EMAIL` /
 npm run build
 ```
 
-Sinab ko'rish: `npm run start` → boshqa terminalda `curl -I http://127.0.0.1:3000/uz`
-javob bersa, `Ctrl+C` bilan to'xtating.
+Sinab koʻrish: `npm run start` → boshqa terminalda `curl -I http://127.0.0.1:3000/uz`
+javob bersa, `Ctrl+C` bilan toʻxtating.
 
 ---
 
@@ -235,7 +235,7 @@ sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-Nginx `public/uploads/` papkasini o'qiy olishi kerak:
+Nginx `public/uploads/` papkasini oʻqiy olishi kerak:
 
 ```bash
 sudo chmod o+x /var/www /var/www/orkestrvaxor /var/www/orkestrvaxor/public
@@ -251,7 +251,7 @@ sudo certbot --nginx -d orkestrvaxor.uz -d www.orkestrvaxor.uz
 Shu bilan sayt `https://orkestrvaxor.uz` da ochiladi.
 
 **Birinchi ish:** `https://orkestrvaxor.uz/admin/kirish` ga kiring va
-«Foydalanuvchilar» bo'limidan parolni almashtiring.
+«Foydalanuvchilar» boʻlimidan parolni almashtiring.
 
 ---
 
@@ -262,7 +262,7 @@ chmod +x /var/www/orkestrvaxor/deploy/backup.sh
 sudo mkdir -p /var/backups/orkestrvaxor
 sudo chown orkestr:orkestr /var/backups/orkestrvaxor
 
-# Sinab ko'rish
+# Sinab koʻrish
 /var/www/orkestrvaxor/deploy/backup.sh
 ```
 
@@ -277,9 +277,9 @@ crontab -e
 ```
 
 Skript bazani va yuklangan rasmlarni saqlaydi, 14 kundan eski nusxalarni
-o'chiradi. Nusxalarni vaqti-vaqti bilan boshqa joyga (masalan, o'z
-kompyuteringizga) ham ko'chirib turing — server buzilsa, undagi zaxira ham
-yo'qoladi.
+oʻchiradi. Nusxalarni vaqti-vaqti bilan boshqa joyga (masalan, oʻz
+kompyuteringizga) ham koʻchirib turing — server buzilsa, undagi zaxira ham
+yoʻqoladi.
 
 **Zaxiradan tiklash:**
 
@@ -292,7 +292,7 @@ tar -xzf /var/backups/orkestrvaxor/rasmlar-2026-08-19-0300.tar.gz -C /var/www/or
 
 ## Keyinchalik: saytni yangilash
 
-Kodda o'zgarish bo'lganda:
+Kodda oʻzgarish boʻlganda:
 
 ```bash
 cd /var/www/orkestrvaxor
@@ -300,13 +300,13 @@ chmod +x deploy/yangilash.sh     # birinchi marta
 ./deploy/yangilash.sh
 ```
 
-Skript: yangi kodni oladi → bog'liqliklarni o'rnatadi → Prisma klientini
-yaratadi → migratsiyalarni qo'llaydi → saytni quradi → xizmatni qayta ishga
+Skript: yangi kodni oladi → bogʻliqliklarni oʻrnatadi → Prisma klientini
+yaratadi → migratsiyalarni qoʻllaydi → saytni quradi → xizmatni qayta ishga
 tushiradi. Qurish paytida sayt eski versiyada ishlab turadi, faqat qayta ishga
-tushishda bir necha soniya uzilish bo'ladi.
+tushishda bir necha soniya uzilish boʻladi.
 
-> **Papkani qayta `git clone` qilmang.** `public/uploads/` Git'ga tushmaydi —
-> yangi klonda admin paneldan yuklangan barcha rasmlar yo'qoladi. Doim shu
+> **Papkani qayta `git clone` qilmang.** `public/uploads/` Gitʼga tushmaydi —
+> yangi klonda admin paneldan yuklangan barcha rasmlar yoʻqoladi. Doim shu
 > papkada `git pull` qiling.
 
 ---
@@ -315,20 +315,20 @@ tushishda bir necha soniya uzilish bo'ladi.
 
 | Belgi | Sabab va yechim |
 |---|---|
-| Sayt ochilmaydi, `502 Bad Gateway` | Xizmat o'chgan: `sudo systemctl status orkestrvaxor`, loglar: `journalctl -u orkestrvaxor -n 50` |
-| `AUTH_SECRET o'rnatilmagan` xatosi | `.env` da `AUTH_SECRET` yo'q yoki 16 belgidan qisqa |
-| Rasm yuklashda `413` xatosi | Nginx'da `client_max_body_size 10M;` yo'q |
-| O'zbekcha harflar buzilgan | Baza noto'g'ri kodlash bilan yaratilgan — 3-qadamga qaytish kerak |
-| `npm run build` xotira yetmay to'xtadi | Svop qo'shing (1-qadam) |
-| `too many clients already` | `.env` ga `DATABASE_POOL_MAX=3` qo'shing |
-| Admin paneldagi o'zgarish saytda ko'rinmayapti | Odatda darhol ko'rinadi. Ko'rinmasa brauzer keshini tekshiring, so'ng: `sudo systemctl restart orkestrvaxor` |
+| Sayt ochilmaydi, `502 Bad Gateway` | Xizmat oʻchgan: `sudo systemctl status orkestrvaxor`, loglar: `journalctl -u orkestrvaxor -n 50` |
+| `AUTH_SECRET oʻrnatilmagan` xatosi | `.env` da `AUTH_SECRET` yoʻq yoki 16 belgidan qisqa |
+| Rasm yuklashda `413` xatosi | Nginxʼda `client_max_body_size 10M;` yoʻq |
+| Oʻzbekcha harflar buzilgan | Baza notoʻgʻri kodlash bilan yaratilgan — 3-qadamga qaytish kerak |
+| `npm run build` xotira yetmay toʻxtadi | Svop qoʻshing (1-qadam) |
+| `too many clients already` | `.env` ga `DATABASE_POOL_MAX=3` qoʻshing |
+| Admin paneldagi oʻzgarish saytda koʻrinmayapti | Odatda darhol koʻrinadi. Koʻrinmasa brauzer keshini tekshiring, soʻng: `sudo systemctl restart orkestrvaxor` |
 
 ---
 
 ## Xavfsizlik eslatmalari
 
-- `.env` faylini hech qachon Git'ga qo'shmang (u `.gitignore` da).
+- `.env` faylini hech qachon Gitʼga qoʻshmang (u `.gitignore` da).
 - Server parolini emas, **SSH kalit**ini ishlatish tavsiya etiladi.
 - Admin panelga birinchi kirgandan keyin parolni almashtiring.
-- Xodimlarga `MUHARRIR` roli bering — `ADMIN` faqat kerak bo'lganda.
+- Xodimlarga `MUHARRIR` roli bering — `ADMIN` faqat kerak boʻlganda.
 - `sudo apt update && sudo apt upgrade` ni oyiga bir marta bajaring.

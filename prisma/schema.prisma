@@ -1,11 +1,11 @@
-// "Orkestr va Xor" ijodiy birlashmasi — ma'lumotlar bazasi sxemasi
+// "Orkestr va Xor" ijodiy birlashmasi — maʼlumotlar bazasi sxemasi
 //
-// Ko'p tillilik: uz/ru/en matnlar Json (jsonb) ustunlarda {"uz":"...","ru":"...","en":"..."}
-// ko'rinishida saqlanadi — frontenddagi Localized<T> tipiga to'g'ridan-to'g'ri mos keladi.
+// Koʻp tillilik: uz/ru/en matnlar Json (jsonb) ustunlarda {"uz":"...","ru":"...","en":"..."}
+// koʻrinishida saqlanadi — frontenddagi Localized<T> tipiga toʻgʻridan-toʻgʻri mos keladi.
 //
 // Har bir kontent jadvalida:
-//   published — saytda ko'rinadimi (qoralama / e'lon qilingan)
-//   sortOrder — admin panelda qo'lda tartiblash uchun
+//   published — saytda koʻrinadimi (qoralama / eʼlon qilingan)
+//   sortOrder — admin panelda qoʻlda tartiblash uchun
 
 generator client {
   provider = "prisma-client"
@@ -17,7 +17,7 @@ datasource db {
 }
 
 // ============================================================
-// ENUM'lar
+// ENUMʼlar
 // ============================================================
 
 enum EnsembleType {
@@ -258,6 +258,8 @@ model Competition {
   title              Json
   kind               CompetitionKind
   status             CompetitionStatus @default(TEZ_KUNDA)
+  /// "Tez kunda" holatida batafsil sahifa ochiqmi (boshqa holatlarda doim ochiq)
+  detailOpen         Boolean           @default(false)
   coverUrl           String?           @db.Text
   date               Json
   location           Json
@@ -266,9 +268,9 @@ model Competition {
   regulationsFileUrl String?           @db.Text
   applicationEmail   String?           @db.VarChar(160)
   prizeFund          Json?
-  /// Ariza anketasi — admin o'zi tuzadigan savollar ro'yxati (src/lib/anketa.ts)
+  /// Ariza anketasi — admin oʻzi tuzadigan savollar roʻyxati (src/lib/anketa.ts)
   formFields         Json?
-  /// "Ishtirok etish" kartasi matnlari — bo'sh bo'lsa saytdagi standart matn chiqadi
+  /// "Ishtirok etish" kartasi matnlari — boʻsh boʻlsa saytdagi standart matn chiqadi
   participateTitle   Json?
   participateText    Json?
   prepareTitle       Json?
@@ -303,7 +305,7 @@ model CompetitionStage {
   @@map("competition_timeline")
 }
 
-/// Har bir tanlov/festivalning o'z tayyor hujjatlari (nizom, ariza namunasi, shartnoma...)
+/// Har bir tanlov/festivalning oʻz tayyor hujjatlari (nizom, ariza namunasi, shartnoma...)
 model CompetitionDocument {
   id            Int     @id @default(autoincrement())
   competitionId Int
@@ -376,7 +378,7 @@ model NewsArticle {
   excerpt   Json
   /// {"uz": ["1-abzats", "2-abzats"], "ru": [...], "en": [...]}
   body      Json
-  /// YouTube yoki Instagram havolasi — yangilik sahifasida pleyer bo'lib ochiladi
+  /// YouTube yoki Instagram havolasi — yangilik sahifasida pleyer boʻlib ochiladi
   videoUrl  String?      @db.Text
   featured  Boolean      @default(false)
   published Boolean      @default(true)
@@ -389,8 +391,8 @@ model NewsArticle {
   @@map("news")
 }
 
-/// Media bo'limidagi videolar. Uch manbadan biri to'ldiriladi:
-/// YouTube ID, Instagram havolasi yoki Storage'ga yuklangan fayl.
+/// Media boʻlimidagi videolar. Uch manbadan biri toʻldiriladi:
+/// YouTube ID, Instagram havolasi yoki Storageʼga yuklangan fayl.
 model MediaVideo {
   id           Int      @id @default(autoincrement())
   title        Json
@@ -398,7 +400,7 @@ model MediaVideo {
   youtubeId    String?  @db.VarChar(40)
   /// Instagram post yoki reel havolasi
   instagramUrl String?  @db.Text
-  /// Supabase Storage'ga yuklangan video fayl
+  /// Supabase Storageʼga yuklangan video fayl
   fileUrl      String?  @db.Text
   /// Muqova rasmi — Instagram va yuklangan video uchun
   coverUrl     String?  @db.Text
@@ -435,7 +437,7 @@ model Expert {
   photoUrl    String? @db.Text
   role        Json
   bio         Json
-  /// {"uz": ["yo'nalish 1", ...], "ru": [...], "en": [...]}
+  /// {"uz": ["yoʻnalish 1", ...], "ru": [...], "en": [...]}
   specialties Json
   cooperation Json?
   published   Boolean @default(true)
@@ -451,7 +453,7 @@ model Leader {
   role         Json
   photoUrl     String?  @db.Text
   bio          Json
-  /// Kartochkada emas, faqat batafsil oynada chiqadigan to'liq ma'lumot
+  /// Kartochkada emas, faqat batafsil oynada chiqadigan toʻliq maʼlumot
   fullBio      Json?
   honorific    Json?
   receptionDay Json?
@@ -464,7 +466,7 @@ model Leader {
   @@map("leaders")
 }
 
-/// "Media → Matbuot uchun" bo'limidagi press-relizlar.
+/// "Media → Matbuot uchun" boʻlimidagi press-relizlar.
 /// Har bir yozuv bitta tadbirga tegishli: tadbir nomi, sanasi va matni.
 model PressRelease {
   id        Int      @id @default(autoincrement())
@@ -499,7 +501,7 @@ model DocumentLink {
 // BOSH SAHIFA BLOKLARI
 // ============================================================
 
-/// Bosh ekrandagi "O'zbekiston simfoniyasi" strategiyasi slaydlari
+/// Bosh ekrandagi "Oʻzbekiston simfoniyasi" strategiyasi slaydlari
 model StrategySlide {
   id        Int     @id @default(autoincrement())
   tag       Json
@@ -556,7 +558,7 @@ model AboutTask {
 }
 
 // ============================================================
-// SOZLAMALAR (kontakt ma'lumotlari, missiya matni, ijtimoiy tarmoqlar)
+// SOZLAMALAR (kontakt maʼlumotlari, missiya matni, ijtimoiy tarmoqlar)
 // ============================================================
 
 /// Kalit-qiymat sozlamalari: siteName, slogan, address, phone, email,
@@ -619,7 +621,7 @@ model CompetitionApplication {
   category      String?          @db.VarChar(120)
   message       String?          @db.Text
   /// Anketa savollariga javoblar: [{ id, savol, javob }] — savol matni ham
-  /// saqlanadi, anketa keyin o'zgarsa ham eski ariza tushunarli qoladi
+  /// saqlanadi, anketa keyin oʻzgarsa ham eski ariza tushunarli qoladi
   answers       Json?
   locale        String           @db.VarChar(5)
   status        SubmissionStatus @default(YANGI)
@@ -668,7 +670,7 @@ model Subscriber {
 model AdminUser {
   id          Int       @id @default(autoincrement())
   email       String    @unique @db.VarChar(160)
-  /// Supabase Auth foydalanuvchisi (auth.users.id). Parol Supabase'da saqlanadi.
+  /// Supabase Auth foydalanuvchisi (auth.users.id). Parol Supabaseʼda saqlanadi.
   authUserId  String?   @unique @db.Uuid
   name        String    @db.VarChar(160)
   role        AdminRole @default(MUHARRIR)
@@ -696,9 +698,9 @@ model MediaFile {
   @@map("media_files")
 }
 
-/// Formalar uchun spam chegarasi — bitta IP dan kelgan so'nggi arizalar izi.
-/// Bazada saqlanadi, chunki Vercel'da har bir so'rov alohida nusxada
-/// bajarilishi mumkin va xotiradagi hisoblagich umumiy bo'lmaydi.
+/// Formalar uchun spam chegarasi — bitta IP dan kelgan soʻnggi arizalar izi.
+/// Bazada saqlanadi, chunki Vercelʼda har bir soʻrov alohida nusxada
+/// bajarilishi mumkin va xotiradagi hisoblagich umumiy boʻlmaydi.
 model FormRateHit {
   id        Int      @id @default(autoincrement())
   ip        String   @db.VarChar(64)
@@ -710,7 +712,7 @@ model FormRateHit {
 
 /// Sahifalardagi tayyor matnlar: tugmalar, sarlavhalar, izohlar.
 /// `messages/{uz,ru,en}.json` dagi standart matn ustidan yoziladi —
-/// qator bo'sh qoldirilsa yoki o'chirilsa, standart matn qaytadi.
+/// qator boʻsh qoldirilsa yoki oʻchirilsa, standart matn qaytadi.
 model UiText {
   id        Int    @id @default(autoincrement())
   /// Nuqtali kalit: "Home.hero.title"
@@ -726,18 +728,18 @@ model UiText {
 }
 
 // ============================================================
-// XALQARO BO'LIMI
+// XALQARO BOʻLIMI
 // ============================================================
 
-/// "Xalqaro" menyusidagi erkin sahifalar — admin paneldan qo'shiladi va
-/// menyuga o'zi chiqadi. Kod o'zgartirmasdan yangi sahifa ochish uchun.
+/// "Xalqaro" menyusidagi erkin sahifalar — admin paneldan qoʻshiladi va
+/// menyuga oʻzi chiqadi. Kod oʻzgartirmasdan yangi sahifa ochish uchun.
 model InternationalPage {
   id        Int      @id @default(autoincrement())
   slug      String   @unique @db.VarChar(140)
   title     Json
-  /// Banner ostidagi bir-ikki jumla — ro'yxatdagi kartochkada ham chiqadi
+  /// Banner ostidagi bir-ikki jumla — roʻyxatdagi kartochkada ham chiqadi
   summary   Json
-  /// Asosiy matn. Bo'sh qator yangi abzatsni boshlaydi.
+  /// Asosiy matn. Boʻsh qator yangi abzatsni boshlaydi.
   body      Json?
   coverUrl  String?  @db.Text
   published Boolean  @default(true)
@@ -751,7 +753,7 @@ model InternationalPage {
   @@map("international_pages")
 }
 
-/// Xalqaro sahifadagi foydali havolalar ro'yxati
+/// Xalqaro sahifadagi foydali havolalar roʻyxati
 model InternationalPageLink {
   id        Int    @id @default(autoincrement())
   pageId    Int

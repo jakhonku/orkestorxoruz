@@ -20,11 +20,11 @@ import { javobMatni, type Javob, type Savol } from '@/lib/anketa';
 import { faylOqi } from '@/server/ariza-fayllari';
 
 /**
- * Ishtirokchi anketasi asosida "Ma'lumotnoma" PDF'i.
+ * Ishtirokchi anketasi asosida "Maʼlumotnoma" PDFʼi.
  *
- * Ko'rinishi rasmiy ma'lumotnoma namunasiga o'xshaydi: sarlavha, F.I.Sh.,
- * o'ng tomonda 3×4 surat, asosiy ma'lumotlar, keyin uzun bo'limlar.
- * Shu bir xil PDF ham oxirgi qadamda ko'rsatiladi, ham arizaga biriktiriladi.
+ * Koʻrinishi rasmiy maʼlumotnoma namunasiga oʻxshaydi: sarlavha, F.I.Sh.,
+ * oʻng tomonda 3×4 surat, asosiy maʼlumotlar, keyin uzun boʻlimlar.
+ * Shu bir xil PDF ham oxirgi qadamda koʻrsatiladi, ham arizaga biriktiriladi.
  */
 
 const A4 = { w: 595.28, h: 841.89 };
@@ -33,7 +33,7 @@ const KENGLIK = A4.w - CHET * 2;
 
 /** Surat yonida chiqadigan qisqa maydonlar (shu tartibda) */
 const YONDAGI = ['tugilganSana', 'tugilganJoyi', 'millati', 'malumoti'];
-/** Ma'lumotnomada alohida joyi bor savollar — pastda takror chiqmaydi */
+/** Maʼlumotnomada alohida joyi bor savollar — pastda takror chiqmaydi */
 const MAXSUS = new Set([...YONDAGI, 'mutaxassislik', 'mukofotlar', 'biografiya', 'asar', 'surat']);
 
 async function shrift(nom: string): Promise<Uint8Array> {
@@ -44,7 +44,7 @@ function sanaMatni(v: string): string {
   return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v.split('-').reverse().join('.') : v;
 }
 
-/** Shriftda yo'q belgilar PDF'ni buzmasligi uchun almashtiriladi */
+/** Shriftda yoʻq belgilar PDFʼni buzmasligi uchun almashtiriladi */
 function toza(s: string, f: PDFFont): string {
   let natija = '';
   for (const ch of s.replace(/\r/g, '').replace(/\t/g, ' ')) {
@@ -73,7 +73,7 @@ function qatorlarga(matn: string, f: PDFFont, olcham: number, kenglik: number): 
         continue;
       }
       if (joriy) chiqish.push(joriy);
-      // Juda uzun so'z (havola kabi) — bo'laklanadi
+      // Juda uzun soʻz (havola kabi) — boʻlaklanadi
       let qolgan = soz;
       while (f.widthOfTextAtSize(qolgan, olcham) > kenglik) {
         let n = qolgan.length;
@@ -101,7 +101,7 @@ export async function malumotnomaPdf({
 }: MalumotnomaMalumoti): Promise<Uint8Array> {
   const pdf = await PDFDocument.create();
   pdf.registerFontkit(fontkit);
-  pdf.setTitle(`Ma’lumotnoma — ${fullName}`);
+  pdf.setTitle(`Maʼlumotnoma — ${fullName}`);
 
   const oddiy = await pdf.embedFont(await shrift('DejaVuSerif.ttf'), { subset: true });
   const qalin = await pdf.embedFont(await shrift('DejaVuSerif-Bold.ttf'), { subset: true });
@@ -127,7 +127,7 @@ export async function malumotnomaPdf({
       if (bayt && yol.endsWith('.png')) rasm = await pdf.embedPng(bayt);
       else if (bayt && yol.endsWith('.jpg')) rasm = await pdf.embedJpg(bayt);
     } catch {
-      rasm = null; // o'qib bo'lmadi — surat o'rni bo'sh ramka bo'lib qoladi
+      rasm = null; // oʻqib boʻlmadi — surat oʻrni boʻsh ramka boʻlib qoladi
     }
   }
 
@@ -137,7 +137,7 @@ export async function malumotnomaPdf({
   const kulrang = rgb(0.4, 0.4, 0.45);
 
   // ---------------- sarlavha ----------------
-  const sarlavha = toza('MA’LUMOTNOMA', qalin);
+  const sarlavha = toza('MAʼLUMOTNOMA', qalin);
   sahifa.drawText(sarlavha, {
     x: (A4.w - qalin.widthOfTextAtSize(sarlavha, 17)) / 2,
     y: y - 17,
@@ -147,7 +147,7 @@ export async function malumotnomaPdf({
   });
   y -= 17 + 26;
 
-  // ---------------- jadval: chap ustun — savol, o'ng ustun — javob ----------------
+  // ---------------- jadval: chap ustun — savol, oʻng ustun — javob ----------------
   const YORLIQ_W = 150;
   const QIYMAT_W = KENGLIK - YORLIQ_W;
   const OLCHAM = 10.5;
@@ -156,7 +156,7 @@ export async function malumotnomaPdf({
   const chiziq = rgb(0.55, 0.57, 0.62);
   const fon = rgb(0.95, 0.96, 0.98);
 
-  // Birinchi blok: F.I.Sh. va qisqa maydonlar, o'ng tomonda esa 3×4 suratli katak
+  // Birinchi blok: F.I.Sh. va qisqa maydonlar, oʻng tomonda esa 3×4 suratli katak
   const RASM_W = 96;
   const RASM_H = 128;
   const RASM_KATAK_W = RASM_W + 16;
@@ -181,7 +181,7 @@ export async function malumotnomaPdf({
       };
     });
 
-  // Suratli katak past bo'lsa — oxirgi qator cho'ziladi, blok surat balandligiga teng bo'ladi
+  // Suratli katak past boʻlsa — oxirgi qator choʻziladi, blok surat balandligiga teng boʻladi
   const boshJami = boshQatorlar.reduce((n, r) => n + r.balandlik, 0);
   if (boshJami < RASM_KATAK_B && boshQatorlar.length) {
     boshQatorlar[boshQatorlar.length - 1].balandlik += RASM_KATAK_B - boshJami;
@@ -206,7 +206,7 @@ export async function malumotnomaPdf({
   const rasmX = katakX + (RASM_KATAK_W - RASM_W) / 2;
   const rasmY = y - blokB + (blokB - RASM_H) / 2;
   if (rasm) {
-    // Surat cho'zilmaydi: 3×4 ramkani to'ldiradi, ortiqcha qismi kesiladi
+    // Surat choʻzilmaydi: 3×4 ramkani toʻldiradi, ortiqcha qismi kesiladi
     const olcham = Math.max(RASM_W / rasm.width, RASM_H / rasm.height);
     const w = rasm.width * olcham;
     const h = rasm.height * olcham;
@@ -225,7 +225,7 @@ export async function malumotnomaPdf({
   }
   y -= blokB;
 
-  // Qolgan maydonlar — to'liq kenglikdagi jadval, birinchi blokning davomi
+  // Qolgan maydonlar — toʻliq kenglikdagi jadval, birinchi blokning davomi
   const qator = (yorliq: string, qiymat: string) => {
     if (!qiymat.trim()) return;
     const yorliqQ = qatorlarga(toza(yorliq, qalin), qalin, OLCHAM, YORLIQ_W - PAD * 2);
@@ -234,7 +234,7 @@ export async function malumotnomaPdf({
     let boshlandi = false;
     let i = 0; // qiymat qatorlaridan qaysigacha chizildi
     while (i < qiymatQ.length || !boshlandi) {
-      // Uzun javob (biografiya) sahifaga sig'masa — keyingi sahifada davom etadi
+      // Uzun javob (biografiya) sahifaga sigʻmasa — keyingi sahifada davom etadi
       if (y - (QATOR_B + PAD * 2) < CHET) {
         sahifa = pdf.addPage([A4.w, A4.h]);
         y = A4.h - CHET;
@@ -267,7 +267,7 @@ export async function malumotnomaPdf({
     qator(yorliqOl(id, id), matnOl(id));
   }
 
-  // Admin qo'shgan boshqa savollar ham ma'lumotnomadan tushib qolmasin
+  // Admin qoʻshgan boshqa savollar ham maʼlumotnomadan tushib qolmasin
   for (const s of savollar) {
     if (MAXSUS.has(s.id) || s.tur === 'bolim' || s.tur === 'rozilik' || s.tur === 'fayl') continue;
     qator(s.savol.uz, matnOl(s.id));

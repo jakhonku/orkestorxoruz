@@ -1,15 +1,15 @@
 /**
  * YouTube havolasidan video ID ajratish.
  *
- * Admin panelda "YouTube ID" maydoniga ko'pincha to'liq havola qo'yiladi
+ * Admin panelda "YouTube ID" maydoniga koʻpincha toʻliq havola qoʻyiladi
  * (https://www.youtube.com/watch?v=... — 40 belgidan uzun). Bazadagi ustun esa
- * qisqa ID uchun mo'ljallangan, shu sababli qiymat saqlashdan oldin tozalanadi.
+ * qisqa ID uchun moʻljallangan, shu sababli qiymat saqlashdan oldin tozalanadi.
  */
 
 /** YouTube video ID: 11 ta harf/raqam/tire/pastki chiziq */
 const ID_NAMUNA = /^[A-Za-z0-9_-]{11}$/;
 
-/** Havolaning turli ko'rinishlaridan ID ajratadigan namunalar */
+/** Havolaning turli koʻrinishlaridan ID ajratadigan namunalar */
 const HAVOLA_NAMUNALARI = [
   /[?&]v=([A-Za-z0-9_-]{11})/, // watch?v=ID
   /youtu\.be\/([A-Za-z0-9_-]{11})/, // youtu.be/ID
@@ -21,8 +21,8 @@ const HAVOLA_NAMUNALARI = [
 
 /**
  * Kiritilgan matndan YouTube ID ni qaytaradi.
- * Ajratib bo'lmasa — matnning o'zi (tozalangan holda) qaytadi, shunda
- * foydalanuvchiga tushunarli xato xabari ko'rsatiladi.
+ * Ajratib boʻlmasa — matnning oʻzi (tozalangan holda) qaytadi, shunda
+ * foydalanuvchiga tushunarli xato xabari koʻrsatiladi.
  */
 export function youtubeIdAjrat(xom: string): string {
   const matn = xom.trim();
@@ -36,7 +36,7 @@ export function youtubeIdAjrat(xom: string): string {
   return matn;
 }
 
-/** Qiymat haqiqiy YouTube ID ga o'xshaydimi */
+/** Qiymat haqiqiy YouTube ID ga oʻxshaydimi */
 export function youtubeIdTogrimi(qiymat: string): boolean {
   return ID_NAMUNA.test(qiymat.trim());
 }

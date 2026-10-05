@@ -16,7 +16,7 @@ import { pick } from '@/lib/utils';
 export default async function HomePage({ params }: { params: { locale: Locale } }) {
   setRequestLocale(params.locale);
 
-  // Bosh sahifadagi barcha bloklar uchun ma'lumot — parallel olinadi
+  // Bosh sahifadagi barcha bloklar uchun maʼlumot — parallel olinadi
   const [slides, stats, events, articles, partners, settings] = await Promise.all([
     getStrategySlides(),
     getKpiStats(),
@@ -26,7 +26,7 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
     getSettings(),
   ]);
 
-  // Hero mijoz komponenti — matnlar shu yerda joriy tilga o'giriladi
+  // Hero mijoz komponenti — matnlar shu yerda joriy tilga oʻgiriladi
   const heroSlides = slides.map((s) => ({
     tag: pick(s.tag, params.locale),
     title: pick(s.title, params.locale),
@@ -40,8 +40,8 @@ export default async function HomePage({ params }: { params: { locale: Locale } 
       <Hero slides={heroSlides} />
       {/*
         "Raqamlarda birlashma" bloki ikki shartda chiqadi:
-        sozlamalarda yoqilgan bo'lsa VA kamida bitta ochiq ko'rsatkich bo'lsa.
-        Shu sababli bo'sh sarlavhali blok sahifada osilib qolmaydi.
+        sozlamalarda yoqilgan boʻlsa VA kamida bitta ochiq koʻrsatkich boʻlsa.
+        Shu sababli boʻsh sarlavhali blok sahifada osilib qolmaydi.
       */}
       {settings.showKpi && stats.length > 0 && <KpiStats stats={stats} />}
       <UpcomingEvents events={events} />

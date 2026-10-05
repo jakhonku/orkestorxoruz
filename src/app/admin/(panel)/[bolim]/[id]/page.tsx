@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-/** Yangi yozuv qo'shish (`/yangi`) va mavjudini tahrirlash (`/12`) sahifasi */
+/** Yangi yozuv qoʻshish (`/yangi`) va mavjudini tahrirlash (`/12`) sahifasi */
 export default async function TahrirlashSahifasi({ params }: Props) {
   const bolim = bolimTop(params.bolim);
   if (!bolim) notFound();

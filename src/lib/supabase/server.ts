@@ -5,11 +5,11 @@ import { createServerClient } from '@supabase/ssr';
 import { ochiqSozlama } from './muhit';
 
 /**
- * Server komponentlar, Server Action'lar va Route Handler'lar uchun Supabase
- * klienti. Sessiya cookie'da saqlanadi — `@supabase/ssr` uni o'zi yangilab turadi.
+ * Server komponentlar, Server Actionʼlar va Route Handlerʼlar uchun Supabase
+ * klienti. Sessiya cookieʼda saqlanadi — `@supabase/ssr` uni oʻzi yangilab turadi.
  *
- * Muhim: Server Component ichida cookie yozib bo'lmaydi (Next.js cheklovi).
- * Shuning uchun yozish `try/catch` ichida — sessiyani yangilash o'rniga
+ * Muhim: Server Component ichida cookie yozib boʻlmaydi (Next.js cheklovi).
+ * Shuning uchun yozish `try/catch` ichida — sessiyani yangilash oʻrniga
  * middleware bajaradi (`src/middleware.ts`).
  */
 export function supabaseServer() {
@@ -27,7 +27,7 @@ export function supabaseServer() {
             saqlagich.set(name, value, options);
           }
         } catch {
-          // Server Component'dan chaqirilgan — cookie'ni middleware yangilaydi
+          // Server Componentʼdan chaqirilgan — cookieʼni middleware yangilaydi
         }
       },
     },

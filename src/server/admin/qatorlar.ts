@@ -10,30 +10,30 @@ import { instagramAjrat, instagramUlashishmi } from '@/lib/instagram';
 import { postManbasi } from '@/lib/post';
 import { qiymatBoshmi, type Maydon, type Qiymatlar } from './turlar';
 
-/** Qator ichidagi bitta maydon bo'shmi — oddiy maydonlar bilan bir xil qoida */
+/** Qator ichidagi bitta maydon boʻshmi — oddiy maydonlar bilan bir xil qoida */
 export function ichkiBoshmi(im: Maydon, qiymat: unknown): boolean {
   return qiymatBoshmi(im, qiymat);
 }
 
 /**
- * Butunlay bo'sh qator — muharrir "Qator qo'shish" ni bosgan-u, to'ldirmagan.
+ * Butunlay boʻsh qator — muharrir "Qator qoʻshish" ni bosgan-u, toʻldirmagan.
  *
  * Bunday qator bazaga yozilmaydi: NOT NULL ustunlar uni rad etardi va
- * muharrirga tushunarsiz Postgres xatosi ko'rinardi
+ * muharrirga tushunarsiz Postgres xatosi koʻrinardi
  * ("null value in column \"src\" violates not-null constraint").
  */
 export function qatorBoshmi(m: Maydon, q: Record<string, unknown>): boolean {
   return (m.maydonlar ?? []).every((im) => ichkiBoshmi(im, q[im.nom]));
 }
 
-/** Bo'sh qatorlarni tashlaydi — qolganlari bazaga yoziladi */
+/** Boʻsh qatorlarni tashlaydi — qolganlari bazaga yoziladi */
 export function qatorlarniTozala(m: Maydon, xom: unknown): Record<string, unknown>[] {
   return ((xom as Record<string, unknown>[]) ?? []).filter((q) => !qatorBoshmi(m, q));
 }
 
 /**
- * To'ldirilgan qatorda majburiy maydon bo'sh qolgan bo'lsa — tushunarli xato.
- * Masalan galereyaga qator qo'shilgan, izoh yozilgan, lekin rasm yuklanmagan.
+ * Toʻldirilgan qatorda majburiy maydon boʻsh qolgan boʻlsa — tushunarli xato.
+ * Masalan galereyaga qator qoʻshilgan, izoh yozilgan, lekin rasm yuklanmagan.
  */
 export function qatorlarTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
   for (const m of maydonlar) {
@@ -41,13 +41,13 @@ export function qatorlarTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): stri
 
     const xom = (qiymatlar[m.nom] as Record<string, unknown>[]) ?? [];
     for (const [i, q] of xom.entries()) {
-      if (qatorBoshmi(m, q)) continue; // bo'sh qator jimgina tashlanadi
+      if (qatorBoshmi(m, q)) continue; // boʻsh qator jimgina tashlanadi
 
       for (const im of m.maydonlar ?? []) {
         if (im.talab && ichkiBoshmi(im, q[im.nom])) {
           return (
-            `"${m.yorliq}" — ${i + 1}-qatorda "${im.yorliq}" to‘ldirilmagan. ` +
-            'Uni to‘ldiring yoki qatorni o‘chiring.'
+            `"${m.yorliq}" — ${i + 1}-qatorda "${im.yorliq}" toʻldirilmagan. ` +
+            'Uni toʻldiring yoki qatorni oʻchiring.'
           );
         }
 
@@ -63,7 +63,7 @@ export function qatorlarTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): stri
 /**
  * Qator ichidagi Instagram / video havolasi tanilganini tekshiradi.
  *
- * "Ulashish" havolasi bu bosqichda o'tkaziladi — uni saqlash amali oldindan
+ * "Ulashish" havolasi bu bosqichda oʻtkaziladi — uni saqlash amali oldindan
  * ochib, haqiqiy havolaga aylantiradi.
  */
 function havolaniTekshir(im: Maydon, qiymat: unknown): string | null {
@@ -78,7 +78,7 @@ function havolaniTekshir(im: Maydon, qiymat: unknown): string | null {
   }
 
   if (im.tur === 'postHavola' && !postManbasi(matn)) {
-    return `"${im.yorliq}" tanilmadi. YouTube, Instagram yoki Telegram havolasini qo‘ying.`;
+    return `"${im.yorliq}" tanilmadi. YouTube, Instagram yoki Telegram havolasini qoʻying.`;
   }
 
   return null;

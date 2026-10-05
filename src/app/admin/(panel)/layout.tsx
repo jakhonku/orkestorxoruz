@@ -5,11 +5,11 @@ import { db } from '@/lib/db';
 import { joriySessiya } from '@/server/auth';
 import { YonMenyu } from './_components/yon-menyu';
 
-/** Admin panel hech qachon keshlanmaydi — har doim bazadan o'qiydi */
+/** Admin panel hech qachon keshlanmaydi — har doim bazadan oʻqiydi */
 export const dynamic = 'force-dynamic';
 
 export default async function PanelLayout({ children }: { children: ReactNode }) {
-  // Ikkalasi birdan so‘raladi — biri ikkinchisini kutib turmaydi
+  // Ikkalasi birdan soʻraladi — biri ikkinchisini kutib turmaydi
   const [sessiya, yangi] = await Promise.all([joriySessiya(), yangiArizalarSoni()]);
   if (!sessiya) redirect('/admin/kirish');
 
@@ -30,8 +30,8 @@ export default async function PanelLayout({ children }: { children: ReactNode })
 /**
  * Yon menyudagi "yangi arizalar" belgisi.
  *
- * To‘rtta jadval bitta so‘rovda sanaladi: admin paneldagi HAR BIR sahifa shu
- * raqamni oladi, to‘rtta alohida so‘rov esa bazaga to‘rt marta borib kelish
+ * Toʻrtta jadval bitta soʻrovda sanaladi: admin paneldagi HAR BIR sahifa shu
+ * raqamni oladi, toʻrtta alohida soʻrov esa bazaga toʻrt marta borib kelish
  * degani edi.
  */
 async function yangiArizalarSoni(): Promise<{ jami: number; tanlov: number }> {

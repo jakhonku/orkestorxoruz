@@ -9,10 +9,10 @@ import { Royxat } from '../_components/royxat';
 type Props = { params: { bolim: string } };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  return { title: bolimTop(params.bolim)?.nom ?? 'Bo‘lim' };
+  return { title: bolimTop(params.bolim)?.nom ?? 'Boʻlim' };
 }
 
-/** Registrga kiritilgan bo'limlar uchun umumiy ro'yxat sahifasi */
+/** Registrga kiritilgan boʻlimlar uchun umumiy roʻyxat sahifasi */
 export default async function BolimRoyxatiSahifasi({ params }: Props) {
   const bolim = bolimTop(params.bolim);
   if (!bolim) notFound();

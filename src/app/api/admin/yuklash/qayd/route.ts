@@ -6,8 +6,8 @@ import { joriySessiya } from '@/server/auth';
 /**
  * Yuklangan faylni `media_files` jadvaliga qayd qiladi.
  *
- * Bu — faqat tarix uchun ro'yxat. Qayd yozilmasa ham fayl joyida turaveradi,
- * shuning uchun xato yuklashni to'xtatmaydi.
+ * Bu — faqat tarix uchun roʻyxat. Qayd yozilmasa ham fayl joyida turaveradi,
+ * shuning uchun xato yuklashni toʻxtatmaydi.
  */
 
 export const runtime = 'nodejs';

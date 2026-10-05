@@ -10,9 +10,9 @@ export type KirishHolati = { xato?: string };
 /**
  * Admin panelga kirish.
  *
- * Parolni Supabase Auth tekshiradi; sessiya cookie'ni `@supabase/ssr` o'zi
- * yozadi. Panelga ruxsat esa `admin_users` jadvalidagi qaydga bog'liq —
- * Supabase'da hisobi bo'lsa ham, jadvalda faol qaydi yo'q odam kira olmaydi.
+ * Parolni Supabase Auth tekshiradi; sessiya cookieʼni `@supabase/ssr` oʻzi
+ * yozadi. Panelga ruxsat esa `admin_users` jadvalidagi qaydga bogʻliq —
+ * Supabaseʼda hisobi boʻlsa ham, jadvalda faol qaydi yoʻq odam kira olmaydi.
  */
 export async function kirish(_avvalgi: KirishHolati, formData: FormData): Promise<KirishHolati> {
   const email = String(formData.get('email') ?? '')
@@ -29,21 +29,21 @@ export async function kirish(_avvalgi: KirishHolati, formData: FormData): Promis
     select: { id: true, active: true, authUserId: true },
   });
   if (!qayd || !qayd.active) {
-    return { xato: 'Email yoki parol noto‘g‘ri.' };
+    return { xato: 'Email yoki parol notoʻgʻri.' };
   }
 
   const supabase = supabaseServer();
   const { data, error } = await supabase.auth.signInWithPassword({ email, password: parol });
 
   if (error || !data.user) {
-    return { xato: 'Email yoki parol noto‘g‘ri.' };
+    return { xato: 'Email yoki parol notoʻgʻri.' };
   }
 
-  // Qayd boshqa Supabase hisobiga bog'langan bo'lsa — kirishga ruxsat yo'q.
-  // Bog'lanish faqat bir marta, birinchi kirishda o'rnatiladi.
+  // Qayd boshqa Supabase hisobiga bogʻlangan boʻlsa — kirishga ruxsat yoʻq.
+  // Bogʻlanish faqat bir marta, birinchi kirishda oʻrnatiladi.
   if (qayd.authUserId && qayd.authUserId !== data.user.id) {
     await supabase.auth.signOut();
-    return { xato: 'Bu hisob boshqa foydalanuvchiga bog‘langan. Administratorga murojaat qiling.' };
+    return { xato: 'Bu hisob boshqa foydalanuvchiga bogʻlangan. Administratorga murojaat qiling.' };
   }
 
   await db.adminUser.update({

@@ -25,8 +25,8 @@ export default async function TanlovSozlamalariSahifasi() {
         <h1 className="font-serif text-2xl font-semibold text-navy">Tanlov sozlamalari</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Tanlov va festivallarni saytda vaqtincha yopish-ochish hamda tanlov sahifasidagi
-          «Ishtirok etish» kartasining umumiy matnlari. Alohida tanlovning o‘z matni
-          kiritilgan bo‘lsa, o‘sha ustun turadi.
+          «Ishtirok etish» kartasining umumiy matnlari. Alohida tanlovning oʻz matni
+          kiritilgan boʻlsa, oʻsha ustun turadi.
         </p>
       </div>
 

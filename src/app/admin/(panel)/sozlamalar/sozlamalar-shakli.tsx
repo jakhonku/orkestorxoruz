@@ -60,7 +60,7 @@ export function SozlamalarShakli({
               qiymat={qiymatlar[m.nom]}
               ozgartir={(v) => {
                 setSaqlandi(false);
-                // `v` funksiya bo'lsa — maydonning eng oxirgi qiymatidan
+                // `v` funksiya boʻlsa — maydonning eng oxirgi qiymatidan
                 // hisoblanadi (rasm yuklash kabi uzoq ishlar uchun kerak)
                 setQiymatlar((eski) => ({
                   ...eski,
@@ -100,7 +100,7 @@ export function SozlamalarShakli({
 /**
  * Pochta xabarnomasini tekshirish.
  *
- * Sozlash ikki qismdan iborat — SMTP ma'lumotlari (Vercel'da) va qabul
+ * Sozlash ikki qismdan iborat — SMTP maʼlumotlari (Vercelʼda) va qabul
  * qiluvchi manzil (yuqorida). Qaysi biri yetishmayotganini haqiqiy ariza
  * kelishini kutmasdan bilib olish uchun shu tugma.
  */
@@ -125,7 +125,7 @@ function PochtaSinovi() {
       <h2 className="text-sm font-semibold text-navy">Pochta xabarnomasi</h2>
       <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
         Yangi ariza kelganda yuqoridagi manzilga xat boradi. Sozlanganini shu
-        yerda tekshirib ko‘ring — manzilni o‘zgartirgan bo‘lsangiz, avval Saqlang.
+        yerda tekshirib koʻring — manzilni oʻzgartirgan boʻlsangiz, avval Saqlang.
       </p>
 
       <button

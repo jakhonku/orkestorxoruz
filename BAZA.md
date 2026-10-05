@@ -1,4 +1,4 @@
-# Ma'lumotlar bazasi — qo'llanma
+# Maʼlumotlar bazasi — qoʻllanma
 
 Sayt kontenti `src/data/*.ts` fayllardan emas, **Supabase Postgres** bazasidan olinadi.
 
@@ -6,27 +6,27 @@ Sayt kontenti `src/data/*.ts` fayllardan emas, **Supabase Postgres** bazasidan o
 
 ## Tez boshlash
 
-Baza Supabase'da turadi — kompyuterda hech narsa o'rnatish shart emas.
+Baza Supabaseʼda turadi — kompyuterda hech narsa oʻrnatish shart emas.
 Supabase loyihasini ochish va kalitlarni olish: [VERCEL.md](./VERCEL.md).
 
 ```bash
-cp .env.example .env   # va Supabase qiymatlarini to'ldiring
+cp .env.example .env   # va Supabase qiymatlarini toʻldiring
 npm install
 npm run db:deploy      # jadvallarni yaratadi
-npm run db:seed        # boshlang'ich ma'lumot bilan to'ldiradi
+npm run db:seed        # boshlangʻich maʼlumot bilan toʻldiradi
 npm run dev            # http://localhost:3000
 ```
 
 > Admin hisobi `.env` dagi `ADMIN_EMAIL` va `ADMIN_PASSWORD` bilan
-> Supabase Auth'da ochiladi va unga ADMIN roli beriladi.
-> `ADMIN_PASSWORD` bo'sh bo'lsa, hisob yaratilmaydi.
+> Supabase Authʼda ochiladi va unga ADMIN roli beriladi.
+> `ADMIN_PASSWORD` boʻsh boʻlsa, hisob yaratilmaydi.
 
 **Ikkita ulanish manzili bor:**
 
-| O'zgaruvchi | Qachon ishlatiladi |
+| Oʻzgaruvchi | Qachon ishlatiladi |
 |-------------|--------------------|
 | `DATABASE_URL` | sayt ish paytida — Supabase **transaction pooler** (port 6543) |
-| `DIRECT_URL` | `prisma migrate` buyruqlari — to'g'ridan-to'g'ri ulanish (port 5432) |
+| `DIRECT_URL` | `prisma migrate` buyruqlari — toʻgʻridan-toʻgʻri ulanish (port 5432) |
 
 ---
 
@@ -34,13 +34,13 @@ npm run dev            # http://localhost:3000
 
 | Buyruq | Vazifasi |
 |--------|----------|
-| `npm run db:deploy` | Tayyor migratsiyalarni bazaga qo‘llaydi (Supabase uchun) |
-| `npm run db:migrate` | Sxemadagi o'zgarishni bazaga qo'llaydi (migratsiya yaratadi) |
-| `npm run db:seed` | Bazani boshlang'ich ma'lumot bilan to'ldiradi (avval tozalaydi) |
+| `npm run db:deploy` | Tayyor migratsiyalarni bazaga qoʻllaydi (Supabase uchun) |
+| `npm run db:migrate` | Sxemadagi oʻzgarishni bazaga qoʻllaydi (migratsiya yaratadi) |
+| `npm run db:seed` | Bazani boshlangʻich maʼlumot bilan toʻldiradi (avval tozalaydi) |
 | `npm run db:matnlar` | Sahifa matnlarini `messages/*.json` dan bazaga sinxronlaydi |
-| `npm run db:studio` | Brauzerda baza ko'rish/tahrirlash oynasini ochadi |
+| `npm run db:studio` | Brauzerda baza koʻrish/tahrirlash oynasini ochadi |
 | `npm run db:generate` | Prisma klientini qayta yaratadi |
-| `npm run db:reset` | Bazani butunlay tozalab, qaytadan quradi va to'ldiradi |
+| `npm run db:reset` | Bazani butunlay tozalab, qaytadan quradi va toʻldiradi |
 
 ---
 
@@ -49,19 +49,19 @@ npm run dev            # http://localhost:3000
 ```
 prisma/
   schema.prisma          # baza sxemasi — barcha jadvallar shu yerda
-  migrations/            # baza tarixi (Git'ga tushadi, o'zgartirilmaydi)
-  seed.ts                # boshlang'ich ma'lumot (src/data/* dan o'qiydi)
+  migrations/            # baza tarixi (Gitʼga tushadi, oʻzgartirilmaydi)
+  seed.ts                # boshlangʻich maʼlumot (src/data/* dan oʻqiydi)
 
 src/
   lib/db.ts              # Prisma klienti (singleton)
   lib/supabase/
-    muhit.ts             # Supabase muhit o'zgaruvchilari bir joyda
+    muhit.ts             # Supabase muhit oʻzgaruvchilari bir joyda
     server.ts            # sessiya bilan ishlaydigan klient (cookie)
     admin.ts             # xizmat kaliti — Auth Admin API va Storage
   server/
-    enums.ts             # baza enum'lari <-> frontend tiplari
-    map.ts               # Json -> Localized o'girish yordamchilari
-    queries/             # sahifalar uchun o'qish so'rovlari
+    enums.ts             # baza enumʼlari <-> frontend tiplari
+    map.ts               # Json -> Localized oʻgirish yordamchilari
+    queries/             # sahifalar uchun oʻqish soʻrovlari
       ensembles.ts       # getEnsembles, getEnsembleBySlug, ...
       projects.ts
       competitions.ts
@@ -69,25 +69,25 @@ src/
       news.ts
       experts.ts
       home.ts            # strategiya slaydlari, KPI, hamkorlar, vazifalar
-      settings.ts        # kontakt ma'lumotlari, missiya matni
-  generated/prisma/      # Prisma yaratgan kod (Git'ga tushmaydi)
-  data/                  # ESKI demo ma'lumot — endi faqat seed uchun manba
+      settings.ts        # kontakt maʼlumotlari, missiya matni
+  generated/prisma/      # Prisma yaratgan kod (Gitʼga tushmaydi)
+  data/                  # ESKI demo maʼlumot — endi faqat seed uchun manba
 ```
 
 ---
 
-## Ko'p tillilik bazada
+## Koʻp tillilik bazada
 
 Uch tildagi matnlar bitta `jsonb` ustunda saqlanadi:
 
 ```json
-{ "uz": "O‘zbekiston Davlat simfonik orkestri",
+{ "uz": "Oʻzbekiston Davlat simfonik orkestri",
   "ru": "Государственный симфонический оркестр Узбекистана",
   "en": "State Symphony Orchestra of Uzbekistan" }
 ```
 
 Bu frontenddagi `Localized<T>` tipiga aynan mos keladi, shuning uchun sahifalardagi
-`pick(value, locale)` chaqiruvlari o'zgarmadi.
+`pick(value, locale)` chaqiruvlari oʻzgarmadi.
 
 ---
 
@@ -107,87 +107,87 @@ Bu frontenddagi `Localized<T>` tipiga aynan mos keladi, shuning uchun sahifalard
 **Tizim:** `admin_users`, `media_files`, `form_rate_hits`
 
 Har bir kontent jadvalida:
-- `published` — saytda ko'rinadimi (qoralama / e'lon qilingan)
-- `sortOrder` — admin panelda qo'lda tartiblash uchun
+- `published` — saytda koʻrinadimi (qoralama / eʼlon qilingan)
+- `sortOrder` — admin panelda qoʻlda tartiblash uchun
 
 ---
 
 ## Muhim texnik shartlar
 
 **Kodlash.** Supabase bazasi UTF-8 va `C.UTF-8` lokali bilan yaratiladi —
-qo'shimcha sozlash kerak emas. (O'zbekcha `o‘`, `g‘` belgilari va kirill
-harflarida katta/kichik harfni farqlamaydigan qidiruv shunga bog'liq.)
+qoʻshimcha sozlash kerak emas. (Oʻzbekcha `oʻ`, `gʻ` belgilari va kirill
+harflarida katta/kichik harfni farqlamaydigan qidiruv shunga bogʻliq.)
 
 **Prisma 7 driver adapter talab qiladi** — `src/lib/db.ts` da `@prisma/adapter-pg`
-orqali ulanadi, `DATABASE_URL` shu yerda o'qiladi.
+orqali ulanadi, `DATABASE_URL` shu yerda oʻqiladi.
 
-**Ulanishlar soni.** Vercel'da har bir funksiya nusxasi o'z hovuzini ochadi,
-shuning uchun hovuz kichik ushlanadi (Vercel'da 3, mahalliy ishda 5;
-`DATABASE_POOL_MAX` bilan o'zgartiriladi). Ulanish Supabase'ning transaction
-pooler'i orqali boradi — pooler minglab qisqa ulanishni bitta bazaga jamlaydi.
+**Ulanishlar soni.** Vercelʼda har bir funksiya nusxasi oʻz hovuzini ochadi,
+shuning uchun hovuz kichik ushlanadi (Vercelʼda 3, mahalliy ishda 5;
+`DATABASE_POOL_MAX` bilan oʻzgartiriladi). Ulanish Supabaseʼning transaction
+poolerʼi orqali boradi — pooler minglab qisqa ulanishni bitta bazaga jamlaydi.
 
 ---
 
-## Sahifalar bazadan qanday o'qiydi
+## Sahifalar bazadan qanday oʻqiydi
 
-Sahifalar build paytida tayyorlanadi va **har 5 daqiqada** bazadan qayta o'qiladi
-(`src/app/[locale]/layout.tsx` dagi `revalidate = 300`). Ya'ni bazadagi o'zgarish
-saytni qayta qurmasdan ham ko'rinadi.
+Sahifalar build paytida tayyorlanadi va **har 5 daqiqada** bazadan qayta oʻqiladi
+(`src/app/[locale]/layout.tsx` dagi `revalidate = 300`). Yaʼni bazadagi oʻzgarish
+saytni qayta qurmasdan ham koʻrinadi.
 
 Admin panelda biror yozuv saqlansa, `revalidatePath('/', 'layout')` chaqiriladi —
-ya'ni tahrir qilingan zahoti sayt yangilanadi, 5 daqiqa kutish shart emas.
+yaʼni tahrir qilingan zahoti sayt yangilanadi, 5 daqiqa kutish shart emas.
 
 ---
 
 ## Qidiruv
 
 `GET /api/search?q=...&locale=uz` — jamoalar, loyihalar, tadbirlar va yangiliklar
-sarlavhasi bo'yicha qidiradi. Butun ma'lumot brauzerga yuklanmaydi, qidiruv
+sarlavhasi boʻyicha qidiradi. Butun maʼlumot brauzerga yuklanmaydi, qidiruv
 serverda `ILIKE` bilan bajariladi.
 
 ---
 
 ## Admin panel (`/admin`)
 
-Interfeys faqat o'zbek tilida, sayt qismidan mustaqil (`src/app/admin/`).
+Interfeys faqat oʻzbek tilida, sayt qismidan mustaqil (`src/app/admin/`).
 Kirish — `/admin/kirish`: parolni **Supabase Auth** tekshiradi, sessiya
-Supabase cookie'sida saqlanadi va `src/middleware.ts` uni yangilab turadi.
+Supabase cookieʼsida saqlanadi va `src/middleware.ts` uni yangilab turadi.
 Rol (`ADMIN` / `MUHARRIR` / `TANLOV`) va faollik esa `admin_users` jadvalida —
-Supabase'da hisobi bo'lsa ham, jadvalda faol qaydi yo'q odam panelga kira olmaydi.
-Foydalanuvchi qo'shish/o'chirish va parol almashtirish Auth Admin API orqali
+Supabaseʼda hisobi boʻlsa ham, jadvalda faol qaydi yoʻq odam panelga kira olmaydi.
+Foydalanuvchi qoʻshish/oʻchirish va parol almashtirish Auth Admin API orqali
 bajariladi (`src/server/admin/foydalanuvchilar.ts`).
 
 `TANLOV` roli — "tanlov admini": panelda faqat "Tanlov va festivallar" va
-"Tanlov arizalari" bo'limlarini ko'radi. Ruxsat sahifalarda ham, server
+"Tanlov arizalari" boʻlimlarini koʻradi. Ruxsat sahifalarda ham, server
 amallarida ham tekshiriladi (`src/server/admin/huquq.ts`). Har bir tanlovning
-ariza anketasini admin o'zi tuzadi (`competitions.formFields`, tuzilmasi —
+ariza anketasini admin oʻzi tuzadi (`competitions.formFields`, tuzilmasi —
 `src/lib/anketa.ts`), javoblar `competition_applications.answers` ga yoziladi.
 
-**Bo'limlar bitta joyda tavsiflanadi** — `src/server/admin/registr.ts`. Har bir
-bo'lim uchun model nomi, maydonlar ro'yxati va ro'yxatdagi qator ko'rinishi
-yoziladi; ro'yxat sahifasi (`/admin/<bolim>`), tahrirlash shakli
+**Boʻlimlar bitta joyda tavsiflanadi** — `src/server/admin/registr.ts`. Har bir
+boʻlim uchun model nomi, maydonlar roʻyxati va roʻyxatdagi qator koʻrinishi
+yoziladi; roʻyxat sahifasi (`/admin/<bolim>`), tahrirlash shakli
 (`/admin/<bolim>/<id>`) va yangi yozuv (`/admin/<bolim>/yangi`) shu tavsifdan
-avtomatik quriladi. Yangi bo'lim qo'shish uchun registrga bitta yozuv va
-`_lib/bolimlar.ts` dagi menyuga bitta qator qo'shiladi — sahifa yozilmaydi.
+avtomatik quriladi. Yangi boʻlim qoʻshish uchun registrga bitta yozuv va
+`_lib/bolimlar.ts` dagi menyuga bitta qator qoʻshiladi — sahifa yozilmaydi.
 
 Maydon turlari (`src/server/admin/turlar.ts`): `matn`, `matnKatta`, `raqam`,
 `belgi`, `tanlov`, `sana`, `vaqt`, `havola`, `rasm`, `fayl`, `video`,
 `youtube`, uch tilli `kopTilli` / `kopTilliKatta` / `kopTilliRoyxat` va
-takrorlanuvchi `qatorlar` (a'zolar, repertuar, galereya, hakamlar...).
+takrorlanuvchi `qatorlar` (aʼzolar, repertuar, galereya, hakamlar...).
 
-**Manzil qismi (slug) panelda yo'q** — muharrir faqat nomni yozadi. Slug
+**Manzil qismi (slug) panelda yoʻq** — muharrir faqat nomni yozadi. Slug
 yozuv birinchi marta saqlanganda nomdan avtomatik yasaladi
-(`src/lib/slug.ts`; kirill harflari lotinga o'giriladi, band nom oxiriga
-raqam qo'shiladi). Qaysi maydondan olinishi registrdagi `slugManbasi` da
-ko'rsatiladi. Tahrirlashda slug **o'zgarmaydi** — tarqatilgan havolalar
+(`src/lib/slug.ts`; kirill harflari lotinga oʻgiriladi, band nom oxiriga
+raqam qoʻshiladi). Qaysi maydondan olinishi registrdagi `slugManbasi` da
+koʻrsatiladi. Tahrirlashda slug **oʻzgarmaydi** — tarqatilgan havolalar
 ishlab turaveradi.
 
-Kam ishlatiladigan maydonga `qoshimcha: true` qo'yiladi — u shaklda yopiq
-"Qo‘shimcha maydonlar" bo‘limiga tushadi (ichida to‘ldirilgani bo‘lsa,
-bo‘lim ochiq holda chiqadi). Shakl shu tariqa qisqa va tushunarli qoladi.
+Kam ishlatiladigan maydonga `qoshimcha: true` qoʻyiladi — u shaklda yopiq
+"Qoʻshimcha maydonlar" boʻlimiga tushadi (ichida toʻldirilgani boʻlsa,
+boʻlim ochiq holda chiqadi). Shakl shu tariqa qisqa va tushunarli qoladi.
 
 > Bazada NULL qabul qilmaydigan ustunlar uchun maydonga `bosh` qiymati
-> beriladi (masalan `sortOrder` uchun `bosh: 0`) — aks holda bo'sh qoldirilgan
+> beriladi (masalan `sortOrder` uchun `bosh: 0`) — aks holda boʻsh qoldirilgan
 > maydon saqlashda xato beradi.
 
 Registrdan tashqari sahifalar: `/admin/arizalar` (murojaatlar holati va ichki
@@ -197,90 +197,90 @@ eslatma), `/admin/obuna`, `/admin/sozlamalar` (`settings` jadvali),
 **Sahifa matnlari** (`/admin/matnlar`): saytdagi tayyor yozuvlar — tugmalar,
 sarlavhalar, izohlar. Standart matnlar `messages/{uz,ru,en}.json` da qoladi,
 admin tahriri esa `ui_texts` jadvalida saqlanadi va standart ustidan yoziladi.
-Maydon bo'sh qoldirilsa — standart matn qaytadi. Kodga yangi matn qo'shilganda
+Maydon boʻsh qoldirilsa — standart matn qaytadi. Kodga yangi matn qoʻshilganda
 `npm run db:matnlar` ishga tushiriladi (bu buyruq mavjud tahrirlarga tegmaydi).
 
 Panelga faqat **kodda haqiqatan ishlatiladigan** kalitlar chiqadi: skript `src/`
-ni o'qib, `useTranslations` orqali chaqirilgan kalitlarni aniqlaydi (dinamik
-`t("type_" + x)` ko'rinishi ham hisobga olinadi). Ishlatilmaydigan kalit panelda
-ko'rinmaydi — aks holda admin tahrirlaydi-yu, saytda hech narsa o'zgarmaydi.
+ni oʻqib, `useTranslations` orqali chaqirilgan kalitlarni aniqlaydi (dinamik
+`t("type_" + x)` koʻrinishi ham hisobga olinadi). Ishlatilmaydigan kalit panelda
+koʻrinmaydi — aks holda admin tahrirlaydi-yu, saytda hech narsa oʻzgarmaydi.
 
-Shu sababdan `About.missionText` ham panelda yo'q: missiya matni avval
-`settings` jadvalidan olinadi, ya'ni **Sozlamalar** bo'limida tahrirlanadi;
-`messages` dagi matn faqat sozlama bo'sh bo'lganda ishlatiladi.
+Shu sababdan `About.missionText` ham panelda yoʻq: missiya matni avval
+`settings` jadvalidan olinadi, yaʼni **Sozlamalar** boʻlimida tahrirlanadi;
+`messages` dagi matn faqat sozlama boʻsh boʻlganda ishlatiladi.
 
-Sozlamalar saytning footer'i, «Aloqa» sahifasi (manzil, telefon, email, ish
+Sozlamalar saytning footerʼi, «Aloqa» sahifasi (manzil, telefon, email, ish
 vaqti, ijtimoiy tarmoqlar va xarita nuqtasi) hamda «Haqida» sahifasidagi
-missiya matnida ishlatiladi. Bazada kalit bo'lmasa, `src/lib/constants.ts`
-dagi zaxira qiymat olinadi — shuning uchun baza bo'sh bo'lsa ham sayt ishlaydi.
+missiya matnida ishlatiladi. Bazada kalit boʻlmasa, `src/lib/constants.ts`
+dagi zaxira qiymat olinadi — shuning uchun baza boʻsh boʻlsa ham sayt ishlaydi.
 
-**Rasm, hujjat va video yuklash** — fayl brauzerdan **to‘g‘ridan-to‘g‘ri**
-Supabase Storage'ga ketadi, server orqali o'tmaydi:
+**Rasm, hujjat va video yuklash** — fayl brauzerdan **toʻgʻridan-toʻgʻri**
+Supabase Storageʼga ketadi, server orqali oʻtmaydi:
 
 1. `POST /api/admin/yuklash` — sessiya, fayl turi va hajmi tekshiriladi,
    javobda bir martalik imzolangan manzil qaytadi;
-2. brauzer faylni o‘sha manzilga `PUT` qiladi (`_lib/yuklash.ts`), yuklash
-   foizi tugmada ko‘rinib turadi;
+2. brauzer faylni oʻsha manzilga `PUT` qiladi (`_lib/yuklash.ts`), yuklash
+   foizi tugmada koʻrinib turadi;
 3. `POST /api/admin/yuklash/qayd` — `media_files` jadvaliga qayd yoziladi
    (qayd yozilmasa ham fayl joyida qoladi).
 
-Shu sxema tufayli Vercel funksiyasining so‘rov hajmi cheklovi yo‘l to‘smaydi.
-Yo‘l: `<papka>/<yil-oy>/<nom>-<tasodifiy>.<kengaytma>`.
+Shu sxema tufayli Vercel funksiyasining soʻrov hajmi cheklovi yoʻl toʻsmaydi.
+Yoʻl: `<papka>/<yil-oy>/<nom>-<tasodifiy>.<kengaytma>`.
 
 Chegaralar va turlar bitta joyda — `src/lib/yuklash.ts` (server ham, brauzer
-ham shundan o‘qiydi): rasm — JPG, PNG, WEBP, AVIF, GIF, SVG, 15 MB gacha;
+ham shundan oʻqiydi): rasm — JPG, PNG, WEBP, AVIF, GIF, SVG, 15 MB gacha;
 hujjat — PDF, DOC, DOCX, XLS, XLSX, 30 MB gacha; video — MP4, WEBM, MOV,
 50 MB gacha (Supabase loyihasining umumiy chegarasi ham 50 MB). Brauzer fayl
-turini aytmasa (ko‘pincha `.mov` bilan shunday bo‘ladi) tur kengaytmadan
+turini aytmasa (koʻpincha `.mov` bilan shunday boʻladi) tur kengaytmadan
 aniqlanadi. HEIC va MKV kabi qabul qilinmaydigan formatlar uchun nima qilish
 kerakligi yozilgan tushunarli xato chiqadi.
 
-Shakldagi `rasm` maydoni rasm yuklaydi, `fayl` — hujjat (Hujjatlar bo‘limi,
+Shakldagi `rasm` maydoni rasm yuklaydi, `fayl` — hujjat (Hujjatlar boʻlimi,
 tanlov nizomi, press-kit), `video` — video fayl.
 
-**Videolar uch manbadan biri bo'lishi mumkin** (`media_videos`): YouTube ID,
-Instagram havolasi (`instagramUrl`) yoki Storage'ga yuklangan fayl (`fileUrl`).
-Instagram va yuklangan video uchun muqova rasmi (`coverUrl`) qo'yiladi —
-YouTube o'z muqovasini o'zi beradi. Uchtasidan hech biri to'ldirilmagan yozuv
-saytda ko'rsatilmaydi.
-Bazaga faylning to'liq (public) manzili saqlanadi. Vercel'da disk faqat o'qish
-uchun ochiq — shuning uchun fayllar loyihaning ichida emas, Storage'da turadi.
+**Videolar uch manbadan biri boʻlishi mumkin** (`media_videos`): YouTube ID,
+Instagram havolasi (`instagramUrl`) yoki Storageʼga yuklangan fayl (`fileUrl`).
+Instagram va yuklangan video uchun muqova rasmi (`coverUrl`) qoʻyiladi —
+YouTube oʻz muqovasini oʻzi beradi. Uchtasidan hech biri toʻldirilmagan yozuv
+saytda koʻrsatilmaydi.
+Bazaga faylning toʻliq (public) manzili saqlanadi. Vercelʼda disk faqat oʻqish
+uchun ochiq — shuning uchun fayllar loyihaning ichida emas, Storageʼda turadi.
 
 ---
 
 ## Saytdagi formalar
 
 Beshta forma bazaga yozadi — barchasi `src/server/forms/amallar.ts` dagi server
-amallari orqali (alohida API yo'llari yo'q):
+amallari orqali (alohida API yoʻllari yoʻq):
 
 | Forma | Amal | Jadval |
 |-------|------|--------|
 | Aloqa sahifasi | `aloqaYuborish` | `contact_messages` |
-| «Qo'shilish uchun ariza» | `jamoaArizasi` | `ensemble_applications` |
+| «Qoʻshilish uchun ariza» | `jamoaArizasi` | `ensemble_applications` |
 | Tanlov arizasi | `tanlovArizasi` | `competition_applications` |
-| Iste'dod platformasi | `talentArizasi` | `talent_applications` |
+| Isteʼdod platformasi | `talentArizasi` | `talent_applications` |
 | Yangiliklar obunasi | `obunaQoshish` | `subscribers` |
 
-Har bir ariza zod bilan tekshiriladi, so'ng admin panelning «Arizalar va
-xabarlar» bo'limida `YANGI` holatida ko'rinadi.
+Har bir ariza zod bilan tekshiriladi, soʻng admin panelning «Arizalar va
+xabarlar» boʻlimida `YANGI` holatida koʻrinadi.
 
 **Spamdan himoya:**
-- har bir formada yashirin «tuzoq» maydoni — robot to'ldirsa, ariza yozilmaydi
-  (foydalanuvchiga esa muvaffaqiyat ko'rsatiladi, robot buni bilmaydi);
-- bitta IP dan 10 daqiqada 5 tadan ko'p ariza qabul qilinmaydi. Hisoblagich
-  bazada (`form_rate_hits`) — Vercel'da so'rovlar bir nechta nusxada bajarilishi
-  mumkin va xotiradagi hisoblagich ularga umumiy bo'lmaydi. Eskirgan izlar
-  o'z-o'zidan tozalanadi.
+- har bir formada yashirin «tuzoq» maydoni — robot toʻldirsa, ariza yozilmaydi
+  (foydalanuvchiga esa muvaffaqiyat koʻrsatiladi, robot buni bilmaydi);
+- bitta IP dan 10 daqiqada 5 tadan koʻp ariza qabul qilinmaydi. Hisoblagich
+  bazada (`form_rate_hits`) — Vercelʼda soʻrovlar bir nechta nusxada bajarilishi
+  mumkin va xotiradagi hisoblagich ularga umumiy boʻlmaydi. Eskirgan izlar
+  oʻz-oʻzidan tozalanadi.
 
 Xato matni serverdan qaytmaydi — faqat kod (`tekshiruv` / `limit` / `xato`)
-qaytadi, matnni klient foydalanuvchi tilida ko'rsatadi.
+qaytadi, matnni klient foydalanuvchi tilida koʻrsatadi.
 
 > Baza talab qiladigan maydonlar formada ham majburiy qilingan: jamoa arizasida
-> shahar va rahbar, iste'dod arizasida yosh, video havolasi va «o'zi haqida».
-> Aloqa formasida mavzu bo'sh qolsa, foydalanuvchi tilidagi «Umumiy murojaat»
+> shahar va rahbar, isteʼdod arizasida yosh, video havolasi va «oʻzi haqida».
+> Aloqa formasida mavzu boʻsh qolsa, foydalanuvchi tilidagi «Umumiy murojaat»
 > yoziladi.
 
-Tanlov arizasi tanlovning `id` si bilan bog'lanadi (`getCompetitionMeta`), va
+Tanlov arizasi tanlovning `id` si bilan bogʻlanadi (`getCompetitionMeta`), va
 server tanlov haqiqatan «ochiq» ekanini qayta tekshiradi.
 
 ---
@@ -289,7 +289,7 @@ server tanlov haqiqatan «ochiq» ekanini qayta tekshiradi.
 
 - [x] Admin panel (`/admin`) — kirish, kontentni tahrirlash, rasm yuklash
 - [x] Formalarni bazaga ulash (aloqa, jamoa arizasi, tanlov arizasi, talent, obuna)
-- [x] Vercel + Supabase'ga moslash — [VERCEL.md](./VERCEL.md)
-- [x] VDS uchun yo'riqnoma va konfiguratsiyalar (keyinroq kerak bo'lsa) — [DEPLOY.md](./DEPLOY.md)
+- [x] Vercel + Supabaseʼga moslash — [VERCEL.md](./VERCEL.md)
+- [x] VDS uchun yoʻriqnoma va konfiguratsiyalar (keyinroq kerak boʻlsa) — [DEPLOY.md](./DEPLOY.md)
 - [ ] Yangi ariza tushganda xabarnoma emaili (`notifyEmail` sozlamasi tayyor)
-- [ ] Supabase loyihasini ochish va saytni Vercel'ga chiqarish (VERCEL.md bo'yicha)
+- [ ] Supabase loyihasini ochish va saytni Vercelʼga chiqarish (VERCEL.md boʻyicha)

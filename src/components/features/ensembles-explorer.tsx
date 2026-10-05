@@ -53,7 +53,7 @@ export function EnsemblesExplorer({ ensembles }: { ensembles: Ensemble[] }) {
             className="pl-11"
           />
         </div>
-        {/* Kichik telefonda ikkita ro'yxat yonma-yon sig'maydi — ustma-ust turadi */}
+        {/* Kichik telefonda ikkita roʻyxat yonma-yon sigʻmaydi — ustma-ust turadi */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:flex md:w-auto">
           <Select
             value={type}

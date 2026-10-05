@@ -5,7 +5,7 @@ import { db } from '@/lib/db';
 import type { Localized, SocialLink } from '@/types';
 import { SITE, SOCIALS } from '@/lib/constants';
 
-/** Bazadagi sozlamalar to'plami (kontakt ma'lumotlari, missiya matni va h.k.) */
+/** Bazadagi sozlamalar toʻplami (kontakt maʼlumotlari, missiya matni va h.k.) */
 export type SiteSettings = {
   name: Localized;
   shortName: Localized;
@@ -22,27 +22,27 @@ export type SiteSettings = {
   missionImage: string;
   /** "Birlashma haqida" sahifasi bannerida, sarlavha yonida chiqadigan rasm */
   aboutHeaderImage: string;
-  /** "Media → Matbuot uchun" bo'limidagi press-kit fayli */
+  /** "Media → Matbuot uchun" boʻlimidagi press-kit fayli */
   pressKitUrl: string;
-  /** Bosh sahifadagi "Raqamlarda birlashma" (KPI) bloki ko'rinsinmi */
+  /** Bosh sahifadagi "Raqamlarda birlashma" (KPI) bloki koʻrinsinmi */
   showKpi: boolean;
-  /** Jamoa sahifasidagi "Tarkib" bloki ko'rinsinmi */
+  /** Jamoa sahifasidagi "Tarkib" bloki koʻrinsinmi */
   showEnsembleMembers: boolean;
-  /** Jamoa sahifasidagi "Repertuar" bloki ko'rinsinmi */
+  /** Jamoa sahifasidagi "Repertuar" bloki koʻrinsinmi */
   showEnsembleRepertoire: boolean;
   /**
    * Talent platformasi ochiqmi (admin panelda yopib-ochiladi).
-   * Yopiq bo'lsa sahifa 404 qaytaradi va menyudan chiqib turadi.
+   * Yopiq boʻlsa sahifa 404 qaytaradi va menyudan chiqib turadi.
    */
   talentOpen: boolean;
   /**
    * Tanlov va festivallar ochiqmi (admin panelda vaqtincha yopiladi).
-   * Yopiq bo'lsa tanlov sahifalari 404 qaytaradi, menyudan chiqib turadi va ariza qabul qilinmaydi.
+   * Yopiq boʻlsa tanlov sahifalari 404 qaytaradi, menyudan chiqib turadi va ariza qabul qilinmaydi.
    */
   tanlovOpen: boolean;
   /**
-   * "Ishtirok etish" kartasining umumiy shabloni — tanlovning o'zida matn kiritilmagan
-   * bo'lsa shu ishlatiladi. Bo'sh qolsa saytdagi standart matn chiqadi.
+   * "Ishtirok etish" kartasining umumiy shabloni — tanlovning oʻzida matn kiritilmagan
+   * boʻlsa shu ishlatiladi. Boʻsh qolsa saytdagi standart matn chiqadi.
    */
   ishtirok: {
     steps: Localized;
@@ -58,9 +58,9 @@ export type SiteSettings = {
 };
 
 /**
- * Sozlamalar bazadan olinadi. Agar biror kalit bazada bo'lmasa,
+ * Sozlamalar bazadan olinadi. Agar biror kalit bazada boʻlmasa,
  * `src/lib/constants.ts` dagi qiymat ishlatiladi — shu sababli sayt
- * baza bo'sh bo'lganda ham ishlashda davom etadi.
+ * baza boʻsh boʻlganda ham ishlashda davom etadi.
  */
 export const getSettings = cache(async (): Promise<SiteSettings> => {
   const rows = await db.setting.findMany();
@@ -86,9 +86,9 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
     missionImage: olish('missionImage', ''),
     aboutHeaderImage: olish('aboutHeaderImage', ''),
     pressKitUrl: olish('pressKitUrl', ''),
-    // Kalit hali bazada bo'lmasa — ko'rinadi (eski xatti-harakat saqlanadi)
+    // Kalit hali bazada boʻlmasa — koʻrinadi (eski xatti-harakat saqlanadi)
     showKpi: s.showKpi === undefined || s.showKpi === null ? true : Boolean(s.showKpi),
-    // Bu bloklar ham — kalit bo'lmasa ko'rinadigan holatda qoladi
+    // Bu bloklar ham — kalit boʻlmasa koʻrinadigan holatda qoladi
     showEnsembleMembers:
       s.showEnsembleMembers === undefined || s.showEnsembleMembers === null
         ? true
@@ -97,7 +97,7 @@ export const getSettings = cache(async (): Promise<SiteSettings> => {
       s.showEnsembleRepertoire === undefined || s.showEnsembleRepertoire === null
         ? true
         : Boolean(s.showEnsembleRepertoire),
-    // Kalit hali bazada bo'lmasa — platforma ochiq deb hisoblanadi
+    // Kalit hali bazada boʻlmasa — platforma ochiq deb hisoblanadi
     talentOpen: s.talentOpen === undefined || s.talentOpen === null ? true : Boolean(s.talentOpen),
     tanlovOpen: s.tanlovOpen === undefined || s.tanlovOpen === null ? true : Boolean(s.tanlovOpen),
     ishtirok: {

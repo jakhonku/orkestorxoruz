@@ -1,17 +1,17 @@
 import { anketaniOqi, yangiSavol, type Savol } from './anketa';
 
 /**
- * Tayyor anketalar — admin panelda bir bosishda qo'yiladi, keyin xohlagancha
- * o'zgartiriladi.
+ * Tayyor anketalar — admin panelda bir bosishda qoʻyiladi, keyin xohlagancha
+ * oʻzgartiriladi.
  */
 
 const s = (qism: Partial<Savol>): Savol => ({ ...yangiSavol(), ...qism });
 
 /**
- * Ijrochilar tanlovi uchun hujjatlar to'plami.
+ * Ijrochilar tanlovi uchun hujjatlar toʻplami.
  *
- * Aloqa ma'lumotlari (telefon, email) va F.I.SH. anketaga kirmaydi — ular
- * har bir arizada doim so'raladi. Saytda 5 qadam bo'lib chiqadi:
+ * Aloqa maʼlumotlari (telefon, email) va F.I.SH. anketaga kirmaydi — ular
+ * har bir arizada doim soʻraladi. Saytda 5 qadam boʻlib chiqadi:
  * ishtirokchi → aloqa → hujjatlar → tarjimai hol va repertuar → tasdiqlash.
  */
 export function hujjatliAnketa(): Savol[] {
@@ -22,7 +22,7 @@ export function hujjatliAnketa(): Savol[] {
       tur: 'sana',
       talab: true,
       savol: {
-        uz: 'Tug‘ilgan yili (kun/oy/yil)',
+        uz: 'Tugʻilgan sanasi (kun/oy/yil)',
         ru: 'Дата рождения (день/месяц/год)',
         en: 'Date of birth (day/month/year)',
       },
@@ -31,7 +31,7 @@ export function hujjatliAnketa(): Savol[] {
       id: 'tugilganJoyi',
       tur: 'matn',
       talab: true,
-      savol: { uz: 'Tug‘ilgan joyi', ru: 'Место рождения', en: 'Place of birth' },
+      savol: { uz: 'Tugʻilgan joyi', ru: 'Место рождения', en: 'Place of birth' },
     }),
     s({
       id: 'millati',
@@ -43,14 +43,14 @@ export function hujjatliAnketa(): Savol[] {
       id: 'malumoti',
       tur: 'matn',
       talab: true,
-      savol: { uz: 'Ma’lumoti', ru: 'Образование', en: 'Education' },
+      savol: { uz: 'Maʼlumoti', ru: 'Образование', en: 'Education' },
     }),
     s({
       id: 'mutaxassislik',
       tur: 'matn',
       talab: true,
       savol: {
-        uz: 'Ma’lumoti bo‘yicha mutaxassisligi',
+        uz: 'Maʼlumoti boʻyicha mutaxassisligi',
         ru: 'Специальность по образованию',
         en: 'Specialty by education',
       },
@@ -109,7 +109,7 @@ export function hujjatliAnketa(): Savol[] {
         en: 'Copy of identity document (passport or ID card)',
       },
       izoh: {
-        uz: 'Rasm yoki PDF. Fayl faqat tashkilotchilarga ko‘rinadi.',
+        uz: 'Rasm yoki PDF. Fayl faqat tashkilotchilarga koʻrinadi.',
         ru: 'Фото или PDF. Файл виден только организаторам.',
         en: 'Image or PDF. Only the organisers can see this file.',
       },
@@ -123,7 +123,7 @@ export function hujjatliAnketa(): Savol[] {
         en: 'Biography and repertoire',
       },
       izoh: {
-        uz: 'O‘zingiz va I turda ijro etiladigan asar haqida',
+        uz: 'Oʻzingiz va I turda ijro etiladigan asar haqida',
         ru: 'О себе и о произведении, исполняемом в I туре',
         en: 'About you and the work performed in Round I',
       },
@@ -139,8 +139,8 @@ export function hujjatliAnketa(): Savol[] {
       tur: 'matnKatta',
       talab: true,
       savol: {
-        uz: 'I turda ijro etiladigan asar va muallif haqida ma’lumot',
-        ru: 'Информация о произведении и его авторе, исполняемом в I туре',
+        uz: 'I turda ijro etiladigan asar va muallif haqida maʼlumot',
+        ru: 'Информация об авторе и произведении, исполняемом в I туре',
         en: 'Information about the work and its author performed in Round I',
       },
     }),
@@ -149,7 +149,7 @@ export function hujjatliAnketa(): Savol[] {
       tur: 'rozilik',
       talab: true,
       savol: {
-        uz: 'Shaxsiy ma’lumotlarimni qayta ishlashga roziman',
+        uz: 'Shaxsiy maʼlumotlarimni qayta ishlashga roziman',
         ru: 'Я даю согласие на обработку моих персональных данных',
         en: 'I consent to the processing of my personal data',
       },
@@ -158,8 +158,8 @@ export function hujjatliAnketa(): Savol[] {
 }
 
 /**
- * Tanlovning haqiqiy anketasi: admin o'zi tuzgan bo'lsa — o'sha, bo'sh bo'lsa —
- * tayyor andoza (id'lari doim bir xil, shuning uchun sayt va server mos keladi).
+ * Tanlovning haqiqiy anketasi: admin oʻzi tuzgan boʻlsa — oʻsha, boʻsh boʻlsa —
+ * tayyor andoza (idʼlari doim bir xil, shuning uchun sayt va server mos keladi).
  */
 export function tanlovAnketasi(xom: unknown): Savol[] {
   const saqlangan = anketaniOqi(xom);

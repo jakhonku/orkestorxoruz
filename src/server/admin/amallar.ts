@@ -17,9 +17,9 @@ import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from './turlar';
 import { qatorlarTekshir, qatorlarniTozala } from './qatorlar';
 
 /**
- * Bo'limlar uchun umumiy saqlash / o'chirish amallari.
+ * Boʻlimlar uchun umumiy saqlash / oʻchirish amallari.
  *
- * Prisma modellari struktura jihatidan bir xil bo'lgani uchun ular
+ * Prisma modellari struktura jihatidan bir xil boʻlgani uchun ular
  * `db[model]` orqali dinamik chaqiriladi — shu sababli bu faylda `any`
  * ishlatiladi. Tashqi chegaralar (registr va shakl) tipli.
  */
@@ -34,16 +34,16 @@ type Delegat = {
 
 function delegat(model: string): Delegat {
   const d = (db as unknown as Record<string, Delegat>)[model];
-  if (!d) throw new Error(`Noma'lum model: ${model}`);
+  if (!d) throw new Error(`Nomaʼlum model: ${model}`);
   return d;
 }
 
-/** Kirganmi va shu bo'limga ruxsati bormi (tanlov admini faqat o'z bo'limiga) */
+/** Kirganmi va shu boʻlimga ruxsati bormi (tanlov admini faqat oʻz boʻlimiga) */
 async function ruxsat(bolimKaliti: string) {
   return bolimRuxsati(bolimKaliti);
 }
 
-/** Saytdagi barcha sahifalarni yangilaydi — o'zgarish darhol ko'rinadi */
+/** Saytdagi barcha sahifalarni yangilaydi — oʻzgarish darhol koʻrinadi */
 function saytniYangilash() {
   revalidatePath('/', 'layout');
   // Admin bosh sahifasidagi yozuvlar soni ham qayta hisoblansin
@@ -55,7 +55,7 @@ function saytniYangilash() {
 // ------------------------------------------------------------------
 
 function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
-  /** Bo'sh maydon: `bosh` berilgan bo'lsa o'sha, aks holda NULL */
+  /** Boʻsh maydon: `bosh` berilgan boʻlsa oʻsha, aks holda NULL */
   const bosh = () => m.bosh ?? null;
 
   switch (m.tur) {
@@ -80,12 +80,12 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       return s === '' ? bosh() : s;
     }
     case 'youtube': {
-      // To'liq havola qo'yilgan bo'lsa ham bazaga faqat ID yoziladi
+      // Toʻliq havola qoʻyilgan boʻlsa ham bazaga faqat ID yoziladi
       const s = youtubeIdAjrat(String(qiymat ?? ''));
       return s === '' ? bosh() : s;
     }
     case 'instagram': {
-      // Har xil ko'rinishdagi havola bitta ko'rinishga keltiriladi
+      // Har xil koʻrinishdagi havola bitta koʻrinishga keltiriladi
       const s = instagramKanonik(String(qiymat ?? ''));
       return s === '' ? bosh() : s;
     }
@@ -94,7 +94,7 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       return s === '' ? bosh() : s;
     }
     case 'anketa':
-      // Mijozdan kelgan anketa qayta tozalanadi — bazaga faqat ma'lum tuzilma tushadi
+      // Mijozdan kelgan anketa qayta tozalanadi — bazaga faqat maʼlum tuzilma tushadi
       return anketaniOqi(qiymat);
     default:
       if (m.boy && qiymat && typeof qiymat === 'object') {
@@ -107,8 +107,8 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
           })
         );
       }
-      // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga o'zgarishsiz tushadi.
-      // Qiymat umuman kelmasa bo'sh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
+      // kopTilli, kopTilliKatta, kopTilliRoyxat — jsonb ga oʻzgarishsiz tushadi.
+      // Qiymat umuman kelmasa boʻsh obyekt yoziladi (ustunlar NULL qabul qilmaydi).
       return qiymat ?? boshQiymat(m);
   }
 }
@@ -118,11 +118,11 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
 // ------------------------------------------------------------------
 
 /**
- * Sarlavhadan bo'sh manzil qismini topadi.
+ * Sarlavhadan boʻsh manzil qismini topadi.
  *
- * Admin panelda slug maydoni yo'q: muharrir faqat nomni yozadi, manzil
- * (masalan /jamoalar/buxoro-yoshlar-xori) shundan yasaladi. Nom band bo'lsa
- * oxiriga raqam qo'shiladi — "…-2", "…-3".
+ * Admin panelda slug maydoni yoʻq: muharrir faqat nomni yozadi, manzil
+ * (masalan /jamoalar/buxoro-yoshlar-xori) shundan yasaladi. Nom band boʻlsa
+ * oxiriga raqam qoʻshiladi — "…-2", "…-3".
  */
 async function bosSlug(d: Delegat, manba: string, qoshimchaBand: string[] = []): Promise<string> {
   const band = (
@@ -134,7 +134,7 @@ async function bosSlug(d: Delegat, manba: string, qoshimchaBand: string[] = []):
   return bosSlugTanla(manba, [...band, ...qoshimchaBand]);
 }
 
-/** Slug yasash uchun ishlatiladigan matn: ko'p tilli maydondan o'zbekchasi olinadi */
+/** Slug yasash uchun ishlatiladigan matn: koʻp tilli maydondan oʻzbekchasi olinadi */
 function slugManbaMatni(qiymat: unknown): string {
   if (typeof qiymat === 'string') return qiymat;
   const uz = (qiymat as { uz?: string })?.uz;
@@ -150,14 +150,14 @@ function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
       continue;
     }
 
-    // Ba'zi maydonlar shartli majburiy — masalan yangilikda havola qo'yilgan
-    // bo'lsa sarlavha va matn talab qilinmaydi
+    // Baʼzi maydonlar shartli majburiy — masalan yangilikda havola qoʻyilgan
+    // boʻlsa sarlavha va matn talab qilinmaydi
     if (!talabMi(m, qiymatlar, maydonlar)) continue;
     const v = qiymatlar[m.nom];
 
     if (m.tur === 'kopTilli' || m.tur === 'kopTilliKatta') {
       const uz = boyMatnOddiy((v as { uz?: string })?.uz ?? '');
-      if (!uz) return `"${m.yorliq}" — o‘zbekcha matn to‘ldirilishi shart.`;
+      if (!uz) return `"${m.yorliq}" — oʻzbekcha matn toʻldirilishi shart.`;
       continue;
     }
     if (m.tur === 'kopTilliRoyxat') {
@@ -166,12 +166,12 @@ function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
       continue;
     }
     if (m.tur === 'raqam') {
-      if (v === null || v === undefined || v === '') return `"${m.yorliq}" to‘ldirilishi shart.`;
+      if (v === null || v === undefined || v === '') return `"${m.yorliq}" toʻldirilishi shart.`;
       continue;
     }
     if (m.tur === 'qatorlar') continue;
 
-    if (!String(v ?? '').trim()) return `"${m.yorliq}" to‘ldirilishi shart.`;
+    if (!String(v ?? '').trim()) return `"${m.yorliq}" toʻldirilishi shart.`;
   }
 
   const qatorXatosi = qatorlarTekshir(maydonlar, qiymatlar);
@@ -181,8 +181,8 @@ function tekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
 }
 
 /**
- * Matn maydonlari bazadagi ustunga sig'adimi — tekshiradi.
- * Sig'masa Postgres "value too long for the column's type" deb qaytaradi,
+ * Matn maydonlari bazadagi ustunga sigʻadimi — tekshiradi.
+ * Sigʻmasa Postgres "value too long for the column's type" deb qaytaradi,
  * bu esa foydalanuvchiga qaysi maydon aybdorligini aytmaydi.
  */
 function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | null {
@@ -213,15 +213,15 @@ function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | nul
       if (!xom) continue;
       if (telegramYopiqmi(xom)) {
         return (
-          `"${m.yorliq}" — yopiq kanal postini saytga o‘rnatib bo‘lmaydi. ` +
-          `Ochiq kanaldagi postning havolasini qo‘ying (https://t.me/kanal/123).`
+          `"${m.yorliq}" — yopiq kanal postini saytga oʻrnatib boʻlmaydi. ` +
+          `Ochiq kanaldagi postning havolasini qoʻying (https://t.me/kanal/123).`
         );
       }
       if (!postManbasi(xom)) {
         return (
           `"${m.yorliq}" — havola tanilmadi. YouTube (https://youtu.be/…), ` +
           `Instagram post/reel (https://www.instagram.com/reel/…) yoki Telegram post ` +
-          `(https://t.me/kanal/123) havolasini qo‘ying.`
+          `(https://t.me/kanal/123) havolasini qoʻying.`
         );
       }
       continue;
@@ -232,7 +232,7 @@ function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | nul
       if (!xom) continue;
       if (!youtubeIdTogrimi(youtubeIdAjrat(xom))) {
         return (
-          `"${m.yorliq}" — YouTube ID noto‘g‘ri. To‘liq havolani qo‘ying ` +
+          `"${m.yorliq}" — YouTube ID notoʻgʻri. Toʻliq havolani qoʻying ` +
           `(masalan https://www.youtube.com/watch?v=jNQXAC9IVRw) yoki 11 belgili ID ni kiriting.`
         );
       }
@@ -252,10 +252,10 @@ function uzunlikTekshir(maydonlar: Maydon[], qiymatlar: Qiymatlar): string | nul
 
 /**
  * Instagram ilovasining "Ulashish" havolasi (instagram.com/share/…) ichida post
- * kodi bo'lmaydi — uni faqat ochib ko'rib bilish mumkin. Saqlashdan oldin shu
- * yerda bir marta ochib ko'riladi va haqiqiy havola bilan almashtiriladi.
+ * kodi boʻlmaydi — uni faqat ochib koʻrib bilish mumkin. Saqlashdan oldin shu
+ * yerda bir marta ochib koʻriladi va haqiqiy havola bilan almashtiriladi.
  *
- * Ochib bo'lmasa qiymat tegilmaydi — tekshiruv muharrirga tushunarli xato beradi.
+ * Ochib boʻlmasa qiymat tegilmaydi — tekshiruv muharrirga tushunarli xato beradi.
  */
 async function ulashishHavolasiniYech(havola: string): Promise<string | null> {
   try {
@@ -263,17 +263,17 @@ async function ulashishHavolasiniYech(havola: string): Promise<string | null> {
       redirect: 'follow',
       signal: AbortSignal.timeout(7000),
       headers: {
-        // Oddiy brauzer sifatida so'raladi — aks holda Instagram bo'sh sahifa qaytaradi
+        // Oddiy brauzer sifatida soʻraladi — aks holda Instagram boʻsh sahifa qaytaradi
         'user-agent':
           'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36',
         'accept-language': 'en',
       },
     });
 
-    // Ko'pincha oxirgi manzilning o'zi yetarli
+    // Koʻpincha oxirgi manzilning oʻzi yetarli
     if (instagramAjrat(javob.url)) return javob.url;
 
-    // Bo'lmasa sahifa ichidagi kanonik havola qidiriladi
+    // Boʻlmasa sahifa ichidagi kanonik havola qidiriladi
     const html = await javob.text();
     const moslik = html.match(/instagram\.com\\?\/(p|reel|reels|tv)\\?\/([A-Za-z0-9_-]+)/i);
     if (!moslik) return null;
@@ -284,7 +284,7 @@ async function ulashishHavolasiniYech(havola: string): Promise<string | null> {
   }
 }
 
-/** Bitta qiymat "ulashish" havolasi bo'lsa — haqiqiy havolaga almashtiradi */
+/** Bitta qiymat "ulashish" havolasi boʻlsa — haqiqiy havolaga almashtiradi */
 async function havolaniTuzat(
   m: Maydon,
   idish: Record<string, unknown>,
@@ -331,7 +331,7 @@ export async function yozuvSaqlash(
     await ruxsat(bolimKaliti);
 
     const bolim = bolimTop(bolimKaliti);
-    if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
+    if (!bolim) return { ok: false, xato: 'Boʻlim topilmadi.' };
 
     const qiymatlar = JSON.parse(malumotJson) as Qiymatlar;
 
@@ -348,14 +348,14 @@ export async function yozuvSaqlash(
       data[m.nom] = qiymatTayyorla(m, qiymatlar[m.nom]);
     }
 
-    // Ichki jadvallar (a'zolar, repertuar, galereya...)
+    // Ichki jadvallar (aʼzolar, repertuar, galereya...)
     const ichki: { maydon: Maydon; bogliq: string; qatorlar: Record<string, unknown>[] }[] = [];
     for (const m of bolim.maydonlar) {
       if (m.tur !== 'qatorlar') continue;
       const bogliq = bolim.bogliqlar?.[m.nom];
       if (!bogliq) continue;
 
-      // Bo'sh qatorlar bazaga bormaydi — NOT NULL ustunlar ularni rad etardi
+      // Boʻsh qatorlar bazaga bormaydi — NOT NULL ustunlar ularni rad etardi
       const xom = qatorlarniTozala(m, qiymatlar[m.nom]);
       const qatorlar = xom.map((q, i) => {
         const r: Record<string, unknown> = { sortOrder: i };
@@ -372,13 +372,13 @@ export async function yozuvSaqlash(
 
     if (id === null) {
       // Yaratishda NULL qiymatlar tashlab yuboriladi — bazadagi standart
-      // qiymatlar (`@default`) o'z ishini qilsin
+      // qiymatlar (`@default`) oʻz ishini qilsin
       const yangiData = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== null));
 
       // Manzil qismi sarlavhadan avtomatik yasaladi (bir marta, yaratilganda).
-      // Tahrirlashda o'zgarmaydi — aks holda tarqatilgan havolalar ishlamay qoladi.
+      // Tahrirlashda oʻzgarmaydi — aks holda tarqatilgan havolalar ishlamay qoladi.
       if (bolim.slugManbasi) {
-        // Sarlavha bo'sh bo'lsa (masalan faqat post havolasi qo'yilgan
+        // Sarlavha boʻsh boʻlsa (masalan faqat post havolasi qoʻyilgan
         // yangilik) manzil sana asosida yasaladi: yangilik-2026-09-18
         const sarlavha = slugManbaMatni(qiymatlar[bolim.slugManbasi]).trim();
         const sana = String(qiymatlar.date ?? '').slice(0, 10);
@@ -395,7 +395,7 @@ export async function yozuvSaqlash(
       });
       yozuvId = yaratilgan.id;
     } else {
-      // Ichki qatorlar butunlay almashtiriladi: eskisi o'chib, yangisi yoziladi
+      // Ichki qatorlar butunlay almashtiriladi: eskisi oʻchib, yangisi yoziladi
       await d.update({
         where: { id },
         data: {
@@ -412,20 +412,20 @@ export async function yozuvSaqlash(
     return { ok: true, id: yozuvId };
   } catch (e) {
     const xabar = e instanceof Error ? e.message : String(e);
-    // Xatoni foydalanuvchi tushunadigan tilga o‘giramiz
+    // Xatoni foydalanuvchi tushunadigan tilga oʻgiramiz
     if (xabar.includes('too long for the column')) {
       return {
         ok: false,
         xato:
-          'Maydonlardan biri juda uzun bo‘lgani uchun saqlanmadi. Qisqartiring — ' +
-          'masalan "YouTube ID" maydoniga to‘liq havola emas, faqat v= dan keyingi qism yoziladi.',
+          'Maydonlardan biri juda uzun boʻlgani uchun saqlanmadi. Qisqartiring — ' +
+          'masalan "YouTube ID" maydoniga toʻliq havola emas, faqat v= dan keyingi qism yoziladi.',
       };
     }
     if (xabar.includes('Unique constraint')) {
       return {
         ok: false,
         xato:
-          'Xuddi shunday yozuv allaqachon bor. Nomni biroz o‘zgartirib, qaytadan saqlang.',
+          'Xuddi shunday yozuv allaqachon bor. Nomni biroz oʻzgartirib, qaytadan saqlang.',
       };
     }
     return { ok: false, xato: `Saqlashda xatolik: ${xabar}` };
@@ -433,7 +433,7 @@ export async function yozuvSaqlash(
 }
 
 // ------------------------------------------------------------------
-// O'chirish
+// Oʻchirish
 // ------------------------------------------------------------------
 
 export async function yozuvOchirish(bolimKaliti: string, id: number): Promise<Natija> {
@@ -441,7 +441,7 @@ export async function yozuvOchirish(bolimKaliti: string, id: number): Promise<Na
     await ruxsat(bolimKaliti);
 
     const bolim = bolimTop(bolimKaliti);
-    if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
+    if (!bolim) return { ok: false, xato: 'Boʻlim topilmadi.' };
 
     await delegat(bolim.model).delete({ where: { id } });
     saytniYangilash();
@@ -452,7 +452,7 @@ export async function yozuvOchirish(bolimKaliti: string, id: number): Promise<Na
 }
 
 // ------------------------------------------------------------------
-// Tez amallar: e'lon qilish / qoralamaga olish
+// Tez amallar: eʼlon qilish / qoralamaga olish
 // ------------------------------------------------------------------
 
 export async function nashrAlmashtirish(bolimKaliti: string, id: number): Promise<Natija> {
@@ -460,7 +460,7 @@ export async function nashrAlmashtirish(bolimKaliti: string, id: number): Promis
     await ruxsat(bolimKaliti);
 
     const bolim = bolimTop(bolimKaliti);
-    if (!bolim) return { ok: false, xato: 'Bo‘lim topilmadi.' };
+    if (!bolim) return { ok: false, xato: 'Boʻlim topilmadi.' };
 
     const d = delegat(bolim.model);
     const joriy = await d.findUnique({ where: { id }, select: { published: true } });
@@ -475,7 +475,7 @@ export async function nashrAlmashtirish(bolimKaliti: string, id: number): Promis
 }
 
 // ------------------------------------------------------------------
-// O'qish (sahifalar uchun)
+// Oʻqish (sahifalar uchun)
 // ------------------------------------------------------------------
 
 export async function royxatOlish(bolimKaliti: string) {
@@ -502,7 +502,7 @@ export async function yozuvOlish(bolimKaliti: string, id: number) {
   const row = await delegat(bolim.model).findUnique({ where: { id }, ...(include ? { include } : {}) });
   if (!row) return null;
 
-  // Sana maydonlarini shakl kutadigan YYYY-MM-DD ko'rinishiga o'giramiz
+  // Sana maydonlarini shakl kutadigan YYYY-MM-DD koʻrinishiga oʻgiramiz
   const natija: Record<string, unknown> = { ...row };
   for (const m of bolim.maydonlar) {
     if (m.tur === 'sana' && row[m.nom]) {

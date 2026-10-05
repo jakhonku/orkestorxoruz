@@ -7,9 +7,9 @@ import { bolimRuxsati } from './huquq';
 import type { SubmissionStatus } from '@/generated/prisma/enums';
 
 /**
- * Saytdan tushgan murojaatlar: aloqa xabarlari, jamoa/tanlov/iste'dod arizalari
- * va obunachilar. Bu yozuvlarni admin panel faqat o'qiydi, holatini o'zgartiradi
- * va o'chiradi — yangisini qo'lda qo'shmaydi.
+ * Saytdan tushgan murojaatlar: aloqa xabarlari, jamoa/tanlov/isteʼdod arizalari
+ * va obunachilar. Bu yozuvlarni admin panel faqat oʻqiydi, holatini oʻzgartiradi
+ * va oʻchiradi — yangisini qoʻlda qoʻshmaydi.
  */
 
 export type MurojaatTuri = 'aloqa' | 'jamoa' | 'tanlov' | 'talent';
@@ -29,12 +29,12 @@ type Delegat = {
 function delegat(tur: MurojaatTuri): Delegat {
   const model = MODELLAR[tur];
   const d = (db as unknown as Record<string, Delegat>)[model];
-  if (!d) throw new Error(`Noma'lum murojaat turi: ${tur}`);
+  if (!d) throw new Error(`Nomaʼlum murojaat turi: ${tur}`);
   return d;
 }
 
 /**
- * Tanlov arizalari o'z bo'limidan ham boshqariladi — tanlov admini faqat
+ * Tanlov arizalari oʻz boʻlimidan ham boshqariladi — tanlov admini faqat
  * ularga tega oladi, boshqa murojaatlarga emas.
  */
 async function ruxsat(tur: MurojaatTuri | 'obuna') {
@@ -47,7 +47,7 @@ function xatoBilan(e: unknown): Natija {
   return { ok: false, xato: e instanceof Error ? e.message : String(e) };
 }
 
-/** Murojaat holatini o'zgartiradi (yangi / ko'rib chiqilmoqda / javob berildi / rad etildi) */
+/** Murojaat holatini oʻzgartiradi (yangi / koʻrib chiqilmoqda / javob berildi / rad etildi) */
 export async function holatOzgartirish(
   tur: MurojaatTuri,
   id: number,
@@ -63,7 +63,7 @@ export async function holatOzgartirish(
   }
 }
 
-/** Ichki eslatma — faqat admin panelda ko'rinadi */
+/** Ichki eslatma — faqat admin panelda koʻrinadi */
 export async function eslatmaSaqlash(
   tur: MurojaatTuri,
   id: number,

@@ -1,20 +1,20 @@
 /**
  * Admin paneldagi shakl (forma) maydonlarining tavsifi.
  *
- * Har bir bo'lim shu maydonlar ro'yxati bilan tavsiflanadi, shakl esa
- * avtomatik quriladi — har bir bo'lim uchun alohida forma yozilmaydi.
+ * Har bir boʻlim shu maydonlar roʻyxati bilan tavsiflanadi, shakl esa
+ * avtomatik quriladi — har bir boʻlim uchun alohida forma yozilmaydi.
  */
 
 export type MaydonTuri =
   /** Bir qatorli matn (masalan F.I.SH.) */
   | 'matn'
-  /** Ko'p qatorli matn */
+  /** Koʻp qatorli matn */
   | 'matnKatta'
   /** Butun son */
   | 'raqam'
-  /** Ha / Yo'q */
+  /** Ha / Yoʻq */
   | 'belgi'
-  /** Ro'yxatdan tanlash */
+  /** Roʻyxatdan tanlash */
   | 'tanlov'
   /** Sana (YYYY-MM-DD) */
   | 'sana'
@@ -28,21 +28,21 @@ export type MaydonTuri =
   | 'fayl'
   /** Video fayl (MP4, WEBM, MOV) — yuklash tugmasi bilan */
   | 'video'
-  /** YouTube video ID — to'liq havola qo'yilsa ID avtomatik ajratiladi */
+  /** YouTube video ID — toʻliq havola qoʻyilsa ID avtomatik ajratiladi */
   | 'youtube'
-  /** Instagram post/reel havolasi — bir xil ko'rinishga keltiriladi */
+  /** Instagram post/reel havolasi — bir xil koʻrinishga keltiriladi */
   | 'instagram'
-  /** Bitta maydon: YouTube, Instagram yoki Telegram havolasi (turi o'zi aniqlanadi) */
+  /** Bitta maydon: YouTube, Instagram yoki Telegram havolasi (turi oʻzi aniqlanadi) */
   | 'postHavola'
   /** Uch tilli bir qatorli matn */
   | 'kopTilli'
-  /** Uch tilli ko'p qatorli matn */
+  /** Uch tilli koʻp qatorli matn */
   | 'kopTilliKatta'
-  /** Uch tilli ro'yxat (har bir band alohida qator) */
+  /** Uch tilli roʻyxat (har bir band alohida qator) */
   | 'kopTilliRoyxat'
-  /** Takrorlanuvchi qatorlar (a'zolar, repertuar, galereya...) */
+  /** Takrorlanuvchi qatorlar (aʼzolar, repertuar, galereya...) */
   | 'qatorlar'
-  /** Ariza anketasi quruvchisi — savollar ro'yxati (src/lib/anketa.ts) */
+  /** Ariza anketasi quruvchisi — savollar roʻyxati (src/lib/anketa.ts) */
   | 'anketa';
 
 export type Maydon = {
@@ -51,11 +51,11 @@ export type Maydon = {
   tur: MaydonTuri;
   talab?: boolean;
   /**
-   * Shu nomdagi maydon to'ldirilgan bo'lsa, joriy maydon majburiy bo'lmaydi.
+   * Shu nomdagi maydon toʻldirilgan boʻlsa, joriy maydon majburiy boʻlmaydi.
    *
-   * Masalan yangilikda ijtimoiy tarmoq havolasi qo'yilgan bo'lsa, sarlavha
-   * va matn shart emas — post o'zi hammasini ko'rsatadi. Havola bo'lmasa,
-   * ular yana majburiy bo'ladi.
+   * Masalan yangilikda ijtimoiy tarmoq havolasi qoʻyilgan boʻlsa, sarlavha
+   * va matn shart emas — post oʻzi hammasini koʻrsatadi. Havola boʻlmasa,
+   * ular yana majburiy boʻladi.
    */
   ixtiyoriyAgar?: string;
   izoh?: string;
@@ -67,29 +67,29 @@ export type Maydon = {
   yarim?: boolean;
   /**
    * Kam ishlatiladigan maydon — shaklda yopiq turadigan
-   * "Qo‘shimcha" bo‘limiga tushadi.
+   * "Qoʻshimcha" boʻlimiga tushadi.
    */
   qoshimcha?: boolean;
   /**
    * Matn uchun ruxsat etilgan eng katta uzunlik.
-   * Bazadagi VarChar ustunlar bilan mos bo'lishi kerak — aks holda saqlashda
+   * Bazadagi VarChar ustunlar bilan mos boʻlishi kerak — aks holda saqlashda
    * tushunarsiz "value too long" xatosi chiqadi.
    */
   uzunlik?: number;
   /**
-   * Maydon bo'sh qoldirilsa bazaga yoziladigan qiymat.
+   * Maydon boʻsh qoldirilsa bazaga yoziladigan qiymat.
    * Bazada NULL qabul qilmaydigan ustunlar uchun kerak (masalan `sortOrder`).
    */
   bosh?: string | number;
   /**
-   * `qatorlar` uchun: shakl ostida "Excel'dan yuklash" va "Namuna fayl"
-   * tugmalari chiqadi — uzun ro'yxatni bittalab qo'lda kiritish shart emas.
-   * Faqat matn/raqamdan iborat jadvallarga qo'yiladi (rasm yoki video
+   * `qatorlar` uchun: shakl ostida "Excelʼdan yuklash" va "Namuna fayl"
+   * tugmalari chiqadi — uzun roʻyxatni bittalab qoʻlda kiritish shart emas.
+   * Faqat matn/raqamdan iborat jadvallarga qoʻyiladi (rasm yoki video
    * yuklanadigan qatorlarga mos emas).
    */
   excel?: boolean;
   /**
-   * `kopTilliKatta` uchun: oddiy maydon o'rniga qalin, qiya, ro'yxat tugmalari
+   * `kopTilliKatta` uchun: oddiy maydon oʻrniga qalin, qiya, roʻyxat tugmalari
    * bor tahrirlagich chiqadi. Qiymat tozalangan HTML sifatida saqlanadi.
    */
   boy?: boolean;
@@ -102,7 +102,7 @@ export type KopTilliRoyxat = { uz: string[]; ru: string[]; en: string[] };
 /** Shakldagi barcha qiymatlar — maydon nomi -> qiymat */
 export type Qiymatlar = Record<string, unknown>;
 
-/** Ro'yxat sahifasidagi bitta qator */
+/** Roʻyxat sahifasidagi bitta qator */
 export type RoyxatQatori = {
   id: number;
   sarlavha: string;
@@ -113,7 +113,7 @@ export type RoyxatQatori = {
 };
 
 export const TILLAR = [
-  { kalit: 'uz' as const, nom: "O'zbekcha", qisqa: 'UZ' },
+  { kalit: 'uz' as const, nom: "Oʻzbekcha", qisqa: 'UZ' },
   { kalit: 'ru' as const, nom: 'Ruscha', qisqa: 'RU' },
   { kalit: 'en' as const, nom: 'Inglizcha', qisqa: 'EN' },
 ];
@@ -126,7 +126,7 @@ export function boshKopTilliRoyxat(): KopTilliRoyxat {
   return { uz: [], ru: [], en: [] };
 }
 
-/** Maydon turiga qarab bo'sh boshlang'ich qiymat */
+/** Maydon turiga qarab boʻsh boshlangʻich qiymat */
 export function boshQiymat(m: Maydon): unknown {
   switch (m.tur) {
     case 'kopTilli':
@@ -146,12 +146,12 @@ export function boshQiymat(m: Maydon): unknown {
   }
 }
 
-/** Maydonlar ro'yxatiga mos bo'sh yozuv */
+/** Maydonlar roʻyxatiga mos boʻsh yozuv */
 export function boshYozuv(maydonlar: Maydon[]): Qiymatlar {
   return Object.fromEntries(maydonlar.map((m) => [m.nom, boshQiymat(m)]));
 }
 
-/** Maydon qiymati bo'shmi — turiga qarab tekshiriladi */
+/** Maydon qiymati boʻshmi — turiga qarab tekshiriladi */
 export function qiymatBoshmi(m: Maydon, qiymat: unknown): boolean {
   if (m.tur === 'kopTilli' || m.tur === 'kopTilliKatta') {
     const v = qiymat as Record<string, unknown> | null;
@@ -170,8 +170,8 @@ export function qiymatBoshmi(m: Maydon, qiymat: unknown): boolean {
 /**
  * Maydon shu topshiriqda majburiymi.
  *
- * Odatda `talab` yetarli, lekin ba'zi maydonlar shartli: boshqa maydon
- * to'ldirilgan bo'lsa majburiylik olib tashlanadi (`ixtiyoriyAgar`).
+ * Odatda `talab` yetarli, lekin baʼzi maydonlar shartli: boshqa maydon
+ * toʻldirilgan boʻlsa majburiylik olib tashlanadi (`ixtiyoriyAgar`).
  */
 export function talabMi(m: Maydon, qiymatlar: Qiymatlar, maydonlar: Maydon[]): boolean {
   if (!m.talab) return false;

@@ -14,7 +14,8 @@
     "db:seed": "tsx prisma/seed.ts && tsx prisma/matnlar.ts",
     "db:studio": "prisma studio",
     "db:reset": "prisma migrate reset --force",
-    "db:matnlar": "tsx prisma/matnlar.ts"
+    "db:matnlar": "tsx prisma/matnlar.ts",
+    "db:apostroflar": "tsx prisma/apostroflar.ts"
   },
   "dependencies": {
     "@pdf-lib/fontkit": "^1.1.1",

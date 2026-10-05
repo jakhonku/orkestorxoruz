@@ -1,9 +1,9 @@
 /**
- * Bazani boshlang'ich ma'lumot bilan to'ldirish.
+ * Bazani boshlangʻich maʼlumot bilan toʻldirish.
  *
  * Manba — saytda hozir ishlatilayotgan `src/data/*` fayllari va `messages/*.json`.
- * Ya'ni seed'dan keyin sayt tashqi ko'rinishi AYNAN hozirgidek qoladi,
- * faqat ma'lumot fayllardan emas, bazadan olinadi.
+ * Yaʼni seedʼdan keyin sayt tashqi koʻrinishi AYNAN hozirgidek qoladi,
+ * faqat maʼlumot fayllardan emas, bazadan olinadi.
  *
  * Ishga tushirish:  npm run db:seed
  * Skript idempotent — qayta-qayta ishlatish mumkin (avval tozalaydi).
@@ -56,7 +56,7 @@ const SLIDE_IMAGES = [
 const L = (u: string, r: string, e: string) => ({ uz: u, ru: r, en: e });
 
 async function tozalash() {
-  // Tartib muhim: bog'liq jadvallar avval o'chiriladi
+  // Tartib muhim: bogʻliq jadvallar avval oʻchiriladi
   await db.$transaction([
     db.ensembleMember.deleteMany(),
     db.repertoireItem.deleteMany(),
@@ -299,7 +299,7 @@ async function boshSahifa() {
     });
   }
 
-  // --- KPI ko'rsatkichlari ---
+  // --- KPI koʻrsatkichlari ---
   for (const [i, k] of kpiStats.entries()) {
     await db.kpiStat.create({
       data: { value: k.value, suffix: k.suffix, icon: k.icon, label: k.label, sortOrder: i },
@@ -329,7 +329,7 @@ async function boshSahifa() {
   }
 
   console.log(`  strategiya slaydlari:${String(uzSlides.length).padStart(3)}`);
-  console.log(`  KPI ko'rsatkichlari: ${kpiStats.length}`);
+  console.log(`  KPI koʻrsatkichlari: ${kpiStats.length}`);
   console.log(`  hamkorlar:           ${partners.length}`);
   console.log(`  vazifalar:           ${taskKeys.length}`);
 }
@@ -362,14 +362,14 @@ async function sozlamalar() {
 
 async function adminFoydalanuvchi() {
   // Parol .env dan olinadi — kodda ochiq saqlanmaydi.
-  // Hisob Supabase Auth'da ochiladi, bazada esa faqat rol va ism saqlanadi.
+  // Hisob Supabase Authʼda ochiladi, bazada esa faqat rol va ism saqlanadi.
   const email = process.env.ADMIN_EMAIL ?? 'admin@orkestrvaxor.uz';
   const parol = process.env.ADMIN_PASSWORD;
 
   if (!parol) {
     console.log('');
-    console.log('  Admin foydalanuvchi yaratilmadi: ADMIN_PASSWORD o‘rnatilmagan.');
-    console.log('  .env fayliga qo‘shing, masalan:  ADMIN_PASSWORD="kuchli-parol"');
+    console.log('  Admin foydalanuvchi yaratilmadi: ADMIN_PASSWORD oʻrnatilmagan.');
+    console.log('  .env fayliga qoʻshing, masalan:  ADMIN_PASSWORD="kuchli-parol"');
     return;
   }
 
@@ -378,7 +378,7 @@ async function adminFoydalanuvchi() {
   if (!url || !xizmatKaliti) {
     console.log('');
     console.log('  Admin foydalanuvchi yaratilmadi: NEXT_PUBLIC_SUPABASE_URL yoki');
-    console.log('  SUPABASE_SERVICE_ROLE_KEY o‘rnatilmagan.');
+    console.log('  SUPABASE_SERVICE_ROLE_KEY oʻrnatilmagan.');
     return;
   }
 
@@ -386,7 +386,7 @@ async function adminFoydalanuvchi() {
     auth: { autoRefreshToken: false, persistSession: false },
   });
 
-  // Hisob bor bo'lsa — paroli yangilanadi, yo'q bo'lsa — yaratiladi
+  // Hisob bor boʻlsa — paroli yangilanadi, yoʻq boʻlsa — yaratiladi
   const { data: royxat } = await supabase.auth.admin.listUsers({ page: 1, perPage: 1000 });
   const bor = royxat?.users.find((u) => u.email?.toLowerCase() === email.toLowerCase());
 
@@ -401,7 +401,7 @@ async function adminFoydalanuvchi() {
     });
     if (error) {
       console.log('');
-      console.log(`  Supabase Auth'da hisob ochilmadi: ${error.message}`);
+      console.log(`  Supabase Authʼda hisob ochilmadi: ${error.message}`);
       return;
     }
     authUserId = data.user?.id ?? null;
@@ -420,7 +420,7 @@ async function adminFoydalanuvchi() {
 }
 
 async function main() {
-  console.log('\nBaza to’ldirilmoqda...\n');
+  console.log('\nBaza toʻldirilmoqda...\n');
   await tozalash();
   await jamoalar();
   await loyihalar();

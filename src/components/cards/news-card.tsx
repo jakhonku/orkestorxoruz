@@ -16,8 +16,8 @@ export function NewsCard({ article }: { article: NewsArticle }) {
   const tc = useTranslations('Common');
 
   /**
-   * Sarlavha yozilmagan bo'lsa (faqat post havolasi qo'yilgan yangilik)
-   * uning o'rniga manba yozuvi chiqadi: "Telegram post", "Video"...
+   * Sarlavha yozilmagan boʻlsa (faqat post havolasi qoʻyilgan yangilik)
+   * uning oʻrniga manba yozuvi chiqadi: "Telegram post", "Video"...
    */
   const yorliq = postYorligiKaliti(article.video);
   const sarlavha = pick(article.title, locale).trim();
@@ -40,9 +40,9 @@ export function NewsCard({ article }: { article: NewsArticle }) {
           />
         ) : (
           /*
-            Muqovasiz yangilik. Bo'sh joy o'rniga saytning o'z uslubidagi
-            fon: to'q ko'k gradient, oltin nur va o'rtada birlashma emblemasi.
-            Shu tufayli oddiy post ham bir xil, tayyor ko'rinishda chiqadi.
+            Muqovasiz yangilik. Boʻsh joy oʻrniga saytning oʻz uslubidagi
+            fon: toʻq koʻk gradient, oltin nur va oʻrtada birlashma emblemasi.
+            Shu tufayli oddiy post ham bir xil, tayyor koʻrinishda chiqadi.
           */
           <span className="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy to-navy-950">
             <span

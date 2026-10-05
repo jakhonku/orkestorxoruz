@@ -6,8 +6,8 @@ import { ochiqSozlama, xizmatKaliti } from './muhit';
 /**
  * Xizmat kaliti (service role) bilan ishlaydigan klient.
  *
- * RLS siyosatlarini chetlab o'tadi va Auth Admin API'ga (foydalanuvchi
- * yaratish, parol almashtirish, o'chirish) hamda Storage'ga to'liq kirish
+ * RLS siyosatlarini chetlab oʻtadi va Auth Admin APIʼga (foydalanuvchi
+ * yaratish, parol almashtirish, oʻchirish) hamda Storageʼga toʻliq kirish
  * beradi. FAQAT server tomonida chaqiriladi — brauzerga tushmasligi shart.
  */
 export function supabaseAdmin() {

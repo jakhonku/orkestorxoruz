@@ -22,10 +22,10 @@ function moslash(p: Qator): InternationalPage {
 }
 
 /**
- * "Xalqaro" bo'limidagi barcha ochiq sahifalar.
+ * "Xalqaro" boʻlimidagi barcha ochiq sahifalar.
  *
- * Menyu har bir sahifada quriladi, shuning uchun so'rov `cache()` ichida:
- * bitta so'rov davomida bazaga faqat bir marta boriladi.
+ * Menyu har bir sahifada quriladi, shuning uchun soʻrov `cache()` ichida:
+ * bitta soʻrov davomida bazaga faqat bir marta boriladi.
  */
 export const getInternationalPages = cache(async (): Promise<InternationalPage[]> => {
   try {
@@ -36,7 +36,7 @@ export const getInternationalPages = cache(async (): Promise<InternationalPage[]
     });
     return rows.map(moslash);
   } catch {
-    // Jadval hali yaratilmagan bo'lsa ham sayt ishlashda davom etadi
+    // Jadval hali yaratilmagan boʻlsa ham sayt ishlashda davom etadi
     return [];
   }
 });

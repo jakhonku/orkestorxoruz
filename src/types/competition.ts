@@ -20,6 +20,8 @@ export interface Competition {
   title: Localized;
   kind: CompetitionKind;
   status: CompetitionStatus;
+  /** Batafsil sahifa ochiqmi: "Tez kunda" holatida admin belgilaydi, boshqa holatlarda doim ochiq */
+  detailOpen?: boolean;
   cover: string;
   date: Localized;
   location: Localized;
@@ -27,9 +29,9 @@ export interface Competition {
   regulations: Localized;
   /** Nizomning yuklab olinadigan fayli (PDF va h.k.) */
   regulationsFile?: string;
-  /** Mukofot jamg'armasi */
+  /** Mukofot jamgʻarmasi */
   prizeFund?: Localized;
-  /** "Ishtirok etish" kartasi: bo'sh maydonlar uchun standart matn ishlatiladi */
+  /** "Ishtirok etish" kartasi: boʻsh maydonlar uchun standart matn ishlatiladi */
   participateTitle?: Localized;
   participateText?: Localized;
   prepareTitle?: Localized;

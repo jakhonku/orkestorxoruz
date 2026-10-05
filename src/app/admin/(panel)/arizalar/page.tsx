@@ -6,7 +6,7 @@ import { MurojaatlarRoyxati, type Murojaat } from './_components/murojaatlar-roy
 
 export const metadata = { title: 'Arizalar va xabarlar' };
 
-/** Har bir turdan eng so'nggi shuncha yozuv ko'rsatiladi */
+/** Har bir turdan eng soʻnggi shuncha yozuv koʻrsatiladi */
 const CHEGARA = 200;
 
 const VILOYAT_NOMI = Object.fromEntries(VILOYATLAR.map((v) => [v.qiymat, v.yorliq]));
@@ -67,8 +67,8 @@ export default async function ArizalarSahifasi() {
         ['Viloyat', VILOYAT_NOMI[r.region] ?? r.region],
         ['Shahar / tuman', r.city],
         ['Rahbar / dirijyor', r.conductor],
-        ["A'zolar soni", r.memberCount],
-        ["Bog'lanuvchi shaxs", r.contactName],
+        ["Aʼzolar soni", r.memberCount],
+        ["Bogʻlanuvchi shaxs", r.contactName],
         ['Email', r.email],
         ['Telefon', r.phone],
         ['Til', r.locale.toUpperCase()],
@@ -91,12 +91,12 @@ export default async function ArizalarSahifasi() {
       tafsilotlar: qatorlar([
         ['F.I.SH.', r.fullName],
         ['Yoshi', r.age],
-        ['Cholg‘u / yo‘nalish', r.instrument],
+        ['Cholgʻu / yoʻnalish', r.instrument],
         ['Email', r.email],
         ['Telefon', r.phone],
         ['Video havolasi', r.videoUrl],
         ['Til', r.locale.toUpperCase()],
-        ['O‘zi haqida', r.about],
+        ['Oʻzi haqida', r.about],
       ]),
     })),
   ].sort((a, b) => b.sana.localeCompare(a.sana));
@@ -107,7 +107,7 @@ export default async function ArizalarSahifasi() {
         <h1 className="font-serif text-2xl font-semibold text-navy">Arizalar va xabarlar</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Saytdagi formalar orqali tushgan murojaatlar. Har birining holatini belgilab boring —
-          shunda nima ko‘rilgani aniq bo‘ladi.
+          shunda nima koʻrilgani aniq boʻladi.
         </p>
       </div>
 

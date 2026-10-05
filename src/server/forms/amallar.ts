@@ -22,8 +22,8 @@ import { randomBytes } from 'node:crypto';
 /**
  * Saytdagi formalar bazaga shu yerdan yoziladi.
  *
- * Xato matnlari qaytarilmaydi — faqat kod qaytadi, matnni klient o'z tilida
- * ko'rsatadi (sayt uch tilli, server esa foydalanuvchi tilini bilmasligi mumkin).
+ * Xato matnlari qaytarilmaydi — faqat kod qaytadi, matnni klient oʻz tilida
+ * koʻrsatadi (sayt uch tilli, server esa foydalanuvchi tilini bilmasligi mumkin).
  */
 
 export type XatoKodi = 'tekshiruv' | 'limit' | 'xato' | 'yopiq';
@@ -35,7 +35,7 @@ const XATO: FormaNatija = { ok: false, kod: 'xato' };
  * Yozuv saqlangandan keyingi pochta xabarnomasi.
  *
  * Alohida funksiya: xat ketmasa ham ariza qabul qilingan hisoblanadi.
- * Nosozlik faqat jurnalga yoziladi — Vercel'dagi "Logs" bo'limida ko'rinadi.
+ * Nosozlik faqat jurnalga yoziladi — Vercelʼdagi "Logs" boʻlimida koʻrinadi.
  */
 async function xabarBer(
   sarlavha: string,
@@ -49,7 +49,7 @@ async function xabarBer(
   }
 }
 
-/** Saqlashdagi xatoni jurnalga yozadi — sababini keyin ko'rish uchun */
+/** Saqlashdagi xatoni jurnalga yozadi — sababini keyin koʻrish uchun */
 function xatoniYoz(qayerda: string, e: unknown) {
   console.error(`${qayerda} — ariza saqlanmadi:`, e instanceof Error ? (e.stack ?? e.message) : e);
 }
@@ -64,9 +64,9 @@ const CHEGARA = 5;
 const OYNA_MS = 10 * 60 * 1000;
 
 /**
- * Hisoblagich bazada saqlanadi (`form_rate_hits`). Vercel'da so'rovlar bir
+ * Hisoblagich bazada saqlanadi (`form_rate_hits`). Vercelʼda soʻrovlar bir
  * nechta nusxada bajarilishi mumkin — xotiradagi hisoblagich ularning
- * hammasiga umumiy bo'lmaydi va chegara amalda ishlamay qoladi.
+ * hammasiga umumiy boʻlmaydi va chegara amalda ishlamay qoladi.
  */
 async function limitdanOshdimi(): Promise<boolean> {
   const h = headers();
@@ -82,12 +82,12 @@ async function limitdanOshdimi(): Promise<boolean> {
 
     await db.formRateHit.create({ data: { ip } });
 
-    // Jadval o'sib ketmasligi uchun eskirgan izlar vaqti-vaqti bilan tozalanadi
+    // Jadval oʻsib ketmasligi uchun eskirgan izlar vaqti-vaqti bilan tozalanadi
     if (Math.random() < 0.05) {
       await db.formRateHit.deleteMany({ where: { createdAt: { lt: chegaraVaqti } } });
     }
   } catch {
-    // Baza javob bermasa ariza to'sib qo'yilmaydi — arizaning o'zini yozishda
+    // Baza javob bermasa ariza toʻsib qoʻyilmaydi — arizaning oʻzini yozishda
     // xato baribir chiqadi va foydalanuvchi xabar oladi
     return false;
   }
@@ -110,15 +110,15 @@ const ixtiyoriy = (kop = 200) => z.string().trim().max(kop).optional().default('
 
 const til = z.enum(['uz', 'ru', 'en']);
 
-/** Robotlar to'ldiradigan yashirin maydon — bo'sh bo'lishi shart */
+/** Robotlar toʻldiradigan yashirin maydon — boʻsh boʻlishi shart */
 const tuzoq = z.string().max(0).optional().default('');
 
-/** Bo'sh matn o'rniga NULL yoziladi */
+/** Boʻsh matn oʻrniga NULL yoziladi */
 const yoNull = (s: string) => (s.trim() === '' ? null : s.trim());
 
 /**
  * Har bir amal uchun bir xil boshlanish: tuzoq, limit va tekshiruv.
- * Tuzoqqa tushgan so'rov "muvaffaqiyatli" deb ko'rsatiladi, lekin yozilmaydi.
+ * Tuzoqqa tushgan soʻrov "muvaffaqiyatli" deb koʻrsatiladi, lekin yozilmaydi.
  */
 async function tayyorgarlik<T>(
   sxema: z.ZodType<T>,
@@ -174,7 +174,7 @@ export async function aloqaYuborish(malumot: unknown): Promise<FormaNatija> {
     });
 
     // Xabarnoma ariza SAQLANGANDAN keyin yuboriladi va xatosi yutiladi —
-    // Telegram ishlamay qolsa ham odamning xabari yo'qolmaydi
+    // Telegram ishlamay qolsa ham odamning xabari yoʻqolmaydi
     await xabarBer('📨 Yangi aloqa xabari', [
       { yorliq: 'Ism', qiymat: d.name },
       { yorliq: 'Email', qiymat: d.email },
@@ -239,7 +239,7 @@ export async function jamoaArizasi(malumot: unknown): Promise<FormaNatija> {
       { yorliq: 'Turi', qiymat: d.type },
       { yorliq: 'Shahar', qiymat: d.city },
       { yorliq: 'Rahbar', qiymat: d.conductor },
-      { yorliq: "A'zolar soni", qiymat: d.memberCount },
+      { yorliq: "Aʼzolar soni", qiymat: d.memberCount },
       { yorliq: 'Aloqa uchun', qiymat: d.contactName },
       { yorliq: 'Telefon', qiymat: d.phone },
       { yorliq: 'Email', qiymat: d.email },
@@ -261,12 +261,12 @@ const tanlovSxemasi = z.object({
   competitionId: z.number().int().positive().optional().nullable(),
   fullName: matn(2, 160),
   ensembleName: ixtiyoriy(200),
-  // Elektron pochta majburiy emas: bo'sh bo'lsa ham bo'ladi (bazada bo'sh matn bo'lib yoziladi)
+  // Elektron pochta majburiy emas: boʻsh boʻlsa ham boʻladi (bazada boʻsh matn boʻlib yoziladi)
   email: z.union([z.literal(''), email]).optional().default(''),
   phone: matn(5, 40),
   category: ixtiyoriy(120),
   message: ixtiyoriy(3000),
-  /** Admin tuzgan anketaga javoblar — to'liq tekshiruv anketa o'qilgandan keyin */
+  /** Admin tuzgan anketaga javoblar — toʻliq tekshiruv anketa oʻqilgandan keyin */
   javoblar: z
     .record(z.string().max(40), z.union([z.string().max(5000), z.array(z.string().max(10)).max(50)]))
     .optional(),
@@ -281,7 +281,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
   const d = t.qiymat;
 
   try {
-    // Tanlovlar admin tomonidan vaqtincha yopilgan bo'lsa ariza qabul qilinmaydi
+    // Tanlovlar admin tomonidan vaqtincha yopilgan boʻlsa ariza qabul qilinmaydi
     if (!(await getSettings()).tanlovOpen) return { ok: false, kod: 'yopiq' };
 
     let javoblar: Javob[] = [];
@@ -296,22 +296,22 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
       if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return TEKSHIRUV;
       tanlovEmaili = tanlov.applicationEmail;
 
-      // Anketa bo'lsa javoblar unga solishtiriladi: majburiy savollar,
-      // variant raqamlari, havola va son ko'rinishi — hammasi serverda ham
+      // Anketa boʻlsa javoblar unga solishtiriladi: majburiy savollar,
+      // variant raqamlari, havola va son koʻrinishi — hammasi serverda ham
       const anketa = tanlovAnketasi(tanlov.formFields);
       if (anketa.length > 0) {
         const tekshiruv = javoblarniTekshir(anketa, d.javoblar ?? {}, arizaPapkasi(d.competitionId));
         if (!tekshiruv.ok) return TEKSHIRUV;
         javoblar = tekshiruv.javoblar;
 
-        // Ma'lumotnoma PDF'i arizaga biriktiriladi — admin panelda fayl bo'lib ko'rinadi.
-        // PDF chiqmasa ham ariza yo'qolmasin: xato jurnalga yoziladi.
+        // Maʼlumotnoma PDFʼi arizaga biriktiriladi — admin panelda fayl boʻlib koʻrinadi.
+        // PDF chiqmasa ham ariza yoʻqolmasin: xato jurnalga yoziladi.
         try {
           const bayt = await malumotnomaPdf({ fullName: d.fullName, savollar: anketa, javoblar });
           const yol = `${arizaPapkasi(d.competitionId)}${new Date().toISOString().slice(0, 7)}/malumotnoma-${randomBytes(6).toString('hex')}.pdf`;
           await faylSaqla(yol, bayt, 'application/pdf');
           javoblar = [
-            { id: 'malumotnoma', savol: 'Ma’lumotnoma (PDF)', javob: yol, tur: 'fayl' },
+            { id: 'malumotnoma', savol: 'Maʼlumotnoma (PDF)', javob: yol, tur: 'fayl' },
             ...javoblar,
           ];
         } catch (e) {
@@ -337,10 +337,10 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
     await xabarBer('🏆 Yangi tanlov arizasi', [
       { yorliq: 'F.I.SH.', qiymat: d.fullName },
       { yorliq: 'Jamoa', qiymat: d.ensembleName },
-      { yorliq: 'Yo‘nalish', qiymat: d.category },
+      { yorliq: 'Yoʻnalish', qiymat: d.category },
       { yorliq: 'Telefon', qiymat: d.phone },
       { yorliq: 'Email', qiymat: d.email },
-      // Fayllar yopiq bucket'da — xatga yo'li emas, "yuklangan" belgisi tushadi
+      // Fayllar yopiq bucketʼda — xatga yoʻli emas, "yuklangan" belgisi tushadi
       ...javoblar.map((j) => ({
         yorliq: j.savol,
         qiymat: j.tur === 'fayl' ? '📎 fayl yuklangan (admin panelda)' : javobMatni(j.javob),
@@ -356,7 +356,7 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
 }
 
 /**
- * Oxirgi qadamda ishtirokchi Ma'lumotnomani PDF ko'rinishida ko'radi va yuklab oladi.
+ * Oxirgi qadamda ishtirokchi Maʼlumotnomani PDF koʻrinishida koʻradi va yuklab oladi.
  * Javoblar arizadagi kabi tekshiriladi, faqat bazaga hech narsa yozilmaydi.
  */
 export async function malumotnomaOldindan(
@@ -382,7 +382,7 @@ export async function malumotnomaOldindan(
     });
     if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return { ok: false };
 
-    // Rozilik belgisi ma'lumotnomaga kirmaydi va bu qadamda hali belgilanmagan bo'lishi mumkin
+    // Rozilik belgisi maʼlumotnomaga kirmaydi va bu qadamda hali belgilanmagan boʻlishi mumkin
     const anketa = tanlovAnketasi(tanlov.formFields).filter((s) => s.tur !== 'rozilik');
     const tekshiruv = javoblarniTekshir(anketa, d.javoblar, arizaPapkasi(d.competitionId));
     if (!tekshiruv.ok) return { ok: false };
@@ -400,7 +400,7 @@ export async function malumotnomaOldindan(
 }
 
 // ------------------------------------------------------------------
-// Iste'dod arizasi
+// Isteʼdod arizasi
 // ------------------------------------------------------------------
 
 const talentSxemasi = z.object({
@@ -422,9 +422,9 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
   const d = t.qiymat;
 
   try {
-    // Platforma admin panelda vaqtincha yopilgan bo'lsa ariza qabul qilinmaydi.
-    // Tekshiruv serverda ham turibdi: forma o'rnida yozuv chiqqani kifoya emas —
-    // so'rovni to'g'ridan-to'g'ri yuborish mumkin.
+    // Platforma admin panelda vaqtincha yopilgan boʻlsa ariza qabul qilinmaydi.
+    // Tekshiruv serverda ham turibdi: forma oʻrnida yozuv chiqqani kifoya emas —
+    // soʻrovni toʻgʻridan-toʻgʻri yuborish mumkin.
     const { talentOpen } = await getSettings();
     if (!talentOpen) return { ok: false, kod: 'yopiq' };
 
@@ -441,14 +441,14 @@ export async function talentArizasi(malumot: unknown): Promise<FormaNatija> {
       },
     });
 
-    await xabarBer('⭐ Yangi iste’dod arizasi', [
+    await xabarBer('⭐ Yangi isteʼdod arizasi', [
       { yorliq: 'F.I.SH.', qiymat: d.fullName },
       { yorliq: 'Yoshi', qiymat: d.age },
-      { yorliq: 'Cholg‘u', qiymat: d.instrument },
+      { yorliq: 'Cholgʻu', qiymat: d.instrument },
       { yorliq: 'Telefon', qiymat: d.phone },
       { yorliq: 'Email', qiymat: d.email },
       { yorliq: 'Video', qiymat: d.videoUrl },
-      { yorliq: 'O‘zi haqida', qiymat: d.about },
+      { yorliq: 'Oʻzi haqida', qiymat: d.about },
     ]);
 
     return { ok: true };
@@ -471,7 +471,7 @@ export async function obunaQoshish(malumot: unknown): Promise<FormaNatija> {
   const d = t.qiymat;
 
   try {
-    // Avval obunani bekor qilgan bo'lsa — qayta faollashtiriladi
+    // Avval obunani bekor qilgan boʻlsa — qayta faollashtiriladi
     await db.subscriber.upsert({
       where: { email: d.email.toLowerCase() },
       create: { email: d.email.toLowerCase(), locale: d.locale },

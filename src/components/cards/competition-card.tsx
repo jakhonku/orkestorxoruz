@@ -18,11 +18,23 @@ export function CompetitionCard({ competition }: { competition: Competition }) {
   const locale = useLocale();
   const t = useTranslations('Competitions');
 
+  const ochiq = competition.detailOpen !== false;
+  const sinf =
+    'group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft';
+  const Qobiq = ({ children }: { children: React.ReactNode }) =>
+    ochiq ? (
+      <Link
+        href={`/tanlovlar/${competition.slug}`}
+        className={`${sinf} transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg`}
+      >
+        {children}
+      </Link>
+    ) : (
+      <div className={sinf}>{children}</div>
+    );
+
   return (
-    <Link
-      href={`/tanlovlar/${competition.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
-    >
+    <Qobiq>
       <div className="relative aspect-[16/9] overflow-hidden">
         <Image
           src={competition.cover}
@@ -59,6 +71,6 @@ export function CompetitionCard({ competition }: { competition: Competition }) {
           </span>
         </div>
       </div>
-    </Link>
+    </Qobiq>
   );
 }

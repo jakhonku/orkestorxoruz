@@ -8,11 +8,11 @@ const intlMiddleware = createMiddleware(routing);
 
 /**
  * Ikki vazifa:
- *   1. Saytning ochiq qismi — next-intl tilni aniqlaydi va manzilga qo'shadi
+ *   1. Saytning ochiq qismi — next-intl tilni aniqlaydi va manzilga qoʻshadi
  *   2. `/admin` — Supabase sessiyasi yangilanadi va kirmagan odam qaytariladi
  *
- * Sessiya cookie'sini aynan shu yerda yangilash kerak: server komponentlar
- * cookie yoza olmaydi, shuning uchun token muddati o'tsa faqat middleware uni
+ * Sessiya cookieʼsini aynan shu yerda yangilash kerak: server komponentlar
+ * cookie yoza olmaydi, shuning uchun token muddati oʻtsa faqat middleware uni
  * uzaytira oladi.
  */
 
@@ -21,7 +21,7 @@ async function adminMiddleware(request: NextRequest) {
   const kalit =
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // Muhit o'zgaruvchilari yo'q bo'lsa — sahifaning o'zi tushunarli xato beradi
+  // Muhit oʻzgaruvchilari yoʻq boʻlsa — sahifaning oʻzi tushunarli xato beradi
   if (!url || !kalit) return NextResponse.next();
 
   let javob = NextResponse.next({ request });
@@ -46,12 +46,12 @@ async function adminMiddleware(request: NextRequest) {
   /**
    * `getClaims()` tokenni Supabase loyihasining ochiq kaliti bilan SHU YERDA
    * tekshiradi — tarmoqqa chiqmaydi (kalitlar bir marta olinib keshlanadi).
-   * Ilgari ishlatilgan `getUser()` har bir so‘rovda Supabase serveriga
-   * borardi: borib-kelish ~0.5 soniya, ya’ni admin paneldagi har bir sahifa
+   * Ilgari ishlatilgan `getUser()` har bir soʻrovda Supabase serveriga
+   * borardi: borib-kelish ~0.5 soniya, yaʼni admin paneldagi har bir sahifa
    * shuncha kutib turardi.
    *
-   * Bu yerda faqat "kirganmi yoki yo‘q" tekshiriladi. Haqiqiy huquq esa
-   * `joriySessiya()` da: u bazadan rolni va hisob faolligini o‘qiydi.
+   * Bu yerda faqat "kirganmi yoki yoʻq" tekshiriladi. Haqiqiy huquq esa
+   * `joriySessiya()` da: u bazadan rolni va hisob faolligini oʻqiydi.
    */
   const { data: dalil } = await supabase.auth.getClaims();
 
@@ -77,6 +77,6 @@ export default async function middleware(request: NextRequest) {
 export const config = {
   // Barcha manzillar, quyidagilardan tashqari:
   // - api marshrutlari, Next ichki fayllari, kengaytmali fayllar
-  // - /admin ko'p tilli emas (faqat o'zbekcha), lekin sessiya uchun tekshiriladi
+  // - /admin koʻp tilli emas (faqat oʻzbekcha), lekin sessiya uchun tekshiriladi
   matcher: ['/', '/admin/:path*', '/(uz|ru|en)/:path*', '/((?!api|_next|_vercel|.*\\..*).*)'],
 };

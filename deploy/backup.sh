@@ -2,7 +2,7 @@
 #
 # Kunlik zaxira: baza + admin paneldan yuklangan rasmlar.
 #
-# Cron'ga qo'yish (har kuni soat 03:00 da):
+# Cronʼga qoʻyish (har kuni soat 03:00 da):
 #   crontab -e
 #   0 3 * * * /var/www/orkestrvaxor/deploy/backup.sh >> /var/backups/orkestrvaxor/backup.log 2>&1
 #
@@ -28,7 +28,7 @@ echo "[$(date '+%F %T')] zaxira boshlandi"
 pg_dump "$DATABASE_URL" | gzip > "$KATALOG/baza-$SANA.sql.gz"
 echo "  baza:    $(du -h "$KATALOG/baza-$SANA.sql.gz" | cut -f1)"
 
-# 2. Yuklangan fayllar (bo'lmasa — o'tkazib yuboriladi)
+# 2. Yuklangan fayllar (boʻlmasa — oʻtkazib yuboriladi)
 if [ -d "$ILOVA/public/uploads" ]; then
   tar -czf "$KATALOG/rasmlar-$SANA.tar.gz" -C "$ILOVA/public" uploads
   echo "  rasmlar: $(du -h "$KATALOG/rasmlar-$SANA.tar.gz" | cut -f1)"

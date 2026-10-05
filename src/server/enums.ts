@@ -1,8 +1,8 @@
 /**
- * Baza enum'lari <-> frontend tiplari o'rtasidagi moslik.
+ * Baza enumʼlari <-> frontend tiplari oʻrtasidagi moslik.
  *
- * Bazada enum'lar KATTA_HARF bilan (Postgres odati), frontendda esa
- * 'kichik-harf' ko'rinishida (mavjud tiplarni o'zgartirmaslik uchun).
+ * Bazada enumʼlar KATTA_HARF bilan (Postgres odati), frontendda esa
+ * 'kichik-harf' koʻrinishida (mavjud tiplarni oʻzgartirmaslik uchun).
  */
 import type {
   CompetitionKind,
@@ -47,7 +47,7 @@ export const regionToDb: Record<Region, P.Region> = {
 };
 export const regionFromDb = invert(regionToDb);
 
-// ---------- Loyiha ko'lami ----------
+// ---------- Loyiha koʻlami ----------
 export const projectScopeToDb: Record<ProjectScope, P.ProjectScope> = {
   respublika: 'RESPUBLIKA',
   xalqaro: 'XALQARO',

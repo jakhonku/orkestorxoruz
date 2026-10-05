@@ -1,9 +1,9 @@
 /**
  * Fayl yuklash qoidalari — server (imzo berish) va brauzer (tekshirish)
- * bitta ro'yxatga tayanadi, shunda ikki joyda ikki xil qoida bo'lib qolmaydi.
+ * bitta roʻyxatga tayanadi, shunda ikki joyda ikki xil qoida boʻlib qolmaydi.
  *
- * Fayl brauzerdan to'g'ridan-to'g'ri Supabase Storage'ga yuklanadi, shuning
- * uchun server so'rovining hajmi cheklovi (Vercel) yo'l to'sib qo'ymaydi.
+ * Fayl brauzerdan toʻgʻridan-toʻgʻri Supabase Storageʼga yuklanadi, shuning
+ * uchun server soʻrovining hajmi cheklovi (Vercel) yoʻl toʻsib qoʻymaydi.
  */
 
 export type FaylGuruhi = 'rasm' | 'hujjat' | 'video';
@@ -37,7 +37,7 @@ export const RUXSAT_ETILGAN: Record<string, Tavsif> = {
 };
 
 /**
- * Brauzer fayl turini aytmasa (ayniqsa .mov bilan shunday bo'ladi) —
+ * Brauzer fayl turini aytmasa (ayniqsa .mov bilan shunday boʻladi) —
  * kengaytmaga qarab aniqlanadi.
  */
 const KENGAYTMA_TURI: Record<string, string> = {
@@ -61,7 +61,7 @@ const KENGAYTMA_TURI: Record<string, string> = {
 
 /**
  * Eng katta hajm. Supabase loyihasining umumiy chegarasi — 50 MB,
- * shuning uchun undan oshiq qiymat qo'yilmaydi.
+ * shuning uchun undan oshiq qiymat qoʻyilmaydi.
  */
 export const CHEGARA: Record<FaylGuruhi, number> = {
   rasm: 15 * 1024 * 1024,
@@ -92,18 +92,18 @@ export function mb(baytlar: number): number {
   return Math.round(baytlar / 1024 / 1024);
 }
 
-/** Tur ruxsat etilmagan bo'lsa ko'rsatiladigan tushunarli xabar */
+/** Tur ruxsat etilmagan boʻlsa koʻrsatiladigan tushunarli xabar */
 export function turXatosi(nom: string, tur: string): string {
   const kengaytma = nom.toLowerCase().split('.').pop() ?? '';
 
   if (['heic', 'heif'].includes(kengaytma)) {
     return (
-      'iPhone’ning HEIC formatidagi rasmi — sayt uni ko‘rsata olmaydi. ' +
-      'Telefonda "Sozlamalar → Kamera → Formatlar → Eng mos" ni tanlang yoki rasmni JPG ga o‘giring.'
+      'iPhoneʼning HEIC formatidagi rasmi — sayt uni koʻrsata olmaydi. ' +
+      'Telefonda "Sozlamalar → Kamera → Formatlar → Eng mos" ni tanlang yoki rasmni JPG ga oʻgiring.'
     );
   }
   if (['mkv', 'avi', 'wmv', 'flv', '3gp'].includes(kengaytma)) {
-    return `.${kengaytma} formatidagi video brauzerda ochilmaydi. MP4 ga o‘girib yuklang.`;
+    return `.${kengaytma} formatidagi video brauzerda ochilmaydi. MP4 ga oʻgirib yuklang.`;
   }
   return (
     `Bu turdagi fayl (${tur || `.${kengaytma}`}) yuklanmaydi. ` +
@@ -111,13 +111,13 @@ export function turXatosi(nom: string, tur: string): string {
   );
 }
 
-/** Hajm chegarasidan oshsa ko'rsatiladigan xabar */
+/** Hajm chegarasidan oshsa koʻrsatiladigan xabar */
 export function hajmXatosi(guruh: FaylGuruhi, hajm: number): string {
   const chegara = mb(CHEGARA[guruh]);
   if (guruh === 'video') {
     return (
-      `Video ${mb(hajm)} MB — chegara ${chegara} MB. Videoni siqing yoki YouTube’ga ` +
-      'joylab, "YouTube ID" maydoniga havolasini qo‘ying.'
+      `Video ${mb(hajm)} MB — chegara ${chegara} MB. Videoni siqing yoki YouTubeʼga ` +
+      'joylab, "YouTube ID" maydoniga havolasini qoʻying.'
     );
   }
   const nomi = guruh === 'rasm' ? 'Rasm' : 'Fayl';

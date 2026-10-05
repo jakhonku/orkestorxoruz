@@ -15,7 +15,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Platformani admin panelda vaqtincha yopib qo'yish mumkin
+ * Platformani admin panelda vaqtincha yopib qoʻyish mumkin
  * ("Sayt sozlamalari", yoki panelning bosh sahifasidagi tugma).
  *
  * Yopilganda sahifa umuman ochilmaydi — 404 qaytadi, menyudan ham,

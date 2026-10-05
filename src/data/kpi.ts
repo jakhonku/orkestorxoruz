@@ -6,7 +6,7 @@ export const kpiStats: KpiStat[] = [
     suffix: '+',
     icon: 'compass',
     label: {
-      uz: 'strategik yo‘nalish',
+      uz: 'strategik yoʻnalish',
       ru: 'стратегических направлений',
       en: 'strategic directions',
     },
@@ -56,7 +56,7 @@ export const kpiStats: KpiStat[] = [
     suffix: '+',
     icon: 'graduation-cap',
     label: {
-      uz: 'ta’lim dasturi',
+      uz: 'taʼlim dasturi',
       ru: 'образовательных программ',
       en: 'education programmes',
     },

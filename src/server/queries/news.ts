@@ -40,7 +40,7 @@ export const getNewsBySlug = cache(async (slug: string): Promise<NewsArticle | u
   return row ? moslashNews(row) : undefined;
 });
 
-/** Bosh sahifa uchun — so'nggi yangiliklar */
+/** Bosh sahifa uchun — soʻnggi yangiliklar */
 export const getLatestNews = cache(async (limit = 3): Promise<NewsArticle[]> => {
   const rows = await db.newsArticle.findMany({
     where: { published: true },
@@ -76,7 +76,7 @@ export const getMediaVideos = cache(async (): Promise<MediaVideo[]> => {
         coverUrl: v.coverUrl ?? '',
         date: isoDate(v.date),
       }))
-      // Uch manbadan hech biri to'ldirilmagan yozuv saytda ko'rsatilmaydi
+      // Uch manbadan hech biri toʻldirilmagan yozuv saytda koʻrsatilmaydi
       .filter((v) => v.youtubeId || v.instagramUrl || v.fileUrl)
   );
 });
@@ -100,10 +100,10 @@ export async function getNewsSlugs(): Promise<string[]> {
 }
 
 /**
- * "Media → Matbuot uchun" bo'limidagi press-relizlar.
+ * "Media → Matbuot uchun" boʻlimidagi press-relizlar.
  *
- * Matni bo'sh yozuv ro'yxatda ko'rsatilmaydi — bosilganda bo'sh oyna
- * ochilmasin (fayl bo'lsa, u yetarli deb hisoblanadi).
+ * Matni boʻsh yozuv roʻyxatda koʻrsatilmaydi — bosilganda boʻsh oyna
+ * ochilmasin (fayl boʻlsa, u yetarli deb hisoblanadi).
  */
 export const getPressReleases = cache(async (): Promise<PressRelease[]> => {
   const rows = await db.pressRelease.findMany({

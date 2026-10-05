@@ -7,10 +7,10 @@ import { korishHavolasi } from '@/server/ariza-fayllari';
 /**
  * Arizaga biriktirilgan faylni ochish.
  *
- * Fayl yopiq bucket'da turadi. Bu manzil panelga kirgan xodimni tekshiradi va
- * 5 daqiqalik vaqtinchalik havolaga yo'naltiradi. Havolaning o'zi (masalan
- * Excel fayldagi) muddati o'tmaydi — har bosilganda yangi havola beriladi,
- * lekin kirmagan odam faylni ko'ra olmaydi.
+ * Fayl yopiq bucketʼda turadi. Bu manzil panelga kirgan xodimni tekshiradi va
+ * 5 daqiqalik vaqtinchalik havolaga yoʻnaltiradi. Havolaning oʻzi (masalan
+ * Excel fayldagi) muddati oʻtmaydi — har bosilganda yangi havola beriladi,
+ * lekin kirmagan odam faylni koʻra olmaydi.
  */
 
 export const runtime = 'nodejs';
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
 
   const yol = new URL(request.url).searchParams.get('yol') ?? '';
   if (!/^tanlov-\d+\/[\w./-]+$/.test(yol) || yol.includes('..')) {
-    return NextResponse.json({ xato: 'Fayl yo‘li noto‘g‘ri.' }, { status: 400 });
+    return NextResponse.json({ xato: 'Fayl yoʻli notoʻgʻri.' }, { status: 400 });
   }
 
   const havola = await korishHavolasi(yol);

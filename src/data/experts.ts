@@ -11,7 +11,7 @@ export const experts: Expert[] = [
     photo: '/experts/bekirova.png',
     role: { uz: 'Xor dirijyori, pedagog', ru: 'Хоровой дирижёр, педагог', en: 'Choral conductor, pedagogue' },
     bio: {
-      uz: 'Yevropaning yetakchi xor jamoalari bilan ishlagan tajribali dirijyor. Xor ijrochiligi metodikasi bo‘yicha mutaxassis.',
+      uz: 'Yevropaning yetakchi xor jamoalari bilan ishlagan tajribali dirijyor. Xor ijrochiligi metodikasi boʻyicha mutaxassis.',
       ru: 'Опытный дирижёр, работавший с ведущими хоровыми коллективами Европы. Специалист по методике хорового исполнительства.',
       en: 'An experienced conductor who has worked with leading European choirs. A specialist in choral performance methodology.',
     },
@@ -29,7 +29,7 @@ export const experts: Expert[] = [
     photo: '/experts/shiganyan.png',
     role: { uz: 'Dirijyor, professor', ru: 'Дирижёр, профессор', en: 'Conductor, professor' },
     bio: {
-      uz: 'Simfonik orkestr dirijyorligi sohasidagi xalqaro ekspert. Ko‘plab yosh dirijyorlar ustozi.',
+      uz: 'Simfonik orkestr dirijyorligi sohasidagi xalqaro ekspert. Koʻplab yosh dirijyorlar ustozi.',
       ru: 'Международный эксперт в области симфонического дирижирования. Наставник многих молодых дирижёров.',
       en: 'An international expert in symphonic conducting and mentor to many young conductors.',
     },
@@ -45,9 +45,9 @@ export const experts: Expert[] = [
     countryCode: 'QA',
     country: { uz: 'Qatar', ru: 'Катар', en: 'Qatar' },
     photo: '/experts/sahim.png',
-    role: { uz: 'Bastakor, san’at menejeri', ru: 'Композитор, арт-менеджер', en: 'Composer, arts manager' },
+    role: { uz: 'Bastakor, sanʼat menejeri', ru: 'Композитор, арт-менеджер', en: 'Composer, arts manager' },
     bio: {
-      uz: 'Sharq va G‘arb musiqiy an’analarini uyg‘unlashtiruvchi bastakor. Xalqaro festivallar tashkilotchisi.',
+      uz: 'Sharq va Gʻarb musiqiy anʼanalarini uygʻunlashtiruvchi bastakor. Xalqaro festivallar tashkilotchisi.',
       ru: 'Композитор, соединяющий восточные и западные музыкальные традиции. Организатор международных фестивалей.',
       en: 'A composer blending Eastern and Western musical traditions, and organiser of international festivals.',
     },
@@ -82,7 +82,7 @@ export const leaders: Leader[] = [
   },
   {
     name: bir('Sanjar Umarov'),
-    role: { uz: 'Loyihalar bo‘yicha direktor o‘rinbosari', ru: 'Заместитель директора по проектам', en: 'Deputy Director for Projects' },
+    role: { uz: 'Loyihalar boʻyicha direktor oʻrinbosari', ru: 'Заместитель директора по проектам', en: 'Deputy Director for Projects' },
     photo: portrait('lead-3'),
     bio: {
       uz: 'Respublika va xalqaro loyihalarni muvofiqlashtiradi.',
@@ -92,10 +92,10 @@ export const leaders: Leader[] = [
   },
   {
     name: bir('Kamola Yusupova'),
-    role: { uz: 'Ta’lim dasturlari rahbari', ru: 'Руководитель образовательных программ', en: 'Head of Education Programmes' },
+    role: { uz: 'Taʼlim dasturlari rahbari', ru: 'Руководитель образовательных программ', en: 'Head of Education Programmes' },
     photo: portrait('lead-4'),
     bio: {
-      uz: 'Malaka oshirish va yoshlar bilan ishlash yo‘nalishini boshqaradi.',
+      uz: 'Malaka oshirish va yoshlar bilan ishlash yoʻnalishini boshqaradi.',
       ru: 'Руководит направлением повышения квалификации и работы с молодёжью.',
       en: 'Directs professional development and youth engagement.',
     },

@@ -11,7 +11,7 @@ import { SOZLAMA_TOPLAMLARI } from './sozlama-maydonlari';
 /**
  * Kalit/qiymat shakllari — `settings` jadvalidagi juftliklar.
  *
- * Kontent bo'limlaridan farqli o'laroq bu yerda satrlar emas, kalitlar
+ * Kontent boʻlimlaridan farqli oʻlaroq bu yerda satrlar emas, kalitlar
  * tahrirlanadi ("Sayt sozlamalari", "Faoliyat sahifasi"), shuning uchun
  * alohida amal yozilgan.
  */
@@ -26,7 +26,7 @@ const KOORDINATA_KALITI = 'mapCoords';
 
 export type SozlamaNatija = { ok: true } | { ok: false; xato: string };
 
-/** `qatorlar` maydonidagi bo'sh satrlarni tashlaydi */
+/** `qatorlar` maydonidagi boʻsh satrlarni tashlaydi */
 function qatorlarniTozala(m: Maydon, xom: unknown): Record<string, unknown>[] {
   const ichki = m.maydonlar ?? [];
   const talab = ichki.filter((im) => im.talab);
@@ -35,7 +35,7 @@ function qatorlarniTozala(m: Maydon, xom: unknown): Record<string, unknown>[] {
     talab.every((im) => {
       const v = q[im.nom];
       if (v && typeof v === 'object') {
-        // Ko'p tilli maydon — o'zbekchasi bo'lsa kifoya
+        // Koʻp tilli maydon — oʻzbekchasi boʻlsa kifoya
         return String((v as Record<string, unknown>).uz ?? '').trim() !== '';
       }
       return String(v ?? '').trim() !== '';
@@ -49,15 +49,15 @@ export async function sozlamalarSaqlash(
 ): Promise<SozlamaNatija> {
   try {
     const sessiya = await joriySessiya();
-    if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+    if (!sessiya) return { ok: false, xato: 'Ruxsat yoʻq. Qaytadan kiring.' };
     // Tanlov shabloni tanlov adminiga ham ochiq, qolgan shakllar — umumiy sozlamalar
     const ruxsatKaliti = toplam === 'tanlov' ? 'tanlov-sozlamalari' : 'sozlamalar';
-    if (!bolimgaRuxsatmi(sessiya, ruxsatKaliti)) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
+    if (!bolimgaRuxsatmi(sessiya, ruxsatKaliti)) return { ok: false, xato: 'Bu boʻlim sizga ochiq emas.' };
 
-    // Maydonlar ta'rifi faqat serverdan olinadi — mijoz yuborgan kalitgina
+    // Maydonlar taʼrifi faqat serverdan olinadi — mijoz yuborgan kalitgina
     // ishonchli deb qabul qilinadi.
     const maydonlar = SOZLAMA_TOPLAMLARI[toplam as keyof typeof SOZLAMA_TOPLAMLARI];
-    if (!maydonlar) return { ok: false, xato: 'Noma’lum shakl.' };
+    if (!maydonlar) return { ok: false, xato: 'Nomaʼlum shakl.' };
 
     const qiymatlar = JSON.parse(malumotJson) as Qiymatlar;
 
@@ -74,8 +74,8 @@ export async function sozlamalarSaqlash(
         continue;
       }
 
-      // Belgi (ha/yo'q) — shakldan qiymat kelmasa ham NULL emas, `false` yoziladi,
-      // aks holda bazada NULL turib qoladi va "ko'rinsin/ko'rinmasin" noaniq bo'ladi.
+      // Belgi (ha/yoʻq) — shakldan qiymat kelmasa ham NULL emas, `false` yoziladi,
+      // aks holda bazada NULL turib qoladi va "koʻrinsin/koʻrinmasin" noaniq boʻladi.
       if (m.tur === 'belgi') {
         yozuvlar.push({ key: m.nom, value: Boolean(qiymatlar[m.nom]) });
         continue;
@@ -117,13 +117,13 @@ export async function sozlamalarSaqlash(
  *
  * Xuddi shu kalit ("Sayt sozlamalari" dagi belgi) admin panelning bosh
  * sahifasidan ham boshqariladi — platformani shoshilinch yopish uchun uzun
- * shaklni ochib, hamma maydonni qayta saqlash shart bo‘lmasin.
+ * shaklni ochib, hamma maydonni qayta saqlash shart boʻlmasin.
  */
 export async function talentHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNatija> {
   try {
     const sessiya = await joriySessiya();
-    if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
-    if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
+    if (!sessiya) return { ok: false, xato: 'Ruxsat yoʻq. Qaytadan kiring.' };
+    if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu boʻlim sizga ochiq emas.' };
 
     await db.setting.upsert({
       where: { key: TALENT_KALITI },
@@ -142,9 +142,9 @@ export async function talentHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNat
 export async function tanlovHolatiniOzgartir(ochiq: boolean): Promise<SozlamaNatija> {
   try {
     const sessiya = await joriySessiya();
-    if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
+    if (!sessiya) return { ok: false, xato: 'Ruxsat yoʻq. Qaytadan kiring.' };
     if (!bolimgaRuxsatmi(sessiya, 'tanlov-sozlamalari')) {
-      return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
+      return { ok: false, xato: 'Bu boʻlim sizga ochiq emas.' };
     }
 
     await db.setting.upsert({

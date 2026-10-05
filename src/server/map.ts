@@ -3,7 +3,7 @@ import type { Localized } from '@/types';
 /**
  * Bazadagi Json ustunni Localized ga aylantiradi.
  *
- * Postgres jsonb har doim {"uz":"...","ru":"...","en":"..."} ko'rinishida
+ * Postgres jsonb har doim {"uz":"...","ru":"...","en":"..."} koʻrinishida
  * saqlanadi, lekin Prisma uni JsonValue deb qaytaradi — shuning uchun
  * bu yerda bir joyda tip beriladi.
  */
@@ -11,12 +11,12 @@ export function loc(value: unknown): Localized {
   return (value ?? { uz: '', ru: '', en: '' }) as Localized;
 }
 
-/** Ixtiyoriy Json ustun uchun — bo'sh bo'lsa undefined qaytaradi */
+/** Ixtiyoriy Json ustun uchun — boʻsh boʻlsa undefined qaytaradi */
 export function locOpt(value: unknown): Localized | undefined {
   return value == null ? undefined : (value as Localized);
 }
 
-/** {"uz": string[], ...} ko'rinishidagi ustunlar uchun */
+/** {"uz": string[], ...} koʻrinishidagi ustunlar uchun */
 export function locList(value: unknown): Localized<string[]> {
   return (value ?? { uz: [], ru: [], en: [] }) as Localized<string[]>;
 }

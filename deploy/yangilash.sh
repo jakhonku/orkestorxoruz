@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
-# Saytni yangilash: GitHub'dan yangi kodni olib, qayta quradi va qayta ishga tushiradi.
+# Saytni yangilash: GitHubʼdan yangi kodni olib, qayta quradi va qayta ishga tushiradi.
 #
 #   cd /var/www/orkestrvaxor && ./deploy/yangilash.sh
 #
 # DIQQAT: bu skript `npm run db:seed` ni CHAQIRMAYDI — seed bazadagi butun
-# kontentni o'chirib, namunaviy ma'lumot yozadi. U faqat birinchi o'rnatishda
+# kontentni oʻchirib, namunaviy maʼlumot yozadi. U faqat birinchi oʻrnatishda
 # bir marta ishlatiladi.
 #
 set -euo pipefail
@@ -18,13 +18,13 @@ cd "$ILOVA"
 echo "==> Yangi kod olinmoqda"
 git pull --ff-only
 
-echo "==> Bog'liqliklar o'rnatilmoqda"
+echo "==> Bogʻliqliklar oʻrnatilmoqda"
 npm ci
 
 echo "==> Prisma klienti yaratilmoqda"
 npx prisma generate
 
-echo "==> Baza migratsiyalari qo'llanmoqda"
+echo "==> Baza migratsiyalari qoʻllanmoqda"
 npx prisma migrate deploy
 
 echo "==> Sayt qurilmoqda"
@@ -37,4 +37,4 @@ sleep 3
 sudo systemctl status "$XIZMAT" --no-pager --lines 5
 
 echo
-echo "Tayyor. Loglarni ko'rish:  sudo journalctl -u $XIZMAT -f"
+echo "Tayyor. Loglarni koʻrish:  sudo journalctl -u $XIZMAT -f"

@@ -6,21 +6,21 @@ import { arizalarHavolasi } from './pochta';
 /**
  * Yangi ariza haqidagi xabarni Telegram botga yuboradi.
  *
- * Webhook kerak emas — webhook Telegram'dan xabar QABUL qilish uchun. Bu yerda
- * server Telegram API'ga oddiy so'rov yuboradi (`sendMessage`), shuning uchun
+ * Webhook kerak emas — webhook Telegramʼdan xabar QABUL qilish uchun. Bu yerda
+ * server Telegram APIʼga oddiy soʻrov yuboradi (`sendMessage`), shuning uchun
  * bot doim ishlab turadi va serverda hech narsa "tinglab" turmaydi.
  *
  * Sozlash (Vercel → Settings → Environment Variables):
  *   TELEGRAM_BOT_TOKEN — @BotFather bergan token
  *   TELEGRAM_CHAT_ID   — xabar boradigan chat: shaxsiy chat, guruh yoki kanal ID si.
- *                        Bir nechtasi bo'lsa vergul bilan ajratiladi.
+ *                        Bir nechtasi boʻlsa vergul bilan ajratiladi.
  *
  * Xato hech qachon yuqoriga chiqmaydi — ariza baribir saqlanadi.
  */
 
 const KUTISH_MS = 8_000;
 
-/** Bitta javob shundan uzun bo'lsa qisqartiriladi (to'liq matn admin panelda) */
+/** Bitta javob shundan uzun boʻlsa qisqartiriladi (toʻliq matn admin panelda) */
 const QIYMAT_UZUNLIGI = 400;
 
 /** Telegram bitta xabarni 4096 belgigacha qabul qiladi */
@@ -49,8 +49,8 @@ function qisqart(s: string): string {
  * Xabar matni: sarlavha, qatorlar va admin panelga havola.
  *
  * Uzun ariza (biografiya, asar tavsifi) xabarni 4096 belgidan oshirib yuboradi.
- * Matnni o'rtasidan kesish HTML tegni buzadi va Telegram xabarni butunlay rad
- * etadi — shuning uchun har bir javob alohida qisqartiriladi va sig'may qolgan
+ * Matnni oʻrtasidan kesish HTML tegni buzadi va Telegram xabarni butunlay rad
+ * etadi — shuning uchun har bir javob alohida qisqartiriladi va sigʻmay qolgan
  * qatorlar butunlay tashlanadi.
  *
  * `oddiy` — teglarsiz variant: HTML qabul qilinmasa zaxira sifatida yuboriladi.
@@ -107,9 +107,9 @@ export async function telegramYubor(sarlavha: string, qatorlar: Qator[]): Promis
         try {
           let javob = await yubor(chatId, false);
           if (!javob.ok) {
-            // Sabab (masalan "chat not found" yoki noto'g'ri token) jurnalga tushadi
+            // Sabab (masalan "chat not found" yoki notoʻgʻri token) jurnalga tushadi
             console.error('Telegram xabari yuborilmadi:', javob.status, await javob.text());
-            // Matnda HTML tushunilmagan bo'lsa (400) — teglarsiz variant bilan qayta uriniladi
+            // Matnda HTML tushunilmagan boʻlsa (400) — teglarsiz variant bilan qayta uriniladi
             if (javob.status === 400) javob = await yubor(chatId, true);
           }
           return javob.ok;

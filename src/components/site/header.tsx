@@ -12,10 +12,10 @@ import { Logo } from './logo';
 import { LocaleSwitcher } from './locale-switcher';
 import { SearchDialog } from './search-dialog';
 
-/** Admin paneldan qo'shilgan sahifa — sarlavhasi bazadan keladi, tarjima kaliti yo'q */
+/** Admin paneldan qoʻshilgan sahifa — sarlavhasi bazadan keladi, tarjima kaliti yoʻq */
 export type DinamikHavola = { href: string; label: string };
 
-/** Menyudagi ichki havola: tarjima kaliti bo'yicha yoki tayyor sarlavha bilan */
+/** Menyudagi ichki havola: tarjima kaliti boʻyicha yoki tayyor sarlavha bilan */
 type Ichki = { href: string; key?: string; label?: string };
 
 export function Header({
@@ -27,7 +27,7 @@ export function Header({
   dinamikHavolalar?: DinamikHavola[];
   /**
    * Menyudan vaqtincha olib turiladigan manzillar — masalan admin panelda
-   * yopib qo'yilgan "/talent". Sahifaning o'zi ham 404 qaytaradi.
+   * yopib qoʻyilgan "/talent". Sahifaning oʻzi ham 404 qaytaradi.
    */
   yashirinHavolalar?: string[];
   /** "Sayt sozlamalari" dagi qisqa nom va uning ostidagi yozuv */
@@ -42,10 +42,10 @@ export function Header({
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   /**
-   * Sarlavha foni scroll paytida o'zgaradi.
+   * Sarlavha foni scroll paytida oʻzgaradi.
    *
    * Hodisa sekundiga yuzlab marta keladi, shuning uchun ish `requestAnimationFrame`
-   * ichida bir marta bajariladi va holat faqat haqiqatan o'zgarganda yangilanadi.
+   * ichida bir marta bajariladi va holat faqat haqiqatan oʻzgarganda yangilanadi.
    * Tinglovchi `passive` — brauzer aylantirishni kutib turmaydi.
    */
   useEffect(() => {
@@ -73,13 +73,13 @@ export function Header({
   }, [pathname]);
 
   /**
-   * Bo'limning ichki havolalari: kodagi doimiylari + admin paneldan
-   * qo'shilganlari. Ikkinchisining sarlavhasi bazadan keladi, shuning uchun
-   * tarjima kaliti o'rniga tayyor matn bilan yuriladi.
+   * Boʻlimning ichki havolalari: kodagi doimiylari + admin paneldan
+   * qoʻshilganlari. Ikkinchisining sarlavhasi bazadan keladi, shuning uchun
+   * tarjima kaliti oʻrniga tayyor matn bilan yuriladi.
    */
   const yashirinmi = (href: string) => yashirinHavolalar.includes(href);
 
-  /** Yopib qo'yilgan sahifalar menyuda ham ko'rinmaydi */
+  /** Yopib qoʻyilgan sahifalar menyuda ham koʻrinmaydi */
   const menyu = NAV_ITEMS.filter((item) => !yashirinmi(item.href));
 
   const ichkiHavolalar = (item: (typeof NAV_ITEMS)[number]): Ichki[] => {
@@ -179,7 +179,7 @@ export function Header({
           >
             <Search className="h-5 w-5" />
           </button>
-          {/* Til almashtirish har qanday ekranda ko'rinib turadi — mobilda ham */}
+          {/* Til almashtirish har qanday ekranda koʻrinib turadi — mobilda ham */}
           <LocaleSwitcher light />
           <button
             onClick={() => setMobileOpen((v) => !v)}
@@ -201,7 +201,7 @@ export function Header({
             transition={{ duration: 0.25 }}
             className="overflow-hidden border-t border-white/10 bg-navy-900 lg:hidden"
           >
-            {/* Menyu ekranga sig'masa — ichida aylantiriladi (kichik telefonlar) */}
+            {/* Menyu ekranga sigʻmasa — ichida aylantiriladi (kichik telefonlar) */}
             <nav className="container flex max-h-[calc(100vh-5rem)] flex-col gap-1 overflow-y-auto py-4">
               {menyu.map((item) => {
                 const ichki = ichkiHavolalar(item);

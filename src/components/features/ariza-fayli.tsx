@@ -15,8 +15,8 @@ import {
 /**
  * Anketadagi "fayl" savoli: ishtirokchi surat yoki hujjat biriktiradi.
  *
- * Fayl brauzerdan to'g'ridan-to'g'ri yopiq Storage bucket'iga ketadi (server
- * orqali o'tmaydi). Anketaga faqat fayl yo'li yoziladi.
+ * Fayl brauzerdan toʻgʻridan-toʻgʻri yopiq Storage bucketʼiga ketadi (server
+ * orqali oʻtmaydi). Anketaga faqat fayl yoʻli yoziladi.
  */
 
 type Holat =
@@ -45,7 +45,7 @@ function storagegaQoy(imzoUrl: string, fayl: File, jarayon: (foiz: number) => vo
     sorov.onload = () =>
       sorov.status >= 200 && sorov.status < 300 ? bajarildi() : xato(new Error(String(sorov.status)));
     sorov.onerror = () => xato(new Error('network'));
-    // Supabase imzolangan manzil faylni shu ko'rinishda kutadi
+    // Supabase imzolangan manzil faylni shu koʻrinishda kutadi
     const forma = new FormData();
     forma.append('cacheControl', '3600');
     forma.append('', fayl);
@@ -64,7 +64,7 @@ export function ArizaFayli({
   tanlovId?: number;
   savolId: string;
   qabul: FaylQabuli;
-  /** Yuklangan faylning yo'li (bo'sh — hali yuklanmagan) */
+  /** Yuklangan faylning yoʻli (boʻsh — hali yuklanmagan) */
   qiymat: string;
   ozgartir: (yol: string) => void;
   /** Yuklash boshlanganda/tugaganda xabar beradi — yuborish tugmasi kutib turadi */
@@ -72,7 +72,7 @@ export function ArizaFayli({
 }) {
   const t = useTranslations('Competitions');
   const input = useRef<HTMLInputElement>(null);
-  // Qadamlar orasida qaytib kelinganda fayl nomi yo'lidan tiklanadi
+  // Qadamlar orasida qaytib kelinganda fayl nomi yoʻlidan tiklanadi
   // (tanlov-2/2026-09/pasport-1a2b3c4d5e6f.pdf → pasport.pdf)
   const [holat, setHolat] = useState<Holat>(() =>
     qiymat

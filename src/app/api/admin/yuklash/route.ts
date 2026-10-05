@@ -16,8 +16,8 @@ import { joriySessiya } from '@/server/auth';
 /**
  * Fayl yuklash uchun bir martalik imzolangan manzil beradi.
  *
- * Fayl brauzerdan to'g'ridan-to'g'ri Supabase Storage'ga ketadi — server
- * orqali o'tmaydi. Shu sababli katta video ham Vercel'ning so'rov hajmi
+ * Fayl brauzerdan toʻgʻridan-toʻgʻri Supabase Storageʼga ketadi — server
+ * orqali oʻtmaydi. Shu sababli katta video ham Vercelʼning soʻrov hajmi
  * cheklovi va funksiya vaqti chekloviga urilmaydi.
  */
 
@@ -29,14 +29,14 @@ type Soraq = { nom?: string; tur?: string; hajm?: number; papka?: string };
 export async function POST(request: Request) {
   const sessiya = await joriySessiya();
   if (!sessiya) {
-    return NextResponse.json({ xato: 'Ruxsat yo‘q. Qaytadan kiring.' }, { status: 401 });
+    return NextResponse.json({ xato: 'Ruxsat yoʻq. Qaytadan kiring.' }, { status: 401 });
   }
 
   let soraq: Soraq;
   try {
     soraq = (await request.json()) as Soraq;
   } catch {
-    return NextResponse.json({ xato: 'So‘rov noto‘g‘ri.' }, { status: 400 });
+    return NextResponse.json({ xato: 'Soʻrov notoʻgʻri.' }, { status: 400 });
   }
 
   const nom = String(soraq.nom ?? '').trim();
@@ -64,7 +64,7 @@ export async function POST(request: Request) {
 
   if (error || !data) {
     return NextResponse.json(
-      { xato: `Storage javob bermadi: ${error?.message ?? 'noma’lum xato'}` },
+      { xato: `Storage javob bermadi: ${error?.message ?? 'nomaʼlum xato'}` },
       { status: 502 },
     );
   }

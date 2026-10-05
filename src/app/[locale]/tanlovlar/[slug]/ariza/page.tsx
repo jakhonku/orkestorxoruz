@@ -21,12 +21,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: 'Competitions' });
   return {
     title: `${t('applyTitle')} — ${pick(competition.title, params.locale)}`,
-    // Ariza shakli qidiruv natijalarida alohida sahifa bo'lib chiqmasin
+    // Ariza shakli qidiruv natijalarida alohida sahifa boʻlib chiqmasin
     robots: { index: false },
   };
 }
 
-/** Tanlovga ariza — qadamma-qadam to'ldiriladigan alohida sahifa */
+/** Tanlovga ariza — qadamma-qadam toʻldiriladigan alohida sahifa */
 export default async function ArizaSahifasi({ params }: Props) {
   setRequestLocale(params.locale);
   if (!(await getSettings()).tanlovOpen) notFound();
@@ -35,7 +35,7 @@ export default async function ArizaSahifasi({ params }: Props) {
     getCompetitionBySlug(params.slug),
     getCompetitionMeta(params.slug),
   ]);
-  if (!competition || !meta) notFound();
+  if (!competition || !meta || competition.detailOpen === false) notFound();
 
   const [t, tk, tn] = await Promise.all([
     getTranslations({ locale: params.locale, namespace: 'Ariza' }),

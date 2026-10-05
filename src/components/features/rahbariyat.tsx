@@ -14,8 +14,8 @@ import { pick } from '@/lib/utils';
 /**
  * Rahbariyat kartochkalari va "batafsil" oynasi.
  *
- * Kartochkada faqat qisqacha ma'lumot turadi — uzun matn kartochkalarni
- * turli balandlikka olib kelardi. To'liq tarjimai hol va katta surat
+ * Kartochkada faqat qisqacha maʼlumot turadi — uzun matn kartochkalarni
+ * turli balandlikka olib kelardi. Toʻliq tarjimai hol va katta surat
  * kartochka bosilganda ochiladi.
  */
 export function Rahbariyat({ leaders }: { leaders: Leader[] }) {
@@ -131,8 +131,8 @@ function Batafsil({ leader }: { leader: Leader }) {
         <div className="mt-4 h-1 w-14 rounded-full bg-gold" />
 
         {/*
-          Batafsil matn bo'lsa sarlavha bilan chiqadi, bo'lmasa qisqachasining
-          o'zi ko'rsatiladi — oyna hech qachon bo'sh qolmaydi.
+          Batafsil matn boʻlsa sarlavha bilan chiqadi, boʻlmasa qisqachasining
+          oʻzi koʻrsatiladi — oyna hech qachon boʻsh qolmaydi.
         */}
         {toliq.trim() !== '' ? (
           <>

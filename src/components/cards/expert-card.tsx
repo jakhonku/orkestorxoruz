@@ -10,7 +10,7 @@ import type { Expert } from '@/types';
 /**
  * Ekspert kartochkasi.
  *
- * `ochish` berilgan bo'lsa kartochka bosiladigan tugmaga aylanadi va to'liq
+ * `ochish` berilgan boʻlsa kartochka bosiladigan tugmaga aylanadi va toʻliq
  * biografiya oynasini ochadi — bu yerda matn uch qator bilan cheklangan,
  * chunki aks holda kartochkalar turli balandlikda chiqardi.
  */

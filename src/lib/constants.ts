@@ -3,8 +3,8 @@ import type { Localized, Region, SocialLink } from '@/types';
 /**
  * Saytning asosiy manzili — sitemap, robots.txt va meta teglar uchun.
  *
- * Tartib: qo'lda ko'rsatilgan manzil -> Vercel'dagi domen -> mahalliy server.
- * Vercel preview'larida shu tufayli havolalar o'sha nusxaga ishora qiladi.
+ * Tartib: qoʻlda koʻrsatilgan manzil -> Vercelʼdagi domen -> mahalliy server.
+ * Vercel previewʼlarida shu tufayli havolalar oʻsha nusxaga ishora qiladi.
  */
 function saytManzili(): string {
   const qol = process.env.NEXT_PUBLIC_SITE_URL;
@@ -19,7 +19,7 @@ function saytManzili(): string {
 
 export const SITE = {
   name: {
-    uz: '"Orkestr va Xor" ijodiy birlashmasi',
+    uz: '“Orkestr va Xor” ijodiy birlashmasi',
     ru: 'Творческое объединение «Оркестр и Хор»',
     en: 'Orchestra and Choir Creative Union',
   } as Localized,
@@ -43,7 +43,7 @@ export const SITE = {
   email: 'info@orkestrvaxor.uz',
   phone: '+998 71 200 00 00',
   address: {
-    uz: "Toshkent shahri, Amir Temur shoh ko'chasi, 1-uy",
+    uz: "Toshkent shahri, Amir Temur shoh koʻchasi, 1-uy",
     ru: 'г. Ташкент, проспект Амира Темура, 1',
     en: '1 Amir Temur Ave, Tashkent',
   } as Localized,
@@ -62,7 +62,7 @@ export const REGION_NAMES: Record<Region, Localized> = {
   samarqand: { uz: 'Samarqand', ru: 'Самарканд', en: 'Samarkand' },
   buxoro: { uz: 'Buxoro', ru: 'Бухара', en: 'Bukhara' },
   xorazm: { uz: 'Xorazm', ru: 'Хорезм', en: 'Khorezm' },
-  fargona: { uz: "Farg'ona", ru: 'Фергана', en: 'Fergana' },
+  fargona: { uz: "Fargʻona", ru: 'Фергана', en: 'Fergana' },
   andijon: { uz: 'Andijon', ru: 'Андижан', en: 'Andijan' },
   namangan: { uz: 'Namangan', ru: 'Наманган', en: 'Namangan' },
   qashqadaryo: { uz: 'Qashqadaryo', ru: 'Кашкадарья', en: 'Kashkadarya' },
@@ -70,7 +70,7 @@ export const REGION_NAMES: Record<Region, Localized> = {
   navoiy: { uz: 'Navoiy', ru: 'Навои', en: 'Navoi' },
   jizzax: { uz: 'Jizzax', ru: 'Джизак', en: 'Jizzakh' },
   sirdaryo: { uz: 'Sirdaryo', ru: 'Сырдарья', en: 'Syrdarya' },
-  qoraqalpogiston: { uz: "Qoraqalpog'iston", ru: 'Каракалпакстан', en: 'Karakalpakstan' },
+  qoraqalpogiston: { uz: "Qoraqalpogʻiston", ru: 'Каракалпакстан', en: 'Karakalpakstan' },
 };
 
 /** Primary navigation — keys map to messages.Nav.* labels */
@@ -108,8 +108,8 @@ export const NAV_ITEMS: NavItem[] = [
 ];
 
 /**
- * Admin paneldan qo'shilgan xalqaro sahifalar endi menyuda emas — ular
- * "Loyihalar" sahifasining Xalqaro bo'limida kartochka bo'lib chiqadi.
+ * Admin paneldan qoʻshilgan xalqaro sahifalar endi menyuda emas — ular
+ * "Loyihalar" sahifasining Xalqaro boʻlimida kartochka boʻlib chiqadi.
  * Kalit hech qaysi menyu bandiga mos kelmaydi.
  */
 export const DINAMIK_MENYU_KALITI = 'xalqaro-sahifalar';

@@ -60,13 +60,13 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
   const t = useTranslations('Media');
   const tn = useTranslations('Nav');
 
-  // Admin panelda qo'yilgan havola YouTube, Instagram yoki Telegram niki —
+  // Admin panelda qoʻyilgan havola YouTube, Instagram yoki Telegram niki —
   // qaysi biri ekani shu yerda aniqlanadi
   const post = postManbasi(article.video ?? '');
   const muqova = article.cover.trim();
 
-  // Faqat post havolasi qo'yilgan yangilikda sarlavha bo'sh bo'lishi mumkin —
-  // o'rniga manba yozuvi ("Telegram post") ishlatiladi
+  // Faqat post havolasi qoʻyilgan yangilikda sarlavha boʻsh boʻlishi mumkin —
+  // oʻrniga manba yozuvi ("Telegram post") ishlatiladi
   const yorliq = postYorligiKaliti(article.video);
   const sarlavha =
     pick(article.title, locale).trim() || t(yorliq ?? `category_${article.category}`);
@@ -78,7 +78,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
         {/*
           Muqovali yangilik: oq fonda sarlavha, ostida keng rasm.
           Muqovasiz yangilik (masalan oddiy Telegram posti): sarlavha saytning
-          odatdagi to'q ko'k bannerida chiqadi — bo'sh oq sahifa qolmaydi.
+          odatdagi toʻq koʻk bannerida chiqadi — boʻsh oq sahifa qolmaydi.
         */}
         {muqova ? (
           <>
@@ -153,7 +153,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
           </header>
         )}
 
-        {/* Video yoki ijtimoiy tarmoq posti — admin panelda havola qo'yilgan bo'lsa */}
+        {/* Video yoki ijtimoiy tarmoq posti — admin panelda havola qoʻyilgan boʻlsa */}
         {post && (
           <div className="container max-w-4xl">
             <Reveal delay={0.15}>
@@ -184,7 +184,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
             </div>
           </div>
         ) : (
-          // Matnsiz yangilik (faqat post): pastda ortiqcha bo'sh joy qolmasin
+          // Matnsiz yangilik (faqat post): pastda ortiqcha boʻsh joy qolmasin
           <div className="pb-12" />
         )}
       </article>
@@ -209,12 +209,12 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
   );
 }
 
-/** Sana va muallif qatori — oq fonda ham, to'q ko'k bannerda ham ishlaydi */
+/** Sana va muallif qatori — oq fonda ham, toʻq koʻk bannerda ham ishlaydi */
 function Malumot({ article, light = false }: { article: NewsArticle; light?: boolean }) {
   const locale = useLocale() as Locale;
   const t = useTranslations('Media');
-  // Muallif ko'rsatilmagan bo'lsa (faqat post havolasi qo'yilgan yangilik)
-  // bo'sh "Muallif:" yozuvi chiqmaydi
+  // Muallif koʻrsatilmagan boʻlsa (faqat post havolasi qoʻyilgan yangilik)
+  // boʻsh "Muallif:" yozuvi chiqmaydi
   const muallif = pick(article.author, locale).trim();
 
   return (

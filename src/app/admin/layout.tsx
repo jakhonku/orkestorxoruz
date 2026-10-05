@@ -24,8 +24,8 @@ export const metadata: Metadata = {
 };
 
 /**
- * Admin panel ikki tilli: o'zbekcha (asosiy) va ruscha. Til `admin-til`
- * cookie'sida turadi va yon menyudagi UZ / RU tugmasi bilan almashtiriladi.
+ * Admin panel ikki tilli: oʻzbekcha (asosiy) va ruscha. Til `admin-til`
+ * cookieʼsida turadi va yon menyudagi UZ / RU tugmasi bilan almashtiriladi.
  */
 export default function AdminRootLayout({ children }: { children: ReactNode }) {
   const til = adminTilOl(cookies().get(ADMIN_TIL_KUKISI)?.value);
@@ -34,7 +34,7 @@ export default function AdminRootLayout({ children }: { children: ReactNode }) {
     <html lang={til} data-til={til} className={`${playfair.variable} ${manrope.variable}`}>
       <head>
         {til === 'ru' && (
-          // Tarjima tayyor bo'lguncha sahifa yashirin — o'zbekcha matn "yaltirab" qolmasin.
+          // Tarjima tayyor boʻlguncha sahifa yashirin — oʻzbekcha matn "yaltirab" qolmasin.
           // Skript ishlamasa ham 2 soniyadan keyin sahifa ochiladi.
           <style>{`
             html[data-til="ru"]:not([data-tarjima]) body { opacity: 0; animation: admin-korsat 0s 2s forwards; }

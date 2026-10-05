@@ -12,7 +12,7 @@ export interface NewsArticle {
   author: Localized;
   excerpt: Localized;
   body: Localized<string[]>;
-  /** YouTube yoki Instagram havolasi — sahifada pleyer bo'lib ochiladi */
+  /** YouTube yoki Instagram havolasi — sahifada pleyer boʻlib ochiladi */
   video?: string;
   featured?: boolean;
 }
@@ -20,7 +20,7 @@ export interface NewsArticle {
 export interface MediaVideo {
   id: string;
   title: Localized;
-  /** YouTube video ID. Bo'sh bo'lsa — boshqa manba ishlatiladi */
+  /** YouTube video ID. Boʻsh boʻlsa — boshqa manba ishlatiladi */
   youtubeId: string;
   /** Instagram post yoki reel havolasi */
   instagramUrl?: string;
@@ -31,17 +31,17 @@ export interface MediaVideo {
   date: string;
 }
 
-/** "Matbuot uchun" bo'limidagi press-reliz — bitta tadbir bo'yicha */
+/** "Matbuot uchun" boʻlimidagi press-reliz — bitta tadbir boʻyicha */
 export interface PressRelease {
   id: string;
   /** Tadbir nomi */
   title: Localized;
   date: string;
-  /** Kartochkada ko'rinadigan qisqa mazmuni */
+  /** Kartochkada koʻrinadigan qisqa mazmuni */
   summary?: Localized;
-  /** To'liq matn — har bir band alohida abzats */
+  /** Toʻliq matn — har bir band alohida abzats */
   body: Localized<string[]>;
-  /** Yuklab olish uchun fayl (PDF, Word). Bo'sh bo'lsa tugma chiqmaydi */
+  /** Yuklab olish uchun fayl (PDF, Word). Boʻsh boʻlsa tugma chiqmaydi */
   fileUrl?: string;
 }
 

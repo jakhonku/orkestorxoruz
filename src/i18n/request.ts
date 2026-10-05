@@ -12,7 +12,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
   /**
    * Standart matnlar — `messages/*.json` fayllaridan.
    * Ular ustidan admin panelda tahrirlangan matnlar yoziladi (`ui_texts`),
-   * shu tufayli saytdagi har bir yozuvni koddan tashqarida o'zgartirish mumkin.
+   * shu tufayli saytdagi har bir yozuvni koddan tashqarida oʻzgartirish mumkin.
    */
   const standart = (await import(`../../messages/${locale}.json`)).default;
   const messages = structuredClone(standart);

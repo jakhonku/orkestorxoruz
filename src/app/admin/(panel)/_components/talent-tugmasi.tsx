@@ -9,8 +9,8 @@ import { talentHolatiniOzgartir, tanlovHolatiniOzgartir } from '@/server/admin/s
 /**
  * Talent platformasini yopib-ochadigan tugma (admin bosh sahifasi).
  *
- * Yopilganda «Talent» sahifasi saytda umuman ko‘rinmaydi: menyudan, footerdan,
- * bosh sahifadagi yo‘nalishlardan va «Faoliyat» kartochkalaridan chiqib ketadi,
+ * Yopilganda «Talent» sahifasi saytda umuman koʻrinmaydi: menyudan, footerdan,
+ * bosh sahifadagi yoʻnalishlardan va «Faoliyat» kartochkalaridan chiqib ketadi,
  * manzili terilsa ham 404 qaytadi va ariza qabul qilinmaydi. Oldin kelgan
  * arizalar joyida qoladi.
  */
@@ -19,7 +19,7 @@ export function TalentTugmasi({
   tur = 'talent',
 }: {
   ochiq: boolean;
-  /** Qaysi bo'lim yopiladi: Talent platformasi yoki Tanlov va festivallar */
+  /** Qaysi boʻlim yopiladi: Talent platformasi yoki Tanlov va festivallar */
   tur?: 'talent' | 'tanlov';
 }) {
   const tanlovmi = tur === 'tanlov';
@@ -61,14 +61,14 @@ export function TalentTugmasi({
             <p className="text-sm font-semibold text-navy">
               {nom}:{' '}
               <span className={ochiqmi ? 'text-emerald-600' : 'text-red-600'}>
-                {ochiqmi ? 'saytda ko‘rinmoqda' : 'saytda yopiq'}
+                {ochiqmi ? 'saytda koʻrinmoqda' : 'saytda yopiq'}
               </span>
             </p>
             <p className="mt-0.5 text-xs leading-relaxed text-muted-foreground">
               {ochiqmi
-                ? 'Bo‘lim saytda va menyuda ko‘rinib turibdi — yangi arizalar qabul qilinmoqda.'
-                : 'Bo‘lim saytda ham, menyuda ham ko‘rinmayapti — yangi ariza qabul qilinmayapti.'}{' '}
-              Kelib bo‘lgan arizalar «Arizalar va xabarlar» da turaveradi.
+                ? 'Boʻlim saytda va menyuda koʻrinib turibdi — yangi arizalar qabul qilinmoqda.'
+                : 'Boʻlim saytda ham, menyuda ham koʻrinmayapti — yangi ariza qabul qilinmayapti.'}{' '}
+              Kelib boʻlgan arizalar «Arizalar va xabarlar» da turaveradi.
             </p>
           </div>
         </div>

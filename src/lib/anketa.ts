@@ -1,12 +1,12 @@
 /**
- * Tanlov arizasi anketasi — admin panelda tuziladi, saytda to'ldiriladi.
+ * Tanlov arizasi anketasi — admin panelda tuziladi, saytda toʻldiriladi.
  *
  * Bu fayl ham serverda, ham brauzerda ishlatiladi: admin paneldagi quruvchi,
- * saytdagi ariza oynasi va serverdagi tekshiruv — hammasi bitta ta'rifga
+ * saytdagi ariza oynasi va serverdagi tekshiruv — hammasi bitta taʼrifga
  * tayanadi. Shu sababli bu yerda faqat sof funksiyalar.
  *
  * F.I.SH., email va telefon anketaga kirmaydi — ular har bir arizada doim
- * so'raladi (ishtirokchi bilan bog'lanish uchun shart).
+ * soʻraladi (ishtirokchi bilan bogʻlanish uchun shart).
  */
 
 export type Tillar = { uz: string; ru: string; en: string };
@@ -15,23 +15,23 @@ export type TillarRoyxat = { uz: string[]; ru: string[]; en: string[] };
 export type SavolTuri =
   /** Bir qatorli matn */
   | 'matn'
-  /** Ko'p qatorli matn */
+  /** Koʻp qatorli matn */
   | 'matnKatta'
-  /** Son (masalan yoshi, a'zolar soni) */
+  /** Son (masalan yoshi, aʼzolar soni) */
   | 'raqam'
   /** Sana */
   | 'sana'
   /** Havola (masalan ijro videosi) */
   | 'havola'
-  /** Ochiladigan ro'yxatdan bittasini tanlash */
+  /** Ochiladigan roʻyxatdan bittasini tanlash */
   | 'tanlov'
   /** Variantlardan bittasini belgilash (radio) */
   | 'variant'
   /** Variantlardan bir nechtasini belgilash (checkbox) */
   | 'belgilar'
-  /** Fayl yuklash (surat, pasport nusxasi...) — yopiq bucket'ga tushadi */
+  /** Fayl yuklash (surat, pasport nusxasi...) — yopiq bucketʼga tushadi */
   | 'fayl'
-  /** Bitta belgi: "roziman" (masalan shaxsiy ma'lumotlarni qayta ishlashga) */
+  /** Bitta belgi: "roziman" (masalan shaxsiy maʼlumotlarni qayta ishlashga) */
   | 'rozilik'
   /**
    * Savol emas — ariza sahifasida yangi QADAM boshlanadi. `savol` — qadam
@@ -43,7 +43,7 @@ export type SavolTuri =
 export type FaylQabuli = 'rasm' | 'pdf' | 'hammasi';
 
 export type Savol = {
-  /** O'zgarmas kalit — javoblar shu bo'yicha bog'lanadi */
+  /** Oʻzgarmas kalit — javoblar shu boʻyicha bogʻlanadi */
   id: string;
   tur: SavolTuri;
   savol: Tillar;
@@ -57,8 +57,8 @@ export type Savol = {
 };
 
 /**
- * Bazaga yoziladigan bitta javob. Savol matni ham saqlanadi (o'zbekcha).
- * `fayl` savolida javob — yopiq bucket'dagi fayl yo'li, `tur` shuni bildiradi.
+ * Bazaga yoziladigan bitta javob. Savol matni ham saqlanadi (oʻzbekcha).
+ * `fayl` savolida javob — yopiq bucketʼdagi fayl yoʻli, `tur` shuni bildiradi.
  */
 export type Javob = { id: string; savol: string; javob: string | string[]; tur?: 'fayl' };
 
@@ -68,7 +68,7 @@ export const SAVOL_TURLARI: { qiymat: SavolTuri; yorliq: string }[] = [
   { qiymat: 'raqam', yorliq: 'Son' },
   { qiymat: 'sana', yorliq: 'Sana' },
   { qiymat: 'havola', yorliq: 'Havola (video, fayl)' },
-  { qiymat: 'tanlov', yorliq: 'Ro‘yxatdan tanlash' },
+  { qiymat: 'tanlov', yorliq: 'Roʻyxatdan tanlash' },
   { qiymat: 'variant', yorliq: 'Bitta variant' },
   { qiymat: 'belgilar', yorliq: 'Bir nechta variant' },
   { qiymat: 'fayl', yorliq: 'Fayl yuklash (surat, hujjat)' },
@@ -110,7 +110,7 @@ export function arizaFaylTuri(nom: string, tur?: string | null): string {
   return topilgan?.[0] ?? berilgan;
 }
 
-/** Tanlov fayllari papkasi: shu tanlovga tegishli bo'lmagan yo'l qabul qilinmaydi */
+/** Tanlov fayllari papkasi: shu tanlovga tegishli boʻlmagan yoʻl qabul qilinmaydi */
 export function arizaPapkasi(tanlovId: number): string {
   return `tanlov-${tanlovId}/`;
 }
@@ -159,7 +159,7 @@ function tillarRoyxat(x: unknown): TillarRoyxat {
 
 /**
  * Bazadan yoki shakldan kelgan xom qiymatni ishonchli anketaga aylantiradi.
- * Noto'g'ri savollar tashlab yuboriladi — hech qachon xato tashlamaydi.
+ * Notoʻgʻri savollar tashlab yuboriladi — hech qachon xato tashlamaydi.
  */
 export function anketaniOqi(xom: unknown): Savol[] {
   if (!Array.isArray(xom)) return [];
@@ -189,11 +189,11 @@ export function anketaniOqi(xom: unknown): Savol[] {
   return natija;
 }
 
-/** Admin saqlashdan oldin anketani tekshiradi. Xato bo'lsa — tushunarli matn. */
+/** Admin saqlashdan oldin anketani tekshiradi. Xato boʻlsa — tushunarli matn. */
 export function anketaXatosi(savollar: Savol[]): string | null {
   for (const [i, s] of savollar.entries()) {
     const raqam = `${i + 1}-savol`;
-    if (!s.savol.uz.trim()) return `Anketa: ${raqam} matni (o‘zbekcha) yozilmagan.`;
+    if (!s.savol.uz.trim()) return `Anketa: ${raqam} matni (oʻzbekcha) yozilmagan.`;
     if (variantliMi(s.tur) && s.variantlar.uz.length === 0) {
       return `Anketa: "${s.savol.uz}" savoliga kamida bitta variant yozing.`;
     }
@@ -201,13 +201,13 @@ export function anketaXatosi(savollar: Savol[]): string | null {
   return null;
 }
 
-/** Ko'p tilli matndan kerakli tildagisi, bo'lmasa o'zbekchasi */
+/** Koʻp tilli matndan kerakli tildagisi, boʻlmasa oʻzbekchasi */
 export function tilda(t: Tillar, locale: string): string {
   const v = (t as Record<string, string>)[locale];
   return v && v.trim() ? v : t.uz;
 }
 
-/** Variantlar ro'yxati kerakli tilda. Tarjima yetishmasa o'zbekchasi olinadi. */
+/** Variantlar roʻyxati kerakli tilda. Tarjima yetishmasa oʻzbekchasi olinadi. */
 export function variantlarTilda(s: Savol, locale: string): string[] {
   const tarjima = (s.variantlar as Record<string, string[]>)[locale] ?? [];
   return s.variantlar.uz.map((uz, i) => (tarjima[i]?.trim() ? tarjima[i] : uz));
@@ -217,13 +217,13 @@ export function variantlarTilda(s: Savol, locale: string): string[] {
  * Saytdan kelgan javoblarni anketaga solishtirib tekshiradi.
  *
  * Variantli savollarda brauzer variant RAQAMINI yuboradi — bazaga esa
- * o'zbekcha matni yoziladi: admin panel o'zbekcha, ishtirokchi qaysi tilda
- * to'ldirgani ahamiyatsiz bo'lsin.
+ * oʻzbekcha matni yoziladi: admin panel oʻzbekcha, ishtirokchi qaysi tilda
+ * toʻldirgani ahamiyatsiz boʻlsin.
  */
 export function javoblarniTekshir(
   savollar: Savol[],
   xom: Record<string, unknown>,
-  /** Fayl yo'llari shu papkadan bo'lishi shart (`arizaPapkasi`) */
+  /** Fayl yoʻllari shu papkadan boʻlishi shart (`arizaPapkasi`) */
   faylPapkasi = '',
 ): { ok: true; javoblar: Javob[] } | { ok: false; savolId: string } {
   const javoblar: Javob[] = [];
@@ -308,7 +308,7 @@ export function javoblarniTekshir(
   return { ok: true, javoblar };
 }
 
-/** Bazadagi javoblarni o'qiydi (admin panel uchun) */
+/** Bazadagi javoblarni oʻqiydi (admin panel uchun) */
 export function javoblarniOqi(xom: unknown): Javob[] {
   if (!Array.isArray(xom)) return [];
   return xom
@@ -326,12 +326,12 @@ export function javobMatni(j: Javob['javob']): string {
 }
 
 /**
- * Ariza sahifasidagi qadamlar uchun anketani bo'laklaydi.
+ * Ariza sahifasidagi qadamlar uchun anketani boʻlaklaydi.
  *
- *   boshi     — birinchi "bolim" gacha bo'lgan savollar (ishtirokchi qadamiga qo'shiladi)
+ *   boshi     — birinchi "bolim" gacha boʻlgan savollar (ishtirokchi qadamiga qoʻshiladi)
  *   bolimlar  — har bir "bolim" va undan keyingi savollar (alohida qadam)
- *   roziliklar — rozilik belgilari: qayerda turganidan qat'i nazar oxirgi,
- *                tasdiqlash qadamida so'raladi
+ *   roziliklar — rozilik belgilari: qayerda turganidan qatʼi nazar oxirgi,
+ *                tasdiqlash qadamida soʻraladi
  */
 export function qadamlargaBol(anketa: Savol[]): {
   boshi: Savol[];
@@ -349,6 +349,6 @@ export function qadamlargaBol(anketa: Savol[]): {
     else boshi.push(s);
   }
 
-  // Ichi bo'sh qadam ko'rsatilmaydi
+  // Ichi boʻsh qadam koʻrsatilmaydi
   return { boshi, bolimlar: bolimlar.filter((b) => b.savollar.length > 0), roziliklar };
 }

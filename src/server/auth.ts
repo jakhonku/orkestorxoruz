@@ -11,7 +11,7 @@ import type { AdminRole } from '@/generated/prisma/enums';
  * Kirish/chiqish va parol tekshiruvi — Supabase Auth zimmasida.
  * Rol (ADMIN / MUHARRIR) va faollik esa bazadagi `admin_users` jadvalida
  * saqlanadi: Supabase foydalanuvchisi shu jadvaldagi qayd bilan
- * `authUserId` orqali bog'lanadi.
+ * `authUserId` orqali bogʻlanadi.
  */
 
 export type Sessiya = {
@@ -25,38 +25,38 @@ export type Sessiya = {
 };
 
 /**
- * Joriy sessiya. Kirilmagan yoki hisob bloklangan bo'lsa — null.
- * `cache()` — bitta so'rov ichida bir marta hisoblanadi.
+ * Joriy sessiya. Kirilmagan yoki hisob bloklangan boʻlsa — null.
+ * `cache()` — bitta soʻrov ichida bir marta hisoblanadi.
  */
 export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
   const supabase = supabaseServer();
 
   /**
    * Token imzosi mahalliy tekshiriladi (`getClaims`) — Supabase serveriga
-   * so‘rov ketmaydi. Cookie’ni o‘zgartirib qo‘yish foyda bermaydi: imzo
-   * loyihaning ochiq kaliti bilan tekshiriladi, soxta token o‘tmaydi.
+   * soʻrov ketmaydi. Cookieʼni oʻzgartirib qoʻyish foyda bermaydi: imzo
+   * loyihaning ochiq kaliti bilan tekshiriladi, soxta token oʻtmaydi.
    *
-   * Hisob bloklangani esa quyida — har so‘rovda bazadan o‘qiladi, ya’ni
-   * huquqni olib qo‘yish darhol kuchga kiradi.
+   * Hisob bloklangani esa quyida — har soʻrovda bazadan oʻqiladi, yaʼni
+   * huquqni olib qoʻyish darhol kuchga kiradi.
    */
   const { data: dalil } = await supabase.auth.getClaims();
   const authId = dalil?.claims?.sub;
   if (!authId) return null;
 
   /**
-   * Qayd FAQAT `authUserId` bo'yicha topiladi — email bo'yicha emas.
+   * Qayd FAQAT `authUserId` boʻyicha topiladi — email boʻyicha emas.
    *
-   * Aks holda Supabase'da o'zi ro'yxatdan o'tgan odam, agar uning emaili
-   * `admin_users` dagi biror qatorga to'g'ri kelib qolsa, o'sha qatorning
-   * huquqlarini olib qo'lardi. Bog'lanish faqat kirish paytida, parol
-   * tekshirilgandan keyin o'rnatiladi (`src/app/admin/actions.ts`).
+   * Aks holda Supabaseʼda oʻzi roʻyxatdan oʻtgan odam, agar uning emaili
+   * `admin_users` dagi biror qatorga toʻgʻri kelib qolsa, oʻsha qatorning
+   * huquqlarini olib qoʻlardi. Bogʻlanish faqat kirish paytida, parol
+   * tekshirilgandan keyin oʻrnatiladi (`src/app/admin/actions.ts`).
    */
   const qayd = await db.adminUser.findUnique({
     where: { authUserId: authId },
     select: { id: true, email: true, name: true, role: true, active: true },
   });
 
-  // Supabase'da hisob bor, lekin panelga ruxsat berilmagan — kirish yo'q
+  // Supabaseʼda hisob bor, lekin panelga ruxsat berilmagan — kirish yoʻq
   if (!qayd || !qayd.active) return null;
 
   return {
@@ -68,7 +68,7 @@ export const joriySessiya = cache(async (): Promise<Sessiya | null> => {
   };
 });
 
-/** Faqat ADMIN bajarishi mumkin bo'lgan amallar uchun */
+/** Faqat ADMIN bajarishi mumkin boʻlgan amallar uchun */
 export async function adminMi(): Promise<boolean> {
   const s = await joriySessiya();
   return s?.role === 'ADMIN';

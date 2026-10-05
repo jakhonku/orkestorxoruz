@@ -14,7 +14,7 @@ export function EventCard({ event }: { event: ConcertEvent }) {
   const t = useTranslations('Afisha');
   const tc = useTranslations('Common');
 
-  // Bo'sh maydonlar sabab ", " kabi yarim qolgan satr chiqmasligi uchun
+  // Boʻsh maydonlar sabab ", " kabi yarim qolgan satr chiqmasligi uchun
   const joy = [pick(event.venue, locale), pick(event.city, locale)].filter(Boolean).join(', ');
   const ijrochi = event.performerNote ? pick(event.performerNote, locale) : '';
   const narx = event.price ? pick(event.price, locale) : '';

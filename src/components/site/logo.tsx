@@ -10,9 +10,9 @@ import type { Localized } from '@/types';
 /**
  * Emblema + yozuv.
  *
- * Ikkala yozuv ham "Sayt sozlamalari" bo'limidan keladi: qisqa nom va uning
- * ostidagi mayda yozuv. Sozlama bo'sh qoldirilsa standart matn ishlatiladi,
- * shunda logotip hech qachon yarim bo'sh ko'rinmaydi.
+ * Ikkala yozuv ham "Sayt sozlamalari" boʻlimidan keladi: qisqa nom va uning
+ * ostidagi mayda yozuv. Sozlama boʻsh qoldirilsa standart matn ishlatiladi,
+ * shunda logotip hech qachon yarim boʻsh koʻrinmaydi.
  */
 export function Logo({
   light = false,

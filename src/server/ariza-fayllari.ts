@@ -7,9 +7,9 @@ import { ARIZA_FAYL_CHEGARASI, FAYL_TURLARI } from '@/lib/anketa';
 /**
  * Ariza fayllari saqlanadigan yopiq bucket bilan ishlash.
  *
- * Bucket birinchi kerak bo'lganda o'zi yaratiladi — Supabase panelida qo'lda
+ * Bucket birinchi kerak boʻlganda oʻzi yaratiladi — Supabase panelida qoʻlda
  * sozlash shart emas. U doim YOPIQ (public: false): pasport nusxasi kabi
- * hujjatlar ochiq havola bilan hech qachon ko'rinmasligi kerak.
+ * hujjatlar ochiq havola bilan hech qachon koʻrinmasligi kerak.
  */
 
 let tayyor = false;
@@ -25,10 +25,10 @@ async function bucketniTayyorla() {
       fileSizeLimit: ARIZA_FAYL_CHEGARASI,
       allowedMimeTypes: Object.keys(FAYL_TURLARI.hammasi),
     });
-    // Parallel so'rov uni allaqachon yaratgan bo'lishi mumkin
+    // Parallel soʻrov uni allaqachon yaratgan boʻlishi mumkin
     if (error && !/already exists/i.test(error.message)) throw error;
   } else if (data.public) {
-    // Kimdir qo'lda ochiq qilib qo'ygan bo'lsa — yopamiz
+    // Kimdir qoʻlda ochiq qilib qoʻygan boʻlsa — yopamiz
     await supabase.storage.updateBucket(ARIZA_BUCKET, {
       public: false,
       fileSizeLimit: ARIZA_FAYL_CHEGARASI,
@@ -38,7 +38,7 @@ async function bucketniTayyorla() {
   tayyor = true;
 }
 
-/** Brauzer faylni to'g'ridan-to'g'ri yuklashi uchun bir martalik imzolangan manzil */
+/** Brauzer faylni toʻgʻridan-toʻgʻri yuklashi uchun bir martalik imzolangan manzil */
 export async function yuklashImzosi(yol: string): Promise<string> {
   await bucketniTayyorla();
   const { data, error } = await supabaseAdmin().storage.from(ARIZA_BUCKET).createSignedUploadUrl(yol);
@@ -54,7 +54,7 @@ export async function korishHavolasi(yol: string, soniya = 300): Promise<string 
   return data?.signedUrl ?? null;
 }
 
-/** Serverda tayyorlangan faylni (masalan Ma'lumotnoma PDF) yopiq bucket'ga saqlaydi */
+/** Serverda tayyorlangan faylni (masalan Maʼlumotnoma PDF) yopiq bucketʼga saqlaydi */
 export async function faylSaqla(yol: string, bayt: Uint8Array, tur: string): Promise<void> {
   await bucketniTayyorla();
   const { error } = await supabaseAdmin()
@@ -63,7 +63,7 @@ export async function faylSaqla(yol: string, bayt: Uint8Array, tur: string): Pro
   if (error) throw new Error(error.message);
 }
 
-/** Yopiq bucket'dagi faylni o'qiydi; topilmasa null */
+/** Yopiq bucketʼdagi faylni oʻqiydi; topilmasa null */
 export async function faylOqi(yol: string): Promise<Uint8Array | null> {
   const { data, error } = await supabaseAdmin().storage.from(ARIZA_BUCKET).download(yol);
   if (error || !data) return null;

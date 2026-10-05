@@ -18,7 +18,7 @@ import { ArizaFayli } from './ariza-fayli';
 
 export type JavobQiymati = string | string[];
 
-/** Yorliq, izoh va xato bilan o'ralgan maydon */
+/** Yorliq, izoh va xato bilan oʻralgan maydon */
 export function Maydon({
   label,
   error,
@@ -33,9 +33,9 @@ export function Maydon({
   required?: boolean;
   /** Yorliq ostidagi kichik tushuntirish */
   izoh?: string;
-  /** Yorliqning o'ng tomonida kulrang "ixtiyoriy" yozuvi */
+  /** Yorliqning oʻng tomonida kulrang "ixtiyoriy" yozuvi */
   ixtiyoriy?: string;
-  /** Ichida bir nechta input bo'lsa `div` — `label` bosish ularni aralashtirib yuboradi */
+  /** Ichida bir nechta input boʻlsa `div` — `label` bosish ularni aralashtirib yuboradi */
   as?: 'label' | 'div';
   children: React.ReactNode;
 }) {
@@ -59,7 +59,7 @@ export function Maydon({
   );
 }
 
-/** Kattaroq maydonlar — ariza sahifasida qulay bo'lishi uchun */
+/** Kattaroq maydonlar — ariza sahifasida qulay boʻlishi uchun */
 export const KATTA = 'h-12 rounded-xl px-4 text-[15px]';
 
 export function AnketaSavoli({
@@ -116,7 +116,7 @@ export function AnketaSavoli({
     );
   }
 
-  // Fayl, variantlar va sana — ichida bir nechta boshqaruv bor, <label> bo'lmaydi
+  // Fayl, variantlar va sana — ichida bir nechta boshqaruv bor, <label> boʻlmaydi
   if (s.tur === 'fayl') {
     return (
       <Maydon as="div" label={yorliq} required={s.talab} izoh={izoh} error={xato} ixtiyoriy={ixtiyoriy}>
@@ -225,9 +225,9 @@ export function AnketaSavoli({
 }
 
 /**
- * Sana: bitta maydon, "KK.OO.YYYY". Raqam yozilganda nuqtalar o'zi qo'yiladi,
- * telefonda raqamli klaviatura ochiladi — tug'ilgan yilni ro'yxatdan
- * qidirib o'tirish shart emas. Qiymat YYYY-MM-DD ko'rinishida saqlanadi;
+ * Sana: bitta maydon, "KK.OO.YYYY". Raqam yozilganda nuqtalar oʻzi qoʻyiladi,
+ * telefonda raqamli klaviatura ochiladi — tugʻilgan yilni roʻyxatdan
+ * qidirib oʻtirish shart emas. Qiymat YYYY-MM-DD koʻrinishida saqlanadi;
  * chala yozilgan sana "2001--" kabi qoladi va tekshiruvda xato beradi.
  */
 function SanaTanlash({ qiymat, ozgartir }: { qiymat: string; ozgartir: (v: string) => void }) {
@@ -236,7 +236,7 @@ function SanaTanlash({ qiymat, ozgartir }: { qiymat: string; ozgartir: (v: strin
   const korsat = (raqamlar: string) =>
     [raqamlar.slice(0, 2), raqamlar.slice(2, 4), raqamlar.slice(4, 8)].filter(Boolean).join('.');
 
-  // Saqlangan qiymatdan (qoralama) ko'rinish tiklanadi
+  // Saqlangan qiymatdan (qoralama) koʻrinish tiklanadi
   const boshlang = () => {
     const [y = '', m = '', d = ''] = qiymat.split('-');
     return korsat(`${d}${m}${y}`.replace(/\D/g, ''));

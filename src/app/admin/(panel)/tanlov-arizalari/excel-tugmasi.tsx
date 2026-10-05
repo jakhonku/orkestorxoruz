@@ -5,7 +5,7 @@ import { Download, Loader2 } from 'lucide-react';
 
 /**
  * Arizalarni Excel faylga yuklab olish.
- * SheetJS faqat tugma bosilganda yuklanadi — sahifa og'irlashmaydi.
+ * SheetJS faqat tugma bosilganda yuklanadi — sahifa ogʻirlashmaydi.
  */
 export function ExcelTugmasi({
   sarlavhalar,
@@ -45,7 +45,7 @@ export function ExcelTugmasi({
       className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-navy transition-colors hover:border-gold/50 disabled:opacity-50"
     >
       {kutilmoqda ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-      Excel’ga yuklab olish
+      Excelʼga yuklab olish
     </button>
   );
 }

@@ -68,7 +68,7 @@ export default async function CompetitionDetailPage({
   const sozlamalar = await getSettings();
   if (!sozlamalar.tanlovOpen) notFound();
   const competition = await getCompetitionBySlug(params.slug);
-  if (!competition) notFound();
+  if (!competition || competition.detailOpen === false) notFound();
 
   // Ariza qaysi tanlovga tegishli ekanini bilish uchun bazadagi id kerak
   const meta = await getCompetitionMeta(params.slug);
@@ -248,7 +248,7 @@ function Detail({
         </div>
       </section>
 
-      {/* Telefonda ariza tugmasi doim ko'rinib tursin */}
+      {/* Telefonda ariza tugmasi doim koʻrinib tursin */}
       {competition.status === 'ochiq' && <div className="h-20 lg:hidden" aria-hidden="true" />}
       {competition.status === 'ochiq' && (
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-white/95 p-3 backdrop-blur-md lg:hidden">
@@ -317,13 +317,13 @@ function Ishtirok({
   const t = useTranslations('Competitions');
 
   const { bolimlar } = qadamlargaBol(anketa);
-  // Ishtirokchi + aloqa + anketa bo'limlari (yoki oddiy shakl) + tasdiqlash
+  // Ishtirokchi + aloqa + anketa boʻlimlari (yoki oddiy shakl) + tasdiqlash
   const qadamlar = 2 + (anketa.length > 0 ? bolimlar.length : 1) + 1;
   const avtoRoyxat = anketa
     .filter((s) => s.tur === 'fayl' || s.tur === 'matnKatta')
     .map((s) => tilda(s.savol, locale));
-  // Admin paneldan kiritilgan matn bo'lsa shu, bo'lmasa standart
-  // Ustunlik: tanlovning o'z matni → umumiy shablon → saytdagi standart matn
+  // Admin paneldan kiritilgan matn boʻlsa shu, boʻlmasa standart
+  // Ustunlik: tanlovning oʻz matni → umumiy shablon → saytdagi standart matn
   const ozi = (v: Localized | undefined, umumiy: Localized, standart: string) =>
     (v && pick(v, locale).trim()) || pick(umumiy, locale).trim() || standart;
   const royxatlar = [competition.prepareList, shablon.prepareList].map((r) =>
@@ -370,7 +370,7 @@ function Ishtirok({
 function memberFlag(country: { uz: string }): string {
   const map: Record<string, string> = {
     Germaniya: 'DE',
-    'O‘zbekiston': 'UZ',
+    'Oʻzbekiston': 'UZ',
     AQSh: 'US',
     Qatar: 'QA',
   };

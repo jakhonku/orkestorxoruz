@@ -9,8 +9,8 @@ interface PageHeaderProps {
   subtitle?: string;
   crumbs?: Crumb[];
   /**
-   * Banner o'ng tomonidagi rasm — admin paneldan yuklanadi.
-   * Bo'sh bo'lsa banner avvalgidek, faqat matndan iborat bo'ladi.
+   * Banner oʻng tomonidagi rasm — admin paneldan yuklanadi.
+   * Boʻsh boʻlsa banner avvalgidek, faqat matndan iborat boʻladi.
    */
   image?: string;
 }

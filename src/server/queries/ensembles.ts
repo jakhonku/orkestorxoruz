@@ -7,7 +7,7 @@ import type { Ensemble } from '@/types';
 import { ensembleTypeFromDb, regionFromDb } from '@/server/enums';
 import { loc } from '@/server/map';
 
-/** Bog'liq jadvallar bilan birga olish uchun umumiy include */
+/** Bogʻliq jadvallar bilan birga olish uchun umumiy include */
 const toliq = {
   members: { orderBy: { sortOrder: 'asc' } },
   repertoire: { orderBy: { sortOrder: 'asc' } },
@@ -34,7 +34,7 @@ function moslash(e: Qator): Ensemble {
     members: e.members.map((m) => ({ name: loc(m.name), role: loc(m.role) })),
     repertoire: e.repertoire.map((r) => ({ composer: loc(r.composer), work: loc(r.work) })),
     gallery: e.gallery.map((g) => ({ src: g.src, caption: loc(g.caption) })),
-    // Manbasi ko'rsatilmagan video sahifada bo'sh joy bo'lib qolmasin
+    // Manbasi koʻrsatilmagan video sahifada boʻsh joy boʻlib qolmasin
     videos: e.videos
       .filter((v) => v.youtubeId || v.instagramUrl)
       .map((v) => ({
@@ -48,8 +48,8 @@ function moslash(e: Qator): Ensemble {
 }
 
 /**
- * Barcha e'lon qilingan jamoalar.
- * `cache()` — bitta so'rov ichida takroriy chaqiruvlar bazaga qayta bormaydi.
+ * Barcha eʼlon qilingan jamoalar.
+ * `cache()` — bitta soʻrov ichida takroriy chaqiruvlar bazaga qayta bormaydi.
  */
 export const getEnsembles = cache(async (): Promise<Ensemble[]> => {
   const rows = await db.ensemble.findMany({

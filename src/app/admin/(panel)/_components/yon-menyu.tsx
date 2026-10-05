@@ -70,13 +70,13 @@ export function YonMenyu({
 }: {
   foydalanuvchi: { name: string; email: string };
   rol: Rol;
-  /** Bo'lim kaliti -> yangi (ko'rilmagan) yozuvlar soni */
+  /** Boʻlim kaliti -> yangi (koʻrilmagan) yozuvlar soni */
   belgilar: Record<string, number>;
 }) {
   const pathname = usePathname();
   const [ochiq, setOchiq] = useState(false);
 
-  // Tanlov admini faqat o'z bo'limlarini ko'radi; server ham shuni tekshiradi
+  // Tanlov admini faqat oʻz boʻlimlarini koʻradi; server ham shuni tekshiradi
   const tanlovAdmini = rol === 'TANLOV';
   const guruhlar = MENYU.map((g) => ({
     ...g,

@@ -14,13 +14,13 @@ const socialIcons = {
   x: Send,
 } as const;
 
-/** Kontakt ma'lumotlari va ijtimoiy tarmoqlar bazadagi sozlamalardan keladi */
+/** Kontakt maʼlumotlari va ijtimoiy tarmoqlar bazadagi sozlamalardan keladi */
 export function Footer({
   settings,
   yashirinHavolalar = [],
 }: {
   settings: SiteSettings;
-  /** Vaqtincha yopilgan sahifalar — footer ro'yxatidan ham chiqib turadi */
+  /** Vaqtincha yopilgan sahifalar — footer roʻyxatidan ham chiqib turadi */
   yashirinHavolalar?: string[];
 }) {
   const t = useTranslations('Footer');

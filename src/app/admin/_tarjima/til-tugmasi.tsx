@@ -5,9 +5,9 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ADMIN_TIL_KUKISI, type AdminTil } from '@/lib/admin-tarjima';
 
-/** O'zbekcha / ruscha almashtirgich. Til cookie'da saqlanadi, sahifa qayta yuklanadi. */
+/** Oʻzbekcha / ruscha almashtirgich. Til cookieʼda saqlanadi, sahifa qayta yuklanadi. */
 export function TilTugmasi({ className }: { className?: string }) {
-  // Server bergan til (html[data-til]); mount'gacha belgilanmaydi — gidratsiya mos kelishi uchun
+  // Server bergan til (html[data-til]); mountʼgacha belgilanmaydi — gidratsiya mos kelishi uchun
   const [til, setTil] = useState<AdminTil | null>(null);
 
   useEffect(() => {
@@ -19,7 +19,7 @@ export function TilTugmasi({ className }: { className?: string }) {
     try {
       document.cookie = `${ADMIN_TIL_KUKISI}=${yangi}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
     } catch {
-      // cookie yozib bo'lmasa til o'zgarmaydi
+      // cookie yozib boʻlmasa til oʻzgarmaydi
     }
     window.location.reload();
   }

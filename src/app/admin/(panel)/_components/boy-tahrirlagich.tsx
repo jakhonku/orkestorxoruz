@@ -11,13 +11,13 @@ const TUGMALAR = [
   { buyruq: 'italic', yorliq: 'Qiya', Ikon: Italic },
   { buyruq: 'underline', yorliq: 'Tagi chizilgan', Ikon: Underline },
   { buyruq: 'formatBlock', arg: 'h3', yorliq: 'Kichik sarlavha', Ikon: Heading3 },
-  { buyruq: 'insertUnorderedList', yorliq: 'Nuqtali ro‘yxat', Ikon: List },
-  { buyruq: 'insertOrderedList', yorliq: 'Raqamli ro‘yxat', Ikon: ListOrdered },
+  { buyruq: 'insertUnorderedList', yorliq: 'Nuqtali roʻyxat', Ikon: List },
+  { buyruq: 'insertOrderedList', yorliq: 'Raqamli roʻyxat', Ikon: ListOrdered },
 ] as const;
 
 /**
- * Qalin, qiya, sarlavha va ro'yxat tugmalari bor tahrirlagich.
- * Til almashganda `key` o'zgarib, tahrirlagich yangidan yaratiladi.
+ * Qalin, qiya, sarlavha va roʻyxat tugmalari bor tahrirlagich.
+ * Til almashganda `key` oʻzgarib, tahrirlagich yangidan yaratiladi.
  */
 export function BoyTahrirlagich({
   qiymat,
@@ -62,7 +62,7 @@ export function BoyTahrirlagich({
             type="button"
             title={yorliq}
             aria-label={yorliq}
-            // Tugma bosilganda tanlangan matn belgisi yo'qolmasin
+            // Tugma bosilganda tanlangan matn belgisi yoʻqolmasin
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => buyruqBer(buyruq, 'arg' in q ? q.arg : undefined)}
             className="flex h-8 w-8 items-center justify-center rounded-md text-navy transition-colors hover:bg-navy/10"
@@ -78,7 +78,7 @@ export function BoyTahrirlagich({
         onInput={yubor}
         onBlur={yubor}
         onPaste={(e) => {
-          // Tashqaridan nusxalangan matn uslubsiz, oddiy matn bo'lib tushadi
+          // Tashqaridan nusxalangan matn uslubsiz, oddiy matn boʻlib tushadi
           e.preventDefault();
           document.execCommand('insertText', false, e.clipboardData.getData('text/plain'));
         }}

@@ -4,7 +4,7 @@ import { javobMatni, javoblarniOqi } from '@/lib/anketa';
 import type { Murojaat } from '@/app/admin/(panel)/arizalar/_components/murojaatlar-royxati';
 
 /**
- * Tanlov arizasini admin paneldagi murojaat ko'rinishiga o'giradi.
+ * Tanlov arizasini admin paneldagi murojaat koʻrinishiga oʻgiradi.
  * "Arizalar va xabarlar" hamda "Tanlov arizalari" sahifalari shuni ishlatadi.
  */
 
@@ -13,7 +13,7 @@ export function sana(d: Date): string {
   return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
 }
 
-/** Bo'sh maydonlar tafsilotlar ro'yxatiga tushmaydi */
+/** Boʻsh maydonlar tafsilotlar roʻyxatiga tushmaydi */
 export function qatorlar(juftlar: [string, string | number | null | undefined][]) {
   return juftlar
     .filter(([, q]) => q !== null && q !== undefined && String(q).trim() !== '')
@@ -59,7 +59,7 @@ export function tanlovMurojaati(r: TanlovArizaQatori): Murojaat {
       ['Ishtirokchi', r.fullName],
       ['Tanlov', tanlovNomi(r)],
       ['Jamoa', r.ensembleName],
-      ['Yo‘nalish', r.category],
+      ['Yoʻnalish', r.category],
       ['Email', r.email],
       ['Telefon', r.phone],
       ...javoblar.map((j): [string, string] => [j.savol, j.tur === 'fayl' ? 'Faylni ochish' : sanaKorinishi(javobMatni(j.javob))]),
@@ -72,19 +72,19 @@ export function tanlovMurojaati(r: TanlovArizaQatori): Murojaat {
       return {
         ...q,
         havola: arizaFayliHavolasi(yol),
-        // Rasm bo'lsa admin panelda o'zi ko'rinadi (PDF va hujjatlar — havola bo'lib qoladi)
+        // Rasm boʻlsa admin panelda oʻzi koʻrinadi (PDF va hujjatlar — havola boʻlib qoladi)
         rasm: /\.(jpe?g|png|webp)$/i.test(yol),
       };
     }),
   };
 }
 
-/** Yopiq bucket'dagi faylni admin orqali ochadigan havola (muddati o'tmaydi) */
+/** Yopiq bucketʼdagi faylni admin orqali ochadigan havola (muddati oʻtmaydi) */
 export function arizaFayliHavolasi(yol: string, asos = ''): string {
   return `${asos}/api/admin/ariza-fayli?yol=${encodeURIComponent(yol)}`;
 }
 
-/** Sana javoblari (2002-01-30) jadvalda 30.01.2002 ko'rinishida chiqadi */
+/** Sana javoblari (2002-01-30) jadvalda 30.01.2002 koʻrinishida chiqadi */
 function sanaKorinishi(m: string): string {
   return /^\d{4}-\d{2}-\d{2}$/.test(m) ? m.split('-').reverse().join('.') : m;
 }

@@ -1,6 +1,6 @@
 /**
- * Boyitilgan matn (qalin, qiya, ro'yxat...) — admin panelda tahrirlanadi,
- * saytda ko'rsatiladi. Faqat quyidagi teglar qoladi, boshqa hamma narsa
+ * Boyitilgan matn (qalin, qiya, roʻyxat...) — admin panelda tahrirlanadi,
+ * saytda koʻrsatiladi. Faqat quyidagi teglar qoladi, boshqa hamma narsa
  * (atributlar, skriptlar, uslublar) olib tashlanadi.
  */
 const RUXSAT: Record<string, string> = {
@@ -61,8 +61,8 @@ export function boyMatnniTozala(kirish: string): string {
 }
 
 /**
- * Bazadagi qiymatni HTML ga aylantiradi. Eski (oddiy) matnda teg yo'q —
- * u abzatslarga bo'linadi.
+ * Bazadagi qiymatni HTML ga aylantiradi. Eski (oddiy) matnda teg yoʻq —
+ * u abzatslarga boʻlinadi.
  */
 export function boyMatnHtml(s: string): string {
   if (!s) return '';
@@ -73,7 +73,7 @@ export function boyMatnHtml(s: string): string {
     .join('');
 }
 
-/** Teglarsiz matn — bo'shligini tekshirish va qisqa ko'rinish uchun */
+/** Teglarsiz matn — boʻshligini tekshirish va qisqa koʻrinish uchun */
 export function boyMatnOddiy(s: string): string {
   return s.replace(TEG, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
 }

@@ -39,7 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...xalqaro.map((p) => `/xalqaro/${p.slug}`),
   ];
 
-  // Yopib qo'yilgan sahifa 404 qaytaradi — sitemapga ham qo'shilmaydi
+  // Yopib qoʻyilgan sahifa 404 qaytaradi — sitemapga ham qoʻshilmaydi
   const all = [...staticPaths, ...(sozlamalar.talentOpen ? ['/talent'] : []), ...dynamicPaths.filter((p) => sozlamalar.tanlovOpen || !p.startsWith('/tanlovlar/'))];
   const now = new Date();
 

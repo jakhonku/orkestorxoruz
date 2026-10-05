@@ -20,7 +20,7 @@ export interface Leader {
   photo: string;
   /** Kartochkadagi qisqacha matn */
   bio: Localized;
-  /** Faqat "Batafsil" oynasida ochiladigan to'liq ma'lumot */
+  /** Faqat "Batafsil" oynasida ochiladigan toʻliq maʼlumot */
   fullBio?: Localized;
   /** Unvon / ilmiy daraja */
   honorific?: Localized;

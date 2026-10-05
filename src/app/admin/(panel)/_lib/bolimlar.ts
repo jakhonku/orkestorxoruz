@@ -1,5 +1,5 @@
 /**
- * Admin paneldagi bo'limlar ro'yxati — yon menyu va bosh sahifa shu yerdan quriladi.
+ * Admin paneldagi boʻlimlar roʻyxati — yon menyu va bosh sahifa shu yerdan quriladi.
  */
 
 export type BolimGuruhi = {
@@ -9,11 +9,11 @@ export type BolimGuruhi = {
     nom: string;
     /** lucide-react ikonka nomi */
     ikonka: string;
-    /** faqat ADMIN roli ko'radi */
+    /** faqat ADMIN roli koʻradi */
     faqatAdmin?: boolean;
     /**
-     * "Tanlov admini" (TANLOV roli) ham ko'radi. Bu rol boshqa hech bir
-     * bo'limga kira olmaydi — ruxsat serverda ham shu ro'yxat bo'yicha
+     * "Tanlov admini" (TANLOV roli) ham koʻradi. Bu rol boshqa hech bir
+     * boʻlimga kira olmaydi — ruxsat serverda ham shu roʻyxat boʻyicha
      * tekshiriladi (`src/server/admin/huquq.ts`).
      */
     tanlovRoli?: boolean;
@@ -91,7 +91,7 @@ export const MENYU: BolimGuruhi[] = [
   },
 ];
 
-/** Tanlov admini kira oladigan bo'limlar */
+/** Tanlov admini kira oladigan boʻlimlar */
 export const TANLOV_ROLI_BOLIMLARI: string[] = MENYU.flatMap((g) => g.bolimlar)
   .filter((b) => b.tanlovRoli)
   .map((b) => b.kalit);

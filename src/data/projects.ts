@@ -6,14 +6,14 @@ export const projects: Project[] = [
   {
     slug: 'mustaqillik-35-yillik-konserti',
     title: {
-      uz: 'Mustaqillikning 35 yilligiga bag‘ishlangan gala-konsert',
+      uz: 'Mustaqillikning 35 yilligiga bagʻishlangan gala-konsert',
       ru: 'Гала-концерт к 35-летию Независимости',
       en: '35th Independence Anniversary Gala Concert',
     },
     scope: 'respublika',
     cover: img('proj-mustaqillik', 1600, 900),
     period: { uz: '2026-yil, sentyabr', ru: 'Сентябрь 2026', en: 'September 2026' },
-    location: { uz: 'Toshkent, "Istiqlol" saroyi', ru: 'Ташкент, дворец «Истиклол»', en: 'Tashkent, Istiqlol Palace' },
+    location: { uz: 'Toshkent, “Istiqlol” saroyi', ru: 'Ташкент, дворец «Истиклол»', en: 'Tashkent, Istiqlol Palace' },
     shortDescription: {
       uz: 'Birlashgan simfonik orkestr va xor ishtirokidagi yirik bayram konserti.',
       ru: 'Масштабный праздничный концерт с участием объединённого симфонического оркестра и хора.',
@@ -38,7 +38,7 @@ export const projects: Project[] = [
   {
     slug: 'uzbekistan-orchestra-fest',
     title: {
-      uz: '"Uzbekistan Orchestra Fest" forumi',
+      uz: '“Uzbekistan Orchestra Fest” forumi',
       ru: 'Форум «Uzbekistan Orchestra Fest»',
       en: '“Uzbekistan Orchestra Fest” Forum',
     },
@@ -52,7 +52,7 @@ export const projects: Project[] = [
       en: 'An annual forum for national orchestras: concerts, master classes and exchange of experience.',
     },
     description: {
-      uz: 'Forum davomida mamlakatning barcha hududlaridan orkestrlar to‘planib, umumiy repertuar ustida ishlaydi, dirijyorlik va cholg‘u ijrochiligi bo‘yicha seminarlar tashkil etiladi.',
+      uz: 'Forum davomida mamlakatning barcha hududlaridan orkestrlar toʻplanib, umumiy repertuar ustida ishlaydi, dirijyorlik va cholgʻu ijrochiligi boʻyicha seminarlar tashkil etiladi.',
       ru: 'В рамках форума собираются оркестры со всех регионов страны, работают над общим репертуаром, проводятся семинары по дирижированию и инструментальному исполнительству.',
       en: 'Orchestras from every region gather to work on shared repertoire, with seminars on conducting and instrumental performance.',
     },
@@ -67,7 +67,7 @@ export const projects: Project[] = [
   {
     slug: 'musiqa-poyezdi',
     title: {
-      uz: '"Musiqa poyezdi" gastrol loyihasi',
+      uz: '“Musiqa poyezdi” gastrol loyihasi',
       ru: 'Гастрольный проект «Музыкальный поезд»',
       en: '“Music Train” Touring Project',
     },
@@ -76,12 +76,12 @@ export const projects: Project[] = [
     period: { uz: '2026-yil, may–iyun', ru: 'Май–июнь 2026', en: 'May–June 2026' },
     location: { uz: 'Toshkent–Samarqand–Buxoro–Xiva–Nukus', ru: 'Ташкент–Самарканд–Бухара–Хива–Нукус', en: 'Tashkent–Samarkand–Bukhara–Khiva–Nukus' },
     shortDescription: {
-      uz: 'Poyezd orqali beshta shaharni bog‘lovchi ko‘chma konsert dasturi.',
-      ru: 'Передвижная концертная программа, связывающая пять городов посредством поезда.',
+      uz: 'Poyezd orqali beshta shaharni bogʻlovchi koʻchma konsert dasturi.',
+      ru: 'Передвижная концертная программа, связывающая пять городов на поезде.',
       en: 'A travelling concert programme connecting five cities by train.',
     },
     description: {
-      uz: 'Loyiha akademik musiqani mintaqalarga olib chiqadi: har bir shaharda ochiq konsertlar, maktab o‘quvchilari uchun ma’rifiy uchrashuvlar tashkil etiladi.',
+      uz: 'Loyiha akademik musiqani mintaqalarga olib chiqadi: har bir shaharda ochiq konsertlar, maktab oʻquvchilari uchun maʼrifiy uchrashuvlar tashkil etiladi.',
       ru: 'Проект несёт академическую музыку в регионы: в каждом городе проходят открытые концерты и просветительские встречи для школьников.',
       en: 'The project brings academic music to the regions: each city hosts open concerts and educational meetings for schoolchildren.',
     },
@@ -100,7 +100,7 @@ export const projects: Project[] = [
   {
     slug: 'tashkent-international-orchestra-choir-forum',
     title: {
-      uz: '"Tashkent International Orchestra and Choir" forumi',
+      uz: '“Tashkent International Orchestra and Choir” forumi',
       ru: 'Форум «Tashkent International Orchestra and Choir»',
       en: '“Tashkent International Orchestra and Choir” Forum',
     },
@@ -130,7 +130,7 @@ export const projects: Project[] = [
   {
     slug: 'bbc-proms-franshizasi',
     title: {
-      uz: '"BBC Proms" franshizasi',
+      uz: '“BBC Proms” franshizasi',
       ru: 'Франшиза «BBC Proms»',
       en: '“BBC Proms” Franchise',
     },
@@ -139,7 +139,7 @@ export const projects: Project[] = [
     period: { uz: '2027-yil (rejalashtirilmoqda)', ru: '2027 (планируется)', en: '2027 (planned)' },
     location: { uz: 'Toshkent', ru: 'Ташкент', en: 'Tashkent' },
     shortDescription: {
-      uz: 'Dunyoga mashhur "Proms" formatini O‘zbekistonda joriy etish tashabbusi.',
+      uz: 'Dunyoga mashhur “Proms” formatini Oʻzbekistonda joriy etish tashabbusi.',
       ru: 'Инициатива по внедрению всемирно известного формата «Proms» в Узбекистане.',
       en: 'An initiative to bring the world-famous “Proms” format to Uzbekistan.',
     },
@@ -167,12 +167,12 @@ export const projects: Project[] = [
     period: { uz: '2026–2027', ru: '2026–2027', en: '2026–2027' },
     location: { uz: 'Nyu-York / Toshkent', ru: 'Нью-Йорк / Ташкент', en: 'New York / Tashkent' },
     shortDescription: {
-      uz: 'Yosh musiqachilar va dirijyorlar uchun jahon miqyosidagi ta’lim almashinuvi.',
+      uz: 'Yosh musiqachilar va dirijyorlar uchun jahon miqyosidagi taʼlim almashinuvi.',
       ru: 'Образовательный обмен мирового уровня для молодых музыкантов и дирижёров.',
       en: 'A world-class educational exchange for young musicians and conductors.',
     },
     description: {
-      uz: 'Dasturga tanlab olingan iste’dodli musiqachilar Juilliard professorlaridan saboq oladi, master-klasslar va amaliyotda ishtirok etadi.',
+      uz: 'Dasturga tanlab olingan isteʼdodli musiqachilar Juilliard professorlaridan saboq oladi, master-klasslar va amaliyotda ishtirok etadi.',
       ru: 'Отобранные талантливые музыканты обучаются у профессоров Juilliard, участвуют в мастер-классах и практике.',
       en: 'Selected talented musicians study with Juilliard faculty and take part in master classes and practice.',
     },
@@ -196,12 +196,12 @@ export const projects: Project[] = [
     period: { uz: '2026–2027', ru: '2026–2027', en: '2026–2027' },
     location: { uz: 'Italiya, Janubiy Koreya, AQSh, BAA', ru: 'Италия, Южная Корея, США, ОАЭ', en: 'Italy, South Korea, USA, UAE' },
     shortDescription: {
-      uz: 'Milliy jamoalarning to‘rt qit’a bo‘ylab konsert gastrollari.',
+      uz: 'Milliy jamoalarning toʻrt mamlakat boʻylab konsert gastrollari.',
       ru: 'Концертные гастроли национальных коллективов по четырём странам.',
       en: 'Concert tours of national ensembles across four countries.',
     },
     description: {
-      uz: 'Gastrollar O‘zbekiston madaniyatini xorijda targ‘ib etadi, milliy bastakorlar asarlarini jahon sahnalarida namoyish etadi.',
+      uz: 'Gastrollar Oʻzbekiston madaniyatini xorijda targʻib etadi, milliy bastakorlar asarlarini jahon sahnalarida namoyish etadi.',
       ru: 'Гастроли продвигают культуру Узбекистана за рубежом, представляя произведения национальных композиторов на мировых сценах.',
       en: 'The tours promote Uzbek culture abroad, presenting national composers’ works on world stages.',
     },

@@ -19,12 +19,12 @@ import { AnketaSavoli, KATTA, Maydon, type JavobQiymati } from './anketa-savoli'
  *
  *   1. Ishtirokchi   — familiya, ism, otasining ismi (+ anketaning birinchi savollari)
  *   2. Aloqa         — telefon, email
- *   3…n. Anketa      — admin "Yangi qadam" bilan ajratgan bo'limlar
- *   oxirgi. Tasdiq   — hamma javoblar ko'rinadi, rozilik belgilari va yuborish
+ *   3…n. Anketa      — admin "Yangi qadam" bilan ajratgan boʻlimlar
+ *   oxirgi. Tasdiq   — hamma javoblar koʻrinadi, rozilik belgilari va yuborish
  *
- * Har bir qadam "Keyingi qadam" bosilganda tekshiriladi — xato bo'lsa
- * keyingisiga o'tilmaydi. To'ldirilgan ma'lumot brauzerda (sessionStorage)
- * saqlanib turadi: sahifa tasodifan yangilansa ham yo'qolmaydi.
+ * Har bir qadam "Keyingi qadam" bosilganda tekshiriladi — xato boʻlsa
+ * keyingisiga oʻtilmaydi. Toʻldirilgan maʼlumot brauzerda (sessionStorage)
+ * saqlanib turadi: sahifa tasodifan yangilansa ham yoʻqolmaydi.
  */
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -46,14 +46,14 @@ type Qadam = {
 
 type Qoralama = { shaxs: Shaxs; aloqa: Aloqa; oddiy: Oddiy; javoblar: Javoblar; qadam: number };
 
-/** To'liq va haqiqiy sanami (31-fevral kabi emas) */
+/** Toʻliq va haqiqiy sanami (31-fevral kabi emas) */
 function sanaTogrimi(v: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(v)) return false;
   const d = new Date(`${v}T00:00:00Z`);
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === v;
 }
 
-/** Sana hali tanlanmaganmi ("--" yoki bo'sh) */
+/** Sana hali tanlanmaganmi ("--" yoki boʻsh) */
 function bosh(s: Savol, v: JavobQiymati | undefined): boolean {
   if (Array.isArray(v)) return v.length === 0;
   const m = String(v ?? '').trim();
@@ -120,10 +120,10 @@ export function ArizaQadamlari({
   const joriy = qadamlar[Math.min(qadam, qadamlar.length - 1)];
   const oxirgimi = joriy.tur === 'tasdiq';
 
-  // ---------------- qoralama (sahifa yangilansa yo'qolmasin) ----------------
+  // ---------------- qoralama (sahifa yangilansa yoʻqolmasin) ----------------
   const qoralamaKaliti = `tanlov-arizasi-${tanlovId}`;
   // Holat (ref emas): saqlash qoralama TIKLANGAN holat bilan qayta chizilgandan
-  // keyingina boshlanadi. Aks holda birinchi chizishdagi bo'sh qiymatlar
+  // keyingina boshlanadi. Aks holda birinchi chizishdagi boʻsh qiymatlar
   // saqlangan qoralamani ustidan yozib yuborardi.
   const [tiklandi, setTiklandi] = useState(false);
 
@@ -139,7 +139,7 @@ export function ArizaQadamlari({
         if (typeof q.qadam === 'number') setQadam(Math.max(0, Math.min(q.qadam, qadamlar.length - 1)));
       }
     } catch {
-      // Saqlab bo'lmaydigan brauzer — qoralamasiz ishlaymiz
+      // Saqlab boʻlmaydigan brauzer — qoralamasiz ishlaymiz
     }
     setTiklandi(true);
     // Faqat birinchi ochilganda
@@ -152,7 +152,7 @@ export function ArizaQadamlari({
       const q: Qoralama = { shaxs, aloqa, oddiy, javoblar, qadam };
       sessionStorage.setItem(qoralamaKaliti, JSON.stringify(q));
     } catch {
-      // e'tiborsiz
+      // eʼtiborsiz
     }
   }, [tiklandi, shaxs, aloqa, oddiy, javoblar, qadam, yuborildi, qoralamaKaliti]);
 
@@ -174,7 +174,7 @@ export function ArizaQadamlari({
     }
     if (q.tur === 'aloqa') {
       if (aloqa.phone.replace(/\D/g, '').length < 7) x.phone = tc('required');
-      // Elektron pochta majburiy emas — yozilgan bo'lsa to'g'riligi tekshiriladi
+      // Elektron pochta majburiy emas — yozilgan boʻlsa toʻgʻriligi tekshiriladi
       if (aloqa.email.trim() && !emailRe.test(aloqa.email.trim())) x.email = tc('invalidEmail');
     }
     for (const s of q.savollar) {
@@ -222,13 +222,13 @@ export function ArizaQadamlari({
   function yubor() {
     if (yuklanayotgan > 0) return;
 
-    // Oxirgi marta hamma qadamlar tekshiriladi — birortasida xato bo'lsa o'sha qadamga qaytamiz
+    // Oxirgi marta hamma qadamlar tekshiriladi — birortasida xato boʻlsa oʻsha qadamga qaytamiz
     for (const [i, q] of qadamlar.entries()) {
       const x = qadamXatolari(q);
       if (Object.keys(x).length) {
         setXatolar(x);
-        // Xato shu qadamda bo'lsa (masalan rozilik belgilanmagan) — o'sha maydonga,
-        // boshqa qadamda bo'lsa — o'sha qadamning boshiga
+        // Xato shu qadamda boʻlsa (masalan rozilik belgilanmagan) — oʻsha maydonga,
+        // boshqa qadamda boʻlsa — oʻsha qadamning boshiga
         if (i === qadam) {
           birinchiXatogaOt(x);
         } else {
@@ -266,7 +266,7 @@ export function ArizaQadamlari({
         try {
           sessionStorage.removeItem(qoralamaKaliti);
         } catch {
-          // e'tiborsiz
+          // eʼtiborsiz
         }
         tepagaChiq();
       } else {
@@ -311,7 +311,7 @@ export function ArizaQadamlari({
   // ---------------- qadam ----------------
   return (
     <div ref={karta} className="scroll-mt-28 rounded-3xl border border-border bg-white p-6 shadow-soft sm:p-10 md:p-12">
-      {/* Jarayon chizig'i */}
+      {/* Jarayon chizigʻi */}
       <div className="mb-8 flex gap-1.5" aria-hidden="true">
         {qadamlar.map((q, i) => (
           <span
@@ -507,7 +507,7 @@ export function ArizaQadamlari({
   );
 }
 
-/** Tasdiqlash qadami: kiritilgan hamma narsa qadamlar bo'yicha, "Tahrirlash" havolasi bilan */
+/** Tasdiqlash qadami: kiritilgan hamma narsa qadamlar boʻyicha, "Tahrirlash" havolasi bilan */
 function Korib({
   qadamlar,
   shaxs,
@@ -599,7 +599,7 @@ function Korib({
 }
 
 /**
- * Tasdiqlash qadamida ishtirokchi Ma'lumotnomani PDF ko'rinishida ko'radi va
+ * Tasdiqlash qadamida ishtirokchi Maʼlumotnomani PDF koʻrinishida koʻradi va
  * yuklab oladi. Yuborilganda aynan shu hujjat arizaga biriktiriladi.
  */
 function MalumotnomaPdf({

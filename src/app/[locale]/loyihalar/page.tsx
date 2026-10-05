@@ -28,10 +28,10 @@ export async function generateMetadata({
 }
 
 /**
- * Loyihalar — bitta sahifada ketma-ket uch bo'lim:
+ * Loyihalar — bitta sahifada ketma-ket uch boʻlim:
  *   1. Respublika loyihalari
  *   2. Xalqaro loyihalar va hamkorlik (xalqaro sahifalar)
- *   3. Festival va ko'rik-tanlovlar
+ *   3. Festival va koʻrik-tanlovlar
  * Ilgari "Faoliyat", "Xalqaro" va "Tanlov va festivallar" alohida sahifalar edi.
  */
 export default async function ProjectsPage({ params }: { params: { locale: Locale } }) {
@@ -54,7 +54,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
   const bolimlar = [
     { id: 'respublika', nom: t('sectionRepublic') },
     { id: 'xalqaro', nom: t('sectionInternational') },
-    // Tanlovlar vaqtincha yopilgan bo'lsa bo'lim ham, unga o'tish tugmasi ham chiqmaydi
+    // Tanlovlar vaqtincha yopilgan boʻlsa boʻlim ham, unga oʻtish tugmasi ham chiqmaydi
     ...(sozlamalar.tanlovOpen ? [{ id: 'tanlovlar', nom: t('sectionCompetitions') }] : []),
   ];
 
@@ -66,7 +66,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
         crumbs={[{ label: tn('home'), href: '/' }, { label: t('title') }]}
       />
 
-      {/* Bo'limlarga tez o'tish */}
+      {/* Boʻlimlarga tez oʻtish */}
       <BolimNavigatsiya bolimlar={bolimlar} />
 
       {/* 1. Respublika loyihalari */}
@@ -102,7 +102,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
             </div>
           )}
 
-          {/* Xalqaro sahifalar (admin paneldan qo'shiladi) */}
+          {/* Xalqaro sahifalar (admin paneldan qoʻshiladi) */}
           <div className={xalqaro.length > 0 ? 'mt-12' : ''}>
             {xalqaro.length === 0 && xalqaroSahifalar.length === 0 && (
               <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />
@@ -126,7 +126,7 @@ export default async function ProjectsPage({ params }: { params: { locale: Local
 
       {sozlamalar.tanlovOpen && (
         <>
-        {/* 3. Festival va ko'rik-tanlovlar */}
+        {/* 3. Festival va koʻrik-tanlovlar */}
         <section id="tanlovlar" className="section scroll-mt-36 bg-white">
           <div className="container">
             <SectionTitle title={t('sectionCompetitions')} subtitle={t('subCompetitions')} />

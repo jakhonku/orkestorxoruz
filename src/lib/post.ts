@@ -3,11 +3,11 @@ import { telegramAjrat, telegramHavolasimi, telegramKanonik } from './telegram';
 import { youtubeIdAjrat, youtubeIdTogrimi } from './youtube';
 
 /**
- * Bitta "havola" maydoniga qo'yilgan manzilni tanib oladi.
+ * Bitta "havola" maydoniga qoʻyilgan manzilni tanib oladi.
  *
  * Muharrir YouTube videosini ham, Instagram postini ham, Telegram kanalidagi
- * postni ham shu bitta maydonga qo'yadi — qaysi biri ekanini sayt o'zi
- * aniqlaydi va sahifada mos ko'rinishda chiqaradi.
+ * postni ham shu bitta maydonga qoʻyadi — qaysi biri ekanini sayt oʻzi
+ * aniqlaydi va sahifada mos koʻrinishda chiqaradi.
  */
 export type PostManba =
   | { tur: 'youtube'; youtubeId: string }
@@ -30,7 +30,7 @@ export function postManbasi(xom: string): PostManba | null {
   return youtubeIdTogrimi(id) ? { tur: 'youtube', youtubeId: id } : null;
 }
 
-/** Bazaga yozishdan oldin havolani bir xil ko'rinishga keltiradi */
+/** Bazaga yozishdan oldin havolani bir xil koʻrinishga keltiradi */
 export function postHavolaKanonik(xom: string): string {
   const manba = postManbasi(xom);
   if (!manba) return (xom ?? '').trim();
@@ -39,7 +39,7 @@ export function postHavolaKanonik(xom: string): string {
     : manba.havola;
 }
 
-/** Shakl ostida ko'rsatiladigan qisqa nom: "YouTube (ID)", "Telegram" ... */
+/** Shakl ostida koʻrsatiladigan qisqa nom: "YouTube (ID)", "Telegram" ... */
 export function postManbaNomi(manba: PostManba): string {
   if (manba.tur === 'youtube') return `YouTube (${manba.youtubeId})`;
   return manba.tur === 'instagram' ? 'Instagram post' : 'Telegram post';
@@ -48,8 +48,8 @@ export function postManbaNomi(manba: PostManba): string {
 /**
  * Sarlavhasiz yangilik uchun zaxira yorliqning tarjima kaliti.
  *
- * Muharrir faqat post havolasini qo'ysa, sarlavha bo'sh qoladi — ro'yxatda
- * va sahifada "Telegram post" kabi yozuv ko'rsatiladi.
+ * Muharrir faqat post havolasini qoʻysa, sarlavha boʻsh qoladi — roʻyxatda
+ * va sahifada "Telegram post" kabi yozuv koʻrsatiladi.
  */
 export function postYorligiKaliti(havola?: string): string | null {
   const manba = postManbasi(havola ?? '');

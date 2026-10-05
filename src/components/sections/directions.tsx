@@ -20,7 +20,7 @@ const directions: Direction[] = [
 export function Directions({ yashirinHavolalar = [] }: { yashirinHavolalar?: string[] }) {
   const t = useTranslations('Home');
 
-  // Admin panelda yopib qo'yilgan sahifaning kartochkasi chiqmaydi
+  // Admin panelda yopib qoʻyilgan sahifaning kartochkasi chiqmaydi
   const korinadigan = directions.filter((d) => !yashirinHavolalar.includes(d.href));
 
   return (

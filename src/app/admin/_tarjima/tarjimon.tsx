@@ -5,16 +5,16 @@ import { useEffect } from 'react';
 import { tarjimaQil } from '@/lib/admin-tarjima';
 
 /**
- * Ruscha tanlanganda ekrandagi o'zbekcha matnlarni ruschaga almashtiradi.
+ * Ruscha tanlanganda ekrandagi oʻzbekcha matnlarni ruschaga almashtiradi.
  *
- * - Sahifa ochilganda hammasi bir marta o'tiladi, keyin `MutationObserver`
- *   yangi paydo bo'lgan yoki o'zgargan matnlarni (server javobi, ochilgan
+ * - Sahifa ochilganda hammasi bir marta oʻtiladi, keyin `MutationObserver`
+ *   yangi paydo boʻlgan yoki oʻzgargan matnlarni (server javobi, ochilgan
  *   oynalar, xato xabarlari) shu zahoti tarjima qiladi.
  * - Matn tugunlari va `placeholder`/`title`/`aria-label`/`alt` atributlari;
  *   `confirm`/`alert` oynalari ham. Foydalanuvchi yozgan qiymatlarga
  *   (input, textarea) tegilmaydi.
- * - Ochilish paytida sahifa yashirin turadi (`data-tarjima` qo'yilguncha) —
- *   o'zbekcha matn bir lahza "yaltirab" ko'rinmasligi uchun.
+ * - Ochilish paytida sahifa yashirin turadi (`data-tarjima` qoʻyilguncha) —
+ *   oʻzbekcha matn bir lahza "yaltirab" koʻrinmasligi uchun.
  */
 
 const ATRIBUTLAR = ['placeholder', 'title', 'aria-label', 'alt'];
@@ -69,7 +69,7 @@ export function AdminTarjimon() {
       html.setAttribute('data-tarjima', '1');
     };
 
-    // Gidratsiya tugashini kutamiz: bundan oldin matnni o'zgartirsak React nomuvofiqlik deb hisoblaydi
+    // Gidratsiya tugashini kutamiz: bundan oldin matnni oʻzgartirsak React nomuvofiqlik deb hisoblaydi
     const kutish = window.setTimeout(boshlash, 60);
 
     const kuzatuvchi = new MutationObserver((royxat) => {
@@ -88,7 +88,7 @@ export function AdminTarjimon() {
       attributeFilter: ATRIBUTLAR,
     });
 
-    // Brauzerning o'z oynalari (masalan "Rostdan o'chirilsinmi?")
+    // Brauzerning oʻz oynalari (masalan "Rostdan oʻchirilsinmi?")
     const { confirm: asliConfirm, alert: asliAlert } = window;
     window.confirm = (xabar?: string) => asliConfirm.call(window, xabar ? tarjimaQil(xabar) : xabar);
     window.alert = (xabar?: unknown) =>

@@ -4,9 +4,9 @@ import { defineConfig } from 'prisma/config';
 /**
  * Prisma CLI sozlamalari (migratsiya, generate, studio).
  *
- * Migratsiyalar Supabase'ning to'g'ridan-to'g'ri ulanishi orqali bajariladi
+ * Migratsiyalar Supabaseʼning toʻgʻridan-toʻgʻri ulanishi orqali bajariladi
  * (`DIRECT_URL`) — pooler orqali DDL buyruqlari ishonchli ishlamaydi.
- * Sayt esa ish paytida pooler'dan foydalanadi (`DATABASE_URL`).
+ * Sayt esa ish paytida poolerʼdan foydalanadi (`DATABASE_URL`).
  */
 export default defineConfig({
   schema: "prisma/schema.prisma",

@@ -2,14 +2,14 @@
  * Sahifa matnlarini bazaga sinxronlash.
  *
  * `messages/{uz,ru,en}.json` — standart matnlar manbasi. Bu skript ulardagi
- * kalitlarni `ui_texts` jadvaliga qo'shadi, shunda admin panelda tahrirlash
- * mumkin bo'ladi.
+ * kalitlarni `ui_texts` jadvaliga qoʻshadi, shunda admin panelda tahrirlash
+ * mumkin boʻladi.
  *
  * Ishga tushirish:  npm run db:matnlar
  *
- * MUHIM: faqat kodda haqiqatan ishlatiladigan kalitlar qo'shiladi.
- * Aks holda panelda tahrirlab bo'ladigan, lekin saytda hech narsani
- * o'zgartirmaydigan "o'lik" matnlar paydo bo'ladi.
+ * MUHIM: faqat kodda haqiqatan ishlatiladigan kalitlar qoʻshiladi.
+ * Aks holda panelda tahrirlab boʻladigan, lekin saytda hech narsani
+ * oʻzgartirmaydigan "oʻlik" matnlar paydo boʻladi.
  *
  * Xavfsiz: mavjud qatorlar tegilmaydi (admin tahriri saqlanadi).
  */
@@ -28,25 +28,25 @@ const db = new PrismaClient({
 });
 
 /**
- * Kod ichida ishlatilsa ham, panelda ko'rsatilmaydigan kalitlar.
+ * Kod ichida ishlatilsa ham, panelda koʻrsatilmaydigan kalitlar.
  *
- * Bular faqat ZAXIRA qiymat: sahifa avval bazadagi kontentni oladi, u bo'sh
- * bo'lsagina shu matnga tushadi. Panelda ko'rsatilsa, admin tahrirlaydi-yu,
- * saytda hech narsa o'zgarmaydi.
+ * Bular faqat ZAXIRA qiymat: sahifa avval bazadagi kontentni oladi, u boʻsh
+ * boʻlsagina shu matnga tushadi. Panelda koʻrsatilsa, admin tahrirlaydi-yu,
+ * saytda hech narsa oʻzgarmaydi.
  */
 const ZAXIRA_KALITLAR = new Set([
-  // Missiya matni "Sozlamalar" bo'limida tahrirlanadi (settings.missionText)
+  // Missiya matni "Sozlamalar" boʻlimida tahrirlanadi (settings.missionText)
   'About.missionText',
 ]);
 
 type Daraxt = { [kalit: string]: unknown };
 
-/** Ichma-ich obyektni "Home.hero.title" ko'rinishidagi tekis ro'yxatga aylantiradi */
+/** Ichma-ich obyektni "Home.hero.title" koʻrinishidagi tekis roʻyxatga aylantiradi */
 function tekisla(obj: Daraxt, oldingi = ''): Record<string, string> {
   const natija: Record<string, string> = {};
   for (const [k, v] of Object.entries(obj)) {
     const kalit = oldingi ? `${oldingi}.${k}` : k;
-    // Massivlar (masalan eski slayd ro'yxati) tahrirlanmaydi — o'tkazib yuboriladi
+    // Massivlar (masalan eski slayd roʻyxati) tahrirlanmaydi — oʻtkazib yuboriladi
     if (Array.isArray(v)) continue;
     if (typeof v === 'object' && v !== null) Object.assign(natija, tekisla(v as Daraxt, kalit));
     else if (typeof v === 'string') natija[kalit] = v;
@@ -97,7 +97,7 @@ function ishlatilganKalitlar(barcha: string[]): Set<string> {
         if (barcha.includes(kalit)) ishlatilgan.add(kalit);
       }
 
-      // t(`prefiks_${...}`) — kalit o'zgaruvchiga bog'liq
+      // t(`prefiks_${...}`) — kalit oʻzgaruvchiga bogʻliq
       const dinamik = new RegExp('\\b' + ozgaruvchi + '\\(\\s*`([^`$]*)\\$\\{', 'g');
       for (const m of matn.matchAll(dinamik)) {
         const boshlanish = `${ns}.${m[1]}`;
@@ -120,7 +120,7 @@ async function main() {
   console.log(`\nmessages/*.json dagi kalitlar: ${hammasi.length} ta`);
   console.log(`  saytda ishlatiladi:         ${kalitlar.length} ta`);
   console.log(`  kodda ishlatilmaydi:        ${hammasi.length - ishlatilgan.size} ta (panelga chiqmaydi)`);
-  console.log(`  faqat zaxira qiymat:        ${ZAXIRA_KALITLAR.size} ta (boshqa bo'limda tahrirlanadi)\n`);
+  console.log(`  faqat zaxira qiymat:        ${ZAXIRA_KALITLAR.size} ta (boshqa boʻlimda tahrirlanadi)\n`);
 
   const bor = await db.uiText.findMany({ select: { key: true } });
   const borKalitlar = new Set(bor.map((b) => b.key));
@@ -145,8 +145,8 @@ async function main() {
     await db.uiText.deleteMany({ where: { key: { in: keraksiz } } });
   }
 
-  console.log(`  yangi qo'shildi:   ${qoshildi}`);
-  console.log(`  o'zgarmadi:        ${kalitlar.length - qoshildi}`);
+  console.log(`  yangi qoʻshildi:   ${qoshildi}`);
+  console.log(`  oʻzgarmadi:        ${kalitlar.length - qoshildi}`);
   console.log(`  panelchan olindi:  ${keraksiz.length}`);
   if (keraksiz.length) for (const k of keraksiz) console.log(`      ${k}`);
   console.log('\nTayyor.\n');

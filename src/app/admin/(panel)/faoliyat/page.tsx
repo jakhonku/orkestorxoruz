@@ -24,7 +24,7 @@ export default async function FaoliyatSahifasi() {
         <h1 className="font-serif text-2xl font-semibold text-navy">Faoliyat sahifasi</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           Saytdagi <span className="font-medium text-navy">/faoliyat</span> sahifasi — menyudagi
-          «Faoliyat» shu yerga olib boradi. Banner, kirish matni va pastdagi yo‘nalish
+          «Faoliyat» shu yerga olib boradi. Banner, kirish matni va pastdagi yoʻnalish
           kartochkalari shu yerdan boshqariladi.
         </p>
       </div>

@@ -9,7 +9,7 @@ import { getSettings } from '@/server/queries/settings';
 /**
  * "Sinov xati" tugmasi.
  *
- * Sozlash ikki qismdan iborat (SMTP ma'lumotlari va qabul qiluvchi pochta) —
+ * Sozlash ikki qismdan iborat (SMTP maʼlumotlari va qabul qiluvchi pochta) —
  * qaysi biri yetishmayotganini haqiqiy arizani kutmasdan bilib olish uchun.
  */
 
@@ -17,8 +17,8 @@ export type SinovNatija = { ok: true } | { ok: false; xato: string };
 
 export async function pochtaSinov(): Promise<SinovNatija> {
   const sessiya = await joriySessiya();
-  if (!sessiya) return { ok: false, xato: 'Ruxsat yo‘q. Qaytadan kiring.' };
-  if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu bo‘lim sizga ochiq emas.' };
+  if (!sessiya) return { ok: false, xato: 'Ruxsat yoʻq. Qaytadan kiring.' };
+  if (!bolimgaRuxsatmi(sessiya, 'sozlamalar')) return { ok: false, xato: 'Bu boʻlim sizga ochiq emas.' };
 
   const smtpBor = Boolean((process.env.SMTP_USER ?? '').trim() && (process.env.SMTP_PASS ?? '').trim());
   const telegramBor = telegramSozlanganmi();
@@ -28,15 +28,15 @@ export async function pochtaSinov(): Promise<SinovNatija> {
       ok: false,
       xato:
         'Xabarnoma sozlanmagan. Vercel loyihasining "Settings → Environment Variables" ' +
-        'bo‘limiga SMTP_USER va SMTP_PASS (Google "App password") yoki TELEGRAM_BOT_TOKEN va ' +
-        'TELEGRAM_CHAT_ID qo‘shing va saytni qayta joylang.',
+        'boʻlimiga SMTP_USER va SMTP_PASS (Google "App password") yoki TELEGRAM_BOT_TOKEN va ' +
+        'TELEGRAM_CHAT_ID qoʻshing va saytni qayta joylang.',
     };
   }
 
   const sozlamalar = await getSettings();
   const kimga = sozlamalar.notifyEmail.trim() || (process.env.SMTP_USER ?? '').trim();
   const qatorlar = [
-    { yorliq: 'Holat', qiymat: 'Xabarnoma to‘g‘ri sozlangan' },
+    { yorliq: 'Holat', qiymat: 'Xabarnoma toʻgʻri sozlangan' },
     { yorliq: 'Qabul qiluvchi', qiymat: kimga },
     { yorliq: 'Tekshirdi', qiymat: sessiya.email },
   ];
@@ -50,20 +50,20 @@ export async function pochtaSinov(): Promise<SinovNatija> {
   const muammolar: string[] = [];
   if (pochtaOk === false) {
     muammolar.push(
-      'Pochta: server xatni qabul qilmadi. Odatda "App password" noto‘g‘ri yoki eskirgan, ' +
+      'Pochta: server xatni qabul qilmadi. Odatda "App password" notoʻgʻri yoki eskirgan, ' +
         'Google hisobida ikki bosqichli tasdiqlash yoqilmagan yoki qabul qiluvchi manzil xato.',
     );
   }
   if (telegramOk === false) {
     muammolar.push(
-      'Telegram: xabar ketmadi. Bot tokeni yoki chat ID noto‘g‘ri, yoki bot chatga qo‘shilmagan ' +
-        '(avval botga /start yozing yoki uni guruhga qo‘shing).',
+      'Telegram: xabar ketmadi. Bot tokeni yoki chat ID notoʻgʻri, yoki bot chatga qoʻshilmagan ' +
+        '(avval botga /start yozing yoki uni guruhga qoʻshing).',
     );
   }
   if (muammolar.length > 0) {
     return {
       ok: false,
-      xato: muammolar.join(' ') + ' Aniq sababi Vercel’dagi "Logs" bo‘limida ko‘rinadi.',
+      xato: muammolar.join(' ') + ' Aniq sababi Vercelʼdagi "Logs" boʻlimida koʻrinadi.',
     };
   }
 

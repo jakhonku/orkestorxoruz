@@ -7,8 +7,8 @@ import type { Localized } from '@/types';
 /**
  * "Faoliyat" sahifasi (/faoliyat) mazmuni.
  *
- * Ro'yxati yo'q — bitta sahifa, shuning uchun `settings` jadvalida
- * kalit/qiymat bo'lib yotadi (xuddi sayt sozlamalari kabi).
+ * Roʻyxati yoʻq — bitta sahifa, shuning uchun `settings` jadvalida
+ * kalit/qiymat boʻlib yotadi (xuddi sayt sozlamalari kabi).
  */
 
 export type FaoliyatBloki = {
@@ -29,8 +29,8 @@ export type FaoliyatSahifasi = {
 const BOSH: Localized = { uz: '', ru: '', en: '' };
 
 /**
- * Sahifa hali to'ldirilmagan bo'lsa — menyudagi uchta yo'nalish
- * zaxira sifatida ko'rsatiladi, shunda sahifa bo'sh qolmaydi.
+ * Sahifa hali toʻldirilmagan boʻlsa — menyudagi uchta yoʻnalish
+ * zaxira sifatida koʻrsatiladi, shunda sahifa boʻsh qolmaydi.
  */
 const ZAXIRA_BLOKLAR: FaoliyatBloki[] = [
   {

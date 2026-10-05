@@ -134,10 +134,10 @@ export function FoydalanuvchilarRoyxati({
               className="inline-flex h-10 items-center gap-2 rounded-xl bg-navy px-5 text-sm font-semibold text-white disabled:opacity-60"
             >
               <Check className="h-4 w-4" />
-              Qo‘shish
+              Qoʻshish
             </button>
             <p className="mt-2 text-xs text-muted-foreground">
-              Parolni yozib oling — u shifrlanib saqlanadi va boshqa ko‘rsatilmaydi.
+              Parolni yozib oling — u shifrlanib saqlanadi va boshqa koʻrsatilmaydi.
             </p>
           </div>
         </form>
@@ -232,7 +232,7 @@ export function FoydalanuvchilarRoyxati({
                           }
                           className="h-8 rounded-lg bg-red-600 px-2.5 text-xs font-semibold text-white disabled:opacity-60"
                         >
-                          O‘chirilsin
+                          Oʻchirilsin
                         </button>
                         <button
                           type="button"
@@ -246,7 +246,7 @@ export function FoydalanuvchilarRoyxati({
                       <button
                         type="button"
                         onClick={() => setOchiriladigan(f.id)}
-                        title="O‘chirish"
+                        title="Oʻchirish"
                         className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600"
                       >
                         <Trash2 className="h-4 w-4" />

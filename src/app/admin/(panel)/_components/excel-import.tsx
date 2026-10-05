@@ -14,10 +14,10 @@ import {
 /**
  * Takrorlanuvchi qatorlarni (tarkib, repertuar va h.k.) Excel fayldan yuklash.
  *
- * Maydon ta'rifida `excel: true` turgan bo'lsa shakl ostida ikki tugma chiqadi:
- * namuna faylni yuklab olish va to'ldirilgan faylni qaytib yuklash. Kutubxona
+ * Maydon taʼrifida `excel: true` turgan boʻlsa shakl ostida ikki tugma chiqadi:
+ * namuna faylni yuklab olish va toʻldirilgan faylni qaytib yuklash. Kutubxona
  * (SheetJS) faqat shu tugmalar bosilganda `import()` orqali yuklanadi — admin
- * panelning qolgan qismi undan og'irlashmaydi.
+ * panelning qolgan qismi undan ogʻirlashmaydi.
  */
 export function ExcelYuklash({
   maydon,
@@ -71,14 +71,14 @@ export function ExcelYuklash({
         raw: false,
       });
       if (jadval.length === 0) {
-        throw new Error('Fayl bo‘sh — birinchi satrda ustun sarlavhalari bo‘lishi kerak.');
+        throw new Error('Fayl boʻsh — birinchi satrda ustun sarlavhalari boʻlishi kerak.');
       }
 
       const oqildi = jadvalniOqi(ichki, jadval);
 
       if (oqildi.qatorlar.length === 0 && oqildi.ogohlantirishlar.length === 0) {
         throw new Error(
-          'Bironta ham qator o‘qilmadi. Ustun sarlavhalari mos kelmayotgan bo‘lishi mumkin — namuna faylni yuklab olib tekshiring.',
+          'Bironta ham qator oʻqilmadi. Ustun sarlavhalari mos kelmayotgan boʻlishi mumkin — namuna faylni yuklab olib tekshiring.',
         );
       }
 
@@ -110,7 +110,7 @@ export function ExcelYuklash({
           ) : (
             <FileSpreadsheet className="h-3.5 w-3.5" />
           )}
-          Excel’dan yuklash
+          Excelʼdan yuklash
         </button>
 
         <button
@@ -137,7 +137,7 @@ export function ExcelYuklash({
 
       <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
         Birinchi satr — ustun sarlavhalari: {sarlavhalar.join(' · ')}. Tilsiz ustun (masalan «
-        {ichki[0]?.yorliq}») o‘zbekcha deb olinadi.
+        {ichki[0]?.yorliq}») oʻzbekcha deb olinadi.
       </p>
 
       {xato && <p className="mt-2 rounded-lg bg-red-50 px-3 py-2 text-xs text-red-700">{xato}</p>}
@@ -146,7 +146,7 @@ export function ExcelYuklash({
         <div className="mt-3 rounded-xl border border-border bg-white p-3">
           <div className="flex items-start justify-between gap-3">
             <p className="text-sm font-semibold text-navy">
-              {natija.qatorlar.length} ta qator o‘qildi
+              {natija.qatorlar.length} ta qator oʻqildi
             </p>
             <button
               type="button"
@@ -160,7 +160,7 @@ export function ExcelYuklash({
 
           {natija.topilmaganUstunlar.length > 0 && (
             <p className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
-              Bu ustunlar faylda topilmadi va bo‘sh qoladi: {natija.topilmaganUstunlar.join(', ')}
+              Bu ustunlar faylda topilmadi va boʻsh qoladi: {natija.topilmaganUstunlar.join(', ')}
             </p>
           )}
 
@@ -188,7 +188,7 @@ export function ExcelYuklash({
                   }}
                   className="rounded-lg bg-navy px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-navy-900"
                 >
-                  Mavjudlariga qo‘shish
+                  Mavjudlariga qoʻshish
                 </button>
                 <button
                   type="button"
@@ -204,7 +204,7 @@ export function ExcelYuklash({
               </div>
 
               <p className="mt-2 text-[11px] text-muted-foreground">
-                O‘zgarish shakl saqlangandan keyin bazaga yoziladi.
+                Oʻzgarish shakl saqlangandan keyin bazaga yoziladi.
               </p>
             </>
           )}
@@ -214,7 +214,7 @@ export function ExcelYuklash({
   );
 }
 
-/** O'qilgan qatorlarning dastlabki beshtasi — nima yuklanayotganini ko'rish uchun */
+/** Oʻqilgan qatorlarning dastlabki beshtasi — nima yuklanayotganini koʻrish uchun */
 function Korish({ ichki, qatorlar }: { ichki: Maydon[]; qatorlar: Record<string, unknown>[] }) {
   const korsat = ichki.slice(0, 3);
 

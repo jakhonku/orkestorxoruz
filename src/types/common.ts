@@ -18,7 +18,7 @@ export interface SocialLink {
   url: string;
 }
 
-/** O'zbekiston viloyatlari (regions) */
+/** Oʻzbekiston viloyatlari (regions) */
 export type Region =
   | 'toshkent-shahri'
   | 'toshkent'

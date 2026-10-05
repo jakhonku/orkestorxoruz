@@ -8,7 +8,7 @@ export const metadata = { title: 'Foydalanuvchilar' };
 
 export default async function FoydalanuvchilarSahifasi() {
   const sessiya = await joriySessiya();
-  // Muharrir bu sahifani ochsa — bo'lim umuman yo'qdek ko'rinadi
+  // Muharrir bu sahifani ochsa — boʻlim umuman yoʻqdek koʻrinadi
   if (sessiya?.role !== 'ADMIN') notFound();
 
   const royxat = await db.adminUser.findMany({ orderBy: [{ role: 'asc' }, { name: 'asc' }] });

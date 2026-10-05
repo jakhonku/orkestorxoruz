@@ -18,8 +18,8 @@ const config: Config = {
     extend: {
       colors: {
         // Brand palette
-        // Brend ranglari (PDF "Orkestr va Xor" — logotip qo'llanmasi)
-        // Chuqur ko'k — asosiy: #05203A (CMYK 95/69/27/67)
+        // Brend ranglari (PDF "Orkestr va Xor" — logotip qoʻllanmasi)
+        // Chuqur koʻk — asosiy: #05203A (CMYK 95/69/27/67)
         navy: {
           DEFAULT: '#05203A',
           50: '#edf2f8',

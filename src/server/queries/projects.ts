@@ -42,11 +42,11 @@ export const getProjects = cache(async (): Promise<Project[]> => {
 });
 
 /**
- * Faqat xalqaro darajadagi loyihalar — "Xalqaro" bo'limidagi
+ * Faqat xalqaro darajadagi loyihalar — "Xalqaro" boʻlimidagi
  * /xalqaro/loyihalar sahifasi uchun.
  *
- * Loyihaning o'zi odatdagidek "Loyihalar" bo'limida tahrirlanadi,
- * bu yerga "Ko'lami" maydoni «Xalqaro darajada» qo'yilganlari tushadi.
+ * Loyihaning oʻzi odatdagidek "Loyihalar" boʻlimida tahrirlanadi,
+ * bu yerga "Koʻlami" maydoni «Xalqaro darajada» qoʻyilganlari tushadi.
  */
 export const getInternationalProjects = cache(async (): Promise<Project[]> => {
   const rows = await db.project.findMany({

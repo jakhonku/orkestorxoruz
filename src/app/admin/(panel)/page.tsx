@@ -12,15 +12,15 @@ import { TalentTugmasi } from './_components/talent-tugmasi';
 
 export const metadata = { title: 'Bosh sahifa' };
 
-/** Prisma modellari dinamik chaqiriladi — bo'lim registridagi `model` nomi bo'yicha */
+/** Prisma modellari dinamik chaqiriladi — boʻlim registridagi `model` nomi boʻyicha */
 type Sanovchi = { count: (a?: unknown) => Promise<number> };
 
 /**
- * Har bir bo‘limdagi yozuvlar soni.
+ * Har bir boʻlimdagi yozuvlar soni.
  *
- * Bu — o‘ttizdan ortiq `count` so‘rovi, ya’ni bazaga o‘ttizdan ortiq marta
- * borib kelish. Sanoqlar tez-tez o‘zgarmaydi, shuning uchun natija keshda
- * saqlanadi va admin panelda biror yozuv saqlangan/o‘chirilgan zahoti
+ * Bu — oʻttizdan ortiq `count` soʻrovi, yaʼni bazaga oʻttizdan ortiq marta
+ * borib kelish. Sanoqlar tez-tez oʻzgarmaydi, shuning uchun natija keshda
+ * saqlanadi va admin panelda biror yozuv saqlangan/oʻchirilgan zahoti
  * (`revalidateTag`) yangilanadi — sahifa esa darhol ochiladi.
  */
 const bolimSanoqlari = unstable_cache(
@@ -28,8 +28,8 @@ const bolimSanoqlari = unstable_cache(
     const juftlar = await Promise.all(
       BOLIMLAR.map(async (b) => {
         const delegat = (db as unknown as Record<string, Sanovchi>)[b.model];
-        // Hamma bo'limda ham `published` ustuni yo'q (masalan "Sahifa matnlari") —
-        // bunday bo'limda faqat umumiy soni sanaladi.
+        // Hamma boʻlimda ham `published` ustuni yoʻq (masalan "Sahifa matnlari") —
+        // bunday boʻlimda faqat umumiy soni sanaladi.
         const nashrBor = b.maydonlar.some((m) => m.nom === 'published');
         try {
           const [jami, nashr] = await Promise.all([
@@ -50,7 +50,7 @@ const bolimSanoqlari = unstable_cache(
 
 export default async function AdminBoshSahifa() {
   const sessiya = await joriySessiya();
-  // Tanlov adminining bosh sahifasi — o'z arizalari
+  // Tanlov adminining bosh sahifasi — oʻz arizalari
   if (sessiya?.role === 'TANLOV') redirect('/admin/tanlov-arizalari');
 
   const [sanoqlar, sozlamalar, xabar, jamoaAriza, tanlovAriza, talent, obuna] = await Promise.all([
@@ -67,7 +67,7 @@ export default async function AdminBoshSahifa() {
     { nom: 'Aloqa xabarlari', son: xabar, ikonka: Mail },
     { nom: 'Jamoa arizalari', son: jamoaAriza, ikonka: Users2 },
     { nom: 'Tanlov arizalari', son: tanlovAriza, ikonka: Inbox },
-    { nom: 'Iste’dod arizalari', son: talent, ikonka: Music4 },
+    { nom: 'Isteʼdod arizalari', son: talent, ikonka: Music4 },
   ];
 
   const jamiYangi = xabar + jamoaAriza + tanlovAriza + talent;
@@ -79,8 +79,8 @@ export default async function AdminBoshSahifa() {
           Assalomu alaykum, {sessiya?.name.split(' ')[0]}
         </h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Saytdagi barcha kontentni shu yerdan boshqarasiz. O‘zgarish saqlangan zahoti saytda
-          ko‘rinadi.
+          Saytdagi barcha kontentni shu yerdan boshqarasiz. Oʻzgarish saqlangan zahoti saytda
+          koʻrinadi.
         </p>
       </div>
 
@@ -126,15 +126,15 @@ export default async function AdminBoshSahifa() {
 
         {jamiYangi === 0 && (
           <p className="mt-3 text-xs text-muted-foreground">
-            Yangi, ko‘rilmagan murojaat yo‘q. Obunachilar soni: {obuna} ta.
+            Yangi, koʻrilmagan murojaat yoʻq. Obunachilar soni: {obuna} ta.
           </p>
         )}
       </section>
 
-      {/* Kontent bo'limlari */}
+      {/* Kontent boʻlimlari */}
       <section>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          Kontent bo‘limlari
+          Kontent boʻlimlari
         </h2>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -153,7 +153,7 @@ export default async function AdminBoshSahifa() {
                 </div>
                 <p className="mt-2 font-serif text-2xl font-semibold text-navy">{s.jami}</p>
                 <p className="text-xs text-muted-foreground">
-                  {qoralama > 0 ? `${qoralama} ta qoralama` : 'hammasi saytda ko‘rinadi'}
+                  {qoralama > 0 ? `${qoralama} ta qoralama` : 'hammasi saytda koʻrinadi'}
                 </p>
               </Link>
             );

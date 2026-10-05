@@ -9,14 +9,14 @@ import { telegramYubor } from './telegram';
 
 /**
  * Yangi ariza kelganda pochtaga xabar yuboradi (Gmail SMTP). Telegram bot ham ulangan
- * bo'lsa (`telegram.ts`), xabar u yerga ham boradi.
+ * boʻlsa (`telegram.ts`), xabar u yerga ham boradi.
  *
  * Ikkita sozlama kerak:
- *   SMTP_USER / SMTP_PASS — muhit o'zgaruvchilari: Gmail manzili va Google
+ *   SMTP_USER / SMTP_PASS — muhit oʻzgaruvchilari: Gmail manzili va Google
  *                            hisobidan olingan 16 belgili "App password"
  *                            (oddiy parol emas!)
- *   Xabarnoma pochtasi     — admin panelda "Sozlamalar" da; bo'sh bo'lsa
- *                            xat SMTP_USER ning o'ziga boradi
+ *   Xabarnoma pochtasi     — admin panelda "Sozlamalar" da; boʻsh boʻlsa
+ *                            xat SMTP_USER ning oʻziga boradi
  *
  * MUHIM: xat ketmasa ham ariza baribir saqlanadi — bu yerdagi hech bir
  * xato yuqoriga chiqmaydi.
@@ -57,11 +57,11 @@ function transport(): Transporter | null {
 }
 
 /**
- * Qabul qiluvchilar: avval admin paneldagi sozlama, u bo'sh bo'lsa
- * xat yuborayotgan pochtaning o'zi.
+ * Qabul qiluvchilar: avval admin paneldagi sozlama, u boʻsh boʻlsa
+ * xat yuborayotgan pochtaning oʻzi.
  */
 async function qabulQiluvchilar(oziniki?: string | null): Promise<string[]> {
-  // Masalan tanlovning o'z emaili — u bor bo'lsa umumiy sozlama o'rniga shu ishlatiladi
+  // Masalan tanlovning oʻz emaili — u bor boʻlsa umumiy sozlama oʻrniga shu ishlatiladi
   let xom = String(oziniki ?? '').trim();
 
   if (!xom) {
@@ -126,7 +126,7 @@ export async function arizaXabari(
   qatorlar: Qator[],
   kimgaOzi?: string | null,
 ): Promise<boolean> {
-  // Ikkala kanal bir-biriga bog'liq emas: biri ishlamasa ikkinchisi baribir yuboradi
+  // Ikkala kanal bir-biriga bogʻliq emas: biri ishlamasa ikkinchisi baribir yuboradi
   const [pochta, telegram] = await Promise.all([
     pochtaYubor(sarlavha, qatorlar, kimgaOzi),
     telegramYubor(sarlavha, qatorlar),

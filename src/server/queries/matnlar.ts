@@ -8,7 +8,7 @@ import type { Locale } from '@/i18n/routing';
  * Admin panelda tahrirlangan sahifa matnlari (`ui_texts`).
  *
  * Bu qiymatlar `messages/{uz,ru,en}.json` dagi standart matnlar ustidan
- * yoziladi. Baza javob bermasa yoki jadval hali yaratilmagan bo'lsa, sayt
+ * yoziladi. Baza javob bermasa yoki jadval hali yaratilmagan boʻlsa, sayt
  * standart matnlar bilan ishlayveradi.
  */
 
@@ -21,7 +21,7 @@ export const uiMatnlar = cache(async (locale: Locale): Promise<Record<string, st
     const natija: Record<string, string> = {};
     for (const q of qatorlar) {
       const matn = (q.value as Qiymat)?.[locale];
-      // Bo'sh qoldirilgan matn — "standartini ishlat" degani
+      // Boʻsh qoldirilgan matn — "standartini ishlat" degani
       if (typeof matn === 'string' && matn.trim() !== '') natija[q.key] = matn;
     }
     return natija;
@@ -42,6 +42,6 @@ export function matnniJoylash(daraxt: Record<string, unknown>, kalit: string, qi
   }
 
   const oxirgi = qismlar[qismlar.length - 1];
-  // Faqat mavjud matnni almashtiramiz — koddan olib tashlangan kalit qo'shilmaydi
+  // Faqat mavjud matnni almashtiramiz — koddan olib tashlangan kalit qoʻshilmaydi
   if (typeof joriy[oxirgi] === 'string') joriy[oxirgi] = qiymat;
 }

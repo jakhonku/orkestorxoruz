@@ -1,7 +1,7 @@
 import { boyMatnHtml } from '@/lib/boy-matn';
 import { cn } from '@/lib/utils';
 
-/** Admin panelda boyitilgan matn sifatida kiritilgan qiymatni ko'rsatadi */
+/** Admin panelda boyitilgan matn sifatida kiritilgan qiymatni koʻrsatadi */
 export function BoyMatn({ matn, className }: { matn: string; className?: string }) {
   return (
     <div

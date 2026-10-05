@@ -32,9 +32,9 @@ export function MediaTabs({
   videos: MediaVideo[];
   photos: MediaPhoto[];
   documents: DocumentLink[];
-  /** Admin paneldagi "Press-relizlar" bo'limidagi yozuvlar */
+  /** Admin paneldagi "Press-relizlar" boʻlimidagi yozuvlar */
   releases: PressRelease[];
-  /** Sozlamalarda yuklangan press-kit fayli. Bo'sh bo'lsa tugma ko'rsatilmaydi */
+  /** Sozlamalarda yuklangan press-kit fayli. Boʻsh boʻlsa tugma koʻrsatilmaydi */
   pressKitUrl: string;
 }) {
   const t = useTranslations('Media');
@@ -49,7 +49,7 @@ export function MediaTabs({
 
   return (
     <div>
-      {/* Mobilda bo'limlar qatorga sig'masa — yonga suriladi (o'ralib ketmaydi) */}
+      {/* Mobilda boʻlimlar qatorga sigʻmasa — yonga suriladi (oʻralib ketmaydi) */}
       <div className="no-scrollbar mb-10 flex gap-1 overflow-x-auto rounded-full border border-border bg-white p-1 shadow-soft sm:w-fit">
         {tabs.map((item) => {
           const Icon = item.icon;
@@ -103,7 +103,7 @@ function NewsTab({ news }: { news: NewsArticle[] }) {
   const totalPages = Math.ceil(news.length / PER_PAGE);
   const visible = news.slice((page - 1) * PER_PAGE, page * PER_PAGE);
 
-  // Ro'yxat bo'sh bo'lsa — bo'sh joy emas, tushunarli xabar ko'rsatiladi
+  // Roʻyxat boʻsh boʻlsa — boʻsh joy emas, tushunarli xabar koʻrsatiladi
   if (news.length === 0) return <EmptyState title={tc('emptyTitle')} text={tc('emptyText')} />;
 
   return (
@@ -200,8 +200,8 @@ function PressTab({
   /**
    * Tugma qaysi faylni ochadi:
    *   1) Sozlamalarda yuklangan press-kit
-   *   2) bo'lmasa — "Hujjatlar" bo'limidagi birinchi fayl
-   * Ikkalasi ham bo'lmasa, ochadigan narsa yo'q — tugma ko'rsatilmaydi.
+   *   2) boʻlmasa — "Hujjatlar" boʻlimidagi birinchi fayl
+   * Ikkalasi ham boʻlmasa, ochadigan narsa yoʻq — tugma koʻrsatilmaydi.
    */
   const yuklanadigan = pressKitUrl || documents[0]?.href || '';
 
@@ -223,7 +223,7 @@ function PressTab({
         )}
       </div>
 
-      {/* Press-relizlar — har biri bitta tadbir bo'yicha */}
+      {/* Press-relizlar — har biri bitta tadbir boʻyicha */}
       {releases.length > 0 && (
         <div className="mt-10">
           <h4 className="mb-4 font-serif text-xl font-semibold text-navy">
@@ -285,7 +285,7 @@ function PressTab({
   );
 }
 
-/** Press-relizning to'liq matni — kartochka bosilganda ochiladigan oyna */
+/** Press-relizning toʻliq matni — kartochka bosilganda ochiladigan oyna */
 function RelizMatni({ reliz }: { reliz: PressRelease }) {
   const t = useTranslations('Media');
   const locale = useLocale();

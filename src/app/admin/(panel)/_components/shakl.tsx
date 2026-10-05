@@ -19,7 +19,7 @@ import { yozuvOchirish, yozuvSaqlash } from '@/server/admin/amallar';
 import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from '@/server/admin/turlar';
 import { MaydonKiritish } from './maydon';
 
-/** Shaklga kerak bo'ladigan bo'lim ma'lumoti (klientga uzatiladigan qismi) */
+/** Shaklga kerak boʻladigan boʻlim maʼlumoti (klientga uzatiladigan qismi) */
 export type ShaklBolim = {
   kalit: string;
   nom: string;
@@ -54,8 +54,8 @@ export function Shakl({
   const qoshimcha = bolim.maydonlar.filter((m) => m.qoshimcha);
 
   /**
-   * Qo'shimcha bo'lim odatda yopiq. Lekin tahrirlashda ichidagi biror maydon
-   * to'ldirilgan bo'lsa — muharrir uni izlab yurmasin deb ochiq holda chiqadi.
+   * Qoʻshimcha boʻlim odatda yopiq. Lekin tahrirlashda ichidagi biror maydon
+   * toʻldirilgan boʻlsa — muharrir uni izlab yurmasin deb ochiq holda chiqadi.
    */
   const [qoshimchaOchiq, setQoshimchaOchiq] = useState(() =>
     qoshimcha.some((m) => toldirilganmi(boshlangich[m.nom])),
@@ -63,11 +63,11 @@ export function Shakl({
   const [kutilmoqda, boshla] = useTransition();
 
   /**
-   * Maydon qiymatini o'zgartirish.
+   * Maydon qiymatini oʻzgartirish.
    *
-   * `qiymat` funksiya bo'lishi ham mumkin — u holda maydonning ENG OXIRGI
+   * `qiymat` funksiya boʻlishi ham mumkin — u holda maydonning ENG OXIRGI
    * qiymatidan hisoblanadi. Bu rasm yuklash kabi uzoq davom etadigan ishlar
-   * uchun kerak: yuklash tugaganda oradagi boshqa o'zgarishlar yo'qolmaydi.
+   * uchun kerak: yuklash tugaganda oradagi boshqa oʻzgarishlar yoʻqolmaydi.
    */
   const ozgartir = (nom: string, qiymat: unknown) => {
     setSaqlandi(false);
@@ -121,7 +121,7 @@ export function Shakl({
           {bolim.nom}
         </Link>
         <h1 className="font-serif text-2xl font-semibold text-navy">
-          {id === null ? `Yangi ${bolim.birlik} qo‘shish` : `${bolim.birlik} — tahrirlash`}
+          {id === null ? `Yangi ${bolim.birlik} qoʻshish` : `${bolim.birlik} — tahrirlash`}
         </h1>
         {bolim.izoh && <p className="mt-1 text-sm text-muted-foreground">{bolim.izoh}</p>}
       </div>
@@ -136,7 +136,7 @@ export function Shakl({
       {/* Asosiy maydonlar */}
       <Panel maydonlar={asosiy} qiymatlar={qiymatlar} ozgartir={ozgartir} />
 
-      {/* Kam ishlatiladigan maydonlar — yopiq turadi, kerak bo‘lsa ochiladi */}
+      {/* Kam ishlatiladigan maydonlar — yopiq turadi, kerak boʻlsa ochiladi */}
       {qoshimcha.length > 0 && (
         <div className="mt-4">
           <button
@@ -145,7 +145,7 @@ export function Shakl({
             className="flex w-full items-center gap-2 rounded-2xl border border-border bg-white px-5 py-3.5 text-left text-sm font-medium text-navy transition-colors hover:border-gold/50"
           >
             <Settings2 className="h-4 w-4 text-muted-foreground" />
-            Qo‘shimcha maydonlar
+            Qoʻshimcha maydonlar
             <span className="text-xs font-normal text-muted-foreground">
               ({qoshimcha.length} ta — ixtiyoriy)
             </span>
@@ -188,7 +188,7 @@ export function Shakl({
             href={`/admin/${bolim.kalit}`}
             className="inline-flex h-11 items-center rounded-xl border border-border px-5 text-sm font-medium text-navy transition-colors hover:bg-navy/5"
           >
-            Ro‘yxatga qaytish
+            Roʻyxatga qaytish
           </Link>
 
           {id !== null && (
@@ -202,7 +202,7 @@ export function Shakl({
                     disabled={kutilmoqda}
                     className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-red-600 px-3 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-60"
                   >
-                    Ha, o‘chirilsin
+                    Ha, oʻchirilsin
                   </button>
                   <button
                     type="button"
@@ -219,7 +219,7 @@ export function Shakl({
                   className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-border px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-red-300 hover:text-red-600"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
-                  O‘chirish
+                  Oʻchirish
                 </button>
               )}
             </div>
@@ -230,7 +230,7 @@ export function Shakl({
   );
 }
 
-/** Maydonlar to'plamini bitta oq kartochkada chizadi */
+/** Maydonlar toʻplamini bitta oq kartochkada chizadi */
 function Panel({
   maydonlar,
   qiymatlar,
@@ -256,7 +256,7 @@ function Panel({
   );
 }
 
-/** Qiymat bo'sh emasmi — qo'shimcha bo'limni ochiq ko'rsatish uchun */
+/** Qiymat boʻsh emasmi — qoʻshimcha boʻlimni ochiq koʻrsatish uchun */
 function toldirilganmi(qiymat: unknown): boolean {
   if (qiymat === null || qiymat === undefined) return false;
   if (typeof qiymat === 'string') return qiymat.trim() !== '';

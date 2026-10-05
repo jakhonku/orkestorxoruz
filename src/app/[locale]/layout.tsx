@@ -80,12 +80,12 @@ export async function generateMetadata({
  * Sahifalar build paytida tayyorlanadi (tez ochiladi) va keshlanadi.
  *
  * Admin panelda biror yozuv saqlansa, `revalidatePath('/', 'layout')`
- * chaqiriladi — kesh o'sha zahoti bekor qilinadi va keyingi so'rov bazadan
- * yangi ma'lumot bilan quriladi. Ya'ni tahrir darhol ko'rinadi.
+ * chaqiriladi — kesh oʻsha zahoti bekor qilinadi va keyingi soʻrov bazadan
+ * yangi maʼlumot bilan quriladi. Yaʼni tahrir darhol koʻrinadi.
  *
- * Quyidagi 60 soniya — faqat zaxira: kimdir ma'lumotni Supabase panelidan
- * to'g'ridan-to'g'ri o'zgartirsa (admin panelsiz), sayt shuncha vaqt ichida
- * o'zi yangilanadi.
+ * Quyidagi 60 soniya — faqat zaxira: kimdir maʼlumotni Supabase panelidan
+ * toʻgʻridan-toʻgʻri oʻzgartirsa (admin panelsiz), sayt shuncha vaqt ichida
+ * oʻzi yangilanadi.
  */
 export const revalidate = 60;
 
@@ -106,15 +106,15 @@ export default async function LocaleLayout({
     getInternationalPages(),
   ]);
 
-  // Admin paneldan qo'shilgan sahifalar "Xalqaro" menyusiga ulanadi.
-  // Sarlavha bazadan kelgani uchun joriy tilga shu yerda o'giriladi.
+  // Admin paneldan qoʻshilgan sahifalar "Xalqaro" menyusiga ulanadi.
+  // Sarlavha bazadan kelgani uchun joriy tilga shu yerda oʻgiriladi.
   const xalqaroHavolalar = xalqaro.map((p) => ({
     href: `/xalqaro/${p.slug}`,
     label: pick(p.title, locale),
   }));
 
-  // Talent platformasi admin panelda yopilgan bo'lsa — menyuda ham,
-  // footerda ham ko'rinmaydi (sahifasi 404 qaytaradi)
+  // Talent platformasi admin panelda yopilgan boʻlsa — menyuda ham,
+  // footerda ham koʻrinmaydi (sahifasi 404 qaytaradi)
   const yashirinHavolalar = [
     ...(settings.talentOpen ? [] : ['/talent']),
     ...(settings.tanlovOpen ? [] : ['/loyihalar#tanlovlar']),

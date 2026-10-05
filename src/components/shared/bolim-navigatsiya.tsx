@@ -7,8 +7,8 @@ import { cn } from '@/lib/utils';
 export type NavBolim = { id: string; nom: string; ikonka?: ReactNode };
 
 /**
- * Sahifa bo'limlariga tez o'tish paneli. Sahifa aylantirilganda hozirgi bo'lim
- * belgilanadi, bosilganda esa shu bo'limga silliq o'tadi.
+ * Sahifa boʻlimlariga tez oʻtish paneli. Sahifa aylantirilganda hozirgi boʻlim
+ * belgilanadi, bosilganda esa shu boʻlimga silliq oʻtadi.
  */
 export function BolimNavigatsiya({ bolimlar }: { bolimlar: NavBolim[] }) {
   const [faol, setFaol] = useState(bolimlar[0]?.id ?? '');
@@ -20,7 +20,7 @@ export function BolimNavigatsiya({ bolimlar }: { bolimlar: NavBolim[] }) {
 
     const kuzatuvchi = new IntersectionObserver(
       (yozuvlar) => {
-        // Ekranning yuqori qismiga kelgan bo'lim faol hisoblanadi
+        // Ekranning yuqori qismiga kelgan boʻlim faol hisoblanadi
         const korinadigan = yozuvlar.filter((y) => y.isIntersecting);
         if (korinadigan.length > 0) setFaol(korinadigan[0].target.id);
       },
@@ -32,7 +32,7 @@ export function BolimNavigatsiya({ bolimlar }: { bolimlar: NavBolim[] }) {
 
   return (
     <nav
-      aria-label="Bo‘limlar"
+      aria-label="Boʻlimlar"
       className="sticky top-20 z-30 border-b border-border/70 bg-white/85 backdrop-blur-md"
     >
       <div className="container no-scrollbar flex gap-2 overflow-x-auto py-3.5">

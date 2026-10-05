@@ -1,9 +1,9 @@
 /**
- * Excel varag'idan o'qilgan xom jadvalni shakl qatorlariga o'girish.
+ * Excel varagʻidan oʻqilgan xom jadvalni shakl qatorlariga oʻgirish.
  *
- * Bu yerda React ham, SheetJS ham yo'q — faqat sof funksiyalar. Shu sababli
- * mantiqni alohida sinab ko'rish mumkin, komponent esa faqat fayl o'qish va
- * ko'rinish bilan shug'ullanadi.
+ * Bu yerda React ham, SheetJS ham yoʻq — faqat sof funksiyalar. Shu sababli
+ * mantiqni alohida sinab koʻrish mumkin, komponent esa faqat fayl oʻqish va
+ * koʻrinish bilan shugʻullanadi.
  */
 
 import { TILLAR, type KopTilli, type Maydon } from '@/server/admin/turlar';
@@ -19,7 +19,7 @@ export function kalitla(matn: string): string {
   return matn.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, '');
 }
 
-/** Namuna fayl va ko'rsatmadagi ustun sarlavhalari */
+/** Namuna fayl va koʻrsatmadagi ustun sarlavhalari */
 export function sarlavhalarRoyxati(ichki: Maydon[]): string[] {
   const s: string[] = [];
   for (const im of ichki) {
@@ -33,7 +33,7 @@ export function sarlavhalarRoyxati(ichki: Maydon[]): string[] {
 }
 
 /* ------------------------------------------------------------------ */
-/* Ustunlarni maydonlarga bog'lash                                     */
+/* Ustunlarni maydonlarga bogʻlash                                     */
 /* ------------------------------------------------------------------ */
 
 type Boglanish = { im: Maydon; ustunlar: Partial<Record<'uz' | 'ru' | 'en' | 'bir', string>> };
@@ -59,7 +59,7 @@ function bogla(ichki: Maydon[], sarlavhalar: Map<string, string>): Boglanish[] {
         ]);
         if (u) ustunlar[til.kalit] = u;
       }
-      // Tilsiz ustun ham qabul qilinadi — u o'zbekcha deb olinadi
+      // Tilsiz ustun ham qabul qilinadi — u oʻzbekcha deb olinadi
       if (!ustunlar.uz) {
         const u = ustunTop(sarlavhalar, [im.nom, im.yorliq]);
         if (u) ustunlar.uz = u;
@@ -74,7 +74,7 @@ function bogla(ichki: Maydon[], sarlavhalar: Map<string, string>): Boglanish[] {
 }
 
 /* ------------------------------------------------------------------ */
-/* Katakdagi matnni maydon turiga o'girish                             */
+/* Katakdagi matnni maydon turiga oʻgirish                             */
 /* ------------------------------------------------------------------ */
 
 function matn(qator: Record<string, unknown>, ustun: string | undefined): string {
@@ -130,7 +130,7 @@ function qiymatQur(b: Boglanish, qator: Record<string, unknown>): unknown {
   return xom;
 }
 
-/** Maydon to'ldirilganmi — talab qilinganlarni tekshirish uchun */
+/** Maydon toʻldirilganmi — talab qilinganlarni tekshirish uchun */
 export function boshmi(im: Maydon, qiymat: unknown): boolean {
   if (KOP_TILLI.includes(im.tur)) {
     const v = qiymat as Record<string, unknown>;
@@ -157,7 +157,7 @@ export type OqishNatijasi = {
 /**
  * Xom jadval (`sheet_to_json` natijasi) → shakl qatorlari.
  *
- * Bo'sh satrlar jimgina tashlab ketiladi, talab qilingan maydoni bo'sh
+ * Boʻsh satrlar jimgina tashlab ketiladi, talab qilingan maydoni boʻsh
  * satrlar esa ogohlantirish bilan tashlanadi — shunda muharrir qaysi
  * satr tushib qolganini biladi.
  */
@@ -165,8 +165,8 @@ export function jadvalniOqi(
   ichki: Maydon[],
   jadval: Record<string, unknown>[],
 ): OqishNatijasi {
-  // Birinchi satrdagi sarlavhalar emas, barcha kalitlar yig'iladi:
-  // Excel ba'zan bo'sh kataklarni tashlab ketadi.
+  // Birinchi satrdagi sarlavhalar emas, barcha kalitlar yigʻiladi:
+  // Excel baʼzan boʻsh kataklarni tashlab ketadi.
   const sarlavhalar = new Map<string, string>();
   for (const q of jadval) {
     for (const k of Object.keys(q)) {
@@ -188,7 +188,7 @@ export function jadvalniOqi(
     const yozuv: Record<string, unknown> = {};
     for (const b of bogliqlar) yozuv[b.im.nom] = qiymatQur(b, xomQator);
 
-    // Butunlay bo'sh satr — Excel oxiridagi bo'shliqlar shu yerda tushib qoladi
+    // Butunlay boʻsh satr — Excel oxiridagi boʻshliqlar shu yerda tushib qoladi
     if (bogliqlar.every((b) => boshmi(b.im, yozuv[b.im.nom]))) return;
 
     const yetishmaydi = bogliqlar
@@ -197,7 +197,7 @@ export function jadvalniOqi(
 
     if (yetishmaydi.length > 0) {
       // +2: birinchi satr sarlavha, hisob 1 dan boshlanadi
-      ogohlantirishlar.push(`${i + 2}-satr tashlab ketildi — ${yetishmaydi.join(', ')} bo‘sh`);
+      ogohlantirishlar.push(`${i + 2}-satr tashlab ketildi — ${yetishmaydi.join(', ')} boʻsh`);
       return;
     }
 

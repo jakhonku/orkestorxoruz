@@ -1,8 +1,8 @@
 /**
  * Ariza haqidagi xat matnini yasash.
  *
- * Alohida faylda turadi — `server-only` bog'liqligi yo'q, shuning uchun
- * mantiqni alohida sinab ko'rish mumkin.
+ * Alohida faylda turadi — `server-only` bogʻliqligi yoʻq, shuning uchun
+ * mantiqni alohida sinab koʻrish mumkin.
  */
 
 /** HTML da bu uch belgi almashtirilishi shart */
@@ -10,17 +10,17 @@ export function himoya(matn: string): string {
   return matn.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
 
-/** Xat qatori: bo'sh qiymatli qatorlar umuman chiqmaydi */
+/** Xat qatori: boʻsh qiymatli qatorlar umuman chiqmaydi */
 export type Qator = { yorliq: string; qiymat?: string | number | null };
 
-/** Bo'sh bo'lmagan qatorlar */
+/** Boʻsh boʻlmagan qatorlar */
 function toza(qatorlar: Qator[]): { yorliq: string; qiymat: string }[] {
   return qatorlar
     .map((q) => ({ yorliq: q.yorliq, qiymat: String(q.qiymat ?? '').trim() }))
     .filter((q) => q.qiymat !== '');
 }
 
-/** Oddiy matnli ko'rinish — pochta dasturi HTML ni ko'rsatmasa ishlatiladi */
+/** Oddiy matnli koʻrinish — pochta dasturi HTML ni koʻrsatmasa ishlatiladi */
 export function xabarMatni(sarlavha: string, qatorlar: Qator[], havola?: string): string {
   const bandlar = [sarlavha, ''];
 
@@ -31,10 +31,10 @@ export function xabarMatni(sarlavha: string, qatorlar: Qator[], havola?: string)
 }
 
 /**
- * Xatning HTML ko'rinishi — saytning ranglarida, jadval ko'rinishida.
+ * Xatning HTML koʻrinishi — saytning ranglarida, jadval koʻrinishida.
  *
  * Pochta dasturlari zamonaviy CSS ni tushunmaydi, shuning uchun uslublar
- * to'g'ridan-to'g'ri teglarga yoziladi.
+ * toʻgʻridan-toʻgʻri teglarga yoziladi.
  */
 export function xabarHtml(sarlavha: string, qatorlar: Qator[], havola?: string): string {
   const qatorlarHtml = toza(qatorlar)

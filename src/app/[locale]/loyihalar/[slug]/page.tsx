@@ -49,7 +49,7 @@ function Detail({ project }: { project: Project }) {
   const tn = useTranslations('Nav');
   const hamkorlar = project.partnersNote ? pick(project.partnersNote, locale) : '';
 
-  /** Tugma ostida ko'rinadigan qisqa manzil: https:// va oxirgi "/" olib tashlanadi */
+  /** Tugma ostida koʻrinadigan qisqa manzil: https:// va oxirgi "/" olib tashlanadi */
   const saytManzili = (project.website ?? '').replace(/^https?:\/\//i, '').replace(/\/+$/, '');
 
   return (
@@ -133,7 +133,7 @@ function Detail({ project }: { project: Project }) {
                 </div>
               </div>
 
-              {/* Loyihaning o'z sayti — admin panelda to'ldirilgan bo'lsa */}
+              {/* Loyihaning oʻz sayti — admin panelda toʻldirilgan boʻlsa */}
               {project.website && (
                 <div className="border-t border-border pt-6">
                   <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold-700">

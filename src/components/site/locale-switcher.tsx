@@ -11,9 +11,9 @@ import { cn } from '@/lib/utils';
 /**
  * Tilni almashtirish.
  *
- * `inline` — uchala til yonma-yon tugma bo'lib turadi. Mobil menyu uchun shu
- * ko'rinish ishlatiladi: menyu `overflow-hidden` ichida bo'lgani uchun ochiladigan
- * ro'yxat ko'rinmay qolardi.
+ * `inline` — uchala til yonma-yon tugma boʻlib turadi. Mobil menyu uchun shu
+ * koʻrinish ishlatiladi: menyu `overflow-hidden` ichida boʻlgani uchun ochiladigan
+ * roʻyxat koʻrinmay qolardi.
  */
 export function LocaleSwitcher({
   light = false,

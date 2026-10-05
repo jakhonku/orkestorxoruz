@@ -22,7 +22,7 @@ export type Murojaat = {
   eslatma: string | null;
   email: string | null;
   telefon: string | null;
-  /** `havola` bo'lsa qiymat bosiladigan havola bo'lib chiqadi (arizaga biriktirilgan fayl) */
+  /** `havola` boʻlsa qiymat bosiladigan havola boʻlib chiqadi (arizaga biriktirilgan fayl) */
   tafsilotlar: { yorliq: string; qiymat: string; havola?: string; rasm?: boolean }[];
 };
 
@@ -31,12 +31,12 @@ const TURLAR: { kalit: MurojaatTuri | 'hammasi'; nom: string }[] = [
   { kalit: 'aloqa', nom: 'Aloqa xabarlari' },
   { kalit: 'jamoa', nom: 'Jamoa arizalari' },
   { kalit: 'tanlov', nom: 'Tanlov arizalari' },
-  { kalit: 'talent', nom: 'Iste’dod arizalari' },
+  { kalit: 'talent', nom: 'Isteʼdod arizalari' },
 ];
 
 const HOLATLAR: { qiymat: string; nom: string; rang: string }[] = [
   { qiymat: 'YANGI', nom: 'Yangi', rang: 'bg-gold/20 text-navy-900' },
-  { qiymat: 'KORIB_CHIQILMOQDA', nom: 'Ko‘rib chiqilmoqda', rang: 'bg-blue-50 text-blue-700' },
+  { qiymat: 'KORIB_CHIQILMOQDA', nom: 'Koʻrib chiqilmoqda', rang: 'bg-blue-50 text-blue-700' },
   { qiymat: 'JAVOB_BERILDI', nom: 'Javob berildi', rang: 'bg-emerald-50 text-emerald-700' },
   { qiymat: 'RAD_ETILDI', nom: 'Rad etildi', rang: 'bg-red-50 text-red-700' },
 ];
@@ -46,7 +46,7 @@ export function MurojaatlarRoyxati({
   turlarsiz,
 }: {
   murojaatlar: Murojaat[];
-  /** Tur tugmalari ko'rsatilmaydi — ro'yxatda bitta tur bo'lganda (tanlov arizalari) */
+  /** Tur tugmalari koʻrsatilmaydi — roʻyxatda bitta tur boʻlganda (tanlov arizalari) */
   turlarsiz?: boolean;
 }) {
   const router = useRouter();
@@ -138,7 +138,7 @@ export function MurojaatlarRoyxati({
 
       {korinadigan.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-white px-6 py-14 text-center text-sm text-muted-foreground">
-          Bu bo‘limda murojaat yo‘q.
+          Bu boʻlimda murojaat yoʻq.
         </div>
       ) : (
         <ul className="space-y-2">
@@ -201,7 +201,7 @@ export function MurojaatlarRoyxati({
                                 href={t.havola}
                                 target="_blank"
                                 rel="noreferrer"
-                                title="Katta ko‘rish uchun bosing"
+                                title="Katta koʻrish uchun bosing"
                                 className="group inline-block"
                               >
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -235,7 +235,7 @@ export function MurojaatlarRoyxati({
                       </table>
                     </div>
 
-                    {/* Bog'lanish */}
+                    {/* Bogʻlanish */}
                     <div className="mt-4 flex flex-wrap items-center gap-2">
                       {m.email && (
                         <a
@@ -276,7 +276,7 @@ export function MurojaatlarRoyxati({
                         className="ml-auto inline-flex h-9 items-center gap-1.5 rounded-lg px-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-red-50 hover:text-red-600 disabled:opacity-60"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
-                        O‘chirish
+                        Oʻchirish
                       </button>
                     </div>
 
@@ -326,7 +326,7 @@ function Eslatma({
         }}
         onBlur={saqla}
         rows={2}
-        placeholder="Faqat xodimlar ko‘radi — saytda chiqmaydi"
+        placeholder="Faqat xodimlar koʻradi — saytda chiqmaydi"
         className="w-full rounded-lg border border-input bg-white px-3 py-2 text-sm text-navy-900 focus-visible:border-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-navy/15"
       />
     </div>
