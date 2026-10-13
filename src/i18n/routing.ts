@@ -10,7 +10,7 @@ export type Locale = (typeof locales)[number];
  * boshlab manzil ham oʻzgaradi (/en/... -> /uz/...), shuning uchun sayt
  * boʻylab yurganda tanlangan til saqlanib qoladi.
  */
-export const defaultLocale: Locale = 'en';
+export const defaultLocale: Locale = 'uz';
 
 export const localeNames: Record<Locale, string> = {
   uz: "Oʻzbekcha",
@@ -24,7 +24,7 @@ export const routing = defineRouting({
   localePrefix: 'always',
   /**
    * Til brauzer sozlamasidan (accept-language) yoki cookieʼdan aniqlanmaydi.
-   * Shu sababli sayt hammaga bir xil — inglizcha ochiladi, keyin odam oʻzi
+   * Shu sababli sayt hammaga bir xil — oʻzbekcha ochiladi, keyin odam oʻzi
    * kerakli tilni tanlaydi.
    */
   localeDetection: false,
