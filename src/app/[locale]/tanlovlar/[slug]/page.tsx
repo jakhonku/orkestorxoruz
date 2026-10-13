@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { sahifaAlternates } from '@/lib/seo';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
@@ -55,6 +56,7 @@ export async function generateMetadata({
   return {
     title: pick(competition.title, params.locale),
     description: pick(competition.shortDescription, params.locale),
+    alternates: sahifaAlternates(params.locale, `/tanlovlar/${params.slug}`),
     openGraph: { images: [competition.cover] },
   };
 }

@@ -55,7 +55,6 @@ export async function generateMetadata({
     openGraph: {
       title,
       description,
-      url: SITE.url,
       siteName: pick(SITE.name, params.locale),
       locale: params.locale,
       type: 'website',
@@ -64,14 +63,6 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title,
       description,
-    },
-    alternates: {
-      canonical: `/${params.locale}`,
-      languages: {
-        uz: '/uz',
-        ru: '/ru',
-        en: '/en',
-      },
     },
   };
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { sahifaAlternates } from '@/lib/seo';
 import { setRequestLocale } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Send, Youtube } from 'lucide-react';
@@ -17,8 +18,12 @@ const socialIcons = {
   x: Send,
 } as const;
 
-export async function generateMetadata(): Promise<Metadata> {
-  return { title: 'Aloqa' };
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale };
+}): Promise<Metadata> {
+  return { title: 'Aloqa', alternates: sahifaAlternates(params.locale, '/aloqa') };
 }
 
 export default async function ContactPage({ params }: { params: { locale: Locale } }) {

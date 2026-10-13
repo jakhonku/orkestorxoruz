@@ -3,12 +3,15 @@ import type { Localized, Region, SocialLink } from '@/types';
 /**
  * Saytning asosiy manzili — sitemap, robots.txt va meta teglar uchun.
  *
- * Tartib: qoʻlda koʻrsatilgan manzil -> Vercelʼdagi domen -> mahalliy server.
+ * Tartib: qoʻlda koʻrsatilgan manzil -> production uchun caoc.uz -> Vercelʼdagi domen -> mahalliy server.
  * Vercel previewʼlarida shu tufayli havolalar oʻsha nusxaga ishora qiladi.
  */
 function saytManzili(): string {
   const qol = process.env.NEXT_PUBLIC_SITE_URL;
   if (qol) return qol.endsWith('/') ? qol.slice(0, -1) : qol;
+
+  // Vercelʼda NEXT_PUBLIC_SITE_URL berilmagan boʻlsa ham, production rasmiy domenda ishlaydi
+  if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'production') return 'https://caoc.uz';
 
   const vercel =
     process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL ?? process.env.NEXT_PUBLIC_VERCEL_URL;

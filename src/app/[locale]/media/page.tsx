@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { sahifaAlternates } from '@/lib/seo';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import type { Locale } from '@/i18n/routing';
 import { PageHeader } from '@/components/shared/page-header';
@@ -18,7 +19,11 @@ export async function generateMetadata({
   params: { locale: Locale };
 }): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: 'Media' });
-  return { title: t('title'), description: t('subtitle') };
+  return {
+    title: t('title'),
+    description: t('subtitle'),
+    alternates: sahifaAlternates(params.locale, '/media'),
+  };
 }
 
 export default async function MediaPage({ params }: { params: { locale: Locale } }) {

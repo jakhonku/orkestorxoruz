@@ -1,7 +1,10 @@
 {
   "Meta": {
     "title": "Orkestr va Xor ijodiy birlashmasi",
-    "description": "Oʻzbekistonda orkestr va xor sanʼatini rivojlantiruvchi davlat ijodiy tashkiloti. Milliy akademik musiqa madaniyati uchun."
+    "description": "Oʻzbekistonda orkestr va xor sanʼatini rivojlantiruvchi davlat ijodiy tashkiloti. Milliy akademik musiqa madaniyati uchun.",
+    "homeTitle": "Orkestr va xor ijodiy jamoalari birlashmasi | CAOC",
+    "homeDescription": "Orkestr va xor ijodiy jamoalari birlashmasining rasmiy sayti. Oʻzbekiston orkestr va xor sanʼati, konsertlar, tanlovlar, yangiliklar va ijodiy loyihalar haqida maʼlumot.",
+    "orgName": "Orkestr va xor ijodiy jamoalari birlashmasi"
   },
   "Nav": {
     "home": "Bosh sahifa",

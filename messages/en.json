@@ -1,7 +1,10 @@
 {
   "Meta": {
     "title": "Orchestra and Choir Creative Union",
-    "description": "A state creative organisation developing orchestral and choral art in Uzbekistan. For a national academic music culture."
+    "description": "A state creative organisation developing orchestral and choral art in Uzbekistan. For a national academic music culture.",
+    "homeTitle": "Association of Orchestra and Choir Creative Groups | CAOC",
+    "homeDescription": "Official website of the Association of Orchestra and Choir Creative Groups (CAOC): orchestral and choral art of Uzbekistan, concerts, competitions, news and creative projects.",
+    "orgName": "Association of Orchestra and Choir Creative Groups"
   },
   "Nav": {
     "home": "Home",

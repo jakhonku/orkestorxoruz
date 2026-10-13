@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { sahifaAlternates } from '@/lib/seo';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
 import { useTranslations } from 'next-intl';
@@ -10,8 +11,15 @@ import { Reveal } from '@/components/shared/reveal';
 import { SectionTitle } from '@/components/shared/section-title';
 import { TalentForm } from '@/components/features/talent-form';
 
-export async function generateMetadata(): Promise<Metadata> {
-  return { title: 'Orchestra and Choir.uz Talent' };
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale };
+}): Promise<Metadata> {
+  return {
+    title: 'Orchestra and Choir.uz Talent',
+    alternates: sahifaAlternates(params.locale, '/talent'),
+  };
 }
 
 /**

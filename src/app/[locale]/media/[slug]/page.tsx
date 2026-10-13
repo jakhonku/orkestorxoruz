@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { sahifaAlternates } from '@/lib/seo';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
@@ -36,6 +37,7 @@ export async function generateMetadata({
   return {
     title: sarlavha,
     description: pick(article.excerpt, params.locale),
+    alternates: sahifaAlternates(params.locale, `/media/${params.slug}`),
     openGraph: {
       images: article.cover ? [article.cover] : undefined,
       type: 'article',

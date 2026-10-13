@@ -25,7 +25,8 @@ export type Slide = {
 
 const AUTOPLAY_MS = 6000;
 
-export function Hero({ slides }: { slides: Slide[] }) {
+/** `heading` — tashkilotning rasmiy nomi: sahifadagi yagona <h1> (SEO) */
+export function Hero({ slides, heading }: { slides: Slide[]; heading: string }) {
   const t = useTranslations('Home');
   const s = useTranslations('Home.strategy');
 
@@ -204,9 +205,13 @@ export function Hero({ slides }: { slides: Slide[] }) {
                 {slide.tag}
               </span>
 
-              <h1 className="mt-4 max-w-4xl font-serif text-[28px] font-semibold leading-[1.12] text-white drop-shadow-sm sm:mt-5 sm:text-5xl md:text-6xl">
-                {slide.title}
+              <h1 className="mt-4 text-sm font-semibold uppercase tracking-[0.12em] text-gold-200 sm:text-base">
+                {heading}
               </h1>
+
+              <h2 className="mt-3 max-w-4xl font-serif text-[28px] font-semibold leading-[1.12] text-white drop-shadow-sm sm:mt-5 sm:text-5xl md:text-6xl">
+                {slide.title}
+              </h2>
 
               <p className="mt-3.5 max-w-2xl text-[15px] leading-relaxed text-white/85 sm:mt-5 sm:text-lg md:text-xl">
                 {slide.text}

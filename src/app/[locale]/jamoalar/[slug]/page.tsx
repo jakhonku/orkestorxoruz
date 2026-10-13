@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { sahifaAlternates } from '@/lib/seo';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
@@ -31,6 +32,7 @@ export async function generateMetadata({
   return {
     title: pick(ensemble.name, params.locale),
     description: pick(ensemble.shortDescription, params.locale),
+    alternates: sahifaAlternates(params.locale, `/jamoalar/${params.slug}`),
     openGraph: { images: [ensemble.banner || ensemble.logo || '/hero.png'] },
   };
 }

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { sahifaAlternates } from '@/lib/seo';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { setRequestLocale } from 'next-intl/server';
@@ -28,6 +29,7 @@ export async function generateMetadata({
   return {
     title: pick(project.title, params.locale),
     description: pick(project.shortDescription, params.locale),
+    alternates: sahifaAlternates(params.locale, `/loyihalar/${params.slug}`),
     openGraph: { images: [project.cover] },
   };
 }

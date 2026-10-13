@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { sahifaAlternates } from '@/lib/seo';
 import type { Metadata } from 'next';
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { useLocale, useTranslations } from 'next-intl';
@@ -21,7 +22,11 @@ export async function generateMetadata({
   params: { locale: Locale };
 }): Promise<Metadata> {
   const t = await getTranslations({ locale: params.locale, namespace: 'About' });
-  return { title: t('title'), description: t('subtitle') };
+  return {
+    title: t('title'),
+    description: t('subtitle'),
+    alternates: sahifaAlternates(params.locale, '/haqida'),
+  };
 }
 
 export default async function AboutPage({ params }: { params: { locale: Locale } }) {
