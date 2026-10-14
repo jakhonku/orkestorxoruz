@@ -38,6 +38,8 @@ const nextConfig = {
   },
 
   experimental: {
+    // Excel (rasmlar bilan) va rasm oʻgirish — paketlanmay, tayyor holda ishlatiladi
+    serverComponentsExternalPackages: ['exceljs', 'sharp'],
     // Maʼlumotnoma PDF uchun shriftlar fayl sifatida oʻqiladi — deployʼga qoʻshilsin
     outputFileTracingIncludes: { '/**': ['./src/server/shriftlar/**'] },
     /**

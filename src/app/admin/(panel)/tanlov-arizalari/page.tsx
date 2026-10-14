@@ -1,18 +1,11 @@
 import Link from 'next/link';
-import { headers } from 'next/headers';
 import { ExternalLink, FileEdit, ListChecks } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
 import { db } from '@/lib/db';
-import { javobMatni, javoblarniOqi } from '@/lib/anketa';
 import { tanlovAnketasi } from '@/lib/anketa-andozalari';
 import { sahifaRuxsati } from '@/server/admin/huquq';
-import {
-  arizaFayliHavolasi,
-  sana,
-  tanlovMurojaati,
-  tanlovNomi,
-} from '@/server/admin/tanlov-arizalari';
+import { tanlovMurojaati } from '@/server/admin/tanlov-arizalari';
 import { MurojaatlarRoyxati } from '../arizalar/_components/murojaatlar-royxati';
 import { ExcelTugmasi } from './excel-tugmasi';
 
@@ -73,63 +66,7 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
     include: { competition: { select: { title: true } } },
   });
 
-  // Excel ustunlari: avval joriy anketa savollari, keyin anketadan keyinroq
-  // olib tashlangan savollarga berilgan javoblar (eski arizalarda qolgan)
   const anketa = tanlangan ? tanlovAnketasi(tanlangan.formFields) : [];
-  const ustunlar = new Map<string, string>(anketa.map((s) => [s.id, s.savol.uz]));
-  for (const a of arizalar) {
-    for (const j of javoblarniOqi(a.answers)) {
-      if (!ustunlar.has(j.id)) ustunlar.set(j.id, j.savol);
-    }
-  }
-
-  const sarlavhalar = [
-    '№',
-    'Sana',
-    'Holat',
-    ...(tanlangan ? [] : ['Tanlov']),
-    'F.I.SH.',
-    'Email',
-    'Telefon',
-    'Jamoa',
-    'Yoʻnalish',
-    ...ustunlar.values(),
-    'Qoʻshimcha maʼlumot',
-    'Til',
-    'Ichki eslatma',
-  ];
-
-  // Excelʼdagi fayl havolalari toʻliq manzil boʻlishi kerak
-  const h = headers();
-  const asos = `${h.get('x-forwarded-proto') ?? 'https'}://${h.get('host') ?? ''}`;
-
-  const jadval = arizalar.map((a, i) => {
-    const javob = new Map(
-      javoblarniOqi(a.answers).map((j) => [
-        j.id,
-        j.tur === 'fayl' ? arizaFayliHavolasi(String(j.javob), asos) : javobMatni(j.javob),
-      ]),
-    );
-    return [
-      String(arizalar.length - i),
-      sana(a.createdAt),
-      ARIZA_HOLATI[a.status] ?? a.status,
-      ...(tanlangan ? [] : [tanlovNomi(a) ?? '']),
-      a.fullName,
-      a.email,
-      a.phone,
-      a.ensembleName ?? '',
-      a.category ?? '',
-      ...[...ustunlar.keys()].map((id) => javob.get(id) ?? ''),
-      a.message ?? '',
-      a.locale.toUpperCase(),
-      a.adminNote ?? '',
-    ];
-  });
-
-  const faylNomi = tanlangan
-    ? `${tanlangan.slug}-arizalar.xlsx`
-    : 'tanlov-arizalari.xlsx';
 
   return (
     <div>
@@ -141,7 +78,7 @@ export default async function TanlovArizalariSahifasi({ searchParams }: Props) {
             boʻyicha javoblar koʻrinadi.
           </p>
         </div>
-        <ExcelTugmasi sarlavhalar={sarlavhalar} qatorlar={jadval} faylNomi={faylNomi} />
+        <ExcelTugmasi tanlovId={tanlangan?.id} bosh={arizalar.length === 0} />
       </div>
 
       {/* Tanlovlar */}
