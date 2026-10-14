@@ -27,6 +27,7 @@ export default async function BolimRoyxatiSahifasi({ params }: Props) {
       birlik={bolim.birlik}
       izoh={bolim.izoh}
       qatorlar={qatorlar}
+      suriladi={bolim.suriladi}
       qoshishMumkin={bolim.qoshishMumkin !== false}
     />
   );

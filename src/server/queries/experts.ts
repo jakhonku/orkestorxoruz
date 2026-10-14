@@ -21,13 +21,14 @@ function moslashExpert(e: ExpertQator): Expert {
     bio: loc(e.bio),
     specialties: locList(e.specialties),
     cooperation: locOpt(e.cooperation),
+    local: e.local,
   };
 }
 
 export const getExperts = cache(async (): Promise<Expert[]> => {
   const rows = await db.expert.findMany({
     where: { published: true },
-    orderBy: [{ sortOrder: 'asc' }, { id: 'asc' }],
+    orderBy: [{ local: 'desc' }, { sortOrder: 'asc' }, { id: 'asc' }],
   });
   return rows.map(moslashExpert);
 });

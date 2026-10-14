@@ -32,6 +32,15 @@ export type Bolim = {
   bogliqlar?: Record<string, string>;
   /** Roʻyxat tartibi */
   saralash?: Record<string, 'asc' | 'desc'>[];
+  /**
+   * Bir model ikki boʻlimga boʻlinganda (masalan mahalliy / xorijiy ekspertlar):
+   * roʻyxat va sanoq faqat shu shartga mos yozuvlarni oladi.
+   */
+  filtr?: Record<string, unknown>;
+  /** Saqlashda shu boʻlimning yozuviga har doim yoziladigan qiymatlar */
+  majburiy?: Record<string, unknown>;
+  /** Roʻyxatda sichqoncha bilan sudrab tartiblash mumkinmi (`sortOrder` ustuni kerak) */
+  suriladi?: boolean;
   /** Yangi yozuv qoʻshish mumkinmi */
   qoshishMumkin?: boolean;
   izoh?: string;
@@ -346,6 +355,16 @@ export const BOLIMLAR: Bolim[] = [
         qoshimcha: true,
       },
       { nom: 'coverUrl', yorliq: 'Muqova rasmi', tur: 'rasm' },
+      {
+        nom: 'contactPhone',
+        yorliq: 'Bogʻlanish uchun telefon raqam',
+        tur: 'matn',
+        yarim: true,
+        uzunlik: 40,
+        izoh:
+          'Masalan +998 90 123 45 67. Toʻldirilsa, tanlov sahifasida "Bogʻlanish" tugmasi chiqadi — ' +
+          'bosilganda shu raqamga qoʻngʻiroq qilinadi. Boʻsh qolsa tugma koʻrinmaydi.',
+      },
       { nom: 'prizeFund', yorliq: "Mukofot jamgʻarmasi", tur: 'kopTilli', qoshimcha: true },
       {
         nom: 'timeline',
@@ -478,7 +497,9 @@ export const BOLIMLAR: Bolim[] = [
     birlik: 'yangilik',
     model: 'newsArticle',
     slugManbasi: 'title',
-    saralash: [{ date: 'desc' }],
+    suriladi: true,
+    // Avval tartib raqami, keyin yangisi tepada
+    saralash: [{ sortOrder: 'asc' }, { date: 'desc' }],
     qator: (r) => ({
       id: r.id,
       sarlavha: uz(r.title),
@@ -543,6 +564,11 @@ export const BOLIMLAR: Bolim[] = [
           'Boʻsh qoldirilsa hech narsa koʻrinmaydi.',
       },
       tanlangan,
+      {
+        ...tartib,
+        qoshimcha: false,
+        izoh: 'Kichik raqam yuqorida turadi: 1 — birinchi, 2 — ikkinchi. Roʻyxatda sudrab ham oʻzgartirish mumkin.',
+      },
       nashr,
     ],
   },
@@ -680,9 +706,11 @@ export const BOLIMLAR: Bolim[] = [
   // ============ EKSPERTLAR ============
   {
     kalit: 'ekspertlar',
-    nom: 'Ekspertlar',
-    birlik: 'ekspert',
+    nom: 'Xorijiy ekspertlar',
+    birlik: 'xorijiy ekspert',
     model: 'expert',
+    filtr: { local: false },
+    majburiy: { local: false },
     slugManbasi: 'name',
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
@@ -703,6 +731,45 @@ export const BOLIMLAR: Bolim[] = [
         yarim: true,
         izoh: '2 harfli kod: DE, US, QA — bayroq shundan chiqadi',
       },
+      { nom: 'role', yorliq: 'Lavozimi / kasbi', tur: 'kopTilli', talab: true },
+      { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm', izoh: 'Vertikal, 600×800' },
+      { nom: 'bio', yorliq: 'Biografiyasi', tur: 'kopTilliKatta', talab: true },
+      {
+        nom: 'specialties',
+        yorliq: "Mutaxassislik yoʻnalishlari",
+        tur: 'kopTilliRoyxat',
+        izoh: 'Har bir yoʻnalish alohida qatorda',
+      },
+      { nom: 'cooperation', yorliq: 'Hamkorlik shakli', tur: 'kopTilli', qoshimcha: true },
+      tartib,
+      nashr,
+    ],
+  },
+
+  // ============ MAHALLIY EKSPERTLAR ============
+  {
+    kalit: 'mahalliy-ekspertlar',
+    nom: 'Mahalliy ekspertlar',
+    birlik: 'mahalliy ekspert',
+    model: 'expert',
+    filtr: { local: true },
+    // Davlat maydoni shaklda yoʻq — mahalliy ekspert doim Oʻzbekistondan
+    majburiy: {
+      local: true,
+      countryCode: 'UZ',
+      country: { uz: 'Oʻzbekiston', ru: 'Узбекистан', en: 'Uzbekistan' },
+    },
+    slugManbasi: 'name',
+    saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
+    qator: (r) => ({
+      id: r.id,
+      sarlavha: uz(r.name),
+      tavsif: uz(r.role),
+      ochiqmi: r.published,
+      rasm: r.photoUrl,
+    }),
+    maydonlar: [
+      { nom: 'name', yorliq: 'F.I.SH.', tur: 'kopTilli', talab: true },
       { nom: 'role', yorliq: 'Lavozimi / kasbi', tur: 'kopTilli', talab: true },
       { nom: 'photoUrl', yorliq: 'Surati', tur: 'rasm', izoh: 'Vertikal, 600×800' },
       { nom: 'bio', yorliq: 'Biografiyasi', tur: 'kopTilliKatta', talab: true },

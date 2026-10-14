@@ -263,6 +263,7 @@
     "timelineTitle": "Timeline",
     "juryTitle": "Jury",
     "applyButton": "Apply now",
+    "contactButton": "Contact",
     "applyTitle": "Application",
     "applyClosed": "Applications for this competition are closed.",
     "form_name": "Full name",
@@ -371,8 +372,10 @@
     "projectsCard": "Projects carried out together with foreign organisations"
   },
   "Experts": {
-    "title": "International experts",
-    "subtitle": "International specialists cooperating with the union",
+    "title": "Experts",
+    "localTitle": "Local experts",
+    "foreignTitle": "International experts",
+    "subtitle": "Local and international specialists cooperating with the union",
     "specialtiesTitle": "Areas of specialisation",
     "bioTitle": "Biography",
     "cooperationTitle": "Cooperation"

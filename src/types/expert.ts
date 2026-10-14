@@ -12,6 +12,8 @@ export interface Expert {
   specialties: Localized<string[]>;
   /** Hamkorlik shakli */
   cooperation?: Localized;
+  /** Mahalliy (Oʻzbekistonlik) ekspertmi */
+  local?: boolean;
 }
 
 export interface Leader {

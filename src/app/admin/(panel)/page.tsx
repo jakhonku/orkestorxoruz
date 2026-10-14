@@ -33,8 +33,10 @@ const bolimSanoqlari = unstable_cache(
         const nashrBor = b.maydonlar.some((m) => m.nom === 'published');
         try {
           const [jami, nashr] = await Promise.all([
-            delegat.count(),
-            nashrBor ? delegat.count({ where: { published: true } }) : Promise.resolve(0),
+            delegat.count(b.filtr ? { where: b.filtr } : undefined),
+            nashrBor
+              ? delegat.count({ where: { ...b.filtr, published: true } })
+              : Promise.resolve(0),
           ]);
           return [b.kalit, { jami, nashr: nashrBor ? nashr : jami }] as const;
         } catch {

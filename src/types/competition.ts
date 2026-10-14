@@ -29,6 +29,8 @@ export interface Competition {
   regulations: Localized;
   /** Nizomning yuklab olinadigan fayli (PDF va h.k.) */
   regulationsFile?: string;
+  /** Bogʻlanish uchun telefon raqam */
+  contactPhone?: string;
   /** Mukofot jamgʻarmasi */
   prizeFund?: Localized;
   /** "Ishtirok etish" kartasi: boʻsh maydonlar uchun standart matn ishlatiladi */

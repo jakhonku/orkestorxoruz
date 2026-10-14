@@ -30,7 +30,7 @@ function moslashNews(n: NewsQator): NewsArticle {
 export const getNews = cache(async (): Promise<NewsArticle[]> => {
   const rows = await db.newsArticle.findMany({
     where: { published: true },
-    orderBy: { date: 'desc' },
+    orderBy: [{ sortOrder: 'asc' }, { date: 'desc' }],
   });
   return rows.map(moslashNews);
 });
@@ -44,7 +44,7 @@ export const getNewsBySlug = cache(async (slug: string): Promise<NewsArticle | u
 export const getLatestNews = cache(async (limit = 3): Promise<NewsArticle[]> => {
   const rows = await db.newsArticle.findMany({
     where: { published: true },
-    orderBy: [{ featured: 'desc' }, { date: 'desc' }],
+    orderBy: [{ featured: 'desc' }, { sortOrder: 'asc' }, { date: 'desc' }],
     take: limit,
   });
   return rows.map(moslashNews);

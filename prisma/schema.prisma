@@ -260,6 +260,8 @@ model Competition {
   status             CompetitionStatus @default(TEZ_KUNDA)
   /// "Tez kunda" holatida batafsil sahifa ochiqmi (boshqa holatlarda doim ochiq)
   detailOpen         Boolean           @default(false)
+  /// Bogʻlanish uchun telefon raqam — tanlov sahifasida "Bogʻlanish" tugmasi boʻlib chiqadi
+  contactPhone       String?           @db.VarChar(40)
   coverUrl           String?           @db.Text
   date               Json
   location           Json
@@ -380,7 +382,10 @@ model NewsArticle {
   body      Json
   /// YouTube yoki Instagram havolasi — yangilik sahifasida pleyer boʻlib ochiladi
   videoUrl  String?      @db.Text
+  /// Yulduzcha: belgilangan yangiliklar roʻyxatda birinchi chiqadi
   featured  Boolean      @default(false)
+  /// Tartib raqami — kichigi yuqorida (yulduzchalilar ichida ham, qolganlar ichida ham)
+  sortOrder Int          @default(0)
   published Boolean      @default(true)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
@@ -440,6 +445,8 @@ model Expert {
   /// {"uz": ["yoʻnalish 1", ...], "ru": [...], "en": [...]}
   specialties Json
   cooperation Json?
+  /// Mahalliy (Oʻzbekistonlik) ekspertmi — aks holda xorijiy
+  local       Boolean @default(false)
   published   Boolean @default(true)
   sortOrder   Int     @default(0)
 

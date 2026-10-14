@@ -1,12 +1,12 @@
 'use client';
 
-import { useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertCircle, Eye, EyeOff, Pencil, Plus, Search, Trash2 } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, Pencil, Plus, GripVertical, Search, Trash2 } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { nashrAlmashtirish, yozuvOchirish } from '@/server/admin/amallar';
+import { nashrAlmashtirish, tartibniSaqlash, yozuvOchirish } from '@/server/admin/amallar';
 import type { RoyxatQatori } from '@/server/admin/turlar';
 
 export function Royxat({
@@ -16,6 +16,7 @@ export function Royxat({
   izoh,
   qatorlar,
   qoshishMumkin = true,
+  suriladi = false,
 }: {
   kalit: string;
   nom: string;
@@ -23,6 +24,7 @@ export function Royxat({
   izoh?: string;
   qatorlar: RoyxatQatori[];
   qoshishMumkin?: boolean;
+  suriladi?: boolean;
 }) {
   const router = useRouter();
   const [qidiruv, setQidiruv] = useState('');
@@ -37,6 +39,41 @@ export function Royxat({
       `${r.sarlavha} ${r.tavsif ?? ''} ${r.belgi ?? ''}`.toLowerCase().includes(q),
     );
   }, [qatorlar, qidiruv]);
+
+  // Sudralayotgan va ustiga olib kelingan qator; sudralgandan keyingi tartib server javobigacha shu yerda turadi
+  const [sudralayotgan, setSudralayotgan] = useState<number | null>(null);
+  const [ustida, setUstida] = useState<number | null>(null);
+  const [tartib, setTartib] = useState<number[] | null>(null);
+
+  // Server yangi roʻyxat yuborsa (oʻchirish, nashr...) vaqtinchalik tartib kerak emas
+  useEffect(() => setTartib(null), [qatorlar]);
+
+  const tartiblangan = useMemo(() => {
+    if (!tartib) return korinadigan;
+    const xarita = new Map(korinadigan.map((r) => [r.id, r]));
+    const royxat = tartib.map((id) => xarita.get(id)).filter((r): r is RoyxatQatori => !!r);
+    // Tartibda yoʻq yangi qatorlar oxiriga qoʻshiladi
+    return [...royxat, ...korinadigan.filter((r) => !tartib.includes(r.id))];
+  }, [korinadigan, tartib]);
+
+  // Qidiruv paytida sudrash oʻchiriladi — roʻyxatning faqat bir qismi koʻrinadi
+  const sudrash = suriladi && !qidiruv.trim();
+
+  function joyla(manbaId: number, nishonId: number) {
+    if (manbaId === nishonId) return;
+    const idlar = tartiblangan.map((r) => r.id);
+    const pastga = idlar.indexOf(manbaId) < idlar.indexOf(nishonId);
+    idlar.splice(idlar.indexOf(manbaId), 1);
+    // Pastga olib borilsa nishondan keyin, yuqoriga olib borilsa nishondan oldin tushadi
+    idlar.splice(idlar.indexOf(nishonId) + (pastga ? 1 : 0), 0, manbaId);
+    setTartib(idlar);
+    setXato(null);
+    boshla(async () => {
+      const natija = await tartibniSaqlash(kalit, idlar);
+      if (!natija.ok) setXato(natija.xato);
+      router.refresh();
+    });
+  }
 
   const nashrEtilgan = qatorlar.filter((r) => r.ochiqmi !== false).length;
 
@@ -121,14 +158,42 @@ export function Royxat({
         </div>
       ) : (
         <ul className="divide-y divide-border overflow-hidden rounded-2xl border border-border bg-white">
-          {korinadigan.map((r) => (
+          {tartiblangan.map((r) => (
             <li
               key={r.id}
+              draggable={sudrash}
+              onDragStart={() => setSudralayotgan(r.id)}
+              onDragOver={(e) => {
+                if (sudralayotgan === null) return;
+                e.preventDefault();
+                setUstida(r.id);
+              }}
+              onDrop={(e) => {
+                e.preventDefault();
+                if (sudralayotgan !== null) joyla(sudralayotgan, r.id);
+                setSudralayotgan(null);
+                setUstida(null);
+              }}
+              onDragEnd={() => {
+                setSudralayotgan(null);
+                setUstida(null);
+              }}
               className={cn(
+                sudralayotgan === r.id && 'opacity-40',
+                ustida === r.id && sudralayotgan !== r.id && 'bg-gold/10',
                 'flex items-center gap-3 px-3 py-3 transition-colors hover:bg-navy-50/40 sm:px-4',
                 r.ochiqmi === false && 'bg-navy-50/20',
               )}
             >
+              {sudrash && (
+                <span
+                  title="Sudrab joyini oʻzgartiring"
+                  className="flex h-8 w-5 shrink-0 cursor-grab items-center justify-center text-muted-foreground active:cursor-grabbing"
+                >
+                  <GripVertical className="h-4 w-4" />
+                </span>
+              )}
+
               {/* Rasm */}
               <div className="hidden h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-border bg-navy-50/60 sm:block">
                 {r.rasm ? (

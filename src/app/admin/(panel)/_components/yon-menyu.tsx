@@ -26,6 +26,7 @@ import {
   Trophy,
   Type,
   UserRound,
+  UserCheck,
   UserSearch,
   Users,
   Video,
@@ -59,6 +60,7 @@ const IKONKALAR: Record<string, LucideIcon> = {
   shield: Shield,
   type: Type,
   'layout-dashboard': LayoutDashboard,
+  'user-check': UserCheck,
   'user-search': UserSearch,
   'clipboard-list': ClipboardList,
 };

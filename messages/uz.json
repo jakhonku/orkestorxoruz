@@ -263,6 +263,7 @@
     "timelineTitle": "Muddatlar",
     "juryTitle": "Hakamlar hayʼati",
     "applyButton": "Ariza topshirish",
+    "contactButton": "Bogʻlanish",
     "applyTitle": "Ariza topshirish",
     "applyClosed": "Bu tanlovga arizalar qabuli yopilgan.",
     "form_name": "F.I.Sh.",
@@ -371,8 +372,10 @@
     "projectsCard": "Xorijiy tashkilotlar bilan birgalikda amalga oshirilayotgan loyihalar"
   },
   "Experts": {
-    "title": "Xorijiy ekspertlar",
-    "subtitle": "Birlashma bilan hamkorlik qiluvchi xalqaro mutaxassislar",
+    "title": "Ekspertlar",
+    "localTitle": "Mahalliy ekspertlar",
+    "foreignTitle": "Xorijiy ekspertlar",
+    "subtitle": "Birlashma bilan hamkorlik qiluvchi mahalliy va xalqaro mutaxassislar",
     "specialtiesTitle": "Mutaxassislik yoʻnalishlari",
     "bioTitle": "Biografiya",
     "cooperationTitle": "Hamkorlik shakli"

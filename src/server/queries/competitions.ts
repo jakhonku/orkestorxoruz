@@ -28,6 +28,7 @@ function moslash(c: Qator): Competition {
     shortDescription: loc(c.shortDescription),
     regulations: loc(c.regulations),
     regulationsFile: c.regulationsFileUrl ?? undefined,
+    contactPhone: c.contactPhone ?? undefined,
     prizeFund: locOpt(c.prizeFund),
     participateTitle: locOpt(c.participateTitle),
     participateText: locOpt(c.participateText),

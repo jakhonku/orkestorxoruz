@@ -348,6 +348,9 @@ export async function yozuvSaqlash(
       data[m.nom] = qiymatTayyorla(m, qiymatlar[m.nom]);
     }
 
+    // Boʻlimga xos qiymatlar (masalan mahalliy ekspert belgisi) — shakldan kelmaydi
+    Object.assign(data, bolim.majburiy);
+
     // Ichki jadvallar (aʼzolar, repertuar, galereya...)
     const ichki: { maydon: Maydon; bogliq: string; qatorlar: Record<string, unknown>[] }[] = [];
     for (const m of bolim.maydonlar) {
@@ -474,6 +477,26 @@ export async function nashrAlmashtirish(bolimKaliti: string, id: number): Promis
   }
 }
 
+/** Sudrab tartiblangan roʻyxatni saqlaydi: yozuvning joyi — uning tartib raqami */
+export async function tartibniSaqlash(bolimKaliti: string, idlar: number[]): Promise<Natija> {
+  try {
+    await ruxsat(bolimKaliti);
+
+    const bolim = bolimTop(bolimKaliti);
+    if (!bolim?.suriladi) return { ok: false, xato: 'Bu boʻlimda sudrab tartiblash yoʻq.' };
+    if (!idlar.every((i) => Number.isInteger(i))) return { ok: false, xato: 'Notoʻgʻri roʻyxat.' };
+
+    const d = delegat(bolim.model);
+    await Promise.all(
+      idlar.map((id, i) => d.update({ where: { id }, data: { sortOrder: i + 1 } })),
+    );
+    saytniYangilash();
+    return { ok: true, id: 0 };
+  } catch (e) {
+    return { ok: false, xato: e instanceof Error ? e.message : String(e) };
+  }
+}
+
 // ------------------------------------------------------------------
 // Oʻqish (sahifalar uchun)
 // ------------------------------------------------------------------
@@ -484,6 +507,7 @@ export async function royxatOlish(bolimKaliti: string) {
   if (!bolim) return [];
 
   const rows = await delegat(bolim.model).findMany({
+    ...(bolim.filtr ? { where: bolim.filtr } : {}),
     orderBy: bolim.saralash ?? [{ id: 'desc' }],
   });
   return rows.map((r) => bolim.qator(r as Record<string, any>));
