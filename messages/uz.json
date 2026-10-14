@@ -340,6 +340,11 @@
     "performer": "Ijrochi"
   },
   "Media": {
+    "news_views": "koʻrildi",
+    "news_share": "Ulashish",
+    "news_shareTitle": "Yangilikni ulashish",
+    "news_copyLink": "Havolani nusxalash",
+    "news_copied": "Havola nusxalandi",
     "title": "Media",
     "subtitle": "Yangiliklar, video va foto materiallar",
     "tab_news": "Yangiliklar",

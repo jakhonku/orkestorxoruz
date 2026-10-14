@@ -11,6 +11,7 @@ import { Reveal } from '@/components/shared/reveal';
 import { Badge } from '@/components/ui/badge';
 import { NewsCard } from '@/components/cards/news-card';
 import { PostEmbed } from '@/components/features/post-embed';
+import { KorishlarSoni, UlashishTugmasi } from '@/components/features/yangilik-amallari';
 import { cn, pick, formatDate } from '@/lib/utils';
 import { postManbasi, postYorligiKaliti } from '@/lib/post';
 import type { NewsArticle } from '@/types';
@@ -99,7 +100,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                 <h1 className="mt-4 font-serif text-3xl font-semibold leading-tight text-navy md:text-4xl">
                   {sarlavha}
                 </h1>
-                <Malumot article={article} />
+                <Malumot article={article} sarlavha={sarlavha} />
               </Reveal>
             </div>
 
@@ -148,7 +149,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
                 <h1 className="mt-4 font-serif text-3xl font-semibold leading-tight text-white drop-shadow-sm md:text-4xl">
                   {sarlavha}
                 </h1>
-                <Malumot article={article} light />
+                <Malumot article={article} sarlavha={sarlavha} light />
                 <div className="mt-6 h-1 w-20 rounded-full bg-gold" />
               </Reveal>
             </div>
@@ -212,7 +213,15 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
 }
 
 /** Sana va muallif qatori — oq fonda ham, toʻq koʻk bannerda ham ishlaydi */
-function Malumot({ article, light = false }: { article: NewsArticle; light?: boolean }) {
+function Malumot({
+  article,
+  sarlavha,
+  light = false,
+}: {
+  article: NewsArticle;
+  sarlavha: string;
+  light?: boolean;
+}) {
   const locale = useLocale() as Locale;
   const t = useTranslations('Media');
   // Muallif koʻrsatilmagan boʻlsa (faqat post havolasi qoʻyilgan yangilik)
@@ -236,6 +245,8 @@ function Malumot({ article, light = false }: { article: NewsArticle; light?: boo
           {t('author')}: {muallif}
         </span>
       )}
+      <KorishlarSoni slug={article.slug} boshlangich={article.views ?? 0} />
+      <UlashishTugmasi sarlavha={sarlavha} light={light} />
     </div>
   );
 }

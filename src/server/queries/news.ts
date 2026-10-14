@@ -24,6 +24,7 @@ function moslashNews(n: NewsQator): NewsArticle {
     body: locList(n.body),
     video: n.videoUrl ?? undefined,
     featured: n.featured,
+    views: n.views,
   };
 }
 

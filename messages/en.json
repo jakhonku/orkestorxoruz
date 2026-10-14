@@ -340,6 +340,11 @@
     "performer": "Performer"
   },
   "Media": {
+    "news_views": "views",
+    "news_share": "Share",
+    "news_shareTitle": "Share this story",
+    "news_copyLink": "Copy link",
+    "news_copied": "Link copied",
     "title": "Media",
     "subtitle": "News, video and photo materials",
     "tab_news": "News",

@@ -386,6 +386,8 @@ model NewsArticle {
   featured  Boolean      @default(false)
   /// Tartib raqami — kichigi yuqorida (yulduzchalilar ichida ham, qolganlar ichida ham)
   sortOrder Int          @default(0)
+  /// Sahifa necha marta ochilgan (har bir tashrif chiqishi bir marta sanaladi)
+  views     Int          @default(0)
   published Boolean      @default(true)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt

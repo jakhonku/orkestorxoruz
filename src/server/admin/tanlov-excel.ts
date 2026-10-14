@@ -1,6 +1,5 @@
 import 'server-only';
 import ExcelJS from 'exceljs';
-import sharp from 'sharp';
 
 import { db } from '@/lib/db';
 import { javobMatni, javoblarniOqi } from '@/lib/anketa';
@@ -30,13 +29,23 @@ const RASM_MUDDATI = 15_000;
 
 const RASM_YOLI = /\.(jpe?g|png|webp)$/i;
 
-/** Yopiq bucketdan rasmni olib, Excel tushunadigan kichik JPEGga aylantiradi */
-async function rasmOl(havola: string | undefined): Promise<{ bayt: Buffer; en: number; boy: number } | null> {
-  try {
-    if (!havola) return null;
-    const javob = await fetch(havola, { signal: AbortSignal.timeout(RASM_MUDDATI) });
-    if (!javob.ok) return null;
+type RasmNatijasi = { bayt: Buffer; en: number; boy: number } | { xato: string };
 
+/** Yopiq bucketdan rasmni olib, Excel tushunadigan kichik JPEGga aylantiradi */
+async function rasmOl(havola: string | undefined): Promise<RasmNatijasi> {
+  if (!havola) return { xato: 'vaqtinchalik havola olinmadi' };
+
+  let javob: Response;
+  try {
+    javob = await fetch(havola, { signal: AbortSignal.timeout(RASM_MUDDATI) });
+  } catch (e) {
+    return { xato: `yuklab boʻlmadi: ${e instanceof Error ? e.message : String(e)}` };
+  }
+  if (!javob.ok) return { xato: `yuklab boʻlmadi (HTTP ${javob.status})` };
+
+  try {
+    // sharp kerak boʻlganda yuklanadi — u ishlamasa ham Excel baribir yasaladi
+    const sharp = (await import('sharp')).default;
     const asl = Buffer.from(await javob.arrayBuffer());
     // rotate() — telefon suratlaridagi aylantirish belgisini inobatga oladi
     const bayt = await sharp(asl, { failOn: 'none' })
@@ -46,8 +55,8 @@ async function rasmOl(havola: string | undefined): Promise<{ bayt: Buffer; en: n
       .toBuffer();
     const { width = 1, height = 1 } = await sharp(bayt).metadata();
     return { bayt, en: width, boy: height };
-  } catch {
-    return null;
+  } catch (e) {
+    return { xato: `rasm oʻgirilmadi: ${e instanceof Error ? e.message : String(e)}` };
   }
 }
 
@@ -58,7 +67,7 @@ async function rasmOl(havola: string | undefined): Promise<{ bayt: Buffer; en: n
 export async function arizalarExcel(
   tanlovId: number | null,
   asos: string,
-): Promise<{ bayt: Buffer; faylNomi: string }> {
+): Promise<{ bayt: Buffer; faylNomi: string; xatolar: string[] }> {
   const tanlov = tanlovId
     ? await db.competition.findUnique({
         where: { id: tanlovId },
@@ -179,14 +188,19 @@ export async function arizalarExcel(
     for (const x of data ?? []) if (x.path && x.signedUrl) havolalar.set(x.path, x.signedUrl);
   }
 
+  const xatolar: string[] = [];
+
   // Rasmlar guruh-guruh parallel yuklanadi
   for (let i = 0; i < vazifalar.length; i += PARALLEL) {
     const guruh = vazifalar.slice(i, i + PARALLEL);
     const natija = await Promise.all(guruh.map((v) => rasmOl(havolalar.get(v.yol))));
 
     natija.forEach((r, k) => {
-      if (!r) return;
       const v = guruh[k];
+      if ('xato' in r) {
+        xatolar.push(`${v.qator}-qator, ${v.ustun}-ustun: ${r.xato}`);
+        return;
+      }
       const id = kitob.addImage({ buffer: r.bayt as unknown as ExcelJS.Buffer, extension: 'jpeg' });
 
       // Rasm katak ichiga nisbati buzilmay sigʻadi
@@ -205,5 +219,6 @@ export async function arizalarExcel(
 
   const bayt = Buffer.from(await kitob.xlsx.writeBuffer());
   const faylNomi = tanlov ? `${tanlov.slug}-arizalar.xlsx` : 'tanlov-arizalari.xlsx';
-  return { bayt, faylNomi };
+  if (xatolar.length > 0) console.error('[tanlov-excel] rasm qoʻshilmadi:', xatolar.slice(0, 10));
+  return { bayt, faylNomi, xatolar };
 }

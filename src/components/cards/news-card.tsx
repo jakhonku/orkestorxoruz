@@ -7,6 +7,7 @@ import { Link } from '@/i18n/navigation';
 import { Badge } from '@/components/ui/badge';
 import { pick, formatDate } from '@/lib/utils';
 import { postYorligiKaliti } from '@/lib/post';
+import { KorishlarSoni, UlashishTugmasi } from '@/components/features/yangilik-amallari';
 import type { NewsArticle } from '@/types';
 import type { Locale } from '@/i18n/routing';
 
@@ -25,67 +26,72 @@ export function NewsCard({ article }: { article: NewsArticle }) {
   const qisqacha = pick(article.excerpt, locale).trim();
 
   return (
-    <Link
-      href={`/media/${article.slug}`}
-      className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg"
-    >
-      <div className="relative aspect-[16/10] overflow-hidden">
-        {article.cover ? (
-          <Image
-            src={article.cover}
-            alt={korinadiganSarlavha}
-            fill
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          /*
-            Muqovasiz yangilik. Boʻsh joy oʻrniga saytning oʻz uslubidagi
-            fon: toʻq koʻk gradient, oltin nur va oʻrtada birlashma emblemasi.
-            Shu tufayli oddiy post ham bir xil, tayyor koʻrinishda chiqadi.
-          */
-          <span className="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy to-navy-950">
-            <span
-              className="absolute inset-0 opacity-70"
-              style={{
-                backgroundImage:
-                  'radial-gradient(circle at 25% 20%, rgba(201,162,39,0.35), transparent 55%)',
-              }}
+    // Tashqi quti oddiy <div>: ichida havola (<a>) va ulashish tugmasi yonma-yon turadi,
+    // chunki tugmani havola ichiga qoʻyib boʻlmaydi
+    <div className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-soft-lg">
+      <Link href={`/media/${article.slug}`} className="flex flex-1 flex-col">
+        <div className="relative aspect-[16/10] overflow-hidden">
+          {article.cover ? (
+            <Image
+              src={article.cover}
+              alt={korinadiganSarlavha}
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
-            {/* Emblema — shaffof oq doira ichida, mayin va bosiqroq */}
-            <span className="absolute inset-0 flex items-center justify-center">
-              <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/90 p-2 shadow-soft ring-1 ring-white/30 transition-transform duration-500 group-hover:scale-105">
-                <Image
-                  src="/logo.png"
-                  alt=""
-                  width={64}
-                  height={64}
-                  className="h-full w-full object-contain opacity-90"
-                />
+          ) : (
+            /*
+              Muqovasiz yangilik. Boʻsh joy oʻrniga saytning oʻz uslubidagi
+              fon: toʻq koʻk gradient, oltin nur va oʻrtada birlashma emblemasi.
+              Shu tufayli oddiy post ham bir xil, tayyor koʻrinishda chiqadi.
+            */
+            <span className="absolute inset-0 bg-gradient-to-br from-navy-800 via-navy to-navy-950">
+              <span
+                className="absolute inset-0 opacity-70"
+                style={{
+                  backgroundImage:
+                    'radial-gradient(circle at 25% 20%, rgba(201,162,39,0.35), transparent 55%)',
+                }}
+              />
+              {/* Emblema — shaffof oq doira ichida, mayin va bosiqroq */}
+              <span className="absolute inset-0 flex items-center justify-center">
+                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/90 p-2 shadow-soft ring-1 ring-white/30 transition-transform duration-500 group-hover:scale-105">
+                  <Image
+                    src="/logo.png"
+                    alt=""
+                    width={64}
+                    height={64}
+                    className="h-full w-full object-contain opacity-90"
+                  />
+                </span>
               </span>
             </span>
+          )}
+          <Badge variant="default" className="absolute left-4 top-4 bg-white/90">
+            {t(`category_${article.category}`)}
+          </Badge>
+        </div>
+        <div className="flex flex-1 flex-col p-6">
+          <span className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
+            <CalendarDays className="h-3.5 w-3.5 text-gold" />
+            {formatDate(article.date, locale)}
           </span>
-        )}
-        <Badge variant="default" className="absolute left-4 top-4 bg-white/90">
-          {t(`category_${article.category}`)}
-        </Badge>
+          <h3 className="font-serif text-lg font-semibold leading-snug text-navy transition-colors group-hover:text-navy-600">
+            {korinadiganSarlavha}
+          </h3>
+          {qisqacha && (
+            <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">{qisqacha}</p>
+          )}
+          <span className="mt-4 flex flex-1 items-end gap-1.5 text-sm font-semibold text-navy">
+            {tc('readMore')}
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </span>
+        </div>
+      </Link>
+      <div className="flex items-center justify-between border-t border-border px-6 py-3 text-xs text-muted-foreground">
+        <KorishlarSoni slug={article.slug} boshlangich={article.views ?? 0} hisoblash={false} />
+        <UlashishTugmasi sarlavha={korinadiganSarlavha} yol={`/${locale}/media/${article.slug}`} kichik />
       </div>
-      <div className="flex flex-1 flex-col p-6">
-        <span className="mb-2 flex items-center gap-1.5 text-xs text-muted-foreground">
-          <CalendarDays className="h-3.5 w-3.5 text-gold" />
-          {formatDate(article.date, locale)}
-        </span>
-        <h3 className="font-serif text-lg font-semibold leading-snug text-navy transition-colors group-hover:text-navy-600">
-          {korinadiganSarlavha}
-        </h3>
-        {qisqacha && (
-          <p className="mt-2 line-clamp-3 flex-1 text-sm text-muted-foreground">{qisqacha}</p>
-        )}
-        <span className="mt-4 flex flex-1 items-end gap-1.5 text-sm font-semibold text-navy">
-          {tc('readMore')}
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-        </span>
-      </div>
-    </Link>
+    </div>
   );
 }

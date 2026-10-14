@@ -19,10 +19,12 @@ export function ExcelTugmasi({
 }) {
   const [kutilmoqda, setKutilmoqda] = useState(false);
   const [xato, setXato] = useState<string | null>(null);
+  const [ogoh, setOgoh] = useState<string | null>(null);
 
   async function yukla() {
     setKutilmoqda(true);
     setXato(null);
+    setOgoh(null);
     try {
       const javob = await fetch(`/api/admin/tanlov-excel${tanlovId ? `?tanlov=${tanlovId}` : ''}`);
       if (!javob.ok) {
@@ -38,6 +40,12 @@ export function ExcelTugmasi({
       a.download = nomi;
       a.click();
       URL.revokeObjectURL(url);
+
+      const soni = Number(javob.headers.get('x-rasm-xatolari-soni') ?? 0);
+      if (soni > 0) {
+        const sabab = decodeURIComponent(javob.headers.get('x-rasm-xatolari') ?? '');
+        setOgoh(`${soni} ta rasm Excelʼga qoʻshilmadi (katakda havola qoldi). Sabab: ${sabab}`);
+      }
     } catch (e) {
       setXato(e instanceof Error ? e.message : 'Yuklab boʻlmadi.');
     } finally {
@@ -56,6 +64,12 @@ export function ExcelTugmasi({
         {kutilmoqda ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
         {kutilmoqda ? 'Tayyorlanmoqda...' : 'Excelʼga yuklab olish'}
       </button>
+      {ogoh && (
+        <p className="flex max-w-md items-start gap-1.5 text-right text-xs text-amber-700">
+          <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+          {ogoh}
+        </p>
+      )}
       {xato && (
         <p className="flex items-center gap-1.5 text-xs text-red-700">
           <AlertCircle className="h-3.5 w-3.5" />

@@ -24,12 +24,16 @@ export async function GET(request: Request) {
   const tanlovId = Number.isInteger(id) && id > 0 ? id : null;
 
   try {
-    const { bayt, faylNomi } = await arizalarExcel(tanlovId, url.origin);
+    const { bayt, faylNomi, xatolar } = await arizalarExcel(tanlovId, url.origin);
     return new NextResponse(new Uint8Array(bayt), {
       headers: {
         'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         'Content-Disposition': `attachment; filename="${faylNomi}"`,
         'Cache-Control': 'no-store',
+        // Qoʻshilmagan rasmlar haqida brauzerga xabar (sarlavhada faqat ASCII boʻladi)
+        'X-Rasm-Xatolari': encodeURIComponent(xatolar.slice(0, 3).join(' | ')),
+        'X-Rasm-Xatolari-Soni': String(xatolar.length),
+        'Access-Control-Expose-Headers': 'X-Rasm-Xatolari, X-Rasm-Xatolari-Soni, Content-Disposition',
       },
     });
   } catch (e) {

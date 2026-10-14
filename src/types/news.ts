@@ -15,6 +15,8 @@ export interface NewsArticle {
   /** YouTube yoki Instagram havolasi — sahifada pleyer boʻlib ochiladi */
   video?: string;
   featured?: boolean;
+  /** Sahifa necha marta koʻrilgan */
+  views?: number;
 }
 
 export interface MediaVideo {
