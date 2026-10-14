@@ -32,23 +32,17 @@ export function Ekspertlar({ experts }: { experts: Expert[] }) {
 
   // Indeks umumiy roʻyxatdan olinadi — oyna shu indeks boʻyicha ochiladi
   const guruhlar = [
-    { sarlavha: t('localTitle'), royxat: experts.map((e, i) => ({ e, i })).filter((x) => x.e.local) },
     { sarlavha: t('foreignTitle'), royxat: experts.map((e, i) => ({ e, i })).filter((x) => !x.e.local) },
+    { sarlavha: t('localTitle'), royxat: experts.map((e, i) => ({ e, i })).filter((x) => x.e.local) },
   ].filter((g) => g.royxat.length > 0);
-  // Faqat bitta guruh boʻlsa sarlavha keraksiz
-  const sarlavhaKerak = guruhlar.length > 1;
 
   return (
     <>
       <div className="space-y-14">
         {guruhlar.map((g) => (
           <section key={g.sarlavha}>
-            {sarlavhaKerak && (
-              <>
-                <h2 className="font-serif text-2xl font-semibold text-navy">{g.sarlavha}</h2>
-                <div className="mb-8 mt-3 h-1 w-16 rounded-full bg-gold" />
-              </>
-            )}
+            <h2 className="font-serif text-2xl font-semibold text-navy">{g.sarlavha}</h2>
+            <div className="mb-8 mt-3 h-1 w-16 rounded-full bg-gold" />
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {g.royxat.map(({ e, i }, n) => (
                 <Reveal key={e.slug} delay={(n % 3) * 0.1}>

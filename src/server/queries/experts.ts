@@ -28,7 +28,7 @@ function moslashExpert(e: ExpertQator): Expert {
 export const getExperts = cache(async (): Promise<Expert[]> => {
   const rows = await db.expert.findMany({
     where: { published: true },
-    orderBy: [{ local: 'desc' }, { sortOrder: 'asc' }, { id: 'asc' }],
+    orderBy: [{ local: 'asc' }, { sortOrder: 'asc' }, { id: 'asc' }],
   });
   return rows.map(moslashExpert);
 });
