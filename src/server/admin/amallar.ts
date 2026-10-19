@@ -15,6 +15,7 @@ import { boyMatnOddiy, boyMatnniTozala } from '@/lib/boy-matn';
 import { bolimTop } from './registr';
 import { boshQiymat, talabMi, type Maydon, type Qiymatlar } from './turlar';
 import { qatorlarTekshir, qatorlarniTozala } from './qatorlar';
+import { toshkentdanDate, toshkentMatni } from '@/lib/muddat';
 
 /**
  * Boʻlimlar uchun umumiy saqlash / oʻchirish amallari.
@@ -68,6 +69,8 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
       return Boolean(qiymat);
     case 'sana':
       return qiymat ? new Date(String(qiymat)) : null;
+    case 'sanaVaqt':
+      return qiymat ? toshkentdanDate(String(qiymat)) : null;
     case 'matn':
     case 'matnKatta':
     case 'vaqt':
@@ -531,6 +534,9 @@ export async function yozuvOlish(bolimKaliti: string, id: number) {
   for (const m of bolim.maydonlar) {
     if (m.tur === 'sana' && row[m.nom]) {
       natija[m.nom] = new Date(row[m.nom] as string).toISOString().slice(0, 10);
+    }
+    if (m.tur === 'sanaVaqt' && row[m.nom]) {
+      natija[m.nom] = toshkentMatni(new Date(row[m.nom] as string));
     }
   }
   return natija;

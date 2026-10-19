@@ -6,7 +6,7 @@ import type { CompetitionGetPayload } from '@/generated/prisma/models';
 import type { Competition } from '@/types';
 import { competitionKindFromDb, competitionStatusFromDb } from '@/server/enums';
 import { loc, locList, locOpt } from '@/server/map';
-import { arizaOchiqmi } from '@/lib/muddat';
+import { arizaOchiqmi, muddatKorinishi } from '@/lib/muddat';
 
 const toliq = {
   timeline: { orderBy: { sortOrder: 'asc' } },
@@ -25,7 +25,7 @@ function moslash(c: Qator): Competition {
     status: c.status === 'OCHIQ' && !arizaOchiqmi(c.status, c.applicationDeadline)
       ? 'yopiq'
       : competitionStatusFromDb[c.status],
-    applicationDeadline: c.applicationDeadline?.toISOString().slice(0, 10),
+    applicationDeadline: c.applicationDeadline ? muddatKorinishi(c.applicationDeadline) : undefined,
     detailOpen: c.status !== 'TEZ_KUNDA' || c.detailOpen,
     cover: c.coverUrl ?? '',
     date: loc(c.date),

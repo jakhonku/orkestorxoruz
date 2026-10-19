@@ -1,12 +1,12 @@
-import { muddatOtdimi } from '@/lib/muddat';
+import { muddatKorinishi, muddatOtdimi } from '@/lib/muddat';
 import type { Maydon, RoyxatQatori } from './turlar';
 
 /** Tanlov roʻyxatidagi belgi: holat + ariza muddati */
 function belgiMatni(status: string, muddat: Date | null): string | undefined {
   const asosiy = { OCHIQ: 'Ariza ochiq', YOPIQ: 'Ariza yopiq', TEZ_KUNDA: 'Tez kunda' }[status];
   if (status !== 'OCHIQ' || !muddat) return asosiy;
-  const sana = muddat.toISOString().slice(0, 10).split('-').reverse().join('.');
-  return muddatOtdimi(muddat) ? `Muddat tugagan (${sana})` : `Ariza ochiq · ${sana} gacha`;
+  const vaqt = muddatKorinishi(muddat);
+  return muddatOtdimi(muddat) ? `Muddat tugagan (${vaqt})` : `Ariza ochiq · ${vaqt} gacha`;
 }
 
 /**
@@ -346,11 +346,11 @@ export const BOLIMLAR: Bolim[] = [
       },
       {
         nom: 'applicationDeadline',
-        yorliq: 'Ariza qabul qilishning oxirgi kuni',
-        tur: 'sana',
+        yorliq: 'Ariza qabul qilish tugaydigan sana va vaqt',
+        tur: 'sanaVaqt',
         yarim: true,
         izoh:
-          'Shu kunning oxirigacha (Toshkent vaqti, 23:59) ariza qabul qilinadi, keyin tanlov avtomatik ' +
+          'Toshkent vaqti bilan. Shu vaqtdan keyin ariza qabul qilinmaydi va tanlov avtomatik ' +
           '«Ariza yopiq» boʻladi. Har bir tanlov uchun alohida. Boʻsh qolsa — muddat cheklanmaydi ' +
           '(faqat yuqoridagi «Holati» hal qiladi).',
       },

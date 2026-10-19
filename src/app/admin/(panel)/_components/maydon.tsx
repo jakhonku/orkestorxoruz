@@ -145,6 +145,16 @@ function Boshqaruv({
         />
       );
 
+    case 'sanaVaqt':
+      return (
+        <input
+          type="datetime-local"
+          value={matn.slice(0, 16)}
+          onChange={(e) => ozgartir(e.target.value)}
+          className={INPUT}
+        />
+      );
+
     case 'vaqt':
       return (
         <input type="time" value={matn} onChange={(e) => ozgartir(e.target.value)} className={INPUT} />

@@ -130,9 +130,7 @@ function Detail({
             </Badge>
             {competition.status === 'ochiq' && competition.applicationDeadline && (
               <Badge variant="outline" className="border-white/30 bg-white/15 text-white backdrop-blur-sm">
-                {t('deadline', {
-                  date: competition.applicationDeadline.split('-').reverse().join('.'),
-                })}
+                {t('deadline', { date: competition.applicationDeadline })}
               </Badge>
             )}
           </div>

@@ -18,6 +18,8 @@ export type MaydonTuri =
   | 'tanlov'
   /** Sana (YYYY-MM-DD) */
   | 'sana'
+  /** Sana va vaqt (Toshkent vaqti bilan) */
+  | 'sanaVaqt'
   /** Vaqt (SS:DD) */
   | 'vaqt'
   /** Havola (https://...) */

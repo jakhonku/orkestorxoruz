@@ -1,27 +1,41 @@
 /**
  * Tanlovga ariza qabul qilish muddati.
  *
- * Admin faqat sanani kiritadi (oxirgi kun). Ariza shu kunning oxirigacha —
- * Toshkent vaqti bilan 23:59:59 gacha — qabul qilinadi. Muddat oʻtgach
- * "ochiq" tanlov avtomatik "yopiq" hisoblanadi (bazadagi holat oʻzgarmaydi).
+ * Admin oxirgi sana VA vaqtni kiritadi (Toshkent vaqti bilan). Shu vaqt
+ * oʻtgach "ochiq" tanlov avtomatik "yopiq" hisoblanadi — bazadagi holat
+ * oʻzgarmaydi, hisob-kitob soʻrov paytida qilinadi.
  */
 
+/** Toshkent UTC+5 (yozgi vaqt yoʻq) */
 const TOSHKENT_SOAT_FARQI = 5 * 3600 * 1000;
-const KUN = 24 * 3600 * 1000;
 
-/** Oxirgi kun tugaydigan aniq vaqt (Toshkent boʻyicha 23:59:59.999) */
-export function muddatTugashVaqti(oxirgiKun: Date): number {
-  return oxirgiKun.getTime() + KUN - TOSHKENT_SOAT_FARQI - 1;
+export function muddatOtdimi(muddat: Date | null | undefined, hozir = Date.now()): boolean {
+  return !!muddat && hozir >= muddat.getTime();
 }
 
-export function muddatOtdimi(oxirgiKun: Date | null | undefined, hozir = Date.now()): boolean {
-  return !!oxirgiKun && hozir > muddatTugashVaqti(oxirgiKun);
-}
-
-/** Bazadagi holat + muddat → haqiqiy holat */
+/** Bazadagi holat + muddat → ariza hozir qabul qilinadimi */
 export function arizaOchiqmi(
   status: 'OCHIQ' | 'YOPIQ' | 'TEZ_KUNDA',
-  oxirgiKun: Date | null | undefined,
+  muddat: Date | null | undefined,
 ): boolean {
-  return status === 'OCHIQ' && !muddatOtdimi(oxirgiKun);
+  return status === 'OCHIQ' && !muddatOtdimi(muddat);
+}
+
+/** Admin shakli kiritgan "YYYY-MM-DDTHH:mm" (Toshkent vaqti) → Date */
+export function toshkentdanDate(matn: string): Date | null {
+  const m = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/.exec(matn.trim());
+  if (!m) return null;
+  const d = new Date(`${m[1]}T${m[2]}:00+05:00`);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
+/** Date → "YYYY-MM-DDTHH:mm" (Toshkent vaqti) — admin shakli uchun */
+export function toshkentMatni(d: Date): string {
+  return new Date(d.getTime() + TOSHKENT_SOAT_FARQI).toISOString().slice(0, 16);
+}
+
+/** Koʻrsatish uchun: "31.12.2026 18:00" */
+export function muddatKorinishi(d: Date): string {
+  const [sana, vaqt] = toshkentMatni(d).split('T');
+  return `${sana.split('-').reverse().join('.')} ${vaqt}`;
 }
