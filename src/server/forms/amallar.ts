@@ -18,6 +18,7 @@ import {
 } from '@/lib/anketa';
 import type { EnsembleType, Region } from '@/types';
 import { randomBytes } from 'node:crypto';
+import { arizaOchiqmi } from '@/lib/muddat';
 
 /**
  * Saytdagi formalar bazaga shu yerdan yoziladi.
@@ -291,9 +292,9 @@ export async function tanlovArizasi(malumot: unknown): Promise<FormaNatija> {
     if (d.competitionId) {
       const tanlov = await db.competition.findUnique({
         where: { id: d.competitionId },
-        select: { status: true, published: true, formFields: true, applicationEmail: true },
+        select: { status: true, applicationDeadline: true, published: true, formFields: true, applicationEmail: true },
       });
-      if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return TEKSHIRUV;
+      if (!tanlov || !tanlov.published || !arizaOchiqmi(tanlov.status, tanlov.applicationDeadline)) return TEKSHIRUV;
       tanlovEmaili = tanlov.applicationEmail;
 
       // Anketa boʻlsa javoblar unga solishtiriladi: majburiy savollar,
@@ -378,9 +379,9 @@ export async function malumotnomaOldindan(
   try {
     const tanlov = await db.competition.findUnique({
       where: { id: d.competitionId },
-      select: { status: true, published: true, formFields: true },
+      select: { status: true, applicationDeadline: true, published: true, formFields: true },
     });
-    if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return { ok: false };
+    if (!tanlov || !tanlov.published || !arizaOchiqmi(tanlov.status, tanlov.applicationDeadline)) return { ok: false };
 
     // Rozilik belgisi maʼlumotnomaga kirmaydi va bu qadamda hali belgilanmagan boʻlishi mumkin
     const anketa = tanlovAnketasi(tanlov.formFields).filter((s) => s.tur !== 'rozilik');

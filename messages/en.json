@@ -250,6 +250,7 @@
   "Competitions": {
     "title": "Competitions & Festivals",
     "subtitle": "A calendar of creative competitions and festivals",
+    "deadline": "Applications accepted until {date}",
     "status_ochiq": "Applications open",
     "status_yopiq": "Applications closed",
     "status_tez-kunda": "Coming soon",

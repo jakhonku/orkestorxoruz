@@ -250,6 +250,7 @@
   "Competitions": {
     "title": "Конкурсы и фестивали",
     "subtitle": "Календарь творческих конкурсов и фестивалей",
+    "deadline": "Приём заявок до {date}",
     "status_ochiq": "Приём открыт",
     "status_yopiq": "Приём закрыт",
     "status_tez-kunda": "Скоро",

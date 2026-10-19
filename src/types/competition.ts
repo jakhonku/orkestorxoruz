@@ -20,6 +20,8 @@ export interface Competition {
   title: Localized;
   kind: CompetitionKind;
   status: CompetitionStatus;
+  /** Ariza qabul qilishning oxirgi kuni (YYYY-MM-DD) */
+  applicationDeadline?: string;
   /** Batafsil sahifa ochiqmi: "Tez kunda" holatida admin belgilaydi, boshqa holatlarda doim ochiq */
   detailOpen?: boolean;
   cover: string;

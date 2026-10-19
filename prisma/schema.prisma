@@ -269,6 +269,8 @@ model Competition {
   regulations        Json
   regulationsFileUrl String?           @db.Text
   applicationEmail   String?           @db.VarChar(160)
+  /// Ariza qabul qilishning oxirgi kuni (Toshkent vaqti bilan kun oxirigacha). Boʻsh — cheklov yoʻq
+  applicationDeadline DateTime?        @db.Date
   prizeFund          Json?
   /// Ariza anketasi — admin oʻzi tuzadigan savollar roʻyxati (src/lib/anketa.ts)
   formFields         Json?

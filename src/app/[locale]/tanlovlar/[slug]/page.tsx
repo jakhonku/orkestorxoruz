@@ -128,6 +128,13 @@ function Detail({
             <Badge variant={statusVariant[competition.status]}>
               {t(`status_${competition.status}`)}
             </Badge>
+            {competition.status === 'ochiq' && competition.applicationDeadline && (
+              <Badge variant="outline" className="border-white/30 bg-white/15 text-white backdrop-blur-sm">
+                {t('deadline', {
+                  date: competition.applicationDeadline.split('-').reverse().join('.'),
+                })}
+              </Badge>
+            )}
           </div>
           <h1 className="mt-3 max-w-3xl font-serif text-3xl font-semibold leading-tight text-white drop-shadow-sm md:text-5xl">
             {pick(competition.title, locale)}

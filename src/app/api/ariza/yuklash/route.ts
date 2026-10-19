@@ -10,6 +10,7 @@ import {
   arizaPapkasi,
 } from '@/lib/anketa';
 import { tanlovAnketasi } from '@/lib/anketa-andozalari';
+import { arizaOchiqmi } from '@/lib/muddat';
 import { xavfsizNom } from '@/lib/yuklash';
 import { yuklashImzosi } from '@/server/ariza-fayllari';
 
@@ -76,9 +77,9 @@ export async function POST(request: Request) {
 
   const tanlov = await db.competition.findUnique({
     where: { id: tanlovId },
-    select: { status: true, published: true, formFields: true },
+    select: { status: true, applicationDeadline: true, published: true, formFields: true },
   });
-  if (!tanlov || !tanlov.published || tanlov.status !== 'OCHIQ') return rad('closed', 403);
+  if (!tanlov || !tanlov.published || !arizaOchiqmi(tanlov.status, tanlov.applicationDeadline)) return rad('closed', 403);
 
   const savol = tanlovAnketasi(tanlov.formFields).find((s) => s.id === savolId && s.tur === 'fayl');
   if (!savol) return rad('bad-request', 400);

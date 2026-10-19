@@ -250,6 +250,7 @@
   "Competitions": {
     "title": "Tanlov va festivallar",
     "subtitle": "Ijodiy tanlovlar va festivallar taqvimi",
+    "deadline": "Arizalar qabul qilinadi: {date} gacha",
     "status_ochiq": "Ariza ochiq",
     "status_yopiq": "Ariza yopiq",
     "status_tez-kunda": "Tez kunda",
