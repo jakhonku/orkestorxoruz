@@ -20,7 +20,21 @@ export default async function StatistikaSahifasi({
 }) {
   await sahifaRuxsati('statistika');
   const davr = davrniAniqla(searchParams.davr);
-  const s = await getStatistika(davr);
+  let s: Awaited<ReturnType<typeof getStatistika>>;
+  try {
+    s = await getStatistika(davr);
+  } catch (e) {
+    console.error('[statistika]', e);
+    return (
+      <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-sm text-red-800">
+        <h1 className="mb-2 font-serif text-xl font-semibold">Statistikani yuklab boʻlmadi</h1>
+        <p>
+          Ehtimol, bazada <code>page_views</code> jadvali hali yaratilmagan. Bazaga migratsiyani
+          qoʻllang: <code>npm run db:deploy</code>.
+        </p>
+      </div>
+    );
+  }
   const bosh = s.jamiKorishlar === 0;
 
   const kartochkalar = [
