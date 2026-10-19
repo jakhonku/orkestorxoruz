@@ -80,6 +80,7 @@ export const MENYU: BolimGuruhi[] = [
     bolimlar: [
       { kalit: 'arizalar', nom: 'Arizalar va xabarlar', ikonka: 'inbox' },
       { kalit: 'obuna', nom: 'Obunachilar', ikonka: 'mail' },
+      { kalit: 'statistika', nom: 'Sayt statistikasi', ikonka: 'line-chart' },
     ],
   },
   {

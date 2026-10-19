@@ -9,6 +9,7 @@ import { SITE } from '@/lib/constants';
 import { pick } from '@/lib/utils';
 import { Header } from '@/components/site/header';
 import { Footer } from '@/components/site/footer';
+import { Kuzatuvchi } from '@/components/features/kuzatuvchi';
 import { HarakatSozlamalari } from '@/components/shared/harakat-sozlamalari';
 import { getSettings } from '@/server/queries/settings';
 import { getInternationalPages } from '@/server/queries/xalqaro';
@@ -116,6 +117,7 @@ export default async function LocaleLayout({
       <body className="flex min-h-screen flex-col font-sans">
         <NextIntlClientProvider messages={messages}>
           <HarakatSozlamalari>
+            <Kuzatuvchi />
             <Header
               dinamikHavolalar={xalqaroHavolalar}
               yashirinHavolalar={yashirinHavolalar}

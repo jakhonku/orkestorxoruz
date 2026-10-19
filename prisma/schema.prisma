@@ -719,6 +719,23 @@ model FormRateHit {
   @@map("form_rate_hits")
 }
 
+/// Sayt statistikasi: har bir sahifa ochilishi. IP va cookie saqlanmaydi —
+/// `visitorHash` kunlik oʻzgaradigan bir tomonlama hash (noyob tashrifchini sanash uchun).
+model PageView {
+  id          Int      @id @default(autoincrement())
+  visitorHash String   @db.VarChar(64)
+  path        String   @db.VarChar(300)
+  locale      String   @db.VarChar(5)
+  country     String?  @db.VarChar(2)
+  durationSec Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([country])
+  @@index([visitorHash, createdAt])
+  @@map("page_views")
+}
+
 /// Sahifalardagi tayyor matnlar: tugmalar, sarlavhalar, izohlar.
 /// `messages/{uz,ru,en}.json` dagi standart matn ustidan yoziladi —
 /// qator boʻsh qoldirilsa yoki oʻchirilsa, standart matn qaytadi.
