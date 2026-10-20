@@ -11,6 +11,7 @@ import {
   FileCheck2,
   FileText,
   Lock,
+  Music,
   Phone,
   ScrollText,
   SendHorizontal,
@@ -368,6 +369,14 @@ function Ishtirok({
             </div>
           )}
           <ArizaTugmasi slug={competition.slug} status={competition.status} toliq />
+          {(competition.notes ?? []).length > 0 && (
+            <Button asChild variant="outline" size="lg" className="w-full">
+              <Link href={`/tanlovlar/${competition.slug}/notalar`}>
+                <Music className="h-4 w-4" />
+                {t('notesButton')}
+              </Link>
+            </Button>
+          )}
           {competition.contactPhone && (
             <Button asChild variant="outline" size="lg" className="w-full">
               <a href={`tel:${competition.contactPhone.replace(/[^\d+]/g, '')}`}>

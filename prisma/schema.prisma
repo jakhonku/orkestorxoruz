@@ -287,6 +287,7 @@ model Competition {
   timeline     CompetitionStage[]
   jury         JuryMember[]
   documents    CompetitionDocument[]
+  notes        CompetitionNote[]
   applications CompetitionApplication[]
 
   @@index([kind])
@@ -321,6 +322,22 @@ model CompetitionDocument {
 
   @@index([competitionId, sortOrder])
   @@map("competition_documents")
+}
+
+/// Tanlov ishtirokchilari yuklab oladigan notalar (tur boʻyicha guruhlanadi)
+model CompetitionNote {
+  id            Int     @id @default(autoincrement())
+  competitionId Int
+  /// Tur nomi — masalan "1-tur", "2-tur"
+  category      Json
+  title         Json
+  fileUrl       String  @db.Text
+  sortOrder     Int     @default(0)
+
+  competition Competition @relation(fields: [competitionId], references: [id], onDelete: Cascade)
+
+  @@index([competitionId, sortOrder])
+  @@map("competition_notes")
 }
 
 model JuryMember {

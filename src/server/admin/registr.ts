@@ -309,7 +309,7 @@ export const BOLIMLAR: Bolim[] = [
     birlik: 'tanlov',
     model: 'competition',
     slugManbasi: 'title',
-    bogliqlar: { timeline: 'timeline', jury: 'jury', documents: 'documents' },
+    bogliqlar: { timeline: 'timeline', jury: 'jury', documents: 'documents', notes: 'notes' },
     saralash: [{ sortOrder: 'asc' }, { id: 'asc' }],
     qator: (r) => ({
       id: r.id,
@@ -416,6 +416,20 @@ export const BOLIMLAR: Bolim[] = [
         maydonlar: [
           { nom: 'title', yorliq: 'Hujjat nomi', tur: 'kopTilli', talab: true },
           { nom: 'fileUrl', yorliq: 'Fayl', tur: 'fayl', talab: true },
+        ],
+      },
+      {
+        nom: 'notes',
+        yorliq: 'Notalar',
+        tur: 'qatorlar',
+        izoh:
+          'Ishtirokchilar yuklab oladigan notalar. Tanlov sahifasida «Notalarni yuklab olish» tugmasi chiqadi ' +
+          'va alohida sahifada turlar boʻyicha (1-tur, 2-tur, 3-tur...) guruhlanib koʻrsatiladi. ' +
+          'Har bir nota uchun turini yozing va faylini (PDF) yuklang. Boʻsh qolsa tugma koʻrinmaydi.',
+        maydonlar: [
+          { nom: 'category', yorliq: 'Tur', tur: 'kopTilli', talab: true, izoh: 'Masalan: 1-tur' },
+          { nom: 'title', yorliq: 'Nota nomi', tur: 'kopTilli', talab: true },
+          { nom: 'fileUrl', yorliq: 'Nota fayli', tur: 'fayl', talab: true },
         ],
       },
       {

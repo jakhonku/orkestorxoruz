@@ -12,6 +12,7 @@ const toliq = {
   timeline: { orderBy: { sortOrder: 'asc' } },
   jury: { orderBy: { sortOrder: 'asc' } },
   documents: { orderBy: { sortOrder: 'asc' } },
+  notes: { orderBy: { sortOrder: 'asc' } },
 } as const;
 
 type Qator = CompetitionGetPayload<{ include: typeof toliq }>;
@@ -40,6 +41,7 @@ function moslash(c: Qator): Competition {
     prepareTitle: locOpt(c.prepareTitle),
     prepareList: c.prepareList == null ? undefined : locList(c.prepareList),
     documents: c.documents.map((d) => ({ title: loc(d.title), file: d.fileUrl })),
+    notes: c.notes.map((n) => ({ category: loc(n.category), title: loc(n.title), file: n.fileUrl })),
     timeline: c.timeline.map((s) => ({
       date: loc(s.date),
       title: loc(s.title),

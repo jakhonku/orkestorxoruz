@@ -42,6 +42,8 @@ export interface Competition {
   prepareList?: Localized<string[]>;
   /** Shu tanlovning tayyor hujjatlari (yuklab olinadi) */
   documents?: { title: Localized; file: string }[];
+  /** Yuklab olinadigan notalar (tur boʻyicha guruhlanadi) */
+  notes?: { category: Localized; title: Localized; file: string }[];
   timeline: TimelineStage[];
   jury: JuryMember[];
 }
