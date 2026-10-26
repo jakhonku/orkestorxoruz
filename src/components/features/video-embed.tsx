@@ -14,6 +14,17 @@ import { instagramEmbed } from '@/lib/instagram';
  * ogʻir iframe yoki video esa foydalanuvchi bosgandan keyin qoʻshiladi.
  */
 
+/** Muqovasiz video uchun: toʻq koʻk fon va oʻrtada birlashma emblemasi */
+function LogoMuqova() {
+  return (
+    <span className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-navy-800 via-navy to-navy-950">
+      <span className="flex h-20 w-20 items-center justify-center rounded-full bg-white/90 p-2 shadow-soft ring-1 ring-white/30">
+        <Image src="/logo.png" alt="" width={64} height={64} className="h-full w-full object-contain opacity-90" />
+      </span>
+    </span>
+  );
+}
+
 function Tugma({
   onClick,
   title,
@@ -85,7 +96,7 @@ export function VideoEmbed({
             className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <span className="absolute inset-0 bg-gradient-to-br from-navy-800 to-navy-950" />
+          <LogoMuqova />
         )}
       </Tugma>
     );
@@ -136,9 +147,7 @@ export function VideoEmbed({
             className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <span className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#833AB4] via-[#C13584] to-[#F77737]">
-            <Instagram className="h-10 w-10 text-white/80" />
-          </span>
+          <LogoMuqova />
         )}
       </Tugma>
     );
@@ -163,13 +172,17 @@ export function VideoEmbed({
 
   return (
     <Tugma onClick={() => setPlaying(true)} title={title} nisbat="aspect-video">
-      <Image
-        src={coverUrl || `https://i.ytimg.com/vi/${youtubeId}/hqdefault.jpg`}
-        alt={title}
-        fill
-        sizes="(max-width: 768px) 100vw, 50vw"
-        className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
-      />
+      {coverUrl ? (
+        <Image
+          src={coverUrl}
+          alt={title}
+          fill
+          sizes="(max-width: 768px) 100vw, 50vw"
+          className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-105"
+        />
+      ) : (
+        <LogoMuqova />
+      )}
     </Tugma>
   );
 }
