@@ -1,21 +1,28 @@
-import Image from 'next/image';
-import { sahifaAlternates } from '@/lib/seo';
-import type { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import { setRequestLocale, getTranslations } from 'next-intl/server';
-import { useLocale, useTranslations } from 'next-intl';
-import { CalendarDays, UserRound } from 'lucide-react';
-import type { Locale } from '@/i18n/routing';
-import { Breadcrumbs } from '@/components/shared/breadcrumbs';
-import { Reveal } from '@/components/shared/reveal';
-import { Badge } from '@/components/ui/badge';
-import { NewsCard } from '@/components/cards/news-card';
-import { PostEmbed } from '@/components/features/post-embed';
-import { KorishlarSoni, UlashishTugmasi } from '@/components/features/yangilik-amallari';
-import { cn, pick, formatDate } from '@/lib/utils';
-import { postManbasi, postYorligiKaliti } from '@/lib/post';
-import type { NewsArticle } from '@/types';
-import { getNewsBySlug, getNewsSlugs, getRelatedNews } from '@/server/queries/news';
+import Image from "next/image";
+import { sahifaAlternates } from "@/lib/seo";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { setRequestLocale, getTranslations } from "next-intl/server";
+import { useLocale, useTranslations } from "next-intl";
+import { CalendarDays, UserRound } from "lucide-react";
+import type { Locale } from "@/i18n/routing";
+import { Breadcrumbs } from "@/components/shared/breadcrumbs";
+import { Reveal } from "@/components/shared/reveal";
+import { Badge } from "@/components/ui/badge";
+import { NewsCard } from "@/components/cards/news-card";
+import { PostEmbed } from "@/components/features/post-embed";
+import {
+  KorishlarSoni,
+  UlashishTugmasi,
+} from "@/components/features/yangilik-amallari";
+import { cn, pick, formatDate } from "@/lib/utils";
+import { postManbasi, postYorligiKaliti } from "@/lib/post";
+import type { NewsArticle } from "@/types";
+import {
+  getNewsBySlug,
+  getNewsSlugs,
+  getRelatedNews,
+} from "@/server/queries/news";
 
 export async function generateStaticParams() {
   const slugs = await getNewsSlugs();
@@ -30,10 +37,14 @@ export async function generateMetadata({
   const article = await getNewsBySlug(params.slug);
   if (!article) return {};
 
-  const t = await getTranslations({ locale: params.locale, namespace: 'Media' });
+  const t = await getTranslations({
+    locale: params.locale,
+    namespace: "Media",
+  });
   const yorliq = postYorligiKaliti(article.video);
   const sarlavha =
-    pick(article.title, params.locale).trim() || t(yorliq ?? `category_${article.category}`);
+    pick(article.title, params.locale).trim() ||
+    t(yorliq ?? `category_${article.category}`);
 
   return {
     title: sarlavha,
@@ -41,7 +52,7 @@ export async function generateMetadata({
     alternates: sahifaAlternates(params.locale, `/media/${params.slug}`),
     openGraph: {
       images: article.cover ? [article.cover] : undefined,
-      type: 'article',
+      type: "article",
     },
   };
 }
@@ -58,38 +69,48 @@ export default async function NewsDetailPage({
   return <Article article={article} related={related} />;
 }
 
-function Article({ article, related }: { article: NewsArticle; related: NewsArticle[] }) {
+function Article({
+  article,
+  related,
+}: {
+  article: NewsArticle;
+  related: NewsArticle[];
+}) {
   const locale = useLocale() as Locale;
-  const t = useTranslations('Media');
-  const tn = useTranslations('Nav');
+  const t = useTranslations("Media");
+  const tn = useTranslations("Nav");
 
   // Admin panelda qoʻyilgan havola YouTube, Instagram yoki Telegram niki —
   // qaysi biri ekani shu yerda aniqlanadi
-  const post = postManbasi(article.video ?? '');
+  const post = postManbasi(article.video ?? "");
   const muqova = article.cover.trim();
 
   // Faqat post havolasi qoʻyilgan yangilikda sarlavha boʻsh boʻlishi mumkin —
   // oʻrniga manba yozuvi ("Telegram post") ishlatiladi
   const yorliq = postYorligiKaliti(article.video);
   const sarlavha =
-    pick(article.title, locale).trim() || t(yorliq ?? `category_${article.category}`);
-  const abzatslar = pick(article.body, locale).filter((band) => band.trim() !== '');
+    pick(article.title, locale).trim() ||
+    t(yorliq ?? `category_${article.category}`);
+  const abzatslar = pick(article.body, locale).filter(
+    (band) => band.trim() !== "",
+  );
 
   return (
     <>
       <article className="bg-white">
         {/*
           Muqovali yangilik: oq fonda sarlavha, ostida keng rasm.
-          Muqovasiz yangilik (masalan oddiy Telegram posti): sarlavha saytning
+          Muqovasiz va videosiz (oddiy matnli) yangilik: sarlavha saytning
           odatdagi toʻq koʻk bannerida chiqadi — boʻsh oq sahifa qolmaydi.
+          Muqovasiz video/post esa oq fonda, ostida oʻzi chiqadi.
         */}
-        {muqova ? (
+        {muqova || post ? (
           <>
             <div className="container max-w-3xl pt-28 md:pt-36">
               <Breadcrumbs
                 crumbs={[
-                  { label: tn('home'), href: '/' },
-                  { label: tn('media'), href: '/media' },
+                  { label: tn("home"), href: "/" },
+                  { label: tn("media"), href: "/media" },
                   { label: sarlavha },
                 ]}
               />
@@ -104,20 +125,22 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
               </Reveal>
             </div>
 
-            <div className="container max-w-4xl">
-              <Reveal delay={0.1}>
-                <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-soft-lg">
-                  <Image
-                    src={muqova}
-                    alt={sarlavha}
-                    fill
-                    priority
-                    sizes="(max-width: 896px) 100vw, 896px"
-                    className="object-cover"
-                  />
-                </div>
-              </Reveal>
-            </div>
+            {muqova && (
+              <div className="container max-w-4xl">
+                <Reveal delay={0.1}>
+                  <div className="relative mt-8 aspect-[16/9] w-full overflow-hidden rounded-2xl shadow-soft-lg">
+                    <Image
+                      src={muqova}
+                      alt={sarlavha}
+                      fill
+                      priority
+                      sizes="(max-width: 896px) 100vw, 896px"
+                      className="object-cover"
+                    />
+                  </div>
+                </Reveal>
+              </div>
+            )}
           </>
         ) : (
           <header className="relative overflow-hidden bg-navy">
@@ -126,19 +149,25 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
               className="absolute inset-0 opacity-30"
               style={{
                 backgroundImage:
-                  'radial-gradient(circle at 20% 20%, rgba(201,162,39,0.25), transparent 40%)',
+                  "radial-gradient(circle at 20% 20%, rgba(201,162,39,0.25), transparent 40%)",
               }}
             />
             {/* Birlashma emblemasi — shaffof suv belgisi sifatida */}
             <div className="pointer-events-none absolute -right-10 top-1/2 hidden h-72 w-72 -translate-y-1/2 opacity-[0.14] md:block lg:right-10 lg:h-80 lg:w-80">
-              <Image src="/logo.png" alt="" fill sizes="320px" className="object-contain" />
+              <Image
+                src="/logo.png"
+                alt=""
+                fill
+                sizes="320px"
+                className="object-contain"
+              />
             </div>
             <div className="container relative max-w-3xl pt-28 pb-12 md:pt-36 md:pb-14">
               <Breadcrumbs
                 light
                 crumbs={[
-                  { label: tn('home'), href: '/' },
-                  { label: tn('media'), href: '/media' },
+                  { label: tn("home"), href: "/" },
+                  { label: tn("media"), href: "/media" },
                   { label: sarlavha },
                 ]}
               />
@@ -163,11 +192,11 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
               {/* Instagram reeli va Telegram posti tik turadi — kengligi cheklanadi */}
               <div
                 className={
-                  post.tur === 'youtube'
-                    ? 'mt-8'
-                    : post.tur === 'telegram'
-                      ? 'mx-auto mt-8 max-w-xl'
-                      : 'mx-auto mt-8 max-w-md'
+                  post.tur === "youtube"
+                    ? "mt-8"
+                    : post.tur === "telegram"
+                      ? "mx-auto mt-8 max-w-xl"
+                      : "mx-auto mt-8 max-w-md"
                 }
               >
                 <PostEmbed manba={post} title={sarlavha} />
@@ -181,7 +210,9 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
             <div className="prose-custom space-y-5">
               {abzatslar.map((para, i) => (
                 <Reveal key={i} delay={i * 0.05}>
-                  <p className="text-lg leading-relaxed text-navy-900/80">{para}</p>
+                  <p className="text-lg leading-relaxed text-navy-900/80">
+                    {para}
+                  </p>
                 </Reveal>
               ))}
             </div>
@@ -196,7 +227,7 @@ function Article({ article, related }: { article: NewsArticle; related: NewsArti
         <section className="section bg-navy-50/40">
           <div className="container">
             <h2 className="mb-8 font-serif text-2xl font-semibold text-navy">
-              {t('relatedTitle')}
+              {t("relatedTitle")}
             </h2>
             <div className="grid gap-6 md:grid-cols-3">
               {related.map((item, i) => (
@@ -223,7 +254,7 @@ function Malumot({
   light?: boolean;
 }) {
   const locale = useLocale() as Locale;
-  const t = useTranslations('Media');
+  const t = useTranslations("Media");
   // Muallif koʻrsatilmagan boʻlsa (faqat post havolasi qoʻyilgan yangilik)
   // boʻsh "Muallif:" yozuvi chiqmaydi
   const muallif = pick(article.author, locale).trim();
@@ -231,8 +262,8 @@ function Malumot({
   return (
     <div
       className={cn(
-        'mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm',
-        light ? 'text-white/70' : 'text-muted-foreground',
+        "mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm",
+        light ? "text-white/70" : "text-muted-foreground",
       )}
     >
       <span className="flex items-center gap-1.5">
@@ -242,7 +273,7 @@ function Malumot({
       {muallif && (
         <span className="flex items-center gap-1.5">
           <UserRound className="h-4 w-4 text-gold" />
-          {t('author')}: {muallif}
+          {t("author")}: {muallif}
         </span>
       )}
       <KorishlarSoni slug={article.slug} boshlangich={article.views ?? 0} />
