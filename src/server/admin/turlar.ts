@@ -93,6 +93,11 @@ export type Maydon = {
    */
   excel?: boolean;
   /**
+   * `qatorlar` uchun (notalar): shakl ostida "ZIP dan notalarni qoʻshish" chiqadi —
+   * ZIP ichidagi har bir PDF alohida qator boʻladi, nomi fayl nomidan olinadi.
+   */
+  zipdanNota?: boolean;
+  /**
    * `kopTilliKatta` uchun: oddiy maydon oʻrniga qalin, qiya, roʻyxat tugmalari
    * bor tahrirlagich chiqadi. Qiymat tozalangan HTML sifatida saqlanadi.
    */

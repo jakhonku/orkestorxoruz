@@ -422,6 +422,7 @@ export const BOLIMLAR: Bolim[] = [
         nom: 'notes',
         yorliq: 'Notalar',
         tur: 'qatorlar',
+        zipdanNota: true,
         izoh:
           'Ishtirokchilar yuklab oladigan notalar. Tanlov sahifasida «Notalarni yuklab olish» tugmasi chiqadi ' +
           'va alohida sahifada turlar boʻyicha (1-tur, 2-tur, 3-tur...) guruhlanib koʻrsatiladi. ' +

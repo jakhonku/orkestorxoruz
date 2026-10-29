@@ -29,6 +29,7 @@ import {
 import { ExcelYuklash } from './excel-import';
 import { BoyTahrirlagich } from './boy-tahrirlagich';
 import { AnketaTuzuvchi } from './anketa-tuzuvchi';
+import { ZipdanNota } from './zipdan-nota';
 import { faylYukla } from '../_lib/yuklash';
 
 export const INPUT =
@@ -851,6 +852,10 @@ function Qatorlar({
         <Plus className="h-3.5 w-3.5" />
         Qator qoʻshish
       </button>
+
+      {maydon.zipdanNota && (
+        <ZipdanNota ichki={ichki} qoshish={(yangi) => ozgartir((eski) => [...eski, ...yangi])} />
+      )}
 
       {maydon.excel && (
         <ExcelYuklash
