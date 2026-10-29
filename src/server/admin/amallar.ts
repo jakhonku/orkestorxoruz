@@ -77,6 +77,7 @@ function qiymatTayyorla(m: Maydon, qiymat: unknown): unknown {
     case 'havola':
     case 'rasm':
     case 'fayl':
+    case 'zip':
     case 'video':
     case 'tanlov': {
       const s = String(qiymat ?? '').trim();

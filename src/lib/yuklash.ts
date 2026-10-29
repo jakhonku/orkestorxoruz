@@ -6,7 +6,7 @@
  * uchun server soʻrovining hajmi cheklovi (Vercel) yoʻl toʻsib qoʻymaydi.
  */
 
-export type FaylGuruhi = 'rasm' | 'hujjat' | 'video';
+export type FaylGuruhi = 'rasm' | 'hujjat' | 'video' | 'arxiv';
 
 type Tavsif = { kengaytma: string; guruh: FaylGuruhi };
 
@@ -34,6 +34,8 @@ export const RUXSAT_ETILGAN: Record<string, Tavsif> = {
   'video/mp4': { kengaytma: '.mp4', guruh: 'video' },
   'video/webm': { kengaytma: '.webm', guruh: 'video' },
   'video/quicktime': { kengaytma: '.mov', guruh: 'video' },
+
+  'application/zip': { kengaytma: '.zip', guruh: 'arxiv' },
 };
 
 /**
@@ -57,6 +59,7 @@ const KENGAYTMA_TURI: Record<string, string> = {
   webm: 'video/webm',
   mov: 'video/quicktime',
   qt: 'video/quicktime',
+  zip: 'application/zip',
 };
 
 /**
@@ -67,6 +70,7 @@ export const CHEGARA: Record<FaylGuruhi, number> = {
   rasm: 15 * 1024 * 1024,
   hujjat: 30 * 1024 * 1024,
   video: 50 * 1024 * 1024,
+  arxiv: 50 * 1024 * 1024,
 };
 
 /** Fayl turini aniqlaydi: brauzer aytgan tur yoki kengaytmadan topilgani */
@@ -107,7 +111,7 @@ export function turXatosi(nom: string, tur: string): string {
   }
   return (
     `Bu turdagi fayl (${tur || `.${kengaytma}`}) yuklanmaydi. ` +
-    'Rasm — JPG, PNG, WEBP, AVIF, GIF, SVG; hujjat — PDF, Word, Excel; video — MP4, WEBM, MOV.'
+    'Rasm — JPG, PNG, WEBP, AVIF, GIF, SVG; hujjat — PDF, Word, Excel; arxiv — ZIP; video — MP4, WEBM, MOV.'
   );
 }
 

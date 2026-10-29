@@ -177,6 +177,9 @@ function Boshqaruv({
     case 'fayl':
       return <Fayl qiymat={matn} ozgartir={ozgartir} />;
 
+    case 'zip':
+      return <Fayl qiymat={matn} ozgartir={ozgartir} tur="zip" />;
+
     case 'video':
       return <Fayl qiymat={matn} ozgartir={ozgartir} tur="video" />;
 
@@ -658,6 +661,12 @@ const FAYL_TURLARI = {
     izoh: 'PDF, Word, Excel — 30 MB gacha',
     papka: 'hujjatlar',
     tugma: 'Hujjat yuklash',
+  },
+  zip: {
+    accept: '.zip,.pdf,application/zip,application/x-zip-compressed,application/pdf',
+    izoh: 'ZIP (ichida PDF notalar) yoki PDF — 50 MB gacha',
+    papka: 'notalar',
+    tugma: 'ZIP yuklash',
   },
   video: {
     accept: '.mp4,.webm,.mov,video/mp4,video/webm,video/quicktime',

@@ -28,6 +28,8 @@ export type MaydonTuri =
   | 'rasm'
   /** Hujjat (PDF, Word, Excel) — yuklash tugmasi bilan */
   | 'fayl'
+  /** ZIP arxiv (ichida PDF notalar) yoki PDF — yuklash tugmasi bilan */
+  | 'zip'
   /** Video fayl (MP4, WEBM, MOV) — yuklash tugmasi bilan */
   | 'video'
   /** YouTube video ID — toʻliq havola qoʻyilsa ID avtomatik ajratiladi */

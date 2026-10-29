@@ -425,11 +425,11 @@ export const BOLIMLAR: Bolim[] = [
         izoh:
           'Ishtirokchilar yuklab oladigan notalar. Tanlov sahifasida «Notalarni yuklab olish» tugmasi chiqadi ' +
           'va alohida sahifada turlar boʻyicha (1-tur, 2-tur, 3-tur...) guruhlanib koʻrsatiladi. ' +
-          'Har bir nota uchun turini yozing va faylini (PDF) yuklang. Boʻsh qolsa tugma koʻrinmaydi.',
+          'Har bir tur uchun (1-tur, 2-tur...) alohida qator qoʻshing va shu turning barcha PDF notalarini bitta ZIP faylga solib yuklang (yoki bitta PDF). Boʻsh qolsa tugma koʻrinmaydi.',
         maydonlar: [
           { nom: 'category', yorliq: 'Tur', tur: 'kopTilli', talab: true, izoh: 'Masalan: 1-tur' },
           { nom: 'title', yorliq: 'Nota nomi', tur: 'kopTilli', talab: true },
-          { nom: 'fileUrl', yorliq: 'Nota fayli', tur: 'fayl', talab: true },
+          { nom: 'fileUrl', yorliq: 'Nota fayli (ZIP yoki PDF)', tur: 'zip', talab: true },
         ],
       },
       {
