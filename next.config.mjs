@@ -26,6 +26,13 @@ const XAVFSIZLIK_SARLAVHALARI = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    /**
+     * Vercel rasm optimizatsiyasi oʻchirilgan: Hobby tarifdagi oylik limit
+     * tugaganda `/_next/image` 402 (OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED)
+     * qaytarib, saytdagi barcha rasmlar buzilgan holda chiqardi. Endi rasmlar
+     * toʻgʻridan-toʻgʻri Supabase Storageʼdan yuklanadi.
+     */
+    unoptimized: true,
     remotePatterns: [
       ...(supabaseHost
         ? [{ protocol: 'https', hostname: supabaseHost, pathname: '/storage/v1/object/public/**' }]
