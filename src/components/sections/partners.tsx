@@ -13,31 +13,54 @@ export function Partners({ partners }: { partners: Partner[] }) {
     <section className="section bg-white">
       <div className="container">
         <SectionTitle eyebrow={t('partnersSubtitle')} title={t('partnersTitle')} />
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {partners.map((partner, i) => (
-            <Reveal key={partner.name} delay={i * 0.06}>
-              <div className="group flex h-32 flex-col items-center justify-center gap-2 rounded-xl border border-border bg-white px-4 text-center shadow-soft transition-all hover:border-gold/40 hover:shadow-soft-lg">
+        <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
+          {partners.map((partner, i) => {
+            const ichki = (
+              <>
                 {partner.logo ? (
-                  <span className="relative h-12 w-full">
+                  <span className="relative h-24 w-full sm:h-28">
                     <Image
                       src={partner.logo}
                       alt={partner.name}
                       fill
-                      sizes="160px"
+                      sizes="(min-width: 1024px) 280px, (min-width: 640px) 33vw, 50vw"
                       className="object-contain grayscale transition-all duration-300 group-hover:grayscale-0"
                     />
                   </span>
                 ) : (
-                  <span className="font-serif text-lg font-bold tracking-tight text-navy transition-colors group-hover:text-gold-700">
+                  <span className="flex h-24 items-center font-serif text-2xl font-bold tracking-tight text-navy transition-colors group-hover:text-gold-700 sm:h-28">
                     {partner.logoText}
                   </span>
                 )}
-                <span className="text-[11px] text-muted-foreground">
+                <span className="line-clamp-2 text-sm font-semibold leading-snug text-navy transition-colors group-hover:text-gold-700">
+                  {partner.name}
+                </span>
+                <span className="text-xs text-muted-foreground">
                   {pick(partner.country, locale)}
                 </span>
-              </div>
-            </Reveal>
-          ))}
+              </>
+            );
+            const klass =
+              'group flex h-full flex-col items-center justify-start gap-3 rounded-xl border border-border bg-white p-5 text-center shadow-soft transition-all hover:border-gold/40 hover:shadow-soft-lg';
+
+            return (
+              <Reveal key={partner.name} delay={i * 0.06}>
+                {partner.url ? (
+                  <a
+                    href={partner.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={partner.name}
+                    className={klass}
+                  >
+                    {ichki}
+                  </a>
+                ) : (
+                  <div className={klass}>{ichki}</div>
+                )}
+              </Reveal>
+            );
+          })}
         </div>
       </div>
     </section>
